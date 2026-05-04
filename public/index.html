@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Automatically generate and upload running activities to Strava daily">
+  <title>StrAct Z - Strava Activity Generator</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏃</text></svg>">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <div class="logo-icon">🏃</div>
+        <span>StrAct Z</span>
+      </a>
+      <div class="header-actions">
+        <div id="authBadge" class="auth-badge disconnected">
+          <span>●</span> <span id="authText">Disconnected</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Connect Screen (shown when not authenticated) -->
+    <div id="connectScreen" class="connect-screen" style="display:none;">
+      <h2>🏃 Strava Auto Activity</h2>
+      <p>Tự động tạo và upload hoạt động chạy bộ lên Strava mỗi ngày. Kết nối tài khoản Strava để bắt đầu.</p>
+      <a href="/auth/connect" class="btn btn-strava btn-lg">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
+        Connect with Strava
+      </a>
+    </div>
+
+    <!-- Dashboard (shown when authenticated) -->
+    <div id="dashboard" style="display:none;">
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon orange">🏃</div>
+          <div class="stat-value" id="statTotal">0</div>
+          <div class="stat-label">Total Activities</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✅</div>
+          <div class="stat-value" id="statUploaded">0</div>
+          <div class="stat-label">Uploaded</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">📏</div>
+          <div class="stat-value" id="statDistance">0</div>
+          <div class="stat-label">Total Distance (km)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">⏱️</div>
+          <div class="stat-value" id="statDuration">0</div>
+          <div class="stat-label">Total Duration (min)</div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <button id="btnGenerate" class="btn btn-secondary" onclick="generateOnly()">
+          📝 Generate GPX Only
+        </button>
+        <button id="btnGenerateUpload" class="btn btn-primary pulse" onclick="generateAndUpload()">
+          🚀 Generate & Upload to Strava
+        </button>
+        <button class="btn btn-secondary" onclick="loadActivities()">
+          🔄 Refresh
+        </button>
+      </div>
+
+      <!-- Content Grid -->
+      <div class="content-grid">
+        
+        <!-- Left Column -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <!-- Route Config Card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🗺️ Route Configuration</div>
+              <button class="btn btn-sm btn-secondary" onclick="saveConfig()">💾 Save</button>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label class="form-label">Allowed Districts (Hanoi)</label>
+                  <div id="cfgDistricts" style="display:flex; flex-wrap:wrap; gap:10px;">
+                    <!-- Checkboxes will be populated by JS -->
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Max Districts per Route</label>
+                  <input type="number" id="cfgMaxSpan" class="form-input" value="1" min="1" max="3" onchange="checkMaxSpan()">
+                </div>
+                <div class="form-group" style="display:flex;align-items:flex-end;">
+                  <label class="toggle">
+                    <input type="checkbox" id="cfgOsrm" checked>
+                    <div class="toggle-track"></div>
+                    <span class="toggle-label">Use OSRM (Snap to roads)</span>
+                  </label>
+                </div>
+              </div>
+              
+              <!-- Date & Time Range -->
+              <div class="form-group" style="grid-column: 1 / -1; margin-bottom: 0;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                  <label class="form-label" style="margin-bottom:0;">Time Configuration</label>
+                  <label class="toggle">
+                    <input type="checkbox" id="cfgCustomTime" onchange="toggleCustomTime()">
+                    <div class="toggle-track"></div>
+                    <span class="toggle-label" style="font-size:0.8rem;color:var(--text-muted)">Custom Time (GPX Only)</span>
+                  </label>
+                </div>
+                
+                <div id="timeRandomInputs" style="background:var(--bg-input); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border); transition: opacity 0.3s;">
+                  <div class="form-row" style="margin-bottom:8px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                      <label class="form-label" style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">🕒 Random Time Bounds</label>
+                      <div style="display:flex;gap:5px;align-items:center;">
+                        <input type="time" id="cfgRandMinTime" class="form-input" value="04:30" style="padding:4px 8px;font-size:0.85rem;">
+                        <span>-</span>
+                        <input type="time" id="cfgRandMaxTime" class="form-input" value="21:30" style="padding:4px 8px;font-size:0.85rem;">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row" style="margin-bottom:0;">
+                    <div class="form-group" style="grid-column: 1 / -1; margin-bottom:0;">
+                      <label class="form-label" style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">🚫 Avoid Workhours</label>
+                      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                        <div style="display:flex;gap:5px;align-items:center;">
+                          <input type="time" id="cfgWorkStart1" class="form-input" value="08:00" style="padding:4px 8px;font-size:0.85rem;width:90px">
+                          <span>-</span>
+                          <input type="time" id="cfgWorkEnd1" class="form-input" value="11:30" style="padding:4px 8px;font-size:0.85rem;width:90px">
+                        </div>
+                        <span style="color:var(--text-muted)"> &amp; </span>
+                        <div style="display:flex;gap:5px;align-items:center;">
+                          <input type="time" id="cfgWorkStart2" class="form-input" value="13:30" style="padding:4px 8px;font-size:0.85rem;width:90px">
+                          <span>-</span>
+                          <input type="time" id="cfgWorkEnd2" class="form-input" value="17:30" style="padding:4px 8px;font-size:0.85rem;width:90px">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="timeCustomInputs" class="form-row" style="display:none; margin-top:10px;">
+                  <div class="form-group">
+                    <label class="form-label">Target Date</label>
+                    <input type="date" id="cfgTargetDate" class="form-input">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Time Range</label>
+                    <div style="display:flex;gap:10px;">
+                      <input type="time" id="cfgCustomMinTime" class="form-input" value="04:30">
+                      <span style="align-self:center;">-</span>
+                      <input type="time" id="cfgCustomMaxTime" class="form-input" value="21:30">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Min Distance (km)</label>
+                  <input type="number" step="0.1" id="cfgMinDist" class="form-input" value="0.5" min="0.2" max="4.0">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Max Distance (km)</label>
+                  <input type="number" step="0.1" id="cfgMaxDist" class="form-input" value="10.0" min="1.0" max="15.0">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Min Pace (min/km)</label>
+                  <input type="number" step="0.1" id="cfgMinPace" class="form-input" value="8.0" min="6.0" max="12.0">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Max Pace (min/km)</label>
+                  <input type="number" step="0.1" id="cfgMaxPace" class="form-input" value="12.0" min="10.0" max="15.0">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div> <!-- End Left Column -->
+
+        <!-- Right Column -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <!-- Schedule Card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">⏰ Auto Schedule</div>
+              <label class="toggle">
+                <input type="checkbox" id="scheduleEnabled" onchange="updateSchedule()">
+                <div class="toggle-track"></div>
+              </label>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Daily Run Time</label>
+                <input type="time" id="scheduleTime" class="form-input" value="06:00" onchange="updateSchedule()">
+              </div>
+              <div class="schedule-display" id="scheduleDisplay" style="display:none;">
+                <div>
+                  <div class="schedule-time" id="scheduleTimeDisplay">06:00</div>
+                  <div class="schedule-label">Next auto-run (Asia/Ho_Chi_Minh)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Strava Account -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔗 Strava Account</div>
+            </div>
+            <div class="card-body" id="accountInfo">
+              <p style="color:var(--text-muted)">Loading...</p>
+            </div>
+          </div>
+
+          <!-- Activity Settings -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">⚙️ Activity Settings</div>
+              <button class="btn btn-sm btn-secondary" onclick="saveConfig()">💾 Save</button>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Activity Type</label>
+                  <select id="cfgActivityType" class="form-select">
+                    <option value="Random">Random (Ưu tiên Chạy bộ)</option>
+                    <option value="Run">Chạy bộ</option>
+                    <option value="Walk">Đi bộ</option>
+                    <option value="Ride">Đạp xe</option>
+                  </select>
+                </div>
+                <div class="form-group" style="display:flex;align-items:flex-end;">
+                  <label class="toggle">
+                    <input type="checkbox" id="cfgHeartRate" checked>
+                    <div class="toggle-track"></div>
+                    <span class="toggle-label">Heart Rate Data</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Min Heart Rate</label>
+                  <input type="number" id="cfgMinHR" class="form-input" value="80" min="60" max="120">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Max Heart Rate</label>
+                  <input type="number" id="cfgMaxHR" class="form-input" value="160" min="120" max="200">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- End Right Column -->
+
+        <!-- Activity History (Local) -->
+        <div class="card full-width">
+          <div class="card-header">
+            <div class="card-title">📋 Local Generated History</div>
+            <span id="historyCount" style="font-size:0.8rem;color:var(--text-muted)"></span>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <div id="activityList">
+              <div class="empty-state">
+                <div class="icon">🏃</div>
+                <p>No activities yet. Generate your first one!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Strava Cloud Activities -->
+        <div class="card full-width">
+          <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
+            <div class="card-title" style="flex:1;">☁️ Strava Cloud Activities</div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <select id="stravaFilterRange" class="form-select" style="padding:4px 8px; font-size:0.8rem; width:120px;" onchange="onStravaFilterChange()">
+                <option value="3_days">Last 3 Days</option>
+                <option value="5_days">Last 5 Days</option>
+                <option value="7_days">Last 7 Days</option>
+                <option value="1_month" selected>Last 1 Month</option>
+                <option value="3_months">Last 3 Months</option>
+                <option value="total">Total</option>
+              </select>
+              <button class="btn btn-sm btn-secondary" onclick="changeStravaPage(-1)">◀ Prev</button>
+              <span id="stravaPageInfo" style="font-size:0.8rem;color:var(--text-muted)">Page 1</span>
+              <button class="btn btn-sm btn-secondary" onclick="changeStravaPage(1)">Next ▶</button>
+            </div>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <div id="stravaActivityList">
+              <div class="empty-state">
+                <div class="icon">☁️</div>
+                <p>Loading activities from Strava...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

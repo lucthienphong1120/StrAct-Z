@@ -1,0 +1,558 @@
+/**
+ * Strava Auto Activity Generator - Frontend Logic
+ */
+
+// ─── API Helpers ────────────────────────────────────────
+
+async function api(endpoint, options = {}) {
+  const res = await fetch(`/api${endpoint}`, {
+    headers: { 'Content-Type': 'application/json', ...options.headers },
+    ...options,
+    body: options.body ? JSON.stringify(options.body) : undefined,
+  });
+  return res.json();
+}
+
+// ─── Toast Notifications ────────────────────────────────
+
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+  toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span> <span>${message}</span>`;
+  container.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 4000);
+}
+
+// ─── Auth ───────────────────────────────────────────────
+
+async function checkAuth() {
+  try {
+    const res = await fetch('/auth/status');
+    const data = await res.json();
+    const badge = document.getElementById('authBadge');
+    const authText = document.getElementById('authText');
+    
+    if (data.authenticated) {
+      badge.className = 'auth-badge';
+      authText.textContent = data.athlete?.name || 'Connected';
+      document.getElementById('connectScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      renderAccountInfo(data.athlete);
+      loadDashboard();
+    } else {
+      badge.className = 'auth-badge disconnected';
+      authText.textContent = 'Disconnected';
+      document.getElementById('connectScreen').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+  } catch (err) {
+    console.error('Auth check failed:', err);
+  }
+}
+
+function renderAccountInfo(athlete) {
+  const el = document.getElementById('accountInfo');
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      ${athlete?.avatar ? `<img src="${athlete.avatar}" style="width:48px;height:48px;border-radius:50%;border:2px solid var(--strava-orange);" alt="avatar">` : '<div style="width:48px;height:48px;border-radius:50%;background:var(--strava-orange);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🏃</div>'}
+      <div>
+        <div style="font-weight:600;">${athlete?.name || 'Strava User'}</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);">ID: ${athlete?.id || 'N/A'}</div>
+      </div>
+    </div>
+    <button class="btn btn-danger btn-sm btn-block" onclick="disconnectStrava()">Disconnect Strava</button>
+  `;
+}
+
+async function disconnectStrava() {
+  if (!confirm('Disconnect Strava account?')) return;
+  await fetch('/auth/disconnect', { method: 'POST' });
+  showToast('Disconnected from Strava', 'info');
+  checkAuth();
+}
+
+// ─── Dashboard ──────────────────────────────────────────
+
+async function loadDashboard() {
+  await Promise.all([loadStats(), loadDistricts(), loadConfig(), loadSchedule(), loadActivities(), loadStravaActivities()]);
+}
+
+async function loadDistricts() {
+  try {
+    const districts = await api('/districts');
+    const select = document.getElementById('cfgDistrict');
+    if (!select) return;
+    select.innerHTML = districts.map(d => `<option value="${d.key}">${d.name}</option>`).join('');
+  } catch (err) { console.error('Districts error:', err); }
+}
+
+async function loadStats() {
+  try {
+    const stats = await api('/stats');
+    document.getElementById('statTotal').textContent = stats.total;
+    document.getElementById('statUploaded').textContent = stats.uploaded;
+    document.getElementById('statDistance').textContent = stats.totalDistanceKm;
+    document.getElementById('statDuration').textContent = stats.totalDurationMin;
+  } catch (err) { console.error('Stats error:', err); }
+}
+
+const HANOI_DISTRICTS = [
+  { key: 'hoan_kiem', name: 'Hoàn Kiếm' },
+  { key: 'hai_ba_trung', name: 'Hai Bà Trưng' },
+  { key: 'hoang_mai', name: 'Hoàng Mai' },
+  { key: 'dong_da', name: 'Đống Đa' },
+  { key: 'ba_dinh', name: 'Ba Đình' },
+  { key: 'thanh_xuan', name: 'Thanh Xuân' },
+  { key: 'cau_giay', name: 'Cầu Giấy' },
+  { key: 'tay_ho', name: 'Tây Hồ' }
+];
+
+async function loadConfig() {
+  try {
+    const config = await api('/config');
+    
+    // Render District Checkboxes
+    const container = document.getElementById('cfgDistricts');
+    if (container) {
+      const selectedKeys = config.selected_districts ? config.selected_districts.split(',') : [];
+      container.innerHTML = '';
+      HANOI_DISTRICTS.forEach(d => {
+        const isChecked = selectedKeys.includes(d.key) ? 'checked' : '';
+        container.innerHTML += `
+          <label class="toggle" style="font-size:0.8rem; margin-bottom:5px;">
+            <input type="checkbox" class="district-cb" value="${d.key}" ${isChecked}>
+            <div class="toggle-track" style="transform:scale(0.8)"></div>
+            <span>${d.name}</span>
+          </label>
+        `;
+      });
+    }
+
+    const maxSpanInput = document.getElementById('cfgMaxSpan');
+    if (maxSpanInput) maxSpanInput.value = config.max_district_span || '1';
+
+    const osrmToggle = document.getElementById('cfgOsrm');
+    if (osrmToggle) osrmToggle.checked = config.use_osrm !== 'false';
+    
+    // Set Target Date to today by default
+    const today = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+    document.getElementById('cfgTargetDate').value = today;
+    
+    document.getElementById('cfgCustomMinTime').value = config.min_time || '04:30';
+    document.getElementById('cfgCustomMaxTime').value = config.max_time || '21:30';
+    document.getElementById('cfgRandMinTime').value = config.min_time || '04:30';
+    document.getElementById('cfgRandMaxTime').value = config.max_time || '21:30';
+    document.getElementById('cfgWorkStart1').value = config.work_start1 || '08:00';
+    document.getElementById('cfgWorkEnd1').value = config.work_end1 || '11:30';
+    document.getElementById('cfgWorkStart2').value = config.work_start2 || '13:30';
+    document.getElementById('cfgWorkEnd2').value = config.work_end2 || '17:30';
+
+    document.getElementById('cfgMinDist').value = config.min_distance_km || '0.5';
+    document.getElementById('cfgMaxDist').value = config.max_distance_km || '10';
+    document.getElementById('cfgMinPace').value = config.min_pace || '7.0';
+    document.getElementById('cfgMaxPace').value = config.max_pace || '15.0';
+    document.getElementById('cfgActivityType').value = config.activity_type || 'Random';
+    document.getElementById('cfgHeartRate').checked = config.heart_rate_enabled === 'true';
+    document.getElementById('cfgMinHR').value = config.min_heart_rate || '80';
+    document.getElementById('cfgMaxHR').value = config.max_heart_rate || '160';
+  } catch (err) { console.error('Config error:', err); }
+}
+
+function validateTimeBounds(minTimeStr, maxTimeStr, targetDateStr, isCustomTime) {
+  if (minTimeStr && maxTimeStr) {
+    const [minH, minM] = minTimeStr.split(':').map(Number);
+    const [maxH, maxM] = maxTimeStr.split(':').map(Number);
+    if (minH * 60 + minM >= maxH * 60 + maxM) {
+      showToast('Start Time must be earlier than End Time!', 'error');
+      return false;
+    }
+  }
+
+  const now = new Date();
+  if (isCustomTime && targetDateStr && maxTimeStr) {
+    const targetDateObj = new Date(`${targetDateStr}T${maxTimeStr}:00.000+07:00`);
+    if (targetDateObj > now) {
+      showToast('Time cannot be in the future!', 'error');
+      return false;
+    }
+  } else if (!isCustomTime && minTimeStr) {
+    const todayStr = new Date().toLocaleDateString('en-CA');
+    const minDateObj = new Date(`${todayStr}T${minTimeStr}:00.000+07:00`);
+    if (minDateObj > now) {
+      showToast('Start Time is currently in the future! Please adjust.', 'error');
+      return false;
+    }
+  }
+  return true;
+}
+
+function validateInputs(config) {
+  if (parseInt(config.max_district_span, 10) > 2) {
+    alert('Giới hạn liên kết 2 quận. Vui lòng liên hệ Admin để nâng cấp (tính năng VIP).');
+    document.getElementById('cfgMaxSpan').value = 2;
+    return false;
+  }
+  
+  const minDist = parseFloat(config.min_distance_km);
+  const maxDist = parseFloat(config.max_distance_km);
+  if (minDist < 0.2 || minDist > 4) { showToast('Min Distance must be between 0.2 and 4 km', 'error'); return false; }
+  if (maxDist < 1 || maxDist > 15) { showToast('Max Distance must be between 1 and 15 km', 'error'); return false; }
+  if (minDist >= maxDist) { showToast('Min Distance must be less than Max Distance', 'error'); return false; }
+  
+  const minPace = parseFloat(config.min_pace);
+  const maxPace = parseFloat(config.max_pace);
+  if (minPace < 6 || minPace > 12) { showToast('Min Pace must be between 6 and 12 min/km', 'error'); return false; }
+  if (maxPace < 10 || maxPace > 15) { showToast('Max Pace must be between 10 and 15 min/km', 'error'); return false; }
+  if (minPace > maxPace) { showToast('Min Pace must be less than or equal to Max Pace', 'error'); return false; }
+
+  if (config.heart_rate_enabled === 'true') {
+    const minHR = parseInt(config.min_heart_rate, 10);
+    const maxHR = parseInt(config.max_heart_rate, 10);
+    if (minHR < 60 || minHR > 120) { showToast('Min Heart Rate must be between 60 and 120', 'error'); return false; }
+    if (maxHR < 120 || maxHR > 200) { showToast('Max Heart Rate must be between 120 and 200', 'error'); return false; }
+    if (minHR >= maxHR) { showToast('Min Heart Rate must be less than Max Heart Rate', 'error'); return false; }
+  }
+
+  return true;
+}
+
+async function saveConfig() {
+  const min_time = document.getElementById('cfgRandMinTime').value;
+  const max_time = document.getElementById('cfgRandMaxTime').value;
+  if (!validateTimeBounds(min_time, max_time, null, false)) return;
+
+  const selected_districts = Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value).join(',');
+  const config = {
+    selected_districts,
+    district_key: 'random', // Legacy field override
+    max_district_span: document.getElementById('cfgMaxSpan').value,
+    use_osrm: document.getElementById('cfgOsrm').checked ? 'true' : 'false',
+    min_time: document.getElementById('cfgRandMinTime').value,
+    max_time: document.getElementById('cfgRandMaxTime').value,
+    work_start1: document.getElementById('cfgWorkStart1').value,
+    work_end1: document.getElementById('cfgWorkEnd1').value,
+    work_start2: document.getElementById('cfgWorkStart2').value,
+    work_end2: document.getElementById('cfgWorkEnd2').value,
+    min_distance_km: document.getElementById('cfgMinDist').value,
+    max_distance_km: document.getElementById('cfgMaxDist').value,
+    min_pace: document.getElementById('cfgMinPace').value,
+    max_pace: document.getElementById('cfgMaxPace').value,
+    activity_type: document.getElementById('cfgActivityType').value,
+    heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
+    min_heart_rate: document.getElementById('cfgMinHR').value,
+    max_heart_rate: document.getElementById('cfgMaxHR').value,
+  };
+
+  if (!validateInputs(config)) return;
+
+  await api('/config', { method: 'POST', body: config });
+  showToast('Configuration saved!', 'success');
+}
+
+// ─── Schedule ───────────────────────────────────────────
+
+async function loadSchedule() {
+  try {
+    const status = await api('/scheduler');
+    document.getElementById('scheduleEnabled').checked = status.enabled;
+    document.getElementById('scheduleTime').value = status.scheduleTime || '06:00';
+    updateScheduleDisplay(status);
+  } catch (err) { console.error('Schedule error:', err); }
+}
+
+function updateScheduleDisplay(status) {
+  const display = document.getElementById('scheduleDisplay');
+  if (status?.enabled) {
+    display.style.display = 'flex';
+    document.getElementById('scheduleTimeDisplay').textContent = status.scheduleTime || '06:00';
+  } else {
+    display.style.display = 'none';
+  }
+}
+
+async function updateSchedule() {
+  const enabled = document.getElementById('scheduleEnabled').checked;
+  const time = document.getElementById('scheduleTime').value;
+  const status = await api('/scheduler', { method: 'POST', body: { enabled, time } });
+  updateScheduleDisplay(status);
+  showToast(enabled ? `Schedule enabled at ${time}` : 'Schedule disabled', 'success');
+}
+
+// ─── Activities ─────────────────────────────────────────
+
+async function loadActivities() {
+  try {
+    const activities = await api('/activities');
+    const container = document.getElementById('activityList');
+    document.getElementById('historyCount').textContent = `${activities.length} activities`;
+
+    if (!activities.length) {
+      container.innerHTML = '<div class="empty-state"><div class="icon">🏃</div><p>No activities yet. Generate your first one!</p></div>';
+      return;
+    }
+
+    container.innerHTML = activities.map(a => {
+      const dateStr = a.created_at.endsWith('Z') ? a.created_at : a.created_at + 'Z';
+      const date = new Date(dateStr).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+      const statusClass = a.upload_status;
+      return `
+        <div class="activity-item">
+          <div>
+            <div class="activity-name">${a.activity_name || 'Unnamed'}</div>
+            <div class="activity-date">${date}</div>
+          </div>
+          <div class="activity-meta">${a.distance_km?.toFixed(1)} km</div>
+          <div class="activity-meta">${a.duration_min?.toFixed(0)} min</div>
+          <div class="activity-meta">${a.pace_min_km?.toFixed(1)} min/km</div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <span class="status-badge ${statusClass}">${a.upload_status}</span>
+            ${a.upload_status === 'generated' ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
+            ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
+            <button class="btn btn-sm btn-danger" style="padding:4px 8px;" onclick="deleteActivity(${a.id}, ${!!a.strava_activity_id})">🗑️</button>
+          </div>
+        </div>`;
+    }).join('');
+  } catch (err) { console.error('Activities error:', err); }
+}
+
+let stravaCurrentPage = 1;
+
+function onStravaFilterChange() {
+  stravaCurrentPage = 1;
+  loadStravaActivities();
+}
+
+async function loadStravaActivities() {
+  const container = document.getElementById('stravaActivityList');
+  container.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Loading...</p></div>';
+  
+  try {
+    const range = document.getElementById('stravaFilterRange').value;
+    let afterQuery = '';
+    if (range !== 'total') {
+      const now = new Date();
+      let days = 30;
+      if (range === '3_days') days = 3;
+      else if (range === '5_days') days = 5;
+      else if (range === '7_days') days = 7;
+      else if (range === '1_month') days = 30;
+      else if (range === '3_months') days = 90;
+      
+      const afterTimestamp = Math.floor((now.getTime() - days * 24 * 60 * 60 * 1000) / 1000);
+      afterQuery = `&after=${afterTimestamp}`;
+    }
+
+    const activities = await api(`/strava-activities?page=${stravaCurrentPage}&per_page=10${afterQuery}`);
+    document.getElementById('stravaPageInfo').textContent = `Page ${stravaCurrentPage}`;
+    
+    if (!activities || !activities.length) {
+      container.innerHTML = '<div class="empty-state"><div class="icon">☁️</div><p>No activities found on Strava.</p></div>';
+      return;
+    }
+    
+    container.innerHTML = activities.map(a => {
+      const date = new Date(a.start_date).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+      const distance = (a.distance / 1000).toFixed(1);
+      const duration = (a.moving_time / 60).toFixed(0);
+      const pace = a.average_speed > 0 ? (1000 / a.average_speed / 60).toFixed(1) : '0';
+      return `
+        <div class="activity-item">
+          <div>
+            <div class="activity-name">${a.name}</div>
+            <div class="activity-date">${date}</div>
+          </div>
+          <div class="activity-meta">${distance} km</div>
+          <div class="activity-meta">${duration} min</div>
+          <div class="activity-meta">${pace} min/km</div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <span class="status-badge uploaded">${a.type}</span>
+            <a href="https://www.strava.com/activities/${a.id}" target="_blank" class="btn btn-sm btn-secondary">View</a>
+          </div>
+        </div>`;
+    }).join('');
+  } catch (err) {
+    container.innerHTML = `<div class="empty-state"><div class="icon">❌</div><p>Failed to load Strava activities: ${err.message}</p></div>`;
+  }
+}
+
+function changeStravaPage(delta) {
+  if (stravaCurrentPage + delta < 1) return;
+  stravaCurrentPage += delta;
+  loadStravaActivities();
+}
+
+// ─── Actions ────────────────────────────────────────────
+
+async function generateOnly() {
+  const btn = document.getElementById('btnGenerate');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Generating...';
+
+  try {
+    const selected_districts = Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value).join(',');
+    const isCustomTime = document.getElementById('cfgCustomTime').checked;
+    const overrideConfig = {
+      target_date: isCustomTime ? document.getElementById('cfgTargetDate').value : undefined,
+      min_time: isCustomTime ? document.getElementById('cfgCustomMinTime').value : document.getElementById('cfgRandMinTime').value,
+      max_time: isCustomTime ? document.getElementById('cfgCustomMaxTime').value : document.getElementById('cfgRandMaxTime').value,
+      work_start1: isCustomTime ? undefined : document.getElementById('cfgWorkStart1').value,
+      work_end1: isCustomTime ? undefined : document.getElementById('cfgWorkEnd1').value,
+      work_start2: isCustomTime ? undefined : document.getElementById('cfgWorkStart2').value,
+      work_end2: isCustomTime ? undefined : document.getElementById('cfgWorkEnd2').value,
+      selected_districts,
+      max_district_span: document.getElementById('cfgMaxSpan').value,
+      district_key: 'random',
+      use_osrm: document.getElementById('cfgOsrm').checked ? 'true' : 'false',
+      min_distance_km: document.getElementById('cfgMinDist').value,
+      max_distance_km: document.getElementById('cfgMaxDist').value,
+      min_pace: document.getElementById('cfgMinPace').value,
+      max_pace: document.getElementById('cfgMaxPace').value,
+      activity_type: document.getElementById('cfgActivityType').value,
+      heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
+      min_heart_rate: document.getElementById('cfgMinHR').value,
+      max_heart_rate: document.getElementById('cfgMaxHR').value,
+    };
+
+    if (!validateTimeBounds(overrideConfig.min_time, overrideConfig.max_time, overrideConfig.target_date, isCustomTime)) {
+      btn.disabled = false;
+      btn.innerHTML = '⚡ Generate Now';
+      return;
+    }
+    
+    if (!validateInputs(overrideConfig)) {
+      btn.disabled = false;
+      btn.innerHTML = '⚡ Generate Now';
+      return;
+    }
+
+    const result = await api('/generate', { method: 'POST', body: overrideConfig });
+    if (result.success) {
+      showToast(`Generated: ${result.activity.name} (${result.activity.distanceKm}km)`, 'success');
+      loadActivities();
+      loadStats();
+    } else {
+      showToast(result.error || 'Generation failed', 'error');
+    }
+  } catch (err) {
+    showToast('Generation failed: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '📝 Generate GPX Only';
+  }
+}
+
+async function generateAndUpload() {
+  const btn = document.getElementById('btnGenerateUpload');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Generating & Uploading...';
+
+  try {
+    const result = await api('/generate-and-upload', { method: 'POST', body: {} });
+    if (result.success) {
+      showToast(`Uploaded to Strava! Activity: ${result.activity?.activityName || 'Done'}`, 'success');
+    } else {
+      if (result.message === 'VIP_REQUIRED') {
+        alert('Giới hạn tạo 2 hoạt động/ngày. Vui lòng liên hệ Admin để nâng cấp giới hạn này.');
+      } else {
+        showToast(result.message || 'Upload failed', 'error');
+      }
+    }
+    loadActivities();
+    loadStats();
+  } catch (err) {
+    showToast('Failed: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🚀 Generate & Upload to Strava';
+  }
+}
+
+async function uploadActivity(id) {
+  showToast('Uploading to Strava...', 'info');
+  try {
+    const result = await api(`/upload/${id}`, { method: 'POST' });
+    if (result.success) {
+      showToast('Uploaded successfully!', 'success');
+    } else {
+      showToast(result.error || 'Upload failed', 'error');
+    }
+    loadActivities();
+    loadStats();
+  } catch (err) {
+    showToast('Upload failed: ' + err.message, 'error');
+  }
+}
+
+async function deleteActivity(id, hasStrava) {
+  const msg = hasStrava 
+    ? 'Delete this activity? This will remove it locally AND from Strava.' 
+    : 'Delete this locally generated activity?';
+  
+  if (!confirm(msg)) return;
+  
+  try {
+    const result = await api(`/activities/${id}?strava=${hasStrava}`, { method: 'DELETE' });
+    if (result.success) {
+      showToast(result.message || 'Activity deleted', 'success');
+      loadActivities();
+      loadStats();
+    } else {
+      showToast(result.error || 'Failed to delete activity', 'error');
+    }
+  } catch (err) {
+    showToast('Delete failed: ' + err.message, 'error');
+  }
+}
+
+// ─── UI Helpers ─────────────────────────────────────────
+
+function checkMaxSpan() {
+  const el = document.getElementById('cfgMaxSpan');
+  if (parseInt(el.value, 10) > 2) {
+    alert('Giới hạn liên kết 2 quận. Vui lòng liên hệ Admin để nâng cấp giới hạn này.');
+    el.value = 2;
+  }
+}
+
+function toggleCustomTime() {
+  const isCustom = document.getElementById('cfgCustomTime').checked;
+  const customInputs = document.getElementById('timeCustomInputs');
+  const randomInputs = document.getElementById('timeRandomInputs');
+  
+  if (isCustom) {
+    customInputs.style.display = 'flex';
+    if(randomInputs) {
+      randomInputs.style.opacity = '0.4';
+      randomInputs.style.pointerEvents = 'none';
+    }
+  } else {
+    customInputs.style.display = 'none';
+    if(randomInputs) {
+      randomInputs.style.opacity = '1';
+      randomInputs.style.pointerEvents = 'auto';
+    }
+  }
+}
+
+// ─── URL Params ─────────────────────────────────────────
+
+function checkUrlParams() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('success') === 'connected') {
+    showToast('Successfully connected to Strava!', 'success');
+    history.replaceState(null, '', '/');
+  }
+  if (params.get('error')) {
+    showToast('Error: ' + params.get('error'), 'error');
+    history.replaceState(null, '', '/');
+  }
+}
+
+// ─── Init ───────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  checkUrlParams();
+  checkAuth();
+});
