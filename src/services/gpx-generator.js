@@ -124,23 +124,24 @@ async function generateActivity(config = {}) {
   let finalMaxHR = maxHeartRate;
 
   if (finalActivityType === 'Walk') {
-    finalMinDist = Math.max(0.5, minDistanceKm * 0.5);
-    finalMaxDist = Math.min(5, maxDistanceKm * 0.8);
+    finalMinDist = minDistanceKm * 0.7;
+    finalMaxDist = maxDistanceKm * 0.7;
     finalMinPace = Math.max(10.0, minPace);
     finalMaxPace = Math.max(15.0, maxPace);
     finalMinHR = 80;
     finalMaxHR = 110;
   } else if (finalActivityType === 'Ride') {
-    finalMinDist = Math.max(5, minDistanceKm * 3);
-    finalMaxDist = Math.max(15, maxDistanceKm * 4);
+    finalMinDist = minDistanceKm * 1.5;
+    finalMaxDist = maxDistanceKm * 1.5;
     finalMinPace = 2.5;
     finalMaxPace = 5.0;
     finalMinHR = 100;
     finalMaxHR = 140;
   } else { // Run
-    // Default config values (e.g. 7-15 min/km)
+    finalMinDist = minDistanceKm;
+    finalMaxDist = maxDistanceKm;
     finalMinPace = Math.min(7.0, minPace);
-    finalMaxPace = Math.min(10.0, maxPace); // Realistic running pace
+    finalMaxPace = Math.min(10.0, maxPace);
     finalMinHR = 120;
     finalMaxHR = 160;
   }

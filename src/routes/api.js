@@ -61,6 +61,19 @@ router.get('/stats', async (req, res) => {
   });
 });
 
+router.get('/insights', async (req, res) => {
+  try {
+    const days = parseInt(req.query.days) || 14;
+    const now = new Date();
+    const after = Math.floor((now.getTime() - (days + 1) * 24 * 60 * 60 * 1000) / 1000); // Buffer 1 day
+    
+    const activities = await stravaApi.getActivities(req.user.id, 1, 200, after);
+    res.json(activities);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ─── Activities ─────────────────────────────────────────────────────────────
 
 router.get('/activities', async (req, res) => {

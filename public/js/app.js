@@ -109,7 +109,7 @@ async function disconnect() {
 let userRole = 'normal';
 
 async function loadDashboard() {
-  await Promise.all([loadStats(), loadDistricts(), loadConfig(), loadSchedule(), loadActivities(), loadStravaActivities()]);
+  await Promise.all([loadStats(), loadDistricts(), loadConfig(), loadSchedule(), loadActivities(), loadStravaActivities(), loadInsights()]);
   initMap();
   resetMapView();
 }
@@ -383,7 +383,6 @@ const LOCAL_PAGE_SIZE = 10;
 async function loadActivities() {
   try {
     const allActivities = await api('/activities');
-    updateActivityChart(allActivities);
     const container = document.getElementById('activityList');
     const total = allActivities.length;
     const totalPages = Math.max(1, Math.ceil(total / LOCAL_PAGE_SIZE));
@@ -877,25 +876,39 @@ async function saveActivityAreas() {
 }
 // ─── Statistics Chart ────────────────────────────────────
 
+async function loadInsights() {
+  const range = document.getElementById('insightsTimeRange').value || 14;
+  try {
+    const activities = await api(`/insights?days=${range}`);
+    updateActivityChart(activities, parseInt(range));
+  } catch (err) {
+    console.error('Insights error:', err);
+  }
+}
+
 let activityChart = null;
 
-function updateActivityChart(activities) {
+function updateActivityChart(activities, days = 14) {
   const ctx = document.getElementById('activityChart');
   if (!ctx) return;
 
-  // Group by date for last 14 days (Hanoi time)
-  const last14Days = [];
+  // Group by date for specified range (Hanoi time)
+  const rangeDays = [];
   const today = new Date();
-  for (let i = 13; i >= 0; i--) {
+  for (let i = days - 1; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
-    last14Days.push(d.toLocaleDateString('en-CA'));
+    rangeDays.push(d.toLocaleDateString('en-CA'));
   }
 
-  const dailyDist = last14Days.map(date => {
+  const dailyDist = rangeDays.map(date => {
     return activities
-      .filter(a => a.created_at && a.created_at.startsWith(date))
-      .reduce((sum, a) => sum + (a.distance_km || 0), 0);
+      .filter(a => {
+        // Strava API uses start_date (ISO)
+        const startDate = a.start_date || a.created_at; 
+        return startDate && startDate.startsWith(date);
+      })
+      .reduce((sum, a) => sum + (a.distance / 1000 || a.distance_km || 0), 0);
   });
 
   if (activityChart) {
@@ -905,7 +918,7 @@ function updateActivityChart(activities) {
   activityChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: last14Days.map(d => d.split('-').slice(1).reverse().join('/')), // MM/DD -> DD/MM
+      labels: rangeDays.map(d => d.split('-').slice(1).reverse().join('/')), // MM/DD -> DD/MM
       datasets: [{
         label: 'Distance (km)',
         data: dailyDist,
@@ -938,7 +951,10 @@ function updateActivityChart(activities) {
           bodyColor: '#fff',
           borderColor: 'rgba(252, 76, 2, 0.4)',
           borderWidth: 1,
-          displayColors: false
+          displayColors: false,
+          callbacks: {
+            label: (context) => `Distance: ${context.parsed.y.toFixed(2)} km`
+          }
         }
       }
     }

@@ -18,7 +18,7 @@
     <div class="header-inner">
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
-        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.19.0</small></span>
+        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.21.0</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;" onclick="systemLogout()">Logout</button>
@@ -70,7 +70,15 @@
       <!-- Activity Insights Chart -->
       <div class="card" style="margin-bottom: 2rem;">
         <div class="card-header">
-          <div class="card-title">📈 Activity Insights (Last 14 days)</div>
+          <div class="card-title">📈 Activity Insights (Cloud)</div>
+          <select id="insightsTimeRange" class="form-select" style="width: 140px; font-size: 0.8rem; padding: 4px 8px;" onchange="loadInsights()">
+            <option value="3">Last 3 Days</option>
+            <option value="5">Last 5 Days</option>
+            <option value="7">Last 7 Days</option>
+            <option value="14" selected>Last 14 Days</option>
+            <option value="30">Last 1 Month</option>
+            <option value="90">Last 3 Months</option>
+          </select>
         </div>
         <div class="card-body" style="height: 200px; position: relative;">
           <canvas id="activityChart"></canvas>
@@ -295,7 +303,7 @@
             <div class="card-body">
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Activity Type <span class="tooltip-icon" data-tooltip="Type of sport for the GPX file">?</span></label>
+                  <label class="form-label">Activity Type <span class="tooltip-icon" data-tooltip="Type of sport for the GPX file.&#10;Distance multipliers:&#10;• Walk: 0.7x&#10;• Run: 1.0x&#10;• Ride: 1.5x">?</span></label>
                   <select id="cfgActivityType" class="form-select" onchange="updateActivityTypeHint()">
                     <option value="Random">Random</option>
                     <option value="Run">Run</option>
