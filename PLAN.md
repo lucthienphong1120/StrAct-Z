@@ -11,3 +11,6 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + update lại toast notification đồng nhất toàn bộ UI dùng chung
 + mọi update config, button sửa đổi, validate, check quyền, vip max range,... đều phải có notify
 + toàn bộ config đều phải có hint (?) button hover hiện giải thích thông tin (ý nghĩa, loại giá trị, đơn vị, phạm vi min/max)
++ review, cân nhắc vị trí có thể dùng Caching layer (optimize API calls)
++ tích hợp thêm các luồng công cụ khác như Fit, Health connect,...
++ 
