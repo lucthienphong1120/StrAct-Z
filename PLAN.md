@@ -12,12 +12,12 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + [x] mọi update config, button sửa đổi, validate, check quyền, vip max range,... đều phải có notify
 + [x] toàn bộ config đều phải có hint (?) button hover hiện giải thích thông tin (ý nghĩa, loại giá trị, đơn vị, phạm vi min/max)
 + [x] review, cân nhắc vị trí có thể dùng Caching layer (optimize API calls)
-+ [ ] tích hợp thêm các luồng công cụ Health Hub như Google Fit, Health connect, Samsung Health, Apple Health,...
++ [ ] tích hợp đẩy data về các luồng công cụ Health Hub như Google Fit, Health connect, Samsung Health, Apple Health
 + [ ] tích hợp bổ sung (hint optional, not tested) cho các công cụ luyện tập khác như adidas running, nike run club, runkeeper
 + [ ] review và sửa lại min, max, range các option + validate (min/max/range)
 + [x] update logic random heart rate trọng số theo hoạt động
 + [x] update logic trọng số vị trí
-+ [ ] sửa Max heart rate thành input field tự count (hiển thị nhưng readonly), thêm 1 field bên cạnh là tuổi default 25 tuổi -> MHR là 195
++ [ ] sửa Max heart rate thành input field tự count (hiển thị nhưng readonly), thêm 1 field bên cạnh là tuổi, default 25 tuổi -> MHR tự tính là 195
 + [ ] check lại các công thức trọng số hoạt động đi bộ/đạp xe/chạy bộ - 50-60/60-70/70-85 % MHR
 + [ ] check lại logic nghỉ đèn đỏ -> nghỉ giảm heart rate và thời tiết nắng/mát ảnh hưởng heart rate, trưa/chiều nắng cũng tăng chút
 + [ ] thêm phần account setting vào giao diện sau login và trước khi kết nối strava
