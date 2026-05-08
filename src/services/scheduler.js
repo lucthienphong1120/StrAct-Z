@@ -7,57 +7,57 @@ const db = require('../db/database');
 const { generateActivity } = require('./gpx-generator');
 const stravaApi = require('./strava-api');
 
-let scheduledTask = null;
-let isRunning = false;
+const scheduledTasks = new Map(); // accountId -> cronTask
+const isRunning = new Map(); // accountId -> boolean
 
 /**
- * Execute the auto-generate and upload flow
+ * Execute the auto-generate and upload flow for a specific account
  */
-async function executeJob() {
-  if (isRunning) {
-    console.log('[Scheduler] Job already running, skipping...');
+async function executeJob(accountId) {
+  if (isRunning.get(accountId)) {
+    console.log(`[Scheduler] Job already running for account ${accountId}, skipping...`);
     return { success: false, message: 'Job already running' };
   }
 
-  isRunning = true;
-  console.log(`[Scheduler] Starting auto-generate job at ${new Date().toISOString()}`);
+  isRunning.set(accountId, true);
+  console.log(`[Scheduler] Starting auto-generate job for account ${accountId} at ${new Date().toISOString()}`);
 
   try {
     // Check if authenticated
-    if (!(await stravaApi.isAuthenticated())) {
+    if (!(await stravaApi.isAuthenticated(accountId))) {
       throw new Error('Not authenticated with Strava. Please connect your account.');
     }
 
     // Check daily limit
-    const stats = await db.getActivityStats();
+    const stats = await db.getActivityStats(accountId);
     if (stats.todayCount >= 2) {
-      console.log('[Scheduler] Limit reached (2 activities/day). VIP required.');
+      console.log(`[Scheduler] Limit reached for account ${accountId} (2 activities/day). VIP required.`);
       return { success: false, message: 'VIP_REQUIRED' };
     }
 
     // Get configuration
-    const config = await db.getAllConfig();
+    const config = await db.getAllConfig(accountId);
     const minCount = parseInt(config.schedule_count_min) || 1;
     const maxCount = parseInt(config.schedule_count_max) || 1;
     let taskCount = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
     if (taskCount > 3) taskCount = 3; // Safety cap
 
-    console.log(`[Scheduler] Will generate ${taskCount} activities...`);
+    console.log(`[Scheduler] Account ${accountId} will generate ${taskCount} activities...`);
     
     let successCount = 0;
     let lastActivity = null;
 
     for (let i = 0; i < taskCount; i++) {
       // Check daily limit inside loop
-      const stats = await db.getActivityStats();
-      if (stats.todayCount >= 2) {
-        console.log('[Scheduler] Limit reached (2 activities/day). VIP required.');
+      const loopStats = await db.getActivityStats(accountId);
+      if (loopStats.todayCount >= 2) {
+        console.log(`[Scheduler] Limit reached for account ${accountId}.`);
         if (i === 0) return { success: false, message: 'VIP_REQUIRED' };
         break; // Stop generating more if limit reached
       }
 
       // Generate activity (async - uses OSRM)
-      console.log(`[Scheduler] Generating activity ${i+1}/${taskCount}...`);
+      console.log(`[Scheduler] Account ${accountId} generating activity ${i+1}/${taskCount}...`);
       const activity = await generateActivity({
         districtKey: config.district_key,
         selected_districts: config.selected_districts,
@@ -77,12 +77,14 @@ async function executeJob() {
         minHeartRate: parseInt(config.min_heart_rate),
         maxHeartRate: parseInt(config.max_heart_rate),
         useOSRM: config.use_osrm !== 'false',
+        simWeather: config.sim_weather !== 'false',
+        simRedLights: config.sim_redlights !== 'false',
       });
 
       console.log(`[Scheduler] Generated: ${activity.activityName} - ${activity.distanceKm}km in ${activity.durationMin}min`);
 
       // Save to database
-      const activityId = await db.saveActivity({
+      const activityId = await db.saveActivity(accountId, {
         activity_name: activity.activityName,
         distance_km: activity.distanceKm,
         duration_min: activity.durationMin,
@@ -98,7 +100,7 @@ async function executeJob() {
       // Upload to Strava
       console.log(`[Scheduler] Uploading activity ${i+1} to Strava...`);
       try {
-        const uploadResult = await stravaApi.uploadActivity(activity.filepath, {
+        const uploadResult = await stravaApi.uploadActivity(accountId, activity.filepath, {
           name: activity.activityName,
           sportType: config.activity_type || 'Run',
         });
@@ -106,11 +108,11 @@ async function executeJob() {
         console.log(`[Scheduler] Upload initiated, ID: ${uploadResult.id}`);
 
         // Wait for processing
-        const finalStatus = await stravaApi.waitForUpload(uploadResult.id);
+        const finalStatus = await stravaApi.waitForUpload(accountId, uploadResult.id);
 
         console.log(`[Scheduler] Upload complete! Strava Activity ID: ${finalStatus.activity_id}`);
 
-        await db.updateActivity(activityId, {
+        await db.updateActivity(accountId, activityId, {
           strava_activity_id: String(finalStatus.activity_id),
           upload_status: 'uploaded',
         });
@@ -128,113 +130,125 @@ async function executeJob() {
 
       } catch (uploadErr) {
         console.error('[Scheduler] Upload failed:', uploadErr);
-        await db.updateActivity(activityId, {
+        await db.updateActivity(accountId, activityId, {
           upload_status: 'failed',
           error_message: typeof uploadErr === 'object' ? JSON.stringify(uploadErr.body || uploadErr.message || uploadErr) : String(uploadErr),
         });
-        // Continue to the next task even if this one fails
       }
     } // end for
 
     return {
       success: successCount > 0,
       message: `Generated and uploaded ${successCount}/${taskCount} activities`,
-      activity: lastActivity, // Just returning the last one for the API response
+      activity: lastActivity,
     };
   } catch (err) {
-    console.error('[Scheduler] Job failed:', err);
+    console.error(`[Scheduler] Job failed for account ${accountId}:`, err);
     return { success: false, message: err.message };
   } finally {
-    isRunning = false;
+    isRunning.set(accountId, false);
   }
 }
 
 /**
- * Start the scheduler
+ * Start the scheduler for a specific account
  */
-async function startScheduler() {
-  const config = await db.getAllConfig();
+async function startScheduler(accountId) {
+  const config = await db.getAllConfig(accountId);
 
   if (config.schedule_enabled !== 'true') {
-    console.log('[Scheduler] Schedule disabled');
     return false;
   }
 
   const cronExpression = config.schedule_cron || '0 6 * * *';
 
   if (!cron.validate(cronExpression)) {
-    console.error(`[Scheduler] Invalid cron expression: ${cronExpression}`);
+    console.error(`[Scheduler] Invalid cron expression for account ${accountId}: ${cronExpression}`);
     return false;
   }
 
   // Stop existing task
-  stopScheduler();
+  stopScheduler(accountId);
 
-  scheduledTask = cron.schedule(cronExpression, async () => {
-    console.log('[Scheduler] Cron triggered');
-    await executeJob();
+  const task = cron.schedule(cronExpression, async () => {
+    console.log(`[Scheduler] Cron triggered for account ${accountId}`);
+    await executeJob(accountId);
   }, {
     timezone: 'Asia/Ho_Chi_Minh'
   });
 
-  console.log(`[Scheduler] Started with cron: ${cronExpression} (Asia/Ho_Chi_Minh)`);
+  scheduledTasks.set(accountId, task);
+
+  console.log(`[Scheduler] Started for account ${accountId} with cron: ${cronExpression}`);
   return true;
 }
 
 /**
- * Stop the scheduler
+ * Start schedulers for ALL active accounts on server boot
  */
-function stopScheduler() {
-  if (scheduledTask) {
-    scheduledTask.stop();
-    scheduledTask = null;
-    console.log('[Scheduler] Stopped');
+async function startAllSchedulers() {
+  const accounts = await db.getAllAccounts();
+  for (const account of accounts) {
+    await startScheduler(account.id);
   }
 }
 
 /**
- * Get scheduler status
+ * Stop the scheduler for a specific account
  */
-async function getStatus() {
-  const config = await db.getAllConfig();
+function stopScheduler(accountId) {
+  const task = scheduledTasks.get(accountId);
+  if (task) {
+    task.stop();
+    scheduledTasks.delete(accountId);
+    console.log(`[Scheduler] Stopped for account ${accountId}`);
+  }
+}
+
+/**
+ * Get scheduler status for a specific account
+ */
+async function getStatus(accountId) {
+  const config = await db.getAllConfig(accountId);
   return {
     enabled: config.schedule_enabled === 'true',
     cronExpression: config.schedule_cron || '0 6 * * *',
     scheduleTime: config.schedule_time || '06:00',
     scheduleCountMin: parseInt(config.schedule_count_min) || 1,
     scheduleCountMax: parseInt(config.schedule_count_max) || 1,
-    isRunning,
-    taskActive: scheduledTask !== null,
+    isRunning: isRunning.get(accountId) || false,
+    taskActive: scheduledTasks.has(accountId),
   };
 }
 
 /**
- * Update schedule
+ * Update schedule for a specific account
  */
-async function updateSchedule(enabled, time, countMin, countMax) {
-  await db.setConfig('schedule_enabled', enabled ? 'true' : 'false');
+async function updateSchedule(accountId, enabled, time, countMin, countMax) {
+  await db.setConfig(accountId, 'schedule_enabled', enabled ? 'true' : 'false');
 
   if (time) {
-    await db.setConfig('schedule_time', time);
+    await db.setConfig(accountId, 'schedule_time', time);
     // Convert time to cron expression
     const [hours, minutes] = time.split(':');
     const cronExpression = `${parseInt(minutes)} ${parseInt(hours)} * * *`;
-    await db.setConfig('schedule_cron', cronExpression);
+    await db.setConfig(accountId, 'schedule_cron', cronExpression);
   }
   
-  if (countMin) await db.setConfig('schedule_count_min', countMin);
-  if (countMax) await db.setConfig('schedule_count_max', countMax);
+  if (countMin) await db.setConfig(accountId, 'schedule_count_min', countMin);
+  if (countMax) await db.setConfig(accountId, 'schedule_count_max', countMax);
 
   if (enabled) {
-    await startScheduler();
+    await startScheduler(accountId);
   } else {
-    stopScheduler();
+    stopScheduler(accountId);
   }
 }
 
 module.exports = {
   executeJob,
   startScheduler,
+  startAllSchedulers,
   stopScheduler,
   getStatus,
   updateSchedule,
