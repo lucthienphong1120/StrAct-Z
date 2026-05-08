@@ -19,7 +19,7 @@ function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
-  const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+  const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
   toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span> <span>${message}</span>`;
   container.appendChild(toast);
   setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 4000);
@@ -190,7 +190,7 @@ function validateTimeBounds(minTimeStr, maxTimeStr, targetDateStr, isCustomTime)
 
 function validateInputs(config) {
   if (parseInt(config.max_district_span, 10) > 2) {
-    alert('Giới hạn liên kết 2 quận. Vui lòng liên hệ Admin để nâng cấp (tính năng VIP).');
+    showToast('Giới hạn liên kết 2 quận. Vui lòng liên hệ Admin để nâng cấp (tính năng VIP).', 'warning');
     document.getElementById('cfgMaxSpan').value = 2;
     return false;
   }
@@ -281,7 +281,7 @@ async function updateSchedule() {
   const countMax = document.getElementById('scheduleCountMax').value;
   
   if (parseInt(countMax) > 3 || parseInt(countMin) > 3) {
-    alert('VIP Required: Bạn chỉ có thể tạo tối đa 3 activity 1 lúc. Vui lòng liên hệ Admin để nâng cấp (tính năng VIP).');
+    showToast('VIP Required: Bạn chỉ có thể tạo tối đa 3 activity 1 lúc.', 'warning');
     document.getElementById('scheduleCountMax').value = Math.min(3, parseInt(countMax));
     document.getElementById('scheduleCountMin').value = Math.min(3, parseInt(countMin));
     return;
@@ -461,6 +461,7 @@ async function generateOnly() {
   const btn = document.getElementById('btnGenerate');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Generating...';
+  showToast('Đang tạo GPX...', 'info');
 
   try {
     const overrideConfig = getOverrideConfig();
@@ -490,6 +491,7 @@ async function generateAndUpload() {
   const btn = document.getElementById('btnGenerateUpload');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Generating & Uploading...';
+  showToast('Đang tạo và tự động Upload...', 'info');
 
   try {
     const overrideConfig = getOverrideConfig();
@@ -504,7 +506,7 @@ async function generateAndUpload() {
       showToast(`Uploaded to Strava! Activity: ${result.activity?.activityName || 'Done'}`, 'success');
     } else {
       if (result.message === 'VIP_REQUIRED') {
-        alert('Giới hạn tạo 2 hoạt động/ngày. Vui lòng liên hệ Admin để nâng cấp giới hạn này.');
+        showToast('Giới hạn tạo 2 hoạt động/ngày. Vui lòng liên hệ Admin để nâng cấp.', 'warning');
       } else {
         showToast(result.message || 'Upload failed', 'error');
       }
@@ -541,11 +543,16 @@ async function deleteActivity(id, hasStrava) {
     : 'Delete this locally generated activity?';
   
   if (!confirm(msg)) return;
+  showToast('Đang xoá hoạt động...', 'info');
   
   try {
     const result = await api(`/activities/${id}?strava=${hasStrava}`, { method: 'DELETE' });
     if (result.success) {
-      showToast(result.message || 'Activity deleted', 'success');
+      if (result.stravaError) {
+        showToast(result.message, 'warning');
+      } else {
+        showToast(result.message || 'Activity deleted', 'success');
+      }
       loadActivities();
       loadStats();
     } else {
@@ -561,7 +568,7 @@ async function deleteActivity(id, hasStrava) {
 function checkMaxSpan() {
   const el = document.getElementById('cfgMaxSpan');
   if (parseInt(el.value, 10) > 2) {
-    alert('Giới hạn liên kết 2 quận. Vui lòng liên hệ Admin để nâng cấp giới hạn này.');
+    showToast('Giới hạn liên kết 2 quận. Vui lòng liên hệ Admin để nâng cấp giới hạn này.', 'warning');
     el.value = 2;
   }
 }

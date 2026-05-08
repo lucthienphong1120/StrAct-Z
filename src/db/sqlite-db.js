@@ -38,7 +38,7 @@ const DEFAULT_CONFIG = {
   max_heart_rate: '160',
   use_osrm: 'true',
   schedule_count_min: '1',
-  schedule_count_max: '1',
+  schedule_count_max: '2',
 };
 
 async function getDb() {
