@@ -205,7 +205,6 @@ async function loadConfig() {
     document.getElementById('cfgMaxPace').value = config.max_pace || '15.0';
     document.getElementById('cfgActivityType').value = config.activity_type || 'Random';
     document.getElementById('cfgHeartRate').checked = config.heart_rate_enabled === 'true';
-    document.getElementById('cfgMinHR').value = config.min_heart_rate || '80';
     document.getElementById('cfgMaxHR').value = config.max_heart_rate || '160';
     
     if (document.getElementById('cfgSimWeather')) {
@@ -540,7 +539,6 @@ function getOverrideConfig() {
     max_pace: document.getElementById('cfgMaxPace').value,
     activity_type: document.getElementById('cfgActivityType').value,
     heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
-    min_heart_rate: document.getElementById('cfgMinHR').value,
     max_heart_rate: document.getElementById('cfgMaxHR').value,
   };
 

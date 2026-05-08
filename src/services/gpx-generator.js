@@ -120,30 +120,36 @@ async function generateActivity(config = {}) {
   let finalMaxDist = maxDistanceKm;
   let finalMinPace = minPace;
   let finalMaxPace = maxPace;
-  let finalMinHR = minHeartRate;
-  let finalMaxHR = maxHeartRate;
+  
+  // Heart Rate Calculation based on MHR (Max Heart Rate from UI/Config)
+  const mhr = parseInt(maxHeartRate || '160', 10);
+  let finalMinHR = 80;
+  let finalMaxHR = 160;
 
   if (finalActivityType === 'Walk') {
     finalMinDist = minDistanceKm * 0.7;
     finalMaxDist = maxDistanceKm * 0.7;
     finalMinPace = Math.max(10.0, minPace);
     finalMaxPace = Math.max(15.0, maxPace);
-    finalMinHR = 80;
-    finalMaxHR = 110;
+    // 50% - 60% MHR
+    finalMinHR = Math.round(mhr * 0.50);
+    finalMaxHR = Math.round(mhr * 0.60);
   } else if (finalActivityType === 'Ride') {
     finalMinDist = minDistanceKm * 1.5;
     finalMaxDist = maxDistanceKm * 1.5;
     finalMinPace = 2.5;
     finalMaxPace = 5.0;
-    finalMinHR = 100;
-    finalMaxHR = 140;
+    // 60% - 70% MHR
+    finalMinHR = Math.round(mhr * 0.60);
+    finalMaxHR = Math.round(mhr * 0.70);
   } else { // Run
     finalMinDist = minDistanceKm;
     finalMaxDist = maxDistanceKm;
     finalMinPace = Math.min(7.0, minPace);
     finalMaxPace = Math.min(10.0, maxPace);
-    finalMinHR = 120;
-    finalMaxHR = 160;
+    // 70% - 85% MHR
+    finalMinHR = Math.round(mhr * 0.70);
+    finalMaxHR = Math.round(mhr * 0.85);
   }
 
   // Determine District (Random if 'random' or not provided)

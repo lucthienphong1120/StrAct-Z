@@ -18,7 +18,7 @@
     <div class="header-inner">
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
-        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.21.0</small></span>
+        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.22.0</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;" onclick="systemLogout()">Logout</button>
@@ -234,18 +234,14 @@
                   <label class="toggle">
                     <input type="checkbox" id="cfgHeartRate" checked>
                     <div class="toggle-track"></div>
-                    <span class="toggle-label">Heart Rate Data <span class="tooltip-icon" data-tooltip="Include simulated HR stream in GPX">?</span></span>
+                    <span class="toggle-label">Heart Rate Data <span class="tooltip-icon" data-tooltip="Simulate HR stream in GPX.&#10;MHR = 220 - Age.&#10;• Walk: 50-60% MHR&#10;• Ride: 60-70% MHR&#10;• Run: 70-85% MHR">?</span></span>
                   </label>
                 </div>
               </div>
               <div class="form-row">
-                <div class="form-group">
-                  <label class="form-label">Min Heart Rate <span class="tooltip-icon" data-tooltip="Lowest HR during activity (60 - 120)">?</span></label>
-                  <input type="number" id="cfgMinHR" class="form-input" value="80" min="60" max="120">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Max Heart Rate <span class="tooltip-icon" data-tooltip="Highest HR during activity (120 - 200)">?</span></label>
-                  <input type="number" id="cfgMaxHR" class="form-input" value="160" min="120" max="200">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label class="form-label">Max Heart Rate (MHR) <span class="tooltip-icon" data-tooltip="Your Maximum Heart Rate (120 - 160). Used as base for intensity calculation.">?</span></label>
+                  <input type="number" id="cfgMaxHR" class="form-input" value="160" min="120" max="160">
                 </div>
               </div>
               <div class="form-row" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);">
