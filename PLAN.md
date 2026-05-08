@@ -35,6 +35,6 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + [ ] footer thêm thông tin copyright, email
 + [ ] cuối phần account setting thêm 1 dòng contact for vip: email (chữ xám)
 + [ ] update logic chống trùng lặp với dữ liệu đã có (uploaded/cloud), thêm comfig safe time default 30p -> tránh random data mới quanh thời gian start/end hoạt động đã có
-+ [ ] 
-+ [ ] 
++ [ ] chuyển min/max pace sang phần activity settings (defailt vẫn 8 và 12)
++ [ ] thêm logic trọng số cho random pace theo hoạt động đi bộ/chạy bộ/đạp xe = x1.25/x0.8/x0.5 (update hint luôn)
 + [ ] 
