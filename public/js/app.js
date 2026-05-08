@@ -597,14 +597,7 @@ async function uploadActivity(id) {
 }
 
 async function deleteActivity(id, hasStrava) {
-  try {
-    const msg = hasStrava
-      ? 'Delete this activity? This will remove it locally AND from Strava.'
-      : 'Delete this locally generated activity?';
-    if (!confirm(msg)) return;
-  } catch (e) {
-    // confirm blocked by browser - proceed anyway
-  }
+  // Removed confirm() because browser blocking it causes silent failures.
 
   showToast('Deleting activity...', 'info');
 
@@ -624,6 +617,27 @@ async function deleteActivity(id, hasStrava) {
     }
   } catch (err) {
     showToast('Delete failed: ' + err.message, 'error');
+  }
+}
+
+async function updatePassword() {
+  const newPassword = document.getElementById('cfgNewPassword').value;
+  if (!newPassword || newPassword.length < 5) {
+    return showToast('Password must be at least 5 characters', 'warning');
+  }
+  try {
+    const result = await api('/account/password', {
+      method: 'PUT',
+      body: { newPassword }
+    });
+    if (result.success) {
+      showToast(result.message, 'success');
+      document.getElementById('cfgNewPassword').value = '';
+    } else {
+      showToast(result.error || 'Failed to update password', 'error');
+    }
+  } catch (err) {
+    showToast('Failed to update password: ' + err.message, 'error');
   }
 }
 

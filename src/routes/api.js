@@ -312,4 +312,20 @@ router.get('/gpx/:filename', (req, res) => {
   res.download(gpxPath, req.params.filename);
 });
 
+// ─── Account Management ───────────────────────────────────────────────────────
+
+router.put('/account/password', async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    if (!newPassword || newPassword.length < 5) {
+      return res.status(400).json({ error: 'Password must be at least 5 characters long' });
+    }
+    await db.updateAccountPassword(req.user.id, newPassword);
+    res.json({ success: true, message: 'Password updated successfully' });
+  } catch (err) {
+    console.error('Password update error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

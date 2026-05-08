@@ -31,7 +31,7 @@ const DEFAULT_CONFIG = {
   start_lng: '105.8542',
   district_key: 'random',
   max_district_span: '1',
-  selected_districts: 'hoan_kiem,hai_ba_trung,hoang_mai,dong_da,ba_dinh,thanh_xuan,cau_giay,tay_ho',
+  selected_districts: 'hoan_kiem,hai_ba_trung,hoang_mai,dong_da,ba_dinh,thanh_xuan,cau_giay,tay_ho,ha_dong',
   activity_type: 'Random',
   variation_enabled: 'true',
   heart_rate_enabled: 'true',
@@ -128,6 +128,9 @@ async function getDb() {
       await dbInstance.run('INSERT INTO user_config (account_id, key, value) VALUES (1, ?, ?)', [row.key, row.value]);
     }
   }
+
+  // Auto-enable ha_dong for legacy configurations
+  await dbInstance.run(`UPDATE user_config SET value = value || ',ha_dong' WHERE key = 'selected_districts' AND value = 'hoan_kiem,hai_ba_trung,hoang_mai,dong_da,ba_dinh,thanh_xuan,cau_giay,tay_ho'`);
 
   if (configCount.c === 0) {
     if (fs.existsSync(OLD_JSON_DB)) {
@@ -299,6 +302,13 @@ async function createAccount(username, plainPassword) {
   return res.lastID;
 }
 
+async function updateAccountPassword(accountId, plainPassword) {
+  const db = await getDb();
+  const hash = bcrypt.hashSync(plainPassword, 10);
+  await db.run('UPDATE accounts SET password_hash = ? WHERE id = ?', [hash, accountId]);
+  return true;
+}
+
 async function getAccountCount() {
   const db = await getDb();
   return (await db.get('SELECT COUNT(*) as c FROM accounts')).c;
@@ -315,5 +325,5 @@ module.exports = {
   saveTokens, getTokens, deleteTokens,
   saveActivity, updateActivity, getActivities,
   getActivityStats, deleteActivity,
-  getUserByUsername, createAccount, getAccountCount, getAllAccounts,
+  getUserByUsername, createAccount, getAccountCount, getAllAccounts, updateAccountPassword,
 };
