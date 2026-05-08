@@ -24,4 +24,9 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + [ ] tạo và rule file markdown cho AI coding để lưu kiến trúc, ghi nhớ, context cần thiết về project này
 + [ ] các quận default enable thêm long biên
 + [ ] menu account setting thêm phần nhập code để kích hoạt vip (đồng thời bổ sung cơ chế chống gian lận, sniffing, bruteforce, relay,...)
++ [ ] update navigator prev và next chạm biên thì phải làm mờ
++ [ ] restrict linked tài khoản stract z với tối đa 1 tài khoản strava và 1 với mỗi hệ thống tích hợp 3rd (nếu có)
++ [ ] bỏ tính năng xóa với hoạt động uploaded, xóa chỉ áp dụng với generate và chưa upload, với hoạt động đã upload cần vào strava xóa (hint/open strava)
++ [ ] Activity Insights (Cloud) thêm dữ liệu thời gian hoạt động dạng line chart màu xanh dương -> biểu đồ dual metrics kết hợp bar+line
++ [ ] Activity Insights (Cloud) default time select là 7 days
 + [ ] 
