@@ -153,29 +153,29 @@ async function generateActivity(config = {}) {
   if (!districtKey || districtKey === 'random') {
     const areas = config.activity_areas ? JSON.parse(config.activity_areas) : [];
     
-    // Calculate weights for each allowed district
+    // Calculate weights for each allowed district (Base ratio 1:1)
     const weights = allowedDistricts.map(key => {
       const dist = HANOI_DISTRICTS[key];
-      if (!dist || areas.length === 0) return 1.0;
+      if (!dist) return 1.0;
       
-      let maxBoost = 1.0;
+      let weight = 1.0; 
+      const distRadiusM = (dist.radiusKm || 1.5) * 1000;
+
       areas.forEach(area => {
         const d = haversineDistance(dist.lat, dist.lng, area.lat, area.lng);
-        let boost = 1.0;
+        const areaRadiusM = area.radius;
         
-        // Districts inside the radius get a huge weight (priority)
-        if (d <= area.radius) {
-          boost = 100.0;
-        } else {
-          // Districts outside the radius get a weight that decays with distance
-          // Formula: 100 * (radius / distance)^2
-          // This ensures that even districts outside the circle have a relative weight
-          boost = 100.0 * Math.pow(area.radius / d, 2.0);
+        if (area.type === 'home') {
+          if (d + distRadiusM <= areaRadiusM) weight += 2.5; // Bao trọn
+          else if (d <= areaRadiusM) weight += 2.0;         // Nhiều (Center inside)
+          else if (d - distRadiusM <= areaRadiusM) weight += 1.0; // Ít (Overlap)
+        } else if (area.type === 'work') {
+          if (d + distRadiusM <= areaRadiusM) weight += 1.5; // Bao trọn
+          else if (d <= areaRadiusM) weight += 1.0;         // Nhiều
+          else if (d - distRadiusM <= areaRadiusM) weight += 0.5; // Ít
         }
-        
-        if (boost > maxBoost) maxBoost = boost;
       });
-      return Math.max(1.0, maxBoost);
+      return weight;
     });
 
     // Weighted pick `span` districts
