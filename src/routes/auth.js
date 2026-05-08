@@ -45,19 +45,23 @@ router.post('/disconnect', async (req, res) => {
 });
 
 // Get auth status
-router.get('/status', (req, res) => {
-  const tokens = db.getTokens();
-  if (tokens && tokens.access_token) {
-    res.json({
-      authenticated: true,
-      athlete: {
-        id: tokens.athlete_id,
-        name: tokens.athlete_name,
-        avatar: tokens.athlete_avatar,
-      }
-    });
-  } else {
-    res.json({ authenticated: false });
+router.get('/status', async (req, res) => {
+  try {
+    const tokens = await db.getTokens();
+    if (tokens && tokens.access_token) {
+      res.json({
+        authenticated: true,
+        athlete: {
+          id: tokens.athlete_id,
+          name: tokens.athlete_name,
+          avatar: tokens.athlete_avatar,
+        }
+      });
+    } else {
+      res.json({ authenticated: false });
+    }
+  } catch (err) {
+    res.json({ authenticated: false, error: err.message });
   }
 });
 

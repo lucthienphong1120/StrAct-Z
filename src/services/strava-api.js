@@ -26,16 +26,35 @@ function makeRequest(options, postData = null) {
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => {
+        // Track Rate Limits
+        const usageHeader = res.headers['x-ratelimit-usage'];
+        const limitHeader = res.headers['x-ratelimit-limit'];
+        if (usageHeader && limitHeader) {
+          const usage = usageHeader.split(',').map(Number);
+          const limit = limitHeader.split(',').map(Number);
+          if ((limit[0] > 0 && usage[0] >= limit[0] * 0.95) || (limit[1] > 0 && usage[1] >= limit[1] * 0.95)) {
+            console.warn(`[Strava API] WARNING: Approaching rate limit (${usage.join(',')}/${limit.join(',')})`);
+          }
+        }
+
         try {
           const json = JSON.parse(data);
           if (res.statusCode >= 400) {
-            reject({ status: res.statusCode, body: json });
+            if (res.statusCode === 429) {
+              reject({ status: 429, body: { error: 'Rate limit exceeded', message: 'Strava API limit reached. Try again in 15 minutes.' } });
+            } else {
+              reject({ status: res.statusCode, body: json });
+            }
           } else {
             resolve(json);
           }
         } catch (e) {
           if (res.statusCode >= 400) {
-            reject({ status: res.statusCode, body: data });
+            if (res.statusCode === 429) {
+              reject({ status: 429, body: { error: 'Rate limit exceeded', message: 'Strava API limit reached.' } });
+            } else {
+              reject({ status: res.statusCode, body: data });
+            }
           } else {
             resolve(data);
           }
@@ -94,7 +113,7 @@ async function exchangeCode(code) {
   const response = await makeRequest(options, postData);
 
   // Save tokens to database
-  db.saveTokens({
+  await db.saveTokens({
     access_token: response.access_token,
     refresh_token: response.refresh_token,
     expires_at: response.expires_at,
@@ -111,7 +130,7 @@ async function exchangeCode(code) {
  * Refresh access token if expired
  */
 async function refreshToken() {
-  const tokens = db.getTokens();
+  const tokens = await db.getTokens();
   if (!tokens) {
     throw new Error('No tokens found. Please authenticate first.');
   }
@@ -144,7 +163,7 @@ async function refreshToken() {
   const response = await makeRequest(options, postData);
 
   // Update tokens in database
-  db.saveTokens({
+  await db.saveTokens({
     access_token: response.access_token,
     refresh_token: response.refresh_token,
     expires_at: response.expires_at,
@@ -268,8 +287,8 @@ async function getAthlete() {
 /**
  * Check if authenticated
  */
-function isAuthenticated() {
-  const tokens = db.getTokens();
+async function isAuthenticated() {
+  const tokens = await db.getTokens();
   return tokens && tokens.access_token ? true : false;
 }
 
@@ -303,7 +322,7 @@ async function deleteActivity(stravaActivityId) {
  */
 async function disconnect() {
   try {
-    const tokens = db.getTokens();
+    const tokens = await db.getTokens();
     if (tokens && tokens.access_token) {
       const postData = new URLSearchParams({
         access_token: tokens.access_token,
@@ -322,7 +341,7 @@ async function disconnect() {
       await makeRequest(options, postData).catch(() => {});
     }
   } finally {
-    db.deleteTokens();
+    await db.deleteTokens();
   }
 }
 

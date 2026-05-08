@@ -86,7 +86,7 @@ app.get('/', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`\n${'═'.repeat(60)}`);
   console.log(`  🏃 Strava Auto Activity Generator`);
   console.log(`  📡 Server running at http://localhost:${PORT}`);
@@ -94,15 +94,15 @@ app.listen(PORT, () => {
 
   // Initialize scheduler on startup
   try {
-    const started = scheduler.startScheduler();
+    const started = await scheduler.startScheduler();
     if (started) {
-      const status = scheduler.getStatus();
+      const status = await scheduler.getStatus();
       console.log(`  ⏰ Scheduler active: ${status.cronExpression}`);
     } else {
       console.log('  ⏰ Scheduler disabled (enable in dashboard)');
     }
   } catch (err) {
-    console.log('  ⏰ Scheduler initialization skipped');
+    console.error('  ⏰ Scheduler initialization skipped:', err.message);
   }
 
   console.log('');

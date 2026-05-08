@@ -336,19 +336,30 @@ async function generateRoute(options = {}) {
 }
 
 /**
- * Fallback route generator (no OSRM) - straight-line interpolation
+ * Fallback route generator (no OSRM) - Manhattan-like interpolation
  */
 function fallbackRoute(waypoints, targetDistM) {
   const allPts = [];
   for (let i = 0; i < waypoints.length - 1; i++) {
     const from = waypoints[i], to = waypoints[i + 1];
-    const segDist = haversineDistance(from.lat, from.lng, to.lat, to.lng);
-    const steps = Math.max(3, Math.floor(segDist / 15));
-    for (let j = (i === 0 ? 0 : 1); j <= steps; j++) {
-      const t = j / steps;
+    const midPt = { lat: from.lat, lng: to.lng }; // L-shape
+    
+    const dist1 = haversineDistance(from.lat, from.lng, midPt.lat, midPt.lng);
+    const dist2 = haversineDistance(midPt.lat, midPt.lng, to.lat, to.lng);
+    
+    const steps1 = Math.max(2, Math.floor(dist1 / 20));
+    const steps2 = Math.max(2, Math.floor(dist2 / 20));
+
+    for (let j = (i === 0 ? 0 : 1); j <= steps1; j++) {
       allPts.push({
-        lat: from.lat + (to.lat - from.lat) * t + randomInRange(-0.00003, 0.00003),
-        lng: from.lng + (to.lng - from.lng) * t + randomInRange(-0.00003, 0.00003),
+        lat: from.lat,
+        lng: from.lng + (midPt.lng - from.lng) * (j / steps1) + randomInRange(-0.00003, 0.00003)
+      });
+    }
+    for (let j = 1; j <= steps2; j++) {
+      allPts.push({
+        lat: midPt.lat + (to.lat - midPt.lat) * (j / steps2) + randomInRange(-0.00003, 0.00003),
+        lng: to.lng
       });
     }
   }
@@ -390,10 +401,14 @@ function generateTimestamps(points, options = {}) {
   const avgSpeed = 1000 / (avgPaceMinPerKm * 60);
 
   let cur = new Date(startTime);
+  const result = [];
   points[0].time = new Date(cur);
+  result.push(points[0]);
 
   for (let i = 1; i < points.length; i++) {
-    const segDist = points[i].distance - points[i - 1].distance;
+    const pt = points[i];
+    const prevPt = points[i - 1];
+    const segDist = pt.distance - prevPt.distance;
     const progress = i / points.length;
 
     let paceFactor = 1.0;
@@ -401,30 +416,49 @@ function generateTimestamps(points, options = {}) {
     else if (progress > 0.92) paceFactor = 1.05 + (progress - 0.92) * 3;
     else paceFactor = randomInRange(1 - paceVariation, 1 + paceVariation, true);
 
-    if (points[i].elevation !== undefined && points[i - 1].elevation !== undefined && segDist > 0) {
-      const grad = (points[i].elevation - points[i - 1].elevation) / segDist;
+    if (pt.elevation !== undefined && prevPt.elevation !== undefined && segDist > 0) {
+      const grad = (pt.elevation - prevPt.elevation) / segDist;
       paceFactor += grad * 4;
     }
 
     const speed = avgSpeed / Math.max(0.5, paceFactor);
-    const secs = segDist / speed;
+    const secs = segDist > 0 ? segDist / speed : 0;
     cur = new Date(cur.getTime() + secs * 1000);
-    points[i].time = new Date(cur);
+    pt.time = new Date(cur);
+    
+    // Simulate Red Light / Pause (approx 1.5% chance per point if not near start/end)
+    if (progress > 0.1 && progress < 0.9 && Math.random() < 0.015) {
+       const pauseSecs = randomInRange(15, 60);
+       const steps = Math.floor(pauseSecs / 5);
+       for (let j = 1; j <= steps; j++) {
+         cur = new Date(cur.getTime() + 5000);
+         result.push({ ...pt, time: new Date(cur), isPause: true });
+       }
+    }
+    
+    result.push(pt);
   }
-  return points;
+  return result;
 }
 
 // ─── Heart Rate ───────────────────────────────────────────────────────────────
 
 function generateHeartRate(points, options = {}) {
+  // Simulate weather factor randomly (hot weather = +HR)
+  const weatherFactor = Math.random() > 0.7 ? randomInRange(3, 8) : 0;
   const { minHR = 130, maxHR = 165, restingHR = 65 } = options;
   const n = points.length;
 
   for (let i = 0; i < n; i++) {
     const p = i / n;
     let hr;
-    if (p < 0.1) hr = restingHR + (minHR - restingHR) * (p / 0.1);
-    else if (p < 0.9) {
+    
+    if (points[i].isPause) {
+       // HR drops during pauses
+       hr = restingHR + (minHR - restingHR) * 0.5 + randomInRange(-2, 2);
+    } else if (p < 0.1) {
+       hr = restingHR + (minHR - restingHR) * (p / 0.1);
+    } else if (p < 0.9) {
       const mp = (p - 0.1) / 0.8;
       hr = minHR + (maxHR - minHR) * (0.5 + 0.3 * Math.sin(2 * Math.PI * 3 * mp)) + randomInRange(-5, 5);
       if (points[i].elevation !== undefined && i > 0 && points[i - 1].elevation !== undefined)
@@ -432,7 +466,8 @@ function generateHeartRate(points, options = {}) {
     } else {
       hr = minHR + (restingHR - minHR) * ((p - 0.9) / 0.1) * 0.5;
     }
-    points[i].heartRate = Math.round(Math.max(restingHR, Math.min(maxHR + 10, hr)));
+    
+    points[i].heartRate = Math.round(Math.max(restingHR, Math.min(maxHR + 15, hr + weatherFactor)));
   }
   return points;
 }

@@ -24,19 +24,19 @@ async function executeJob() {
 
   try {
     // Check if authenticated
-    if (!stravaApi.isAuthenticated()) {
+    if (!(await stravaApi.isAuthenticated())) {
       throw new Error('Not authenticated with Strava. Please connect your account.');
     }
 
     // Check daily limit
-    const stats = db.getActivityStats();
+    const stats = await db.getActivityStats();
     if (stats.todayCount >= 2) {
       console.log('[Scheduler] Limit reached (2 activities/day). VIP required.');
       return { success: false, message: 'VIP_REQUIRED' };
     }
 
     // Get configuration
-    const config = db.getAllConfig();
+    const config = await db.getAllConfig();
 
     // Generate activity (async - uses OSRM)
     console.log(`[Scheduler] Generating activity...`);
@@ -64,7 +64,7 @@ async function executeJob() {
     console.log(`[Scheduler] Generated: ${activity.activityName} - ${activity.distanceKm}km in ${activity.durationMin}min`);
 
     // Save to database
-    const activityId = db.saveActivity({
+    const activityId = await db.saveActivity({
       activity_name: activity.activityName,
       distance_km: activity.distanceKm,
       duration_min: activity.durationMin,
@@ -90,7 +90,7 @@ async function executeJob() {
 
       console.log(`[Scheduler] Upload complete! Strava Activity ID: ${finalStatus.activity_id}`);
 
-      db.updateActivity(activityId, {
+      await db.updateActivity(activityId, {
         strava_activity_id: String(finalStatus.activity_id),
         upload_status: 'uploaded',
       });
@@ -104,7 +104,7 @@ async function executeJob() {
       };
     } catch (uploadErr) {
       console.error('[Scheduler] Upload failed:', uploadErr);
-      db.updateActivity(activityId, {
+      await db.updateActivity(activityId, {
         upload_status: 'failed',
         error_message: typeof uploadErr === 'object' ? JSON.stringify(uploadErr.body || uploadErr.message || uploadErr) : String(uploadErr),
       });
@@ -126,8 +126,8 @@ async function executeJob() {
 /**
  * Start the scheduler
  */
-function startScheduler() {
-  const config = db.getAllConfig();
+async function startScheduler() {
+  const config = await db.getAllConfig();
 
   if (config.schedule_enabled !== 'true') {
     console.log('[Scheduler] Schedule disabled');
@@ -169,8 +169,8 @@ function stopScheduler() {
 /**
  * Get scheduler status
  */
-function getStatus() {
-  const config = db.getAllConfig();
+async function getStatus() {
+  const config = await db.getAllConfig();
   return {
     enabled: config.schedule_enabled === 'true',
     cronExpression: config.schedule_cron || '0 6 * * *',
@@ -183,19 +183,19 @@ function getStatus() {
 /**
  * Update schedule
  */
-function updateSchedule(enabled, time) {
-  db.setConfig('schedule_enabled', enabled ? 'true' : 'false');
+async function updateSchedule(enabled, time) {
+  await db.setConfig('schedule_enabled', enabled ? 'true' : 'false');
 
   if (time) {
-    db.setConfig('schedule_time', time);
+    await db.setConfig('schedule_time', time);
     // Convert time to cron expression
     const [hours, minutes] = time.split(':');
     const cronExpression = `${parseInt(minutes)} ${parseInt(hours)} * * *`;
-    db.setConfig('schedule_cron', cronExpression);
+    await db.setConfig('schedule_cron', cronExpression);
   }
 
   if (enabled) {
-    startScheduler();
+    await startScheduler();
   } else {
     stopScheduler();
   }
