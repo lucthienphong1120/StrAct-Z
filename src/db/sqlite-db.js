@@ -77,6 +77,7 @@ async function getDb() {
       route_start_lat REAL,
       route_start_lng REAL,
       route_start_time TEXT,
+      district_keys TEXT,
       deleted_at TEXT
     );
   `);
@@ -87,9 +88,12 @@ async function getDb() {
   try {
     await dbInstance.exec('ALTER TABLE activities ADD COLUMN route_start_time TEXT');
     console.log('[SQLite] Added route_start_time column');
-  } catch (e) {
-    // Column might already exist
-  }
+  } catch (e) {}
+
+  try {
+    await dbInstance.exec('ALTER TABLE activities ADD COLUMN district_keys TEXT');
+    console.log('[SQLite] Added district_keys column');
+  } catch (e) {}
 
   if (configCount.c === 0) {
     if (fs.existsSync(OLD_JSON_DB)) {
@@ -174,8 +178,8 @@ async function deleteTokens() {
 
 async function saveActivity(data) {
   const db = await getDb();
-  const res = await db.run(`INSERT INTO activities (created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng, route_start_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [new Date().toISOString(), data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.gpx_file, data.strava_activity_id || null, data.upload_status || 'pending', null, data.route_start_lat, data.route_start_lng, data.route_start_time || null]);
+  const res = await db.run(`INSERT INTO activities (created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng, route_start_time, district_keys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [new Date().toISOString(), data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.gpx_file, data.strava_activity_id || null, data.upload_status || 'pending', null, data.route_start_lat, data.route_start_lng, data.route_start_time || null, data.district_keys || null]);
   return res.lastID;
 }
 

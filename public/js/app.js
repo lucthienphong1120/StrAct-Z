@@ -313,13 +313,28 @@ async function loadActivities() {
     container.innerHTML = activities.map(a => {
       const actualTime = a.route_start_time || a.created_at;
       const dateStr = actualTime.endsWith('Z') ? actualTime : actualTime + 'Z';
-      const date = new Date(dateStr).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+      const dateObj = new Date(dateStr);
+      const timeStr = dateObj.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' });
+      const dateOnlyStr = dateObj.toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+      
+      let districtTags = '';
+      if (a.district_keys) {
+         const keys = a.district_keys.split(',');
+         districtTags = keys.map(k => {
+           const name = HANOI_DISTRICTS.find(d => d.key === k)?.name || k;
+           return `<span class="status-badge" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); padding: 2px 6px;">📍 ${name}</span>`;
+         }).join('');
+      }
+
       const statusClass = a.upload_status;
       return `
         <div class="activity-item">
           <div>
             <div class="activity-name">${a.activity_name || 'Unnamed'}</div>
-            <div class="activity-date">${date}</div>
+            <div class="activity-date" style="display:flex; gap:6px; margin-top:4px; flex-wrap:wrap; align-items:center;">
+               <span class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); padding: 2px 6px;">⏱️ ${timeStr} ${dateOnlyStr}</span>
+               ${districtTags}
+            </div>
           </div>
           <div class="activity-meta">${a.distance_km?.toFixed(1)} km</div>
           <div class="activity-meta">${a.duration_min?.toFixed(0)} min</div>
@@ -362,13 +377,16 @@ async function loadStravaActivities() {
       afterQuery = `&after=${afterTimestamp}`;
     }
 
-    const activities = await api(`/strava-activities?page=${stravaCurrentPage}&per_page=10${afterQuery}`);
+    let activities = await api(`/strava-activities?page=${stravaCurrentPage}&per_page=10${afterQuery}`);
     document.getElementById('stravaPageInfo').textContent = `Page ${stravaCurrentPage}`;
     
     if (!activities || !activities.length) {
       container.innerHTML = '<div class="empty-state"><div class="icon">☁️</div><p>No activities found on Strava.</p></div>';
       return;
     }
+    
+    // Sort descending (latest first)
+    activities.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
     
     container.innerHTML = activities.map(a => {
       const date = new Date(a.start_date).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });

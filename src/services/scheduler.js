@@ -92,6 +92,7 @@ async function executeJob() {
         route_start_lat: activity.startLat,
         route_start_lng: activity.startLng,
         route_start_time: activity.startTime ? activity.startTime.toISOString() : new Date().toISOString(),
+        district_keys: activity.districtKey,
       });
 
       // Upload to Strava
