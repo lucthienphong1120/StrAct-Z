@@ -15,7 +15,7 @@
     <div class="header-inner">
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
-        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.14.0</small></span>
+        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.15.0</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;" onclick="systemLogout()">Logout</button>
@@ -272,6 +272,22 @@
                 <div class="form-group">
                   <label class="form-label">Max Heart Rate</label>
                   <input type="number" id="cfgMaxHR" class="form-input" value="160" min="120" max="200">
+                </div>
+              </div>
+              <div class="form-row" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);">
+                <div class="form-group" style="display:flex;align-items:flex-end;">
+                  <label class="toggle" style="margin-bottom: 5px;">
+                    <input type="checkbox" id="cfgSimWeather" checked>
+                    <div class="toggle-track"></div>
+                    <span class="toggle-label" style="font-size: 0.85rem;" title="30% chance for hot weather (+3~8 BPM HR)">🌤️ Weather Sim</span>
+                  </label>
+                </div>
+                <div class="form-group" style="display:flex;align-items:flex-end;">
+                  <label class="toggle" style="margin-bottom: 5px;">
+                    <input type="checkbox" id="cfgSimRedLights" checked>
+                    <div class="toggle-track"></div>
+                    <span class="toggle-label" style="font-size: 0.85rem;" title="1.5% chance per GPS point to pause 15-60s">🚦 Red Lights</span>
+                  </label>
                 </div>
               </div>
             </div>

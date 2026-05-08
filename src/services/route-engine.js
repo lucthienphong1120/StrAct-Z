@@ -15,6 +15,10 @@ const HANOI_DISTRICTS = {
   thanh_xuan:   { name: 'Thanh Xuân',   lat: 20.9951, lng: 105.8130, radiusKm: 1.8 },
   cau_giay:     { name: 'Cầu Giấy',     lat: 21.0312, lng: 105.7886, radiusKm: 2.0 },
   tay_ho:       { name: 'Tây Hồ',       lat: 21.0614, lng: 105.8317, radiusKm: 2.2 },
+  long_bien:    { name: 'Long Biên',    lat: 21.0425, lng: 105.8943, radiusKm: 2.5 },
+  ha_dong:      { name: 'Hà Đông',      lat: 20.9632, lng: 105.7725, radiusKm: 2.8 },
+  bac_tu_liem:  { name: 'Bắc Từ Liêm',  lat: 21.0658, lng: 105.7505, radiusKm: 2.5 },
+  nam_tu_liem:  { name: 'Nam Từ Liêm',  lat: 21.0125, lng: 105.7600, radiusKm: 2.2 },
 };
 
 const EARTH_RADIUS = 6371000;
@@ -427,7 +431,7 @@ function generateTimestamps(points, options = {}) {
     pt.time = new Date(cur);
     
     // Simulate Red Light / Pause (approx 1.5% chance per point if not near start/end)
-    if (progress > 0.1 && progress < 0.9 && Math.random() < 0.015) {
+    if (options.simRedLights !== false && progress > 0.1 && progress < 0.9 && Math.random() < 0.015) {
        const pauseSecs = randomInRange(15, 60);
        const steps = Math.floor(pauseSecs / 5);
        for (let j = 1; j <= steps; j++) {
@@ -445,7 +449,7 @@ function generateTimestamps(points, options = {}) {
 
 function generateHeartRate(points, options = {}) {
   // Simulate weather factor randomly (hot weather = +HR)
-  const weatherFactor = Math.random() > 0.7 ? randomInRange(3, 8) : 0;
+  const weatherFactor = (options.simWeather !== false && Math.random() > 0.7) ? randomInRange(3, 8) : 0;
   const { minHR = 130, maxHR = 165, restingHR = 65 } = options;
   const n = points.length;
 

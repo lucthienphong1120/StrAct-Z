@@ -122,7 +122,11 @@ const HANOI_DISTRICTS = [
   { key: 'ba_dinh', name: 'Ba Đình' },
   { key: 'thanh_xuan', name: 'Thanh Xuân' },
   { key: 'cau_giay', name: 'Cầu Giấy' },
-  { key: 'tay_ho', name: 'Tây Hồ' }
+  { key: 'tay_ho', name: 'Tây Hồ' },
+  { key: 'long_bien', name: 'Long Biên', defaultOff: true },
+  { key: 'ha_dong', name: 'Hà Đông' },
+  { key: 'bac_tu_liem', name: 'Bắc Từ Liêm', defaultOff: true },
+  { key: 'nam_tu_liem', name: 'Nam Từ Liêm', defaultOff: true }
 ];
 
 async function loadConfig() {
@@ -134,8 +138,18 @@ async function loadConfig() {
     if (container) {
       const selectedKeys = config.selected_districts ? config.selected_districts.split(',') : [];
       container.innerHTML = '';
+      container.style.display = 'grid';
+      container.style.gridTemplateColumns = 'repeat(3, 1fr)';
+      container.style.gap = '10px';
+      
       HANOI_DISTRICTS.forEach(d => {
-        const isChecked = selectedKeys.includes(d.key) ? 'checked' : '';
+        let isChecked = '';
+        if (config.selected_districts !== undefined) {
+          isChecked = selectedKeys.includes(d.key) ? 'checked' : '';
+        } else {
+          isChecked = d.defaultOff ? '' : 'checked';
+        }
+        
         container.innerHTML += `
           <label class="toggle" style="font-size:0.8rem; margin-bottom:5px;">
             <input type="checkbox" class="district-cb" value="${d.key}" ${isChecked}>
@@ -173,6 +187,13 @@ async function loadConfig() {
     document.getElementById('cfgHeartRate').checked = config.heart_rate_enabled === 'true';
     document.getElementById('cfgMinHR').value = config.min_heart_rate || '80';
     document.getElementById('cfgMaxHR').value = config.max_heart_rate || '160';
+    
+    if (document.getElementById('cfgSimWeather')) {
+      document.getElementById('cfgSimWeather').checked = config.sim_weather !== 'false';
+    }
+    if (document.getElementById('cfgSimRedLights')) {
+      document.getElementById('cfgSimRedLights').checked = config.sim_redlights !== 'false';
+    }
   } catch (err) { console.error('Config error:', err); }
 }
 
@@ -259,6 +280,8 @@ async function saveConfig() {
     heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
     min_heart_rate: document.getElementById('cfgMinHR').value,
     max_heart_rate: document.getElementById('cfgMaxHR').value,
+    sim_weather: document.getElementById('cfgSimWeather')?.checked ? 'true' : 'false',
+    sim_redlights: document.getElementById('cfgSimRedLights')?.checked ? 'true' : 'false',
   };
 
   if (!validateInputs(config)) return;
