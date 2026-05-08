@@ -31,4 +31,7 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + [ ] Activity Insights (Cloud) thêm dữ liệu thời gian hoạt động dạng line chart màu xanh dương -> biểu đồ dual metrics kết hợp bar+line
 + [ ] Activity Insights (Cloud) default time select là 7 days
 + [ ] tích hợp thành app addin có thể cài đặt trên chrome (windows/android)
++ [ ] hiển thị sự khác biệt giữa vip và normal account trên UI (nhận diện - nhãn, màu sắc, nổi bật - có thể update cả color/theme giống app ngân hàng)
++ [ ] footer thêm thông tin copyright, email
++ [ ] cuối phần account setting thêm 1 dòng contact for vip: email (chữ xám)
 + [ ] 
