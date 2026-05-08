@@ -107,6 +107,7 @@ router.post('/generate', async (req, res) => {
       upload_status: 'generated',
       route_start_lat: activity.startLat,
       route_start_lng: activity.startLng,
+      route_start_time: activity.startTime ? activity.startTime.toISOString() : new Date().toISOString(),
     });
 
     res.json({
@@ -226,8 +227,8 @@ router.delete('/activities/:id', async (req, res) => {
 router.get('/scheduler', async (req, res) => res.json(await scheduler.getStatus()));
 
 router.post('/scheduler', async (req, res) => {
-  const { enabled, time } = req.body;
-  await scheduler.updateSchedule(enabled, time);
+  const { enabled, time, countMin, countMax } = req.body;
+  await scheduler.updateSchedule(enabled, time, countMin, countMax);
   res.json(await scheduler.getStatus());
 });
 

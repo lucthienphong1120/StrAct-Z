@@ -208,6 +208,16 @@
                 <label class="form-label">Daily Run Time</label>
                 <input type="time" id="scheduleTime" class="form-input" value="06:00" onchange="updateSchedule()">
               </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Min Count</label>
+                  <input type="number" id="scheduleCountMin" class="form-input" value="1" min="1" max="3" onchange="updateSchedule()">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Max Count</label>
+                  <input type="number" id="scheduleCountMax" class="form-input" value="1" min="1" max="3" onchange="updateSchedule()">
+                </div>
+              </div>
               <div class="schedule-display" id="scheduleDisplay" style="display:none;">
                 <div>
                   <div class="schedule-time" id="scheduleTimeDisplay">06:00</div>
@@ -290,8 +300,8 @@
               <select id="stravaFilterRange" class="form-select" style="padding:4px 8px; font-size:0.8rem; width:120px;" onchange="onStravaFilterChange()">
                 <option value="3_days">Last 3 Days</option>
                 <option value="5_days">Last 5 Days</option>
-                <option value="7_days">Last 7 Days</option>
-                <option value="1_month" selected>Last 1 Month</option>
+                <option value="7_days" selected>Last 7 Days</option>
+                <option value="1_month">Last 1 Month</option>
                 <option value="3_months">Last 3 Months</option>
                 <option value="total">Total</option>
               </select>

@@ -258,6 +258,8 @@ async function loadSchedule() {
     const status = await api('/scheduler');
     document.getElementById('scheduleEnabled').checked = status.enabled;
     document.getElementById('scheduleTime').value = status.scheduleTime || '06:00';
+    document.getElementById('scheduleCountMin').value = status.scheduleCountMin || 1;
+    document.getElementById('scheduleCountMax').value = status.scheduleCountMax || 1;
     updateScheduleDisplay(status);
   } catch (err) { console.error('Schedule error:', err); }
 }
@@ -275,9 +277,24 @@ function updateScheduleDisplay(status) {
 async function updateSchedule() {
   const enabled = document.getElementById('scheduleEnabled').checked;
   const time = document.getElementById('scheduleTime').value;
-  const status = await api('/scheduler', { method: 'POST', body: { enabled, time } });
+  const countMin = document.getElementById('scheduleCountMin').value;
+  const countMax = document.getElementById('scheduleCountMax').value;
+  
+  if (parseInt(countMax) > 3 || parseInt(countMin) > 3) {
+    alert('VIP Required: Bạn chỉ có thể tạo tối đa 3 activity 1 lúc. Vui lòng liên hệ Admin để nâng cấp (tính năng VIP).');
+    document.getElementById('scheduleCountMax').value = Math.min(3, parseInt(countMax));
+    document.getElementById('scheduleCountMin').value = Math.min(3, parseInt(countMin));
+    return;
+  }
+  
+  if (parseInt(countMin) > parseInt(countMax)) {
+    showToast('Min Count không được lớn hơn Max Count', 'error');
+    return;
+  }
+  
+  const status = await api('/scheduler', { method: 'POST', body: { enabled, time, countMin, countMax } });
   updateScheduleDisplay(status);
-  showToast(enabled ? `Schedule enabled at ${time}` : 'Schedule disabled', 'success');
+  showToast(enabled ? `Schedule enabled at ${time} (${countMin}-${countMax} acts)` : 'Schedule disabled', 'success');
 }
 
 // ─── Activities ─────────────────────────────────────────
@@ -294,7 +311,8 @@ async function loadActivities() {
     }
 
     container.innerHTML = activities.map(a => {
-      const dateStr = a.created_at.endsWith('Z') ? a.created_at : a.created_at + 'Z';
+      const actualTime = a.route_start_time || a.created_at;
+      const dateStr = actualTime.endsWith('Z') ? actualTime : actualTime + 'Z';
       const date = new Date(dateStr).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
       const statusClass = a.upload_status;
       return `

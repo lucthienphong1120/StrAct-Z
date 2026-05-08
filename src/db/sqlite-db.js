@@ -37,6 +37,8 @@ const DEFAULT_CONFIG = {
   min_heart_rate: '80',
   max_heart_rate: '160',
   use_osrm: 'true',
+  schedule_count_min: '1',
+  schedule_count_max: '1',
 };
 
 async function getDb() {
@@ -74,12 +76,21 @@ async function getDb() {
       error_message TEXT,
       route_start_lat REAL,
       route_start_lng REAL,
+      route_start_time TEXT,
       deleted_at TEXT
     );
   `);
   
   // Migrate from JSON if SQLite config is empty
   const configCount = await dbInstance.get('SELECT COUNT(*) as c FROM config');
+  
+  try {
+    await dbInstance.exec('ALTER TABLE activities ADD COLUMN route_start_time TEXT');
+    console.log('[SQLite] Added route_start_time column');
+  } catch (e) {
+    // Column might already exist
+  }
+
   if (configCount.c === 0) {
     if (fs.existsSync(OLD_JSON_DB)) {
       try {
@@ -163,8 +174,8 @@ async function deleteTokens() {
 
 async function saveActivity(data) {
   const db = await getDb();
-  const res = await db.run(`INSERT INTO activities (created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [new Date().toISOString(), data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.gpx_file, data.strava_activity_id || null, data.upload_status || 'pending', null, data.route_start_lat, data.route_start_lng]);
+  const res = await db.run(`INSERT INTO activities (created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng, route_start_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [new Date().toISOString(), data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.gpx_file, data.strava_activity_id || null, data.upload_status || 'pending', null, data.route_start_lat, data.route_start_lng, data.route_start_time || null]);
   return res.lastID;
 }
 
