@@ -443,8 +443,7 @@ function changeStravaPage(delta) {
 
 function getOverrideConfig() {
   const selected_districts = Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value).join(',');
-  const isScheduleMode = document.getElementById('cfgCustomTime').checked;
-  const isCustomTime = !isScheduleMode; // Toggle OFF = custom time (default), Toggle ON = schedule/random
+  const isCustomTime = document.getElementById('cfgCustomTime').checked;
   const overrideConfig = {
     target_date: isCustomTime ? document.getElementById('cfgTargetDate').value : undefined,
     min_time: isCustomTime ? document.getElementById('cfgCustomMinTime').value : document.getElementById('cfgRandMinTime').value,
@@ -600,18 +599,22 @@ function checkMaxSpan() {
 }
 
 function toggleCustomTime() {
-  const isScheduleMode = document.getElementById('cfgCustomTime').checked;
+  const isCustom = document.getElementById('cfgCustomTime').checked;
   const customInputs = document.getElementById('timeCustomInputs');
   const randomInputs = document.getElementById('timeRandomInputs');
   
-  if (isScheduleMode) {
-    // Show random time bounds, hide custom date/time
-    customInputs.style.display = 'none';
-    randomInputs.style.display = 'block';
+  if (isCustom) {
+    // Custom time active: dim random, enable custom
+    customInputs.style.opacity = '1';
+    customInputs.style.pointerEvents = 'auto';
+    randomInputs.style.opacity = '0.4';
+    randomInputs.style.pointerEvents = 'none';
   } else {
-    // Show custom date/time, hide random time bounds
-    customInputs.style.display = 'grid';
-    randomInputs.style.display = 'none';
+    // Random time active (default): dim custom, enable random
+    customInputs.style.opacity = '0.4';
+    customInputs.style.pointerEvents = 'none';
+    randomInputs.style.opacity = '1';
+    randomInputs.style.pointerEvents = 'auto';
   }
 }
 

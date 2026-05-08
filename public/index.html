@@ -15,7 +15,7 @@
     <div class="header-inner">
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
-        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.12.1</small></span>
+        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.13.0</small></span>
       </a>
       <div class="header-actions">
         <div id="authBadge" class="auth-badge disconnected">
@@ -117,29 +117,14 @@
                   <label class="toggle">
                     <input type="checkbox" id="cfgCustomTime" onchange="toggleCustomTime()">
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size:0.8rem;color:var(--text-muted)">Schedule Mode (Random Time)</span>
+                    <span class="toggle-label" style="font-size:0.8rem;color:var(--text-muted)">Custom Time (GPX Only)</span>
                   </label>
                 </div>
                 
-                <div id="timeCustomInputs" class="form-row" style="margin-top:0;">
-                  <div class="form-group">
-                    <label class="form-label">Target Date</label>
-                    <input type="date" id="cfgTargetDate" class="form-input">
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Time Range</label>
-                    <div style="display:flex;gap:10px;">
-                      <input type="time" id="cfgCustomMinTime" class="form-input" value="04:30">
-                      <span style="align-self:center;">-</span>
-                      <input type="time" id="cfgCustomMaxTime" class="form-input" value="21:30">
-                    </div>
-                  </div>
-                </div>
-
-                <div id="timeRandomInputs" style="display:none; background:var(--bg-input); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border); margin-top:10px;">
+                <div id="timeRandomInputs" style="background:var(--bg-input); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border); transition: opacity 0.3s;">
                   <div class="form-row" style="margin-bottom:8px;">
                     <div class="form-group" style="margin-bottom:0;">
-                      <label class="form-label" style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">🕒 Random Time Bounds</label>
+                      <label class="form-label" style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">&#x1F552; Random Time Bounds</label>
                       <div style="display:flex;gap:5px;align-items:center;">
                         <input type="time" id="cfgRandMinTime" class="form-input" value="04:30" style="padding:4px 8px;font-size:0.85rem;">
                         <span>-</span>
@@ -149,7 +134,7 @@
                   </div>
                   <div class="form-row" style="margin-bottom:0;">
                     <div class="form-group" style="grid-column: 1 / -1; margin-bottom:0;">
-                      <label class="form-label" style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">🚫 Avoid Workhours</label>
+                      <label class="form-label" style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">&#x1F6AB; Avoid Workhours</label>
                       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
                         <div style="display:flex;gap:5px;align-items:center;">
                           <input type="time" id="cfgWorkStart1" class="form-input" value="08:00" style="padding:4px 8px;font-size:0.85rem;width:90px">
@@ -163,6 +148,21 @@
                           <input type="time" id="cfgWorkEnd2" class="form-input" value="17:30" style="padding:4px 8px;font-size:0.85rem;width:90px">
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="timeCustomInputs" class="form-row" style="margin-top:10px; opacity:0.4; pointer-events:none;">
+                  <div class="form-group">
+                    <label class="form-label">Target Date</label>
+                    <input type="date" id="cfgTargetDate" class="form-input">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Time Range</label>
+                    <div style="display:flex;gap:10px;">
+                      <input type="time" id="cfgCustomMinTime" class="form-input" value="04:30">
+                      <span style="align-self:center;">-</span>
+                      <input type="time" id="cfgCustomMaxTime" class="form-input" value="21:30">
                     </div>
                   </div>
                 </div>
