@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - StrAct Z</title>
+  <title>Setup - StrAct Z</title>
   <link rel="stylesheet" href="/css/style.css">
   <style>
     .login-container {
@@ -24,25 +24,11 @@
       box-shadow: var(--shadow-lg), var(--shadow-glow);
       text-align: center;
     }
-    .login-logo {
-      font-size: 3rem;
-      margin-bottom: 10px;
-    }
-    .login-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 5px;
-    }
-    .login-subtitle {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      margin-bottom: 30px;
-    }
-    .login-form {
-      text-align: left;
-    }
-    #loginError {
+    .login-logo { font-size: 3rem; margin-bottom: 10px; }
+    .login-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 5px; }
+    .login-subtitle { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 30px; }
+    .login-form { text-align: left; }
+    #registerError {
       display: none;
       background: rgba(239, 68, 68, 0.1);
       color: var(--accent-red);
@@ -58,47 +44,51 @@
 <body>
   <div class="login-container">
     <div class="login-card">
-      <div class="login-logo">🏃</div>
-      <h1 class="login-title">StrAct Z</h1>
-      <p class="login-subtitle">Strava Auto Activity Generator</p>
+      <div class="login-logo">🚀</div>
+      <h1 class="login-title">First Time Setup</h1>
+      <p class="login-subtitle">Create your admin account to get started</p>
       
-      <div id="loginError"></div>
+      <div id="registerError"></div>
 
-      <form class="login-form" id="loginForm">
+      <form class="login-form" id="registerForm">
         <div class="form-group">
           <label class="form-label">Username</label>
           <input type="text" id="username" class="form-input" required autofocus>
         </div>
         <div class="form-group">
           <label class="form-label">Password</label>
-          <input type="password" id="password" class="form-input" required>
+          <input type="password" id="password" class="form-input" required minlength="6">
         </div>
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Login</button>
+        <div class="form-group">
+          <label class="form-label">Confirm Password</label>
+          <input type="password" id="confirmPassword" class="form-input" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Create Admin Account</button>
       </form>
     </div>
   </div>
 
   <script>
-    // Check if first-time setup is needed
-    fetch('/auth/system/needs-setup').then(res => res.json()).then(data => {
-      if (data.needsSetup) {
-        window.location.href = '/register.html';
-      }
-    }).catch(console.error);
-
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
-      const errorDiv = document.getElementById('loginError');
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const errorDiv = document.getElementById('registerError');
       const btn = e.target.querySelector('button');
 
+      if (password !== confirmPassword) {
+        errorDiv.textContent = 'Passwords do not match';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
       btn.disabled = true;
-      btn.textContent = 'Authenticating...';
+      btn.textContent = 'Creating...';
       errorDiv.style.display = 'none';
 
       try {
-        const res = await fetch('/auth/system/login', {
+        const res = await fetch('/auth/system/register-admin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password })
@@ -106,10 +96,20 @@
         
         const data = await res.json();
         
-        if (res.ok) {
-          window.location.href = '/';
+        if (res.ok && data.success) {
+          // Auto login after registration
+          const loginRes = await fetch('/auth/system/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+          if (loginRes.ok) {
+            window.location.href = '/';
+          } else {
+            window.location.href = '/login.html';
+          }
         } else {
-          errorDiv.textContent = data.error || data.message || 'Login failed'; // data.message is for express-rate-limit
+          errorDiv.textContent = data.error || 'Registration failed';
           errorDiv.style.display = 'block';
         }
       } catch (err) {
@@ -117,7 +117,7 @@
         errorDiv.style.display = 'block';
       } finally {
         btn.disabled = false;
-        btn.textContent = 'Login';
+        btn.textContent = 'Create Admin Account';
       }
     });
   </script>

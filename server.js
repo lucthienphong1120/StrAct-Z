@@ -59,9 +59,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve login page unauthenticated
+// Serve login and register pages unauthenticated
 app.get('/login.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+app.get('/register.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
 // Protect static files
@@ -91,13 +94,8 @@ app.listen(PORT, async () => {
 
   // Initialize scheduler on startup
   try {
-    const started = await scheduler.startScheduler();
-    if (started) {
-      const status = await scheduler.getStatus();
-      console.log(`  ⏰ Scheduler active: ${status.cronExpression}`);
-    } else {
-      console.log('  ⏰ Scheduler disabled (enable in dashboard)');
-    }
+    await scheduler.startAllSchedulers();
+    console.log('  ⏰ Multi-tenant schedulers initialized');
   } catch (err) {
     console.error('  ⏰ Scheduler initialization skipped:', err.message);
   }
