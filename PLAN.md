@@ -7,7 +7,7 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + khu vực hoạt động sẽ dùng làm tính trọng số random district ưu tiên khu vực gần hơn (cho phép user thêm tối đa 2 vòng tròn khu vực home và work - màu xanh lam)
 + Max Distance default thành 8km
 + phần đầu có thể thêm hoặc thay bằng chart thống kê cho đẹp
-+ weather sim và red light thêm ghi chú tác dụng ở dưới
 + use osrm thêm ghi chú tác dụng ở dưới
 + update lại toast notification đồng nhất toàn bộ UI dùng chung
 + mọi update config, button sửa đổi, validate, check quyền, vip max range,... đều phải có notify
++ toàn bộ config đều phải có hint (?) button hover hiện giải thích thông tin (ý nghĩa, loại giá trị, đơn vị, phạm vi min/max)
