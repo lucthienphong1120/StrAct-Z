@@ -9,11 +9,13 @@ const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const cookieParser = require('cookie-parser');
 
 const authRoutes = require('./src/routes/auth');
 const apiRoutes = require('./src/routes/api');
 const db = require('./src/db/database');
 const scheduler = require('./src/services/scheduler');
+const { authenticateToken, requirePageAuth } = require('./src/middleware/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -52,36 +54,31 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-// Basic Authentication (Protects UI & API if configured in .env)
-const adminUser = process.env.ADMIN_USERNAME;
-const adminPass = process.env.ADMIN_PASSWORD;
-
-if (adminUser && adminPass) {
-  app.use(authLimiter); // Apply strict brute force protection
-  app.use((req, res, next) => {
-    const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
-    const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
-    
-    if (login && password && login === adminUser && password === adminPass) {
-      return next();
-    }
-    
-    res.set('WWW-Authenticate', 'Basic realm="StrAct Z Secure Area"');
-    res.status(401).send('Authentication required. Please check your ADMIN_USERNAME and ADMIN_PASSWORD in .env');
-  });
-}
-
+app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve login page unauthenticated
+app.get('/login.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+// Protect static files
+app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 
 // Routes
-app.use('/auth', authRoutes);
-app.use('/api', apiRoutes);
+// Apply strict brute force protection ONLY to login endpoint
+app.use('/auth/system/login', authLimiter);
 
-// Serve main page
-app.get('/', (req, res) => {
+// Auth Routes (connect, callback, login, logout are public, others might need auth)
+app.use('/auth', authRoutes);
+
+// Protect API routes
+app.use('/api', authenticateToken, apiRoutes);
+
+// Serve main page (protected)
+app.get('/', requirePageAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 

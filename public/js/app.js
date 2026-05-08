@@ -39,6 +39,7 @@ async function checkAuth() {
       authText.textContent = data.athlete?.name || 'Connected';
       document.getElementById('connectScreen').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('btnLogout').style.display = 'block';
       renderAccountInfo(data.athlete);
       loadDashboard();
     } else {
@@ -46,6 +47,7 @@ async function checkAuth() {
       authText.textContent = 'Disconnected';
       document.getElementById('connectScreen').style.display = 'flex';
       document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('btnLogout').style.display = 'block';
     }
   } catch (err) {
     console.error('Auth check failed:', err);
@@ -62,15 +64,29 @@ function renderAccountInfo(athlete) {
         <div style="font-size:0.8rem;color:var(--text-muted);">ID: ${athlete?.id || 'N/A'}</div>
       </div>
     </div>
-    <button class="btn btn-danger btn-sm btn-block" onclick="disconnectStrava()">Disconnect Strava</button>
+    <button class="btn btn-danger btn-sm btn-block" onclick="disconnect()">Disconnect Strava</button>
+    <button class="btn btn-outline-danger btn-sm btn-block" style="margin-top:10px;" onclick="systemLogout()">Logout System</button>
   `;
 }
 
-async function disconnectStrava() {
-  if (!confirm('Disconnect Strava account?')) return;
-  await fetch('/auth/disconnect', { method: 'POST' });
-  showToast('Disconnected from Strava', 'info');
-  checkAuth();
+async function systemLogout() {
+  try {
+    await fetch('/auth/system/logout', { method: 'POST' });
+    window.location.href = '/login.html';
+  } catch (err) {
+    console.error('Logout error:', err);
+  }
+}
+
+async function disconnect() {
+  try {
+    if (!confirm('Disconnect Strava account?')) return;
+    await fetch('/auth/disconnect', { method: 'POST' });
+    checkAuth();
+    showToast('Strava disconnected');
+  } catch (err) {
+    showToast('Failed to disconnect Strava', 'error');
+  }
 }
 
 // ─── Dashboard ──────────────────────────────────────────

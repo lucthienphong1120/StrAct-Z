@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - StrAct Z</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: radial-gradient(circle at center, var(--bg-card) 0%, var(--bg-primary) 100%);
+    }
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      padding: 40px 30px;
+      border-radius: var(--radius-xl);
+      background: var(--gradient-card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+      text-align: center;
+    }
+    .login-logo {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    .login-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 5px;
+    }
+    .login-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+    }
+    .login-form {
+      text-align: left;
+    }
+    #loginError {
+      display: none;
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--accent-red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-logo">🏃</div>
+      <h1 class="login-title">StrAct Z</h1>
+      <p class="login-subtitle">Strava Auto Activity Generator</p>
+      
+      <div id="loginError"></div>
+
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" id="username" class="form-input" required autofocus>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="password" class="form-input" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('loginError');
+      const btn = e.target.querySelector('button');
+
+      btn.disabled = true;
+      btn.textContent = 'Authenticating...';
+      errorDiv.style.display = 'none';
+
+      try {
+        const res = await fetch('/auth/system/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+          window.location.href = '/';
+        } else {
+          errorDiv.textContent = data.error || data.message || 'Login failed'; // data.message is for express-rate-limit
+          errorDiv.style.display = 'block';
+        }
+      } catch (err) {
+        errorDiv.textContent = 'Connection error. Please try again.';
+        errorDiv.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Login';
+      }
+    });
+  </script>
+</body>
+</html>

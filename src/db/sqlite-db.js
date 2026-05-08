@@ -2,6 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const { open } = require('sqlite');
 const path = require('path');
 const fs = require('fs');
+const bcrypt = require('bcryptjs');
 const encryption = require('../utils/encryption');
 
 const DATA_DIR = path.join(__dirname, '..', '..', 'data');
@@ -80,6 +81,13 @@ async function getDb() {
       district_keys TEXT,
       deleted_at TEXT
     );
+    CREATE TABLE IF NOT EXISTS accounts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT UNIQUE NOT NULL,
+      password_hash TEXT NOT NULL,
+      role TEXT DEFAULT 'admin',
+      created_at TEXT
+    );
   `);
   
   // Migrate from JSON if SQLite config is empty
@@ -124,6 +132,21 @@ async function getDb() {
       for (const [k, v] of Object.entries(DEFAULT_CONFIG)) {
         await dbInstance.run('INSERT INTO config (key, value) VALUES (?, ?)', [k, String(v)]);
       }
+    }
+  }
+
+  // Seed Admin Account if empty
+  const accountCount = await dbInstance.get('SELECT COUNT(*) as c FROM accounts');
+  if (accountCount.c === 0 && process.env.ADMIN_USERNAME && process.env.ADMIN_PASSWORD) {
+    try {
+      const hash = bcrypt.hashSync(process.env.ADMIN_PASSWORD, 10);
+      await dbInstance.run(
+        'INSERT INTO accounts (username, password_hash, role, created_at) VALUES (?, ?, ?, ?)',
+        [process.env.ADMIN_USERNAME, hash, 'admin', new Date().toISOString()]
+      );
+      console.log('[SQLite] Seeded initial admin account from .env');
+    } catch (e) {
+      console.error('[SQLite] Failed to seed admin account', e);
     }
   }
   
@@ -230,10 +253,16 @@ async function getActivityStats() {
   };
 }
 
+async function getUserByUsername(username) {
+  const db = await getDb();
+  return await db.get('SELECT * FROM accounts WHERE username = ?', [username]);
+}
+
 module.exports = {
   getDb,
   getConfig, setConfig, getAllConfig,
   saveTokens, getTokens, deleteTokens,
   saveActivity, updateActivity, getActivities,
   getActivityStats, deleteActivity,
+  getUserByUsername,
 };
