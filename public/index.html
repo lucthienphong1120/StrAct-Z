@@ -48,22 +48,22 @@
         <div class="stat-card">
           <div class="stat-icon orange">🏃</div>
           <div class="stat-value" id="statTotal">0</div>
-          <div class="stat-label">Total Activities</div>
+          <div class="stat-label">Total Activities <small style="display:block; font-size:0.6rem; opacity:0.7;">(Generated & stored in local DB)</small></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon green">✅</div>
           <div class="stat-value" id="statUploaded">0</div>
-          <div class="stat-label">Uploaded</div>
+          <div class="stat-label">Uploaded <small style="display:block; font-size:0.6rem; opacity:0.7;">(Generated & stored in local DB)</small></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon blue">📏</div>
           <div class="stat-value" id="statDistance">0</div>
-          <div class="stat-label">Total Distance (km)</div>
+          <div class="stat-label">Total Distance (km) <small style="display:block; font-size:0.6rem; opacity:0.7;">(Generated & stored in local DB)</small></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon purple">⏱️</div>
           <div class="stat-value" id="statDuration">0</div>
-          <div class="stat-label">Total Duration (min)</div>
+          <div class="stat-label">Total Duration (min) <small style="display:block; font-size:0.6rem; opacity:0.7;">(Generated & stored in local DB)</small></div>
         </div>
       </div>
 
@@ -123,7 +123,7 @@
                   <label class="form-label">Max Districts per Route <span class="tooltip-icon" data-tooltip="Max districts a route can cross. Normal: 2, VIP: 3">?</span></label>
                   <input type="number" id="cfgMaxSpan" class="form-input" value="1" min="1" max="3" onchange="checkMaxSpan()">
                 </div>
-                <div class="form-group" style="display:flex;align-items:flex-end;">
+                <div class="form-group" style="display:flex;align-items:center;">
                   <label class="toggle">
                     <input type="checkbox" id="cfgOsrm" checked>
                     <div class="toggle-track"></div>
@@ -212,6 +212,61 @@
             </div>
           </div>
 
+          <!-- Activity Settings -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">⚙️ Activity Settings</div>
+              <button class="btn btn-sm btn-secondary" onclick="saveConfig()">💾 Save</button>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Activity Type <span class="tooltip-icon" data-tooltip="Type of sport for the GPX file.&#10;Distance multipliers:&#10;• Walk: 0.7x&#10;• Run: 1.0x&#10;• Ride: 1.5x">?</span></label>
+                  <select id="cfgActivityType" class="form-select" onchange="updateActivityTypeHint()">
+                    <option value="Random">Random</option>
+                    <option value="Run">Run</option>
+                    <option value="Walk">Walk</option>
+                    <option value="Ride">Ride</option>
+                  </select>
+                  <div id="activityTypeHint" style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">🎲 60% Run, 30% Walk, 10% Ride</div>
+                </div>
+                <div class="form-group" style="display:flex;align-items:center;">
+                  <label class="toggle">
+                    <input type="checkbox" id="cfgHeartRate" checked>
+                    <div class="toggle-track"></div>
+                    <span class="toggle-label">Heart Rate Data <span class="tooltip-icon" data-tooltip="Include simulated HR stream in GPX">?</span></span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Min Heart Rate <span class="tooltip-icon" data-tooltip="Lowest HR during activity (60 - 120)">?</span></label>
+                  <input type="number" id="cfgMinHR" class="form-input" value="80" min="60" max="120">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Max Heart Rate <span class="tooltip-icon" data-tooltip="Highest HR during activity (120 - 200)">?</span></label>
+                  <input type="number" id="cfgMaxHR" class="form-input" value="160" min="120" max="200">
+                </div>
+              </div>
+              <div class="form-row" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);">
+                <div class="form-group" style="display:flex;align-items:center;">
+                  <label class="toggle" style="margin-bottom: 5px;">
+                    <input type="checkbox" id="cfgSimWeather" checked>
+                    <div class="toggle-track"></div>
+                    <span class="toggle-label" style="font-size: 0.85rem;">🌤️ Weather Sim <span class="tooltip-icon" data-tooltip="30% chance for hot weather (+3~8 BPM HR)">?</span></span>
+                  </label>
+                </div>
+                <div class="form-group" style="display:flex;align-items:center;">
+                  <label class="toggle" style="margin-bottom: 5px;">
+                    <input type="checkbox" id="cfgSimRedLights" checked>
+                    <div class="toggle-track"></div>
+                    <span class="toggle-label" style="font-size: 0.85rem;">🚦 Red Lights <span class="tooltip-icon" data-tooltip="1.5% chance per GPS point to pause for 15-60s, lowering HR">?</span></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div> <!-- End Left Column -->
 
         <!-- Right Column -->
@@ -249,16 +304,6 @@
             </div>
           </div>
 
-          <!-- Strava Account -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">🔗 Strava Account</div>
-            </div>
-            <div class="card-body" id="accountInfo">
-              <p style="color:var(--text-muted)">Loading...</p>
-            </div>
-          </div>
-
           <!-- Activity Areas Card -->
           <div class="card">
             <div class="card-header">
@@ -278,6 +323,16 @@
             </div>
           </div>
 
+          <!-- Strava Account -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔗 Strava Account</div>
+            </div>
+            <div class="card-body" id="accountInfo">
+              <p style="color:var(--text-muted)">Loading...</p>
+            </div>
+          </div>
+
           <!-- Account Settings -->
           <div class="card">
             <div class="card-header">
@@ -289,61 +344,6 @@
                 <div style="display:flex; gap:8px;">
                   <input type="password" id="cfgNewPassword" class="form-input" placeholder="New Password (min 5 chars)" style="flex:1;">
                   <button class="btn btn-sm btn-primary" onclick="updatePassword()">Update</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Activity Settings -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">⚙️ Activity Settings</div>
-              <button class="btn btn-sm btn-secondary" onclick="saveConfig()">💾 Save</button>
-            </div>
-            <div class="card-body">
-              <div class="form-row">
-                <div class="form-group">
-                  <label class="form-label">Activity Type <span class="tooltip-icon" data-tooltip="Type of sport for the GPX file.&#10;Distance multipliers:&#10;• Walk: 0.7x&#10;• Run: 1.0x&#10;• Ride: 1.5x">?</span></label>
-                  <select id="cfgActivityType" class="form-select" onchange="updateActivityTypeHint()">
-                    <option value="Random">Random</option>
-                    <option value="Run">Run</option>
-                    <option value="Walk">Walk</option>
-                    <option value="Ride">Ride</option>
-                  </select>
-                  <div id="activityTypeHint" style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">🎲 60% Run, 30% Walk, 10% Ride</div>
-                </div>
-                <div class="form-group" style="display:flex;align-items:flex-end;">
-                  <label class="toggle">
-                    <input type="checkbox" id="cfgHeartRate" checked>
-                    <div class="toggle-track"></div>
-                    <span class="toggle-label">Heart Rate Data <span class="tooltip-icon" data-tooltip="Include simulated HR stream in GPX">?</span></span>
-                  </label>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label class="form-label">Min Heart Rate <span class="tooltip-icon" data-tooltip="Lowest HR during activity (60 - 120)">?</span></label>
-                  <input type="number" id="cfgMinHR" class="form-input" value="80" min="60" max="120">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Max Heart Rate <span class="tooltip-icon" data-tooltip="Highest HR during activity (120 - 200)">?</span></label>
-                  <input type="number" id="cfgMaxHR" class="form-input" value="160" min="120" max="200">
-                </div>
-              </div>
-              <div class="form-row" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);">
-                <div class="form-group" style="display:flex;align-items:flex-end;">
-                  <label class="toggle" style="margin-bottom: 5px;">
-                    <input type="checkbox" id="cfgSimWeather" checked>
-                    <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size: 0.85rem;">🌤️ Weather Sim <span class="tooltip-icon" data-tooltip="30% chance for hot weather (+3~8 BPM HR)">?</span></span>
-                  </label>
-                </div>
-                <div class="form-group" style="display:flex;align-items:flex-end;">
-                  <label class="toggle" style="margin-bottom: 5px;">
-                    <input type="checkbox" id="cfgSimRedLights" checked>
-                    <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size: 0.85rem;">🚦 Red Lights <span class="tooltip-icon" data-tooltip="1.5% chance per GPS point to pause for 15-60s, lowering HR">?</span></span>
-                  </label>
                 </div>
               </div>
             </div>
