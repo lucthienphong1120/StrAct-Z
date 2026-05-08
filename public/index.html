@@ -119,9 +119,8 @@
                   <label class="toggle">
                     <input type="checkbox" id="cfgOsrm" checked>
                     <div class="toggle-track"></div>
-                    <span class="toggle-label">Use OSRM (Snap to roads)</span>
+                    <span class="toggle-label">Use OSRM <span class="tooltip-icon" data-tooltip="Routes follow real streets via Open Source Routing Machine. Disable for fallback straight-line paths.">?</span></span>
                   </label>
-                  <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">Routes follow real streets via Open Source Routing Machine. Disable for fallback straight-line paths.</div>
                 </div>
               </div>
               
@@ -255,7 +254,7 @@
           <!-- Activity Areas Card -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">📍 Activity Areas (Map) <span class="tooltip-icon" data-tooltip="Base ratio is 1:1. Areas add boosts: Home (+2.5/2.0/1.0), Work (+1.5/1.0/0.5) for districts covered.">?</span></div>
+              <div class="card-title">📍 Activity Areas (Map) <span class="tooltip-icon" data-tooltip="Base ratio is 1:1.&#10;Home: +2.5 / +2.0 / +1.0&#10;Work: +1.5 / +1.0 / +0.5&#10;Districts covered get the boost.">?</span></div>
               <div style="display:flex; gap:5px;">
                 <button class="btn btn-sm btn-secondary" onclick="addActivityCircle('home')">🏠 Home</button>
                 <button class="btn btn-sm btn-secondary" onclick="addActivityCircle('work')">💼 Work</button>
@@ -328,14 +327,14 @@
                   <label class="toggle" style="margin-bottom: 5px;">
                     <input type="checkbox" id="cfgSimWeather" checked>
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size: 0.85rem;" title="30% chance for hot weather (+3~8 BPM HR)">🌤️ Weather Sim</span>
+                    <span class="toggle-label" style="font-size: 0.85rem;">🌤️ Weather Sim <span class="tooltip-icon" data-tooltip="30% chance for hot weather (+3~8 BPM HR)">?</span></span>
                   </label>
                 </div>
                 <div class="form-group" style="display:flex;align-items:flex-end;">
                   <label class="toggle" style="margin-bottom: 5px;">
                     <input type="checkbox" id="cfgSimRedLights" checked>
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size: 0.85rem;" title="1.5% chance per GPS point to pause 15-60s">🚦 Red Lights</span>
+                    <span class="toggle-label" style="font-size: 0.85rem;">🚦 Red Lights <span class="tooltip-icon" data-tooltip="1.5% chance per GPS point to pause for 15-60s, lowering HR">?</span></span>
                   </label>
                 </div>
               </div>

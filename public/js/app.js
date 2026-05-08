@@ -111,6 +111,7 @@ let userRole = 'normal';
 async function loadDashboard() {
   await Promise.all([loadStats(), loadDistricts(), loadConfig(), loadSchedule(), loadActivities(), loadStravaActivities()]);
   initMap();
+  resetMapView();
 }
 
 async function loadDistricts() {
@@ -758,6 +759,13 @@ function initMap() {
   // Small delay to ensure container is ready
   setTimeout(() => map.invalidateSize(), 100);
 }
+
+function resetMapView() {
+  if (map) {
+    map.setView([21.0285, 105.8542], 12);
+  }
+}
+
 
 function renderCircles(areasData) {
   if (!map) initMap();
