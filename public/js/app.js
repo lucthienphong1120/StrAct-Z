@@ -15,14 +15,29 @@ async function api(endpoint, options = {}) {
 
 // ─── Toast Notifications ────────────────────────────────
 
+const TOAST_ICONS = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+const TOAST_DURATION = { success: 4000, error: 6000, info: 3500, warning: 5000 };
+
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
+  if (!container) return;
+
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
-  const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
-  toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span> <span>${message}</span>`;
+  toast.innerHTML = `
+    <span class="toast-icon">${TOAST_ICONS[type] || 'ℹ️'}</span>
+    <span class="toast-body">${message}</span>
+    <button class="toast-close" title="Dismiss">✕</button>
+  `;
+
+  const dismiss = () => {
+    toast.classList.add('hide');
+    setTimeout(() => toast.remove(), 380);
+  };
+
+  toast.querySelector('.toast-close').addEventListener('click', dismiss);
   container.appendChild(toast);
-  setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 4000);
+  setTimeout(dismiss, TOAST_DURATION[type] || 4000);
 }
 
 // ─── Auth ───────────────────────────────────────────────
