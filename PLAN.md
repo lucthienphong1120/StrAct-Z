@@ -16,3 +16,5 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + [x] review và sửa lại min, max, range các option + validate (min/max/range)
 + [x] update logic random heart rate trọng số theo hoạt động
 + [x] update logic trọng số vị trí
++ [ ] sửa Max heart rate default thành 190bpm và check lại các công thức trọng số hoạt động đi bộ/đạp xe/chạy bộ - 50-60/60-70/70-85 % MHR
+
