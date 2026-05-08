@@ -12,7 +12,8 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + [x] mọi update config, button sửa đổi, validate, check quyền, vip max range,... đều phải có notify
 + [x] toàn bộ config đều phải có hint (?) button hover hiện giải thích thông tin (ý nghĩa, loại giá trị, đơn vị, phạm vi min/max)
 + [x] review, cân nhắc vị trí có thể dùng Caching layer (optimize API calls)
-+ [ ] tích hợp thêm các luồng công cụ khác như Fit, Health connect,...
++ [ ] tích hợp thêm các luồng công cụ Health Hub như Google Fit, Health connect, Apple Health,...
++ [ ] tích hợp bổ sung (hint optional, not tested) cho các công cụ luyện tập khác như adidas running, nike run club
 + [ ] review và sửa lại min, max, range các option + validate (min/max/range)
 + [x] update logic random heart rate trọng số theo hoạt động
 + [x] update logic trọng số vị trí
@@ -29,4 +30,5 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + [ ] bỏ tính năng xóa với hoạt động uploaded, xóa chỉ áp dụng với generate và chưa upload, với hoạt động đã upload cần vào strava xóa (hint/open strava)
 + [ ] Activity Insights (Cloud) thêm dữ liệu thời gian hoạt động dạng line chart màu xanh dương -> biểu đồ dual metrics kết hợp bar+line
 + [ ] Activity Insights (Cloud) default time select là 7 days
++ [ ] tích hợp thành app addin có thể cài đặt trên chrome (windows/android)
 + [ ] 
