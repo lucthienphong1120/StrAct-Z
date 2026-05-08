@@ -23,23 +23,23 @@ router.get('/districts', (req, res) => {
 // ─── Configuration ──────────────────────────────────────────────────────────
 
 router.get('/config', async (req, res) => {
-  res.json(await db.getAllConfig());
+  res.json(await db.getAllConfig(req.user.id));
 });
 
 router.post('/config', async (req, res) => {
   const updates = req.body;
   for (const [key, value] of Object.entries(updates)) {
-    await db.setConfig(key, value);
+    await db.setConfig(req.user.id, key, value);
   }
-  res.json({ success: true, config: await db.getAllConfig() });
+  res.json({ success: true, config: await db.getAllConfig(req.user.id) });
 });
 
 // ─── Stats ──────────────────────────────────────────────────────────────────
 
 router.get('/stats', async (req, res) => {
-  const stats = await db.getActivityStats();
-  const scheduleStatus = await scheduler.getStatus();
-  const tokens = await db.getTokens();
+  const stats = await db.getActivityStats(req.user.id);
+  const scheduleStatus = await scheduler.getStatus(req.user.id);
+  const tokens = await db.getTokens(req.user.id);
   res.json({
     ...stats,
     schedule: scheduleStatus,
@@ -53,7 +53,7 @@ router.get('/stats', async (req, res) => {
 
 router.get('/activities', async (req, res) => {
   const limit = parseInt(req.query.limit) || 100;
-  const all = await db.getActivities(limit);
+  const all = await db.getActivities(req.user.id, limit);
   // Exclude hard-deleted (shouldn't exist) but show soft-deleted with flag
   res.json(all);
 });
@@ -63,7 +63,7 @@ router.get('/strava-activities', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const perPage = parseInt(req.query.per_page) || 10;
     const after = req.query.after ? parseInt(req.query.after) : null;
-    const activities = await stravaApi.getActivities(page, perPage, after);
+    const activities = await stravaApi.getActivities(req.user.id, page, perPage, after);
     res.json(activities);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -73,7 +73,7 @@ router.get('/strava-activities', async (req, res) => {
 // Generate GPX only (no upload)
 router.post('/generate', async (req, res) => {
   try {
-    const config = await db.getAllConfig();
+    const config = await db.getAllConfig(req.user.id);
     const ov = req.body || {};
 
     const activity = await generateActivity({
@@ -96,9 +96,11 @@ router.post('/generate', async (req, res) => {
       minHeartRate: parseInt(ov.min_heart_rate || config.min_heart_rate),
       maxHeartRate: parseInt(ov.max_heart_rate || config.max_heart_rate),
       useOSRM: (ov.use_osrm || config.use_osrm) !== 'false',
+      simWeather: (ov.sim_weather || config.sim_weather) !== 'false',
+      simRedLights: (ov.sim_redlights || config.sim_redlights) !== 'false',
     });
 
-    const activityId = await db.saveActivity({
+    const activityId = await db.saveActivity(req.user.id, {
       activity_name: activity.activityName,
       distance_km: activity.distanceKm,
       duration_min: activity.durationMin,
@@ -133,7 +135,7 @@ router.post('/generate', async (req, res) => {
 // Generate and upload
 router.post('/generate-and-upload', async (req, res) => {
   try {
-    const config = await db.getAllConfig();
+    const config = await db.getAllConfig(req.user.id);
     const ov = req.body || {};
 
     const activity = await generateActivity({
@@ -156,9 +158,11 @@ router.post('/generate-and-upload', async (req, res) => {
       minHeartRate: parseInt(ov.min_heart_rate || config.min_heart_rate),
       maxHeartRate: parseInt(ov.max_heart_rate || config.max_heart_rate),
       useOSRM: (ov.use_osrm || config.use_osrm) !== 'false',
+      simWeather: (ov.sim_weather || config.sim_weather) !== 'false',
+      simRedLights: (ov.sim_redlights || config.sim_redlights) !== 'false',
     });
 
-    const activityId = await db.saveActivity({
+    const activityId = await db.saveActivity(req.user.id, {
       activity_name: activity.activityName,
       distance_km: activity.distanceKm,
       duration_min: activity.durationMin,
@@ -171,14 +175,14 @@ router.post('/generate-and-upload', async (req, res) => {
       district_keys: activity.districtKey,
     });
 
-    const uploadResult = await stravaApi.uploadActivity(activity.filepath, {
+    const uploadResult = await stravaApi.uploadActivity(req.user.id, activity.filepath, {
       name: activity.activityName,
       sportType: ov.activity_type || config.activity_type || 'Run',
     });
 
-    const finalStatus = await stravaApi.waitForUpload(uploadResult.id);
+    const finalStatus = await stravaApi.waitForUpload(req.user.id, uploadResult.id);
 
-    await db.updateActivity(activityId, {
+    await db.updateActivity(req.user.id, activityId, {
       strava_activity_id: String(finalStatus.activity_id),
       upload_status: 'uploaded',
     });
@@ -201,21 +205,21 @@ router.post('/generate-and-upload', async (req, res) => {
 // Upload existing activity by local DB id
 router.post('/upload/:id', async (req, res) => {
   try {
-    const activities = await db.getActivities(200);
+    const activities = await db.getActivities(req.user.id, 200);
     const activity = activities.find(a => a.id === parseInt(req.params.id));
     if (!activity) return res.status(404).json({ error: 'Activity not found' });
 
     const gpxPath = path.join(__dirname, '..', '..', 'data', 'gpx', activity.gpx_file);
     if (!fs.existsSync(gpxPath)) return res.status(404).json({ error: 'GPX file not found' });
 
-    const uploadResult = await stravaApi.uploadActivity(gpxPath, {
+    const uploadResult = await stravaApi.uploadActivity(req.user.id, gpxPath, {
       name: activity.activity_name,
-      sportType: await db.getConfig('activity_type') || 'Run',
+      sportType: await db.getConfig(req.user.id, 'activity_type') || 'Run',
     });
 
-    const finalStatus = await stravaApi.waitForUpload(uploadResult.id);
+    const finalStatus = await stravaApi.waitForUpload(req.user.id, uploadResult.id);
 
-    await db.updateActivity(activity.id, {
+    await db.updateActivity(req.user.id, activity.id, {
       strava_activity_id: String(finalStatus.activity_id),
       upload_status: 'uploaded',
     });
@@ -224,7 +228,7 @@ router.post('/upload/:id', async (req, res) => {
   } catch (err) {
     console.error('Upload error:', err);
     if (req.params.id) {
-      await db.updateActivity(parseInt(req.params.id), {
+      await db.updateActivity(req.user.id, parseInt(req.params.id), {
         upload_status: 'failed',
         error_message: JSON.stringify(err.body || err.message || err),
       });
@@ -240,7 +244,7 @@ router.delete('/activities/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   const deleteFromStrava = req.query.strava === 'true';
 
-  const activities = await db.getActivities(200);
+  const activities = await db.getActivities(req.user.id, 200);
   const activity = activities.find(a => a.id === id);
   if (!activity) return res.status(404).json({ error: 'Activity not found' });
 
@@ -252,7 +256,7 @@ router.delete('/activities/:id', async (req, res) => {
   // Try to delete from Strava first if requested
   if (deleteFromStrava && activity.strava_activity_id) {
     try {
-      await stravaApi.deleteActivity(activity.strava_activity_id);
+      await stravaApi.deleteActivity(req.user.id, activity.strava_activity_id);
       stravaDeleted = true;
     } catch (err) {
       stravaError = err.body || err.message || 'Strava delete failed';
@@ -267,7 +271,7 @@ router.delete('/activities/:id', async (req, res) => {
   } catch (e) { /* ignore */ }
 
   // Hard delete from local DB
-  await db.deleteActivity(id, true);
+  await db.deleteActivity(req.user.id, id, true);
 
   res.json({
     success: true,
@@ -283,17 +287,17 @@ router.delete('/activities/:id', async (req, res) => {
 
 // ─── Scheduler ───────────────────────────────────────────────────────────────
 
-router.get('/scheduler', async (req, res) => res.json(await scheduler.getStatus()));
+router.get('/scheduler', async (req, res) => res.json(await scheduler.getStatus(req.user.id)));
 
 router.post('/scheduler', async (req, res) => {
   const { enabled, time, countMin, countMax } = req.body;
-  await scheduler.updateSchedule(enabled, time, countMin, countMax);
-  res.json(await scheduler.getStatus());
+  await scheduler.updateSchedule(req.user.id, enabled, time, countMin, countMax);
+  res.json(await scheduler.getStatus(req.user.id));
 });
 
 router.post('/scheduler/trigger', async (req, res) => {
   try {
-    const result = await scheduler.executeJob();
+    const result = await scheduler.executeJob(req.user.id);
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

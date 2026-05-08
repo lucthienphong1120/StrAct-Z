@@ -20,7 +20,8 @@ function requirePageAuth(req, res, next) {
   if (!token) return res.redirect('/login.html');
 
   try {
-    jwt.verify(token, JWT_SECRET);
+    const verified = jwt.verify(token, JWT_SECRET);
+    req.user = verified;
     next();
   } catch (err) {
     res.redirect('/login.html');

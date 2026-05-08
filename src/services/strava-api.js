@@ -92,7 +92,7 @@ function getAuthUrl() {
 /**
  * Exchange authorization code for tokens
  */
-async function exchangeCode(code) {
+async function exchangeCode(accountId, code) {
   const postData = new URLSearchParams({
     client_id: process.env.STRAVA_CLIENT_ID,
     client_secret: process.env.STRAVA_CLIENT_SECRET,
@@ -113,7 +113,7 @@ async function exchangeCode(code) {
   const response = await makeRequest(options, postData);
 
   // Save tokens to database
-  await db.saveTokens({
+  await db.saveTokens(accountId, {
     access_token: response.access_token,
     refresh_token: response.refresh_token,
     expires_at: response.expires_at,
@@ -129,8 +129,8 @@ async function exchangeCode(code) {
 /**
  * Refresh access token if expired
  */
-async function refreshToken() {
-  const tokens = await db.getTokens();
+async function refreshToken(accountId) {
+  const tokens = await db.getTokens(accountId);
   if (!tokens) {
     throw new Error('No tokens found. Please authenticate first.');
   }
@@ -163,7 +163,7 @@ async function refreshToken() {
   const response = await makeRequest(options, postData);
 
   // Update tokens in database
-  await db.saveTokens({
+  await db.saveTokens(accountId, {
     access_token: response.access_token,
     refresh_token: response.refresh_token,
     expires_at: response.expires_at,
@@ -179,14 +179,14 @@ async function refreshToken() {
 /**
  * Upload GPX file to Strava
  */
-async function uploadActivity(gpxFilepath, options = {}) {
+async function uploadActivity(accountId, gpxFilepath, options = {}) {
   const {
     name = 'Morning Run',
     description = '',
     sportType = 'Run',
   } = options;
 
-  const accessToken = await refreshToken();
+  const accessToken = await refreshToken(accountId);
 
   const form = new FormData();
   form.append('file', fs.createReadStream(gpxFilepath));
@@ -231,8 +231,8 @@ async function uploadActivity(gpxFilepath, options = {}) {
 /**
  * Check upload status
  */
-async function checkUploadStatus(uploadId) {
-  const accessToken = await refreshToken();
+async function checkUploadStatus(accountId, uploadId) {
+  const accessToken = await refreshToken(accountId);
 
   const options = {
     hostname: STRAVA_BASE_URL,
@@ -271,8 +271,8 @@ async function waitForUpload(uploadId, maxAttempts = 30) {
 /**
  * Get authenticated athlete info
  */
-async function getAthlete() {
-  const accessToken = await refreshToken();
+async function getAthlete(accountId) {
+  const accessToken = await refreshToken(accountId);
   const options = {
     hostname: STRAVA_BASE_URL,
     path: '/api/v3/athlete',
@@ -287,16 +287,16 @@ async function getAthlete() {
 /**
  * Check if authenticated
  */
-async function isAuthenticated() {
-  const tokens = await db.getTokens();
+async function isAuthenticated(accountId) {
+  const tokens = await db.getTokens(accountId);
   return tokens && tokens.access_token ? true : false;
 }
 
 /**
  * Delete a Strava activity by its activity ID
  */
-async function deleteActivity(stravaActivityId) {
-  const accessToken = await refreshToken();
+async function deleteActivity(accountId, stravaActivityId) {
+  const accessToken = await refreshToken(accountId);
   const options = {
     hostname: STRAVA_BASE_URL,
     path: `/api/v3/activities/${stravaActivityId}`,
@@ -320,9 +320,9 @@ async function deleteActivity(stravaActivityId) {
 /**
  * Disconnect / deauthorize
  */
-async function disconnect() {
+async function disconnect(accountId) {
   try {
-    const tokens = await db.getTokens();
+    const tokens = await db.getTokens(accountId);
     if (tokens && tokens.access_token) {
       const postData = new URLSearchParams({
         access_token: tokens.access_token,
@@ -341,15 +341,15 @@ async function disconnect() {
       await makeRequest(options, postData).catch(() => {});
     }
   } finally {
-    await db.deleteTokens();
+    await db.deleteTokens(accountId);
   }
 }
 
 /**
  * Get athlete's past activities
  */
-async function getActivities(page = 1, perPage = 30, after = null) {
-  const token = await refreshToken();
+async function getActivities(accountId, page = 1, perPage = 30, after = null) {
+  const token = await refreshToken(accountId);
   
   let reqPath = `/api/v3/athlete/activities?page=${page}&per_page=${perPage}`;
   if (after) {

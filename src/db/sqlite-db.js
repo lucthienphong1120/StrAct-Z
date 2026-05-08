@@ -54,8 +54,15 @@ async function getDb() {
       key TEXT PRIMARY KEY,
       value TEXT
     );
+    CREATE TABLE IF NOT EXISTS user_config (
+      account_id INTEGER,
+      key TEXT,
+      value TEXT,
+      PRIMARY KEY (account_id, key)
+    );
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      account_id INTEGER,
       access_token TEXT,
       refresh_token TEXT,
       expires_at INTEGER,
@@ -103,6 +110,25 @@ async function getDb() {
     console.log('[SQLite] Added district_keys column');
   } catch (e) {}
 
+  try {
+    await dbInstance.exec('ALTER TABLE activities ADD COLUMN account_id INTEGER DEFAULT 1');
+    console.log('[SQLite] Added account_id to activities');
+  } catch (e) {}
+
+  try {
+    await dbInstance.exec('ALTER TABLE users ADD COLUMN account_id INTEGER DEFAULT 1');
+    console.log('[SQLite] Added account_id to users');
+  } catch (e) {}
+
+  // Migrate global config to user_config for account 1
+  const uConfCount = await dbInstance.get('SELECT COUNT(*) as c FROM user_config');
+  if (uConfCount.c === 0) {
+    const oldConfs = await dbInstance.all('SELECT * FROM config');
+    for (const row of oldConfs) {
+      await dbInstance.run('INSERT INTO user_config (account_id, key, value) VALUES (1, ?, ?)', [row.key, row.value]);
+    }
+  }
+
   if (configCount.c === 0) {
     if (fs.existsSync(OLD_JSON_DB)) {
       try {
@@ -128,9 +154,9 @@ async function getDb() {
         console.error('[SQLite] Migration failed', e);
       }
     } else {
-      // Just seed default configs
+      // Just seed default configs to account 1
       for (const [k, v] of Object.entries(DEFAULT_CONFIG)) {
-        await dbInstance.run('INSERT INTO config (key, value) VALUES (?, ?)', [k, String(v)]);
+        await dbInstance.run('INSERT OR IGNORE INTO user_config (account_id, key, value) VALUES (1, ?, ?)', [k, String(v)]);
       }
     }
   }
@@ -153,35 +179,35 @@ async function getDb() {
   return dbInstance;
 }
 
-async function getConfig(key) {
+async function getConfig(accountId, key) {
   const db = await getDb();
-  const row = await db.get('SELECT value FROM config WHERE key = ?', [key]);
+  const row = await db.get('SELECT value FROM user_config WHERE account_id = ? AND key = ?', [accountId, key]);
   return row ? row.value : (DEFAULT_CONFIG[key] || null);
 }
 
-async function setConfig(key, value) {
+async function setConfig(accountId, key, value) {
   const db = await getDb();
-  await db.run('INSERT OR REPLACE INTO config (key, value) VALUES (?, ?)', [key, String(value)]);
+  await db.run('INSERT OR REPLACE INTO user_config (account_id, key, value) VALUES (?, ?, ?)', [accountId, key, String(value)]);
 }
 
-async function getAllConfig() {
+async function getAllConfig(accountId) {
   const db = await getDb();
-  const rows = await db.all('SELECT key, value FROM config');
+  const rows = await db.all('SELECT key, value FROM user_config WHERE account_id = ?', [accountId]);
   const conf = { ...DEFAULT_CONFIG };
   for (const r of rows) conf[r.key] = r.value;
   return conf;
 }
 
-async function saveTokens(data) {
+async function saveTokens(accountId, data) {
   const db = await getDb();
-  await db.run('DELETE FROM users'); // Multi-user placeholder: delete old user for now to maintain single-user behavior until UI supports multi-user login
-  await db.run(`INSERT INTO users (access_token, refresh_token, expires_at, athlete_id, athlete_name, athlete_avatar, scope) VALUES (?, ?, ?, ?, ?, ?, ?)`, 
-    [encryption.encrypt(data.access_token), encryption.encrypt(data.refresh_token), data.expires_at, data.athlete_id, data.athlete_name, data.athlete_avatar, data.scope]);
+  await db.run('DELETE FROM users WHERE account_id = ?', [accountId]);
+  await db.run(`INSERT INTO users (account_id, access_token, refresh_token, expires_at, athlete_id, athlete_name, athlete_avatar, scope) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+    [accountId, encryption.encrypt(data.access_token), encryption.encrypt(data.refresh_token), data.expires_at, data.athlete_id, data.athlete_name, data.athlete_avatar, data.scope]);
 }
 
-async function getTokens() {
+async function getTokens(accountId) {
   const db = await getDb();
-  const user = await db.get('SELECT * FROM users ORDER BY id DESC LIMIT 1');
+  const user = await db.get('SELECT * FROM users WHERE account_id = ? ORDER BY id DESC LIMIT 1', [accountId]);
   if (!user) return null;
   return {
     access_token: encryption.decrypt(user.access_token),
@@ -194,19 +220,19 @@ async function getTokens() {
   };
 }
 
-async function deleteTokens() {
+async function deleteTokens(accountId) {
   const db = await getDb();
-  await db.run('DELETE FROM users');
+  await db.run('DELETE FROM users WHERE account_id = ?', [accountId]);
 }
 
-async function saveActivity(data) {
+async function saveActivity(accountId, data) {
   const db = await getDb();
-  const res = await db.run(`INSERT INTO activities (created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng, route_start_time, district_keys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [new Date().toISOString(), data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.gpx_file, data.strava_activity_id || null, data.upload_status || 'pending', null, data.route_start_lat, data.route_start_lng, data.route_start_time || null, data.district_keys || null]);
+  const res = await db.run(`INSERT INTO activities (account_id, created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng, route_start_time, district_keys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [accountId, new Date().toISOString(), data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.gpx_file, data.strava_activity_id || null, data.upload_status || 'pending', null, data.route_start_lat, data.route_start_lng, data.route_start_time || null, data.district_keys || null]);
   return res.lastID;
 }
 
-async function updateActivity(id, data) {
+async function updateActivity(accountId, id, data) {
   const db = await getDb();
   const sets = [];
   const vals = [];
@@ -215,33 +241,33 @@ async function updateActivity(id, data) {
     vals.push(v);
   }
   if (sets.length === 0) return;
-  vals.push(id);
-  await db.run(`UPDATE activities SET ${sets.join(', ')} WHERE id = ?`, vals);
+  vals.push(id, accountId);
+  await db.run(`UPDATE activities SET ${sets.join(', ')} WHERE id = ? AND account_id = ?`, vals);
 }
 
-async function getActivities(limit = 50) {
+async function getActivities(accountId, limit = 50) {
   const db = await getDb();
-  return await db.all(`SELECT * FROM activities WHERE deleted_at IS NULL ORDER BY id DESC LIMIT ?`, [limit]);
+  return await db.all(`SELECT * FROM activities WHERE account_id = ? AND deleted_at IS NULL ORDER BY id DESC LIMIT ?`, [accountId, limit]);
 }
 
-async function deleteActivity(id, hard = false) {
+async function deleteActivity(accountId, id, hard = false) {
   const db = await getDb();
   if (hard) {
-    await db.run(`DELETE FROM activities WHERE id = ?`, [id]);
+    await db.run(`DELETE FROM activities WHERE id = ? AND account_id = ?`, [id, accountId]);
   } else {
-    await db.run(`UPDATE activities SET upload_status = 'deleted', deleted_at = ? WHERE id = ?`, [new Date().toISOString(), id]);
+    await db.run(`UPDATE activities SET upload_status = 'deleted', deleted_at = ? WHERE id = ? AND account_id = ?`, [new Date().toISOString(), id, accountId]);
   }
   return true;
 }
 
-async function getActivityStats() {
+async function getActivityStats(accountId) {
   const db = await getDb();
   const today = new Date().toISOString().slice(0, 10) + '%';
-  const total = (await db.get('SELECT COUNT(*) as c FROM activities WHERE deleted_at IS NULL')).c;
-  const uploaded = (await db.get("SELECT COUNT(*) as c FROM activities WHERE upload_status = 'uploaded' AND deleted_at IS NULL")).c;
-  const failed = (await db.get("SELECT COUNT(*) as c FROM activities WHERE upload_status = 'failed' AND deleted_at IS NULL")).c;
-  const sums = await db.get("SELECT SUM(distance_km) as dist, SUM(duration_min) as dur FROM activities WHERE upload_status = 'uploaded' AND deleted_at IS NULL");
-  const todayCount = (await db.get('SELECT COUNT(*) as c FROM activities WHERE created_at LIKE ? AND deleted_at IS NULL', [today])).c;
+  const total = (await db.get('SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND deleted_at IS NULL', [accountId])).c;
+  const uploaded = (await db.get("SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND upload_status = 'uploaded' AND deleted_at IS NULL", [accountId])).c;
+  const failed = (await db.get("SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND upload_status = 'failed' AND deleted_at IS NULL", [accountId])).c;
+  const sums = await db.get("SELECT SUM(distance_km) as dist, SUM(duration_min) as dur FROM activities WHERE account_id = ? AND upload_status = 'uploaded' AND deleted_at IS NULL", [accountId]);
+  const todayCount = (await db.get('SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND created_at LIKE ? AND deleted_at IS NULL', [accountId, today])).c;
 
   return {
     total,
@@ -258,11 +284,36 @@ async function getUserByUsername(username) {
   return await db.get('SELECT * FROM accounts WHERE username = ?', [username]);
 }
 
+async function createAccount(username, plainPassword) {
+  const db = await getDb();
+  const hash = bcrypt.hashSync(plainPassword, 10);
+  const res = await db.run(
+    'INSERT INTO accounts (username, password_hash, role, created_at) VALUES (?, ?, ?, ?)',
+    [username, hash, 'admin', new Date().toISOString()]
+  );
+  
+  // Seed default configs for new account
+  for (const [k, v] of Object.entries(DEFAULT_CONFIG)) {
+    await db.run('INSERT OR IGNORE INTO user_config (account_id, key, value) VALUES (?, ?, ?)', [res.lastID, k, String(v)]);
+  }
+  return res.lastID;
+}
+
+async function getAccountCount() {
+  const db = await getDb();
+  return (await db.get('SELECT COUNT(*) as c FROM accounts')).c;
+}
+
+async function getAllAccounts() {
+  const db = await getDb();
+  return await db.all('SELECT id, username, role, created_at FROM accounts');
+}
+
 module.exports = {
   getDb,
   getConfig, setConfig, getAllConfig,
   saveTokens, getTokens, deleteTokens,
   saveActivity, updateActivity, getActivities,
   getActivityStats, deleteActivity,
-  getUserByUsername,
+  getUserByUsername, createAccount, getAccountCount, getAllAccounts,
 };

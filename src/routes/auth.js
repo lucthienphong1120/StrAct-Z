@@ -11,6 +11,33 @@ const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.APP_SECRET || 'strava_auto_act_default_secret_32';
 
+// Check if system needs setup
+router.get('/system/needs-setup', async (req, res) => {
+  try {
+    const count = await db.getAccountCount();
+    res.json({ needsSetup: count === 0 });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Register initial admin account
+router.post('/system/register-admin', async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) return res.status(400).json({ error: 'Username and password required' });
+
+  try {
+    const count = await db.getAccountCount();
+    if (count > 0) return res.status(403).json({ error: 'Setup already completed' });
+
+    await db.createAccount(username, password);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Registration error:', err);
+    res.status(500).json({ error: 'Failed to create account' });
+  }
+});
+
 // System Login (JWT)
 router.post('/system/login', async (req, res) => {
   const { username, password } = req.body;
@@ -44,15 +71,19 @@ router.post('/system/logout', (req, res) => {
   res.json({ success: true });
 });
 
+const { authenticateToken, requirePageAuth } = require('../middleware/auth');
+
 // Redirect to Strava OAuth
-router.get('/connect', (req, res) => {
-  const authUrl = stravaApi.getAuthUrl();
+router.get('/connect', requirePageAuth, (req, res) => {
+  // Pass accountId in state to ensure we know who is connecting
+  const authUrl = stravaApi.getAuthUrl(req.user.id);
   res.redirect(authUrl);
 });
 
 // OAuth callback
-router.get('/callback', async (req, res) => {
-  const { code, error, scope } = req.query;
+router.get('/callback', requirePageAuth, async (req, res) => {
+  const { code, error, scope, state } = req.query;
+  const accountId = req.user.id; // From requirePageAuth
 
   if (error) {
     return res.redirect('/?error=' + encodeURIComponent(error));
@@ -63,7 +94,12 @@ router.get('/callback', async (req, res) => {
   }
 
   try {
-    await stravaApi.exchangeCode(code);
+    // If state doesn't match accountId, it might be a CSRF or mixed session
+    if (state && parseInt(state) !== accountId) {
+      console.warn(`OAuth state mismatch: got ${state}, expected ${accountId}`);
+    }
+    
+    await stravaApi.exchangeCode(accountId, code);
     res.redirect('/?success=connected');
   } catch (err) {
     console.error('Auth callback error:', err);
@@ -72,9 +108,9 @@ router.get('/callback', async (req, res) => {
 });
 
 // Disconnect
-router.post('/disconnect', async (req, res) => {
+router.post('/disconnect', authenticateToken, async (req, res) => {
   try {
-    await stravaApi.disconnect();
+    await stravaApi.disconnect(req.user.id);
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -82,9 +118,9 @@ router.post('/disconnect', async (req, res) => {
 });
 
 // Get auth status
-router.get('/status', async (req, res) => {
+router.get('/status', authenticateToken, async (req, res) => {
   try {
-    const tokens = await db.getTokens();
+    const tokens = await db.getTokens(req.user.id);
     if (tokens && tokens.access_token) {
       res.json({
         authenticated: true,
