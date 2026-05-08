@@ -162,14 +162,20 @@ async function generateActivity(config = {}) {
       areas.forEach(area => {
         const d = haversineDistance(dist.lat, dist.lng, area.lat, area.lng);
         let boost = 1.0;
-        if (d <= area.radius) boost = 15.0; // Significant boost if inside
-        else if (d <= area.radius * 2) boost = 5.0;
-        else if (d <= area.radius * 4) boost = 2.0;
         
-        if (area.type === 'home' || area.type === 'work') boost *= 1.5;
+        // Districts inside the radius get a huge weight (priority)
+        if (d <= area.radius) {
+          boost = 100.0;
+        } else {
+          // Districts outside the radius get a weight that decays with distance
+          // Formula: 100 * (radius / distance)^2
+          // This ensures that even districts outside the circle have a relative weight
+          boost = 100.0 * Math.pow(area.radius / d, 2.0);
+        }
+        
         if (boost > maxBoost) maxBoost = boost;
       });
-      return maxBoost;
+      return Math.max(1.0, maxBoost);
     });
 
     // Weighted pick `span` districts

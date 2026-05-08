@@ -18,7 +18,7 @@
     <div class="header-inner">
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
-        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.16.0</small></span>
+        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.18.0</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;" onclick="systemLogout()">Logout</button>
@@ -257,7 +257,6 @@
             <div class="card-header">
               <div class="card-title">📍 Activity Areas (Map)</div>
               <div style="display:flex; gap:5px;">
-                <button class="btn btn-sm btn-secondary" onclick="addActivityCircle('area')">➕ Area</button>
                 <button class="btn btn-sm btn-secondary" onclick="addActivityCircle('home')">🏠 Home</button>
                 <button class="btn btn-sm btn-secondary" onclick="addActivityCircle('work')">💼 Work</button>
                 <button class="btn btn-sm btn-primary" onclick="saveActivityAreas()">💾 Save</button>
@@ -266,9 +265,8 @@
             <div class="card-body" style="padding: 0;">
               <div id="activityMap" style="height: 350px; width: 100%; border-bottom-left-radius: var(--radius-lg); border-bottom-right-radius: var(--radius-lg);"></div>
               <div style="padding: 10px; font-size: 0.75rem; color: var(--text-muted);">
-                Drag circles to set locations. Use the handles to resize. 
-                <b>Orange</b> is General Area, <b>Blue</b> is Home/Work. 
-                Districts near these areas are prioritized.
+                Drag 🏠 <b>Home (Orange)</b> and 💼 <b>Work (Blue)</b> markers to set locations. 
+                Districts near these areas will be prioritized during generation.
               </div>
             </div>
           </div>

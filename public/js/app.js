@@ -778,7 +778,7 @@ function renderCircles(areasData) {
 }
 
 function createCircleLayer(lat, lng, radius, type) {
-  const color = type === 'area' ? '#ff7800' : '#3b82f6';
+  const color = type === 'home' ? '#ff7800' : '#3b82f6'; // Home: Orange, Work: Blue
   
   // Circle for area visualization
   const circle = L.circle([lat, lng], {
@@ -805,7 +805,7 @@ function createCircleLayer(lat, lng, radius, type) {
   marker.bindPopup(`
     <div style="text-align:center;">
       <b style="color:${color}">${type.toUpperCase()}</b><br>
-      Radius: <input type="number" value="${radius}" step="100" style="width:60px" onchange="updateCircleRadius(${activityCircles.length-1}, this.value)">m<br>
+      Radius: <input type="number" value="${radius}" step="100" style="width:70px; background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border); border-radius:4px; padding:2px;" onchange="updateCircleRadius(${activityCircles.length-1}, this.value)">m<br>
       <button class="btn btn-sm btn-secondary" style="margin-top:5px; padding:2px 8px; color:var(--accent-red)" onclick="removeCircle(${activityCircles.length-1})">Delete</button>
     </div>
   `);
@@ -814,15 +814,15 @@ function createCircleLayer(lat, lng, radius, type) {
 function addActivityCircle(type) {
   if (!map) return;
   
-  // Limit home/work
-  if (type !== 'area') {
-    const count = activityCircles.filter(c => c.type === type).length;
-    if (count >= 1) return showToast(`Only 1 ${type} area allowed`, 'warning');
-  }
+  // Only home or work allowed
+  if (type !== 'home' && type !== 'work') return;
+
+  const count = activityCircles.filter(c => c.type === type).length;
+  if (count >= 1) return showToast(`Only 1 ${type} area allowed`, 'warning');
 
   const center = map.getCenter();
   createCircleLayer(center.lat, center.lng, 2000, type);
-  showToast(`Added ${type} area at map center`, 'info');
+  showToast(`Added ${type} area`, 'info');
 }
 
 function updateCircleRadius(index, newRadius) {
