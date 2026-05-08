@@ -18,7 +18,7 @@ const DEFAULT_CONFIG = {
   schedule_cron: '0 6 * * *',
   schedule_time: '06:00',
   min_distance_km: '0.5',
-  max_distance_km: '10',
+  max_distance_km: '8',
   min_pace: '8.0',
   max_pace: '12.0',
   min_time: '04:30',

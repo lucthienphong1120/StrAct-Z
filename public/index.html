@@ -15,7 +15,7 @@
     <div class="header-inner">
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
-        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.15.0</small></span>
+        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.16.0</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;" onclick="systemLogout()">Logout</button>
@@ -108,6 +108,7 @@
                     <div class="toggle-track"></div>
                     <span class="toggle-label">Use OSRM (Snap to roads)</span>
                   </label>
+                  <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">Routes follow real streets via Open Source Routing Machine. Disable for fallback straight-line paths.</div>
                 </div>
               </div>
               
@@ -175,7 +176,7 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">Max Distance (km)</label>
-                  <input type="number" step="0.1" id="cfgMaxDist" class="form-input" value="10.0" min="1.0" max="15.0">
+                  <input type="number" step="0.1" id="cfgMaxDist" class="form-input" value="8.0" min="1.0" max="15.0">
                 </div>
               </div>
               <div class="form-row">
