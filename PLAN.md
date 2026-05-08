@@ -13,8 +13,14 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + [x] toàn bộ config đều phải có hint (?) button hover hiện giải thích thông tin (ý nghĩa, loại giá trị, đơn vị, phạm vi min/max)
 + [x] review, cân nhắc vị trí có thể dùng Caching layer (optimize API calls)
 + [ ] tích hợp thêm các luồng công cụ khác như Fit, Health connect,...
-+ [x] review và sửa lại min, max, range các option + validate (min/max/range)
++ [ ] review và sửa lại min, max, range các option + validate (min/max/range)
 + [x] update logic random heart rate trọng số theo hoạt động
 + [x] update logic trọng số vị trí
-+ [ ] sửa Max heart rate default thành 190bpm và check lại các công thức trọng số hoạt động đi bộ/đạp xe/chạy bộ - 50-60/60-70/70-85 % MHR
-
++ [ ] sửa Max heart rate thành input field tự count, thêm 1 field bên cạnh là tuổi default 25 tuổi -> MHR là 195
++ [ ] check lại các công thức trọng số hoạt động đi bộ/đạp xe/chạy bộ - 50-60/60-70/70-85 % MHR
++ [ ] check lại logic nghỉ đèn đỏ -> nghỉ giảm heart rate và thời tiết nắng/mát ảnh hưởng heart rate, trưa/chiều nắng cũng tăng chút
++ [ ] thêm phần account setting vào giao diện sau login và trước khi kết nối strava
++ [ ] đổi tên app trong strava oauth về StrAct Z
++ [ ] tạo và rule file markdown cho AI coding để lưu kiến trúc, ghi nhớ, context cần thiết về project này
++ [ ] các quận default enable thêm long biên
++ [ ] 
