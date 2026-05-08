@@ -190,7 +190,7 @@ function validateTimeBounds(minTimeStr, maxTimeStr, targetDateStr, isCustomTime)
 
 function validateInputs(config) {
   if (parseInt(config.max_district_span, 10) > 2) {
-    showToast('Giới hạn liên kết 2 quận. Vui lòng liên hệ Admin để nâng cấp (tính năng VIP).', 'warning');
+    showToast('Max 2 districts allowed. Contact Admin to upgrade (VIP feature).', 'warning');
     document.getElementById('cfgMaxSpan').value = 2;
     return false;
   }
@@ -281,14 +281,14 @@ async function updateSchedule() {
   const countMax = document.getElementById('scheduleCountMax').value;
   
   if (parseInt(countMax) > 3 || parseInt(countMin) > 3) {
-    showToast('VIP Required: Bạn chỉ có thể tạo tối đa 3 activity 1 lúc.', 'warning');
+    showToast('VIP Required: Max 3 activities at once.', 'warning');
     document.getElementById('scheduleCountMax').value = Math.min(3, parseInt(countMax));
     document.getElementById('scheduleCountMin').value = Math.min(3, parseInt(countMin));
     return;
   }
   
   if (parseInt(countMin) > parseInt(countMax)) {
-    showToast('Min Count không được lớn hơn Max Count', 'error');
+    showToast('Min Count must not exceed Max Count', 'error');
     return;
   }
   
@@ -461,7 +461,7 @@ async function generateOnly() {
   const btn = document.getElementById('btnGenerate');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Generating...';
-  showToast('Đang tạo GPX...', 'info');
+  showToast('Generating GPX...', 'info');
 
   try {
     const overrideConfig = getOverrideConfig();
@@ -491,7 +491,7 @@ async function generateAndUpload() {
   const btn = document.getElementById('btnGenerateUpload');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Generating & Uploading...';
-  showToast('Đang tạo và tự động Upload...', 'info');
+  showToast('Generating & uploading to Strava...', 'info');
 
   try {
     const overrideConfig = getOverrideConfig();
@@ -506,7 +506,7 @@ async function generateAndUpload() {
       showToast(`Uploaded to Strava! Activity: ${result.activity?.activityName || 'Done'}`, 'success');
     } else {
       if (result.message === 'VIP_REQUIRED') {
-        showToast('Giới hạn tạo 2 hoạt động/ngày. Vui lòng liên hệ Admin để nâng cấp.', 'warning');
+        showToast('Daily limit reached (2 activities/day). Contact Admin to upgrade.', 'warning');
       } else {
         showToast(result.message || 'Upload failed', 'error');
       }
@@ -538,23 +538,28 @@ async function uploadActivity(id) {
 }
 
 async function deleteActivity(id, hasStrava) {
-  const msg = hasStrava 
-    ? 'Delete this activity? This will remove it locally AND from Strava.' 
-    : 'Delete this locally generated activity?';
-  
-  if (!confirm(msg)) return;
-  showToast('Đang xoá hoạt động...', 'info');
-  
+  try {
+    const msg = hasStrava
+      ? 'Delete this activity? This will remove it locally AND from Strava.'
+      : 'Delete this locally generated activity?';
+    if (!confirm(msg)) return;
+  } catch (e) {
+    // confirm blocked by browser - proceed anyway
+  }
+
+  showToast('Deleting activity...', 'info');
+
   try {
     const result = await api(`/activities/${id}?strava=${hasStrava}`, { method: 'DELETE' });
     if (result.success) {
       if (result.stravaError) {
-        showToast(result.message, 'warning');
+        showToast(result.message || 'Deleted locally, Strava error', 'warning');
       } else {
         showToast(result.message || 'Activity deleted', 'success');
       }
       loadActivities();
       loadStats();
+      loadStravaActivities();
     } else {
       showToast(result.error || 'Failed to delete activity', 'error');
     }
@@ -568,7 +573,7 @@ async function deleteActivity(id, hasStrava) {
 function checkMaxSpan() {
   const el = document.getElementById('cfgMaxSpan');
   if (parseInt(el.value, 10) > 2) {
-    showToast('Giới hạn liên kết 2 quận. Vui lòng liên hệ Admin để nâng cấp giới hạn này.', 'warning');
+    showToast('Max 2 districts allowed. Contact Admin to upgrade.', 'warning');
     el.value = 2;
   }
 }
