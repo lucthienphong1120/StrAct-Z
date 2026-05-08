@@ -37,4 +37,7 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + [ ] update logic chống trùng lặp với dữ liệu đã có (uploaded/cloud), thêm comfig safe time default 30p -> tránh random data mới quanh thời gian start/end hoạt động đã có
 + [ ] chuyển min/max pace sang phần activity settings (defailt vẫn 8 và 12)
 + [ ] thêm logic trọng số cho random pace theo hoạt động đi bộ/chạy bộ/đạp xe = x1.25/x0.8/x0.5 (update hint luôn)
-+ [ ] 
++ [ ] fix hint z-index cao trên menu, tránh bị overflow, xử lý xuống dòng
++ [ ] thêm nút khóa scale và move cho Activity Areas Map (default yes)
++ [ ] tùy chỉnh mở rộng/thu hẹp vòng tròn vị trí trong Activity Areas Map (kèm thông số ràng buộc min size = hiện tại, max tối đa x2)
++ [ ] file config based các giá trị validate, range cho normal/vip account để tôi tự tùy chỉnh và update (cập nhật readme và kiến trúc luôn)
