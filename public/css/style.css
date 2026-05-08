@@ -439,6 +439,31 @@ body::before {
 }
 .toast.info .toast-icon { color: var(--accent-blue); }
 
+/* ─── Map Styles ────────────────────────────────────────── */
+#activityMap {
+  background: var(--bg-card);
+  z-index: 1;
+}
+
+.leaflet-container {
+  background: var(--bg-card) !important;
+}
+
+.leaflet-tile {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+.leaflet-control-attribution {
+  background: rgba(0,0,0,0.5) !important;
+  color: var(--text-muted) !important;
+}
+
+.leaflet-bar a {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
 /* ─── Tooltips ────────────────────────────────────────── */
 .tooltip-icon {
   display: inline-flex;

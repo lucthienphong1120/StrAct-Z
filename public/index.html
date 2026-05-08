@@ -6,6 +6,9 @@
   <meta name="description" content="Automatically generate and upload running activities to Strava daily">
   <title>StrAct Z - Strava Activity Generator</title>
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏃</text></svg>">
 </head>
 <body>
@@ -61,6 +64,16 @@
           <div class="stat-icon purple">⏱️</div>
           <div class="stat-value" id="statDuration">0</div>
           <div class="stat-label">Total Duration (min)</div>
+        </div>
+      </div>
+
+      <!-- Activity Insights Chart -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header">
+          <div class="card-title">📈 Activity Insights (Last 14 days)</div>
+        </div>
+        <div class="card-body" style="height: 200px; position: relative;">
+          <canvas id="activityChart"></canvas>
         </div>
       </div>
 
@@ -236,6 +249,27 @@
             </div>
             <div class="card-body" id="accountInfo">
               <p style="color:var(--text-muted)">Loading...</p>
+            </div>
+          </div>
+
+          <!-- Activity Areas Card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📍 Activity Areas (Map)</div>
+              <div style="display:flex; gap:5px;">
+                <button class="btn btn-sm btn-secondary" onclick="addActivityCircle('area')">➕ Area</button>
+                <button class="btn btn-sm btn-secondary" onclick="addActivityCircle('home')">🏠 Home</button>
+                <button class="btn btn-sm btn-secondary" onclick="addActivityCircle('work')">💼 Work</button>
+                <button class="btn btn-sm btn-primary" onclick="saveActivityAreas()">💾 Save</button>
+              </div>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <div id="activityMap" style="height: 350px; width: 100%; border-bottom-left-radius: var(--radius-lg); border-bottom-right-radius: var(--radius-lg);"></div>
+              <div style="padding: 10px; font-size: 0.75rem; color: var(--text-muted);">
+                Drag circles to set locations. Use the handles to resize. 
+                <b>Orange</b> is General Area, <b>Blue</b> is Home/Work. 
+                Districts near these areas are prioritized.
+              </div>
             </div>
           </div>
 

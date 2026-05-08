@@ -11,6 +11,18 @@ const db = require('../db/database');
 
 const STRAVA_BASE_URL = 'www.strava.com';
 
+// ─── Caching Layer ──────────────────────────────────────────────────────────
+const activityCache = new Map(); // accountId-page-perPage-after -> { data, expires }
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+function clearActivityCache(accountId) {
+  for (const key of activityCache.keys()) {
+    if (key.startsWith(`${accountId}-`)) {
+      activityCache.delete(key);
+    }
+  }
+}
+
 // Bypass SSL cert verification (common issue on Windows with corporate CA certs)
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
@@ -176,9 +188,6 @@ async function refreshToken(accountId) {
   return response.access_token;
 }
 
-/**
- * Upload GPX file to Strava
- */
 async function uploadActivity(accountId, gpxFilepath, options = {}) {
   const {
     name = 'Morning Run',
@@ -206,6 +215,8 @@ async function uploadActivity(accountId, gpxFilepath, options = {}) {
     },
   };
 
+  clearActivityCache(accountId);
+
   return new Promise((resolve, reject) => {
     const req = https.request({ ...requestOptions, agent: httpsAgent }, (res) => {
       let data = '';
@@ -227,6 +238,7 @@ async function uploadActivity(accountId, gpxFilepath, options = {}) {
     form.pipe(req);
   });
 }
+
 
 /**
  * Check upload status
@@ -303,6 +315,9 @@ async function deleteActivity(accountId, stravaActivityId) {
     method: 'DELETE',
     headers: { 'Authorization': `Bearer ${accessToken}` },
   };
+  
+  clearActivityCache(accountId);
+
   return new Promise((resolve, reject) => {
     const req = https.request({ ...options, agent: httpsAgent }, (res) => {
       if (res.statusCode === 204) { resolve({ success: true }); }
@@ -349,6 +364,12 @@ async function disconnect(accountId) {
  * Get athlete's past activities
  */
 async function getActivities(accountId, page = 1, perPage = 30, after = null) {
+  const cacheKey = `${accountId}-${page}-${perPage}-${after}`;
+  const cached = activityCache.get(cacheKey);
+  if (cached && cached.expires > Date.now()) {
+    return cached.data;
+  }
+
   const token = await refreshToken(accountId);
   
   let reqPath = `/api/v3/athlete/activities?page=${page}&per_page=${perPage}`;
@@ -369,6 +390,9 @@ async function getActivities(accountId, page = 1, perPage = 30, after = null) {
   if (response.errors) {
     throw new Error(response.message || 'Failed to fetch activities');
   }
+
+  activityCache.set(cacheKey, { data: response, expires: Date.now() + CACHE_TTL_MS });
+
   return response;
 }
 

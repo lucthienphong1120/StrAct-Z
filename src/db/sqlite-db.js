@@ -40,6 +40,7 @@ const DEFAULT_CONFIG = {
   use_osrm: 'true',
   schedule_count_min: '1',
   schedule_count_max: '2',
+  activity_areas: '[]',
 };
 
 async function getDb() {
@@ -92,7 +93,7 @@ async function getDb() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT UNIQUE NOT NULL,
       password_hash TEXT NOT NULL,
-      role TEXT DEFAULT 'admin',
+      role TEXT DEFAULT 'normal',
       created_at TEXT
     );
   `);

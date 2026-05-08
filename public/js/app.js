@@ -110,6 +110,7 @@ let userRole = 'normal';
 
 async function loadDashboard() {
   await Promise.all([loadStats(), loadDistricts(), loadConfig(), loadSchedule(), loadActivities(), loadStravaActivities()]);
+  initMap();
 }
 
 async function loadDistricts() {
@@ -211,6 +212,11 @@ async function loadConfig() {
     }
     if (document.getElementById('cfgSimRedLights')) {
       document.getElementById('cfgSimRedLights').checked = config.sim_redlights !== 'false';
+    }
+    
+    // Render Map Areas
+    if (config.activity_areas) {
+      renderCircles(config.activity_areas);
     }
   } catch (err) { console.error('Config error:', err); }
 }
@@ -376,6 +382,7 @@ const LOCAL_PAGE_SIZE = 10;
 async function loadActivities() {
   try {
     const allActivities = await api('/activities');
+    updateActivityChart(allActivities);
     const container = document.getElementById('activityList');
     const total = allActivities.length;
     const totalPages = Math.max(1, Math.ceil(total / LOCAL_PAGE_SIZE));
@@ -735,3 +742,197 @@ document.addEventListener('DOMContentLoaded', () => {
   checkUrlParams();
   checkAuth();
 });
+// ─── Map & Activity Areas ─────────────────────────────────
+
+let map = null;
+let activityCircles = [];
+
+function initMap() {
+  if (map || !document.getElementById('activityMap')) return;
+  
+  map = L.map('activityMap').setView([21.0285, 105.8542], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Small delay to ensure container is ready
+  setTimeout(() => map.invalidateSize(), 100);
+}
+
+function renderCircles(areasData) {
+  if (!map) initMap();
+  
+  // Clear existing
+  activityCircles.forEach(item => {
+    map.removeLayer(item.circle);
+    map.removeLayer(item.marker);
+  });
+  activityCircles = [];
+
+  try {
+    const areas = typeof areasData === 'string' ? JSON.parse(areasData) : (areasData || []);
+    areas.forEach(area => {
+      createCircleLayer(area.lat, area.lng, area.radius, area.type);
+    });
+  } catch (e) { console.error('Error rendering circles:', e); }
+}
+
+function createCircleLayer(lat, lng, radius, type) {
+  const color = type === 'area' ? '#ff7800' : '#3b82f6';
+  
+  // Circle for area visualization
+  const circle = L.circle([lat, lng], {
+    color: color,
+    fillColor: color,
+    fillOpacity: 0.15,
+    radius: radius,
+    weight: 2
+  }).addTo(map);
+
+  // Marker for dragging and deletion
+  const marker = L.marker([lat, lng], {
+    draggable: true,
+    title: type.toUpperCase()
+  }).addTo(map);
+
+  const item = { circle, marker, type };
+  activityCircles.push(item);
+
+  marker.on('drag', (e) => {
+    circle.setLatLng(e.latlng);
+  });
+
+  marker.bindPopup(`
+    <div style="text-align:center;">
+      <b style="color:${color}">${type.toUpperCase()}</b><br>
+      Radius: <input type="number" value="${radius}" step="100" style="width:60px" onchange="updateCircleRadius(${activityCircles.length-1}, this.value)">m<br>
+      <button class="btn btn-sm btn-secondary" style="margin-top:5px; padding:2px 8px; color:var(--accent-red)" onclick="removeCircle(${activityCircles.length-1})">Delete</button>
+    </div>
+  `);
+}
+
+function addActivityCircle(type) {
+  if (!map) return;
+  
+  // Limit home/work
+  if (type !== 'area') {
+    const count = activityCircles.filter(c => c.type === type).length;
+    if (count >= 1) return showToast(`Only 1 ${type} area allowed`, 'warning');
+  }
+
+  const center = map.getCenter();
+  createCircleLayer(center.lat, center.lng, 2000, type);
+  showToast(`Added ${type} area at map center`, 'info');
+}
+
+function updateCircleRadius(index, newRadius) {
+  if (activityCircles[index]) {
+    activityCircles[index].circle.setRadius(parseInt(newRadius));
+  }
+}
+
+function removeCircle(index) {
+  if (activityCircles[index]) {
+    map.removeLayer(activityCircles[index].circle);
+    map.removeLayer(activityCircles[index].marker);
+    activityCircles.splice(index, 1);
+    // Re-render to fix indices in popups
+    const currentData = activityCircles.map(c => ({
+      lat: c.marker.getLatLng().lat,
+      lng: c.marker.getLatLng().lng,
+      radius: c.circle.getRadius(),
+      type: c.type
+    }));
+    renderCircles(currentData);
+  }
+}
+
+async function saveActivityAreas() {
+  const data = activityCircles.map(c => ({
+    lat: c.marker.getLatLng().lat,
+    lng: c.marker.getLatLng().lng,
+    radius: c.circle.getRadius(),
+    type: c.type
+  }));
+
+  try {
+    const res = await api('/config', {
+      method: 'POST',
+      body: { activity_areas: JSON.stringify(data) }
+    });
+    
+    if (res.error) showToast(res.error, 'error');
+    else showToast('Activity areas saved!', 'success');
+  } catch (err) {
+    showToast('Failed to save areas: ' + err.message, 'error');
+  }
+}
+// ─── Statistics Chart ────────────────────────────────────
+
+let activityChart = null;
+
+function updateActivityChart(activities) {
+  const ctx = document.getElementById('activityChart');
+  if (!ctx) return;
+
+  // Group by date for last 14 days (Hanoi time)
+  const last14Days = [];
+  const today = new Date();
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    last14Days.push(d.toLocaleDateString('en-CA'));
+  }
+
+  const dailyDist = last14Days.map(date => {
+    return activities
+      .filter(a => a.created_at && a.created_at.startsWith(date))
+      .reduce((sum, a) => sum + (a.distance_km || 0), 0);
+  });
+
+  if (activityChart) {
+    activityChart.destroy();
+  }
+
+  activityChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: last14Days.map(d => d.split('-').slice(1).reverse().join('/')), // MM/DD -> DD/MM
+      datasets: [{
+        label: 'Distance (km)',
+        data: dailyDist,
+        backgroundColor: 'rgba(252, 76, 2, 0.5)',
+        borderColor: 'rgba(252, 76, 2, 1)',
+        borderWidth: 1,
+        borderRadius: 4,
+        hoverBackgroundColor: 'rgba(252, 76, 2, 0.8)'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: 'rgba(255, 255, 255, 0.05)' },
+          ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { size: 10 } }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { size: 10 } }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(15, 23, 42, 0.9)',
+          titleColor: '#fff',
+          bodyColor: '#fff',
+          borderColor: 'rgba(252, 76, 2, 0.4)',
+          borderWidth: 1,
+          displayColors: false
+        }
+      }
+    }
+  });
+}

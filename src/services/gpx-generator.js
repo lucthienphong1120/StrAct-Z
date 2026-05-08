@@ -12,6 +12,7 @@ const {
   generateHeartRate,
   generateCadence,
   randomInRange,
+  haversineDistance,
 } = require('./route-engine');
 
 const GPX_DIR = path.join(__dirname, '..', '..', 'data', 'gpx');
@@ -150,13 +151,45 @@ async function generateActivity(config = {}) {
   
   let chosenDistrictKeys = [];
   if (!districtKey || districtKey === 'random') {
-    // Pick `span` random districts from allowedDistricts
+    const areas = config.activity_areas ? JSON.parse(config.activity_areas) : [];
+    
+    // Calculate weights for each allowed district
+    const weights = allowedDistricts.map(key => {
+      const dist = HANOI_DISTRICTS[key];
+      if (!dist || areas.length === 0) return 1.0;
+      
+      let maxBoost = 1.0;
+      areas.forEach(area => {
+        const d = haversineDistance(dist.lat, dist.lng, area.lat, area.lng);
+        let boost = 1.0;
+        if (d <= area.radius) boost = 15.0; // Significant boost if inside
+        else if (d <= area.radius * 2) boost = 5.0;
+        else if (d <= area.radius * 4) boost = 2.0;
+        
+        if (area.type === 'home' || area.type === 'work') boost *= 1.5;
+        if (boost > maxBoost) maxBoost = boost;
+      });
+      return maxBoost;
+    });
+
+    // Weighted pick `span` districts
     let available = [...allowedDistricts];
+    let availableWeights = [...weights];
     const span = Math.min(maxSpan, available.length);
+    
     for (let i = 0; i < span && available.length > 0; i++) {
-      const idx = Math.floor(Math.random() * available.length);
-      chosenDistrictKeys.push(available[idx]);
-      available.splice(idx, 1);
+      const totalWeight = availableWeights.reduce((a, b) => a + b, 0);
+      let r = Math.random() * totalWeight;
+      let sum = 0;
+      for (let j = 0; j < available.length; j++) {
+        sum += availableWeights[j];
+        if (r <= sum) {
+          chosenDistrictKeys.push(available[j]);
+          available.splice(j, 1);
+          availableWeights.splice(j, 1);
+          break;
+        }
+      }
     }
   } else if (HANOI_DISTRICTS[districtKey]) {
     chosenDistrictKeys = [districtKey];
