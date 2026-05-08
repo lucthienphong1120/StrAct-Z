@@ -40,4 +40,6 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + [ ] fix hint z-index cao trên menu, tránh bị overflow, xử lý xuống dòng
 + [ ] thêm nút khóa scale và move cho Activity Areas Map (default yes)
 + [ ] tùy chỉnh mở rộng/thu hẹp vòng tròn vị trí trong Activity Areas Map (kèm thông số ràng buộc min size = hiện tại, max tối đa x2)
-+ [ ] file config based các giá trị validate, range cho normal/vip account để tôi tự tùy chỉnh và update (cập nhật readme và kiến trúc luôn)
++ [ ] file config based các giá trị gồm default validate, range, type cho normal/vip account để tôi tự tùy chỉnh và update (cập nhật readme và kiến trúc luôn)
++ [ ] hint ngoài thông tin về config sẽ xuống dòng và thêm thông tin dynamic từ config file (validate, range, type)
++ [ ] 
