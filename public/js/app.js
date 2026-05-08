@@ -106,6 +106,8 @@ async function disconnect() {
 
 // ─── Dashboard ──────────────────────────────────────────
 
+let userRole = 'normal';
+
 async function loadDashboard() {
   await Promise.all([loadStats(), loadDistricts(), loadConfig(), loadSchedule(), loadActivities(), loadStravaActivities()]);
 }
@@ -122,6 +124,7 @@ async function loadDistricts() {
 async function loadStats() {
   try {
     const stats = await api('/stats');
+    userRole = stats.role || 'normal';
     document.getElementById('statTotal').textContent = stats.total;
     document.getElementById('statUploaded').textContent = stats.uploaded;
     document.getElementById('statDistance').textContent = stats.totalDistanceKm;
@@ -301,8 +304,12 @@ async function saveConfig() {
 
   if (!validateInputs(config)) return;
 
-  await api('/config', { method: 'POST', body: config });
-  showToast('Configuration saved!', 'success');
+  const res = await api('/config', { method: 'POST', body: config });
+  if (res.error) {
+    showToast(res.error, 'error');
+  } else {
+    showToast('Configuration saved!', 'success');
+  }
 }
 
 // ─── Schedule ───────────────────────────────────────────
@@ -334,8 +341,14 @@ async function updateSchedule() {
   const countMin = document.getElementById('scheduleCountMin').value;
   const countMax = document.getElementById('scheduleCountMax').value;
   
-  if (parseInt(countMax) > 3 || parseInt(countMin) > 3) {
-    showToast('VIP Required: Max 3 activities at once.', 'warning');
+  if (userRole !== 'vip' && (parseInt(countMax) > 2 || parseInt(countMin) > 2)) {
+    showToast('VIP Required: Max 2 daily scheduled activities.', 'warning');
+    document.getElementById('scheduleCountMax').value = Math.min(2, parseInt(countMax));
+    document.getElementById('scheduleCountMin').value = Math.min(2, parseInt(countMin));
+    return;
+  }
+  if (userRole === 'vip' && (parseInt(countMax) > 3 || parseInt(countMin) > 3)) {
+    showToast('Max 3 activities at once.', 'warning');
     document.getElementById('scheduleCountMax').value = Math.min(3, parseInt(countMax));
     document.getElementById('scheduleCountMin').value = Math.min(3, parseInt(countMin));
     return;
@@ -347,6 +360,10 @@ async function updateSchedule() {
   }
   
   const status = await api('/scheduler', { method: 'POST', body: { enabled, time, countMin, countMax } });
+  if (status.error) {
+    showToast(status.error, 'error');
+    return;
+  }
   updateScheduleDisplay(status);
   showToast(enabled ? `Schedule enabled at ${time} (${countMin}-${countMax} acts)` : 'Schedule disabled', 'success');
 }
@@ -660,8 +677,8 @@ async function updatePassword() {
 
 function checkMaxSpan() {
   const el = document.getElementById('cfgMaxSpan');
-  if (parseInt(el.value, 10) > 2) {
-    showToast('Max 2 districts allowed. Contact Admin to upgrade.', 'warning');
+  if (userRole !== 'vip' && parseInt(el.value, 10) > 2) {
+    showToast('Max 2 districts allowed. VIP Required.', 'warning');
     el.value = 2;
   }
 }

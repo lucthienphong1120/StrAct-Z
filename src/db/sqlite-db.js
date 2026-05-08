@@ -292,7 +292,7 @@ async function createAccount(username, plainPassword) {
   const hash = bcrypt.hashSync(plainPassword, 10);
   const res = await db.run(
     'INSERT INTO accounts (username, password_hash, role, created_at) VALUES (?, ?, ?, ?)',
-    [username, hash, 'admin', new Date().toISOString()]
+    [username, hash, 'normal', new Date().toISOString()]
   );
   
   // Seed default configs for new account

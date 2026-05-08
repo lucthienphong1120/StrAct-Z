@@ -21,14 +21,16 @@ router.get('/system/needs-setup', async (req, res) => {
   }
 });
 
-// Register initial admin account
-router.post('/system/register-admin', async (req, res) => {
+// Register a new account
+router.post('/system/register', async (req, res) => {
   const { username, password } = req.body;
-  if (!username || !password) return res.status(400).json({ error: 'Username and password required' });
+  if (!username || !password || username.length < 3 || password.length < 5) {
+    return res.status(400).json({ error: 'Username (min 3) and password (min 5) required' });
+  }
 
   try {
-    const count = await db.getAccountCount();
-    if (count > 0) return res.status(403).json({ error: 'Setup already completed' });
+    const existing = await db.getUserByUsername(username);
+    if (existing) return res.status(409).json({ error: 'Username already taken' });
 
     await db.createAccount(username, password);
     res.json({ success: true });

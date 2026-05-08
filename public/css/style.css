@@ -439,6 +439,57 @@ body::before {
 }
 .toast.info .toast-icon { color: var(--accent-blue); }
 
+/* ─── Tooltips ────────────────────────────────────────── */
+.tooltip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  font-weight: bold;
+  cursor: help;
+  margin-left: 6px;
+  position: relative;
+  vertical-align: middle;
+}
+
+.tooltip-icon:hover {
+  background: var(--strava-orange);
+  color: #fff;
+}
+
+.tooltip-icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  background: var(--bg-secondary);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: normal;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 1000;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+}
+
+.tooltip-icon:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) scale(1);
+}
+
 /* ─── Responsive ──────────────────────────────────────── */
 @media (max-width: 900px) {
   .content-grid { grid-template-columns: 1fr; }

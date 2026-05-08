@@ -28,6 +28,17 @@ router.get('/config', async (req, res) => {
 
 router.post('/config', async (req, res) => {
   const updates = req.body;
+  
+  // Enforce VIP limits
+  if (req.user.role !== 'vip') {
+    if (updates.max_district_span && parseInt(updates.max_district_span) > 2) {
+      return res.status(403).json({ error: 'Max 2 districts allowed. VIP required.' });
+    }
+    if (updates.schedule_count_max && parseInt(updates.schedule_count_max) > 2) {
+      return res.status(403).json({ error: 'Max 2 scheduled activities allowed. VIP required.' });
+    }
+  }
+
   for (const [key, value] of Object.entries(updates)) {
     await db.setConfig(req.user.id, key, value);
   }
@@ -42,6 +53,7 @@ router.get('/stats', async (req, res) => {
   const tokens = await db.getTokens(req.user.id);
   res.json({
     ...stats,
+    role: req.user.role,
     schedule: scheduleStatus,
     authenticated: !!(tokens && tokens.access_token),
     athleteName: tokens?.athlete_name || null,
@@ -291,6 +303,9 @@ router.get('/scheduler', async (req, res) => res.json(await scheduler.getStatus(
 
 router.post('/scheduler', async (req, res) => {
   const { enabled, time, countMin, countMax } = req.body;
+  if (req.user.role !== 'vip' && (parseInt(countMin) > 2 || parseInt(countMax) > 2)) {
+    return res.status(403).json({ error: 'Max 2 scheduled activities allowed. VIP required.' });
+  }
   await scheduler.updateSchedule(req.user.id, enabled, time, countMin, countMax);
   res.json(await scheduler.getStatus(req.user.id));
 });

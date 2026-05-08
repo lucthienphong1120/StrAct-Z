@@ -75,16 +75,14 @@
         </div>
         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Login</button>
       </form>
+      <div style="margin-top: 15px; font-size: 0.9rem;">
+        <a href="/register.html" style="color: var(--accent-blue); text-decoration: none;">Create an account</a>
+      </div>
     </div>
   </div>
 
   <script>
-    // Check if first-time setup is needed
-    fetch('/auth/system/needs-setup').then(res => res.json()).then(data => {
-      if (data.needsSetup) {
-        window.location.href = '/register.html';
-      }
-    }).catch(console.error);
+    // Registration is open, no need for initial setup check.
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
