@@ -34,4 +34,7 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + [ ] hiển thị sự khác biệt giữa vip và normal account trên UI (nhận diện - nhãn, màu sắc, nổi bật - có thể update cả color/theme giống app ngân hàng)
 + [ ] footer thêm thông tin copyright, email
 + [ ] cuối phần account setting thêm 1 dòng contact for vip: email (chữ xám)
++ [ ] update logic chống trùng lặp với dữ liệu đã có (uploaded/cloud), thêm comfig safe time default 30p -> tránh random data mới quanh thời gian start/end hoạt động đã có
++ [ ] 
++ [ ] 
 + [ ] 
