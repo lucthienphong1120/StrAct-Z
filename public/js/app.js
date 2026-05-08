@@ -421,43 +421,50 @@ function changeStravaPage(delta) {
 
 // ─── Actions ────────────────────────────────────────────
 
+function getOverrideConfig() {
+  const selected_districts = Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value).join(',');
+  const isCustomTime = document.getElementById('cfgCustomTime').checked;
+  const overrideConfig = {
+    target_date: isCustomTime ? document.getElementById('cfgTargetDate').value : undefined,
+    min_time: isCustomTime ? document.getElementById('cfgCustomMinTime').value : document.getElementById('cfgRandMinTime').value,
+    max_time: isCustomTime ? document.getElementById('cfgCustomMaxTime').value : document.getElementById('cfgRandMaxTime').value,
+    work_start1: isCustomTime ? undefined : document.getElementById('cfgWorkStart1').value,
+    work_end1: isCustomTime ? undefined : document.getElementById('cfgWorkEnd1').value,
+    work_start2: isCustomTime ? undefined : document.getElementById('cfgWorkStart2').value,
+    work_end2: isCustomTime ? undefined : document.getElementById('cfgWorkEnd2').value,
+    selected_districts,
+    max_district_span: document.getElementById('cfgMaxSpan').value,
+    district_key: 'random',
+    use_osrm: document.getElementById('cfgOsrm').checked ? 'true' : 'false',
+    min_distance_km: document.getElementById('cfgMinDist').value,
+    max_distance_km: document.getElementById('cfgMaxDist').value,
+    min_pace: document.getElementById('cfgMinPace').value,
+    max_pace: document.getElementById('cfgMaxPace').value,
+    activity_type: document.getElementById('cfgActivityType').value,
+    heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
+    min_heart_rate: document.getElementById('cfgMinHR').value,
+    max_heart_rate: document.getElementById('cfgMaxHR').value,
+  };
+
+  if (!validateTimeBounds(overrideConfig.min_time, overrideConfig.max_time, overrideConfig.target_date, isCustomTime)) {
+    return null;
+  }
+  
+  if (!validateInputs(overrideConfig)) {
+    return null;
+  }
+  
+  return overrideConfig;
+}
+
 async function generateOnly() {
   const btn = document.getElementById('btnGenerate');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Generating...';
 
   try {
-    const selected_districts = Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value).join(',');
-    const isCustomTime = document.getElementById('cfgCustomTime').checked;
-    const overrideConfig = {
-      target_date: isCustomTime ? document.getElementById('cfgTargetDate').value : undefined,
-      min_time: isCustomTime ? document.getElementById('cfgCustomMinTime').value : document.getElementById('cfgRandMinTime').value,
-      max_time: isCustomTime ? document.getElementById('cfgCustomMaxTime').value : document.getElementById('cfgRandMaxTime').value,
-      work_start1: isCustomTime ? undefined : document.getElementById('cfgWorkStart1').value,
-      work_end1: isCustomTime ? undefined : document.getElementById('cfgWorkEnd1').value,
-      work_start2: isCustomTime ? undefined : document.getElementById('cfgWorkStart2').value,
-      work_end2: isCustomTime ? undefined : document.getElementById('cfgWorkEnd2').value,
-      selected_districts,
-      max_district_span: document.getElementById('cfgMaxSpan').value,
-      district_key: 'random',
-      use_osrm: document.getElementById('cfgOsrm').checked ? 'true' : 'false',
-      min_distance_km: document.getElementById('cfgMinDist').value,
-      max_distance_km: document.getElementById('cfgMaxDist').value,
-      min_pace: document.getElementById('cfgMinPace').value,
-      max_pace: document.getElementById('cfgMaxPace').value,
-      activity_type: document.getElementById('cfgActivityType').value,
-      heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
-      min_heart_rate: document.getElementById('cfgMinHR').value,
-      max_heart_rate: document.getElementById('cfgMaxHR').value,
-    };
-
-    if (!validateTimeBounds(overrideConfig.min_time, overrideConfig.max_time, overrideConfig.target_date, isCustomTime)) {
-      btn.disabled = false;
-      btn.innerHTML = '⚡ Generate Now';
-      return;
-    }
-    
-    if (!validateInputs(overrideConfig)) {
+    const overrideConfig = getOverrideConfig();
+    if (!overrideConfig) {
       btn.disabled = false;
       btn.innerHTML = '⚡ Generate Now';
       return;
@@ -485,7 +492,14 @@ async function generateAndUpload() {
   btn.innerHTML = '<span class="spinner"></span> Generating & Uploading...';
 
   try {
-    const result = await api('/generate-and-upload', { method: 'POST', body: {} });
+    const overrideConfig = getOverrideConfig();
+    if (!overrideConfig) {
+      btn.disabled = false;
+      btn.innerHTML = '🚀 Generate & Upload to Strava';
+      return;
+    }
+    
+    const result = await api('/generate-and-upload', { method: 'POST', body: overrideConfig });
     if (result.success) {
       showToast(`Uploaded to Strava! Activity: ${result.activity?.activityName || 'Done'}`, 'success');
     } else {

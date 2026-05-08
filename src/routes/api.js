@@ -133,10 +133,68 @@ router.post('/generate', async (req, res) => {
 // Generate and upload
 router.post('/generate-and-upload', async (req, res) => {
   try {
-    const result = await scheduler.executeJob();
-    res.json(result);
+    const config = await db.getAllConfig();
+    const ov = req.body || {};
+
+    const activity = await generateActivity({
+      districtKey: ov.district_key || config.district_key,
+      selected_districts: ov.selected_districts || config.selected_districts,
+      max_district_span: ov.max_district_span || config.max_district_span,
+      targetDate: ov.target_date,
+      minTime: ov.min_time || config.min_time,
+      maxTime: ov.max_time || config.max_time,
+      workStart1: ov.work_start1 || config.work_start1,
+      workEnd1: ov.work_end1 || config.work_end1,
+      workStart2: ov.work_start2 || config.work_start2,
+      workEnd2: ov.work_end2 || config.work_end2,
+      minDistanceKm: parseFloat(ov.min_distance_km || config.min_distance_km),
+      maxDistanceKm: parseFloat(ov.max_distance_km || config.max_distance_km),
+      minPace: parseFloat(ov.min_pace || config.min_pace),
+      maxPace: parseFloat(ov.max_pace || config.max_pace),
+      activityType: ov.activity_type || config.activity_type,
+      heartRateEnabled: (ov.heart_rate_enabled || config.heart_rate_enabled) === 'true',
+      minHeartRate: parseInt(ov.min_heart_rate || config.min_heart_rate),
+      maxHeartRate: parseInt(ov.max_heart_rate || config.max_heart_rate),
+      useOSRM: (ov.use_osrm || config.use_osrm) !== 'false',
+    });
+
+    const activityId = await db.saveActivity({
+      activity_name: activity.activityName,
+      distance_km: activity.distanceKm,
+      duration_min: activity.durationMin,
+      pace_min_km: activity.paceMinKm,
+      gpx_file: activity.filename,
+      upload_status: 'generated',
+      route_start_lat: activity.startLat,
+      route_start_lng: activity.startLng,
+      route_start_time: activity.startTime ? activity.startTime.toISOString() : new Date().toISOString(),
+      district_keys: activity.districtKey,
+    });
+
+    const uploadResult = await stravaApi.uploadActivity(activity.filepath, {
+      name: activity.activityName,
+      sportType: ov.activity_type || config.activity_type || 'Run',
+    });
+
+    const finalStatus = await stravaApi.waitForUpload(uploadResult.id);
+
+    await db.updateActivity(activityId, {
+      strava_activity_id: String(finalStatus.activity_id),
+      upload_status: 'uploaded',
+    });
+
+    res.json({
+      success: true,
+      activity: {
+        id: activityId,
+        activityName: activity.activityName,
+        distanceKm: activity.distanceKm,
+        stravaActivityId: finalStatus.activity_id,
+      },
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Generate and Upload error:', err);
+    res.status(500).json({ error: err.message, message: err.message });
   }
 });
 
