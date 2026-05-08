@@ -299,18 +299,32 @@ async function updateSchedule() {
 
 // ─── Activities ─────────────────────────────────────────
 
+let localCurrentPage = 1;
+const LOCAL_PAGE_SIZE = 10;
+
 async function loadActivities() {
   try {
-    const activities = await api('/activities');
+    const allActivities = await api('/activities');
     const container = document.getElementById('activityList');
-    document.getElementById('historyCount').textContent = `${activities.length} activities`;
+    const total = allActivities.length;
+    const totalPages = Math.max(1, Math.ceil(total / LOCAL_PAGE_SIZE));
+    
+    // Clamp page
+    if (localCurrentPage > totalPages) localCurrentPage = totalPages;
+    if (localCurrentPage < 1) localCurrentPage = 1;
+    
+    document.getElementById('historyCount').textContent = `${total} activities`;
+    document.getElementById('localPageInfo').textContent = `Page ${localCurrentPage}/${totalPages}`;
 
-    if (!activities.length) {
-      container.innerHTML = '<div class="empty-state"><div class="icon">🏃</div><p>No activities yet. Generate your first one!</p></div>';
+    if (!total) {
+      container.innerHTML = '<div class="empty-state"><div class="icon">\ud83c\udfc3</div><p>No activities yet. Generate your first one!</p></div>';
       return;
     }
 
-    container.innerHTML = activities.map(a => {
+    const start = (localCurrentPage - 1) * LOCAL_PAGE_SIZE;
+    const pageActivities = allActivities.slice(start, start + LOCAL_PAGE_SIZE);
+
+    container.innerHTML = pageActivities.map(a => {
       const actualTime = a.route_start_time || a.created_at;
       const dateStr = actualTime.endsWith('Z') ? actualTime : actualTime + 'Z';
       const dateObj = new Date(dateStr);
@@ -322,7 +336,7 @@ async function loadActivities() {
          const keys = a.district_keys.split(',');
          districtTags = keys.map(k => {
            const name = HANOI_DISTRICTS.find(d => d.key === k)?.name || k;
-           return `<span class="status-badge" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); padding: 2px 6px;">📍 ${name}</span>`;
+           return `<span class="status-badge" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); padding: 2px 6px;">\ud83d\udccd ${name}</span>`;
          }).join('');
       }
 
@@ -332,7 +346,7 @@ async function loadActivities() {
           <div>
             <div class="activity-name">${a.activity_name || 'Unnamed'}</div>
             <div class="activity-date" style="display:flex; gap:6px; margin-top:4px; flex-wrap:wrap; align-items:center;">
-               <span class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); padding: 2px 6px;">⏱️ ${timeStr} ${dateOnlyStr}</span>
+               <span class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); padding: 2px 6px;">\u23f1\ufe0f ${timeStr} ${dateOnlyStr}</span>
                ${districtTags}
             </div>
           </div>
@@ -343,11 +357,17 @@ async function loadActivities() {
             <span class="status-badge ${statusClass}">${a.upload_status}</span>
             ${a.upload_status === 'generated' ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
             ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
-            <button class="btn btn-sm btn-danger" style="padding:4px 8px;" onclick="deleteActivity(${a.id}, ${!!a.strava_activity_id})">🗑️</button>
+            <button class="btn btn-sm btn-danger" style="padding:4px 8px;" onclick="deleteActivity(${a.id}, ${!!a.strava_activity_id})">\ud83d\uddd1\ufe0f</button>
           </div>
         </div>`;
     }).join('');
   } catch (err) { console.error('Activities error:', err); }
+}
+
+function changeLocalPage(delta) {
+  localCurrentPage += delta;
+  if (localCurrentPage < 1) localCurrentPage = 1;
+  loadActivities();
 }
 
 let stravaCurrentPage = 1;
@@ -423,7 +443,8 @@ function changeStravaPage(delta) {
 
 function getOverrideConfig() {
   const selected_districts = Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value).join(',');
-  const isCustomTime = document.getElementById('cfgCustomTime').checked;
+  const isScheduleMode = document.getElementById('cfgCustomTime').checked;
+  const isCustomTime = !isScheduleMode; // Toggle OFF = custom time (default), Toggle ON = schedule/random
   const overrideConfig = {
     target_date: isCustomTime ? document.getElementById('cfgTargetDate').value : undefined,
     min_time: isCustomTime ? document.getElementById('cfgCustomMinTime').value : document.getElementById('cfgRandMinTime').value,
@@ -579,22 +600,30 @@ function checkMaxSpan() {
 }
 
 function toggleCustomTime() {
-  const isCustom = document.getElementById('cfgCustomTime').checked;
+  const isScheduleMode = document.getElementById('cfgCustomTime').checked;
   const customInputs = document.getElementById('timeCustomInputs');
   const randomInputs = document.getElementById('timeRandomInputs');
   
-  if (isCustom) {
-    customInputs.style.display = 'flex';
-    if(randomInputs) {
-      randomInputs.style.opacity = '0.4';
-      randomInputs.style.pointerEvents = 'none';
-    }
-  } else {
+  if (isScheduleMode) {
+    // Show random time bounds, hide custom date/time
     customInputs.style.display = 'none';
-    if(randomInputs) {
-      randomInputs.style.opacity = '1';
-      randomInputs.style.pointerEvents = 'auto';
-    }
+    randomInputs.style.display = 'block';
+  } else {
+    // Show custom date/time, hide random time bounds
+    customInputs.style.display = 'grid';
+    randomInputs.style.display = 'none';
+  }
+}
+
+function updateActivityTypeHint() {
+  const type = document.getElementById('cfgActivityType').value;
+  const hint = document.getElementById('activityTypeHint');
+  if (type === 'Random') {
+    hint.textContent = '\ud83c\udfb2 60% Run, 30% Walk, 10% Ride';
+    hint.style.display = 'block';
+  } else {
+    hint.textContent = '100% ' + type;
+    hint.style.display = 'block';
   }
 }
 

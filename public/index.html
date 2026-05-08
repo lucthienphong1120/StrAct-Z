@@ -117,11 +117,26 @@
                   <label class="toggle">
                     <input type="checkbox" id="cfgCustomTime" onchange="toggleCustomTime()">
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size:0.8rem;color:var(--text-muted)">Custom Time (GPX Only)</span>
+                    <span class="toggle-label" style="font-size:0.8rem;color:var(--text-muted)">Schedule Mode (Random Time)</span>
                   </label>
                 </div>
                 
-                <div id="timeRandomInputs" style="background:var(--bg-input); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border); transition: opacity 0.3s;">
+                <div id="timeCustomInputs" class="form-row" style="margin-top:0;">
+                  <div class="form-group">
+                    <label class="form-label">Target Date</label>
+                    <input type="date" id="cfgTargetDate" class="form-input">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Time Range</label>
+                    <div style="display:flex;gap:10px;">
+                      <input type="time" id="cfgCustomMinTime" class="form-input" value="04:30">
+                      <span style="align-self:center;">-</span>
+                      <input type="time" id="cfgCustomMaxTime" class="form-input" value="21:30">
+                    </div>
+                  </div>
+                </div>
+
+                <div id="timeRandomInputs" style="display:none; background:var(--bg-input); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border); margin-top:10px;">
                   <div class="form-row" style="margin-bottom:8px;">
                     <div class="form-group" style="margin-bottom:0;">
                       <label class="form-label" style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">🕒 Random Time Bounds</label>
@@ -148,21 +163,6 @@
                           <input type="time" id="cfgWorkEnd2" class="form-input" value="17:30" style="padding:4px 8px;font-size:0.85rem;width:90px">
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="timeCustomInputs" class="form-row" style="display:none; margin-top:10px;">
-                  <div class="form-group">
-                    <label class="form-label">Target Date</label>
-                    <input type="date" id="cfgTargetDate" class="form-input">
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Time Range</label>
-                    <div style="display:flex;gap:10px;">
-                      <input type="time" id="cfgCustomMinTime" class="form-input" value="04:30">
-                      <span style="align-self:center;">-</span>
-                      <input type="time" id="cfgCustomMaxTime" class="form-input" value="21:30">
                     </div>
                   </div>
                 </div>
@@ -247,12 +247,13 @@
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Activity Type</label>
-                  <select id="cfgActivityType" class="form-select">
-                    <option value="Random">Random (Ưu tiên Chạy bộ)</option>
-                    <option value="Run">Chạy bộ</option>
-                    <option value="Walk">Đi bộ</option>
-                    <option value="Ride">Đạp xe</option>
+                  <select id="cfgActivityType" class="form-select" onchange="updateActivityTypeHint()">
+                    <option value="Random">Random</option>
+                    <option value="Run">Run</option>
+                    <option value="Walk">Walk</option>
+                    <option value="Ride">Ride</option>
                   </select>
+                  <div id="activityTypeHint" style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">🎲 60% Run, 30% Walk, 10% Ride</div>
                 </div>
                 <div class="form-group" style="display:flex;align-items:flex-end;">
                   <label class="toggle">
@@ -278,9 +279,14 @@
 
         <!-- Activity History (Local) -->
         <div class="card full-width">
-          <div class="card-header">
-            <div class="card-title">📋 Local Generated History</div>
-            <span id="historyCount" style="font-size:0.8rem;color:var(--text-muted)"></span>
+          <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
+            <div class="card-title" style="flex:1;">📋 Local Generated History</div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <span id="historyCount" style="font-size:0.8rem;color:var(--text-muted)"></span>
+              <button class="btn btn-sm btn-secondary" onclick="changeLocalPage(-1)">◀ Prev</button>
+              <span id="localPageInfo" style="font-size:0.8rem;color:var(--text-muted)">Page 1</span>
+              <button class="btn btn-sm btn-secondary" onclick="changeLocalPage(1)">Next ▶</button>
+            </div>
           </div>
           <div class="card-body" style="padding:0;">
             <div id="activityList">
