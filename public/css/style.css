@@ -490,29 +490,44 @@ body::before {
 .tooltip-icon::after {
   content: attr(data-tooltip);
   position: absolute;
-  bottom: 120%;
+  bottom: 125%;
   left: 50%;
   transform: translateX(-50%) scale(0.9);
-  background: var(--bg-secondary);
+  background: rgba(15, 23, 42, 0.95);
   color: #fff;
-  padding: 6px 10px;
+  padding: 8px 12px;
   border-radius: 6px;
   font-size: 0.75rem;
   font-weight: normal;
-  white-space: nowrap;
+  white-space: pre-wrap;
+  width: max-content;
+  max-width: 250px;
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s ease;
   z-index: 1000;
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   pointer-events: none;
+  line-height: 1.4;
+  text-align: left;
 }
 
 .tooltip-icon:hover::after {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) scale(1);
+}
+
+/* Align tooltips to the right if they are near the right edge */
+.tooltip-left::after {
+  left: auto;
+  right: 0;
+  transform: scale(0.9);
+}
+
+.tooltip-left:hover::after {
+  transform: scale(1);
 }
 
 /* ─── Responsive ──────────────────────────────────────── */
