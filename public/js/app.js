@@ -55,6 +55,11 @@ async function checkAuth() {
       document.getElementById('connectScreen').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
       document.getElementById('btnLogout').style.display = 'block';
+      
+      // Update header name with VIP indicator
+      const vipTag = userRole === 'vip' ? ' <span style="color:var(--vip-gold); font-size:0.7rem; font-weight:800; border:1px solid var(--vip-gold); padding:1px 6px; border-radius:4px; margin-left:6px; background:rgba(245,158,11,0.1);">VIP</span>' : '';
+      authText.innerHTML = (data.athlete?.name || 'Connected') + vipTag;
+      
       renderAccountInfo(data.athlete);
       loadDashboard();
     } else {
@@ -224,6 +229,14 @@ async function loadStats() {
       document.body.classList.add('is-vip');
     } else {
       document.body.classList.remove('is-vip');
+    }
+
+    // Refresh header name with VIP indicator
+    const authText = document.getElementById('authText');
+    if (authText) {
+      const currentName = authText.textContent.replace(' VIP', '').trim();
+      const vipTag = userRole === 'vip' ? ' <span style="color:var(--vip-gold); font-size:0.7rem; font-weight:800; border:1px solid var(--vip-gold); padding:1px 6px; border-radius:4px; margin-left:6px; background:rgba(245,158,11,0.1);">VIP</span>' : '';
+      authText.innerHTML = currentName + vipTag;
     }
     
     document.getElementById('statTotal').textContent = stats.total;

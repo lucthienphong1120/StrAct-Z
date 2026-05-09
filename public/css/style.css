@@ -42,12 +42,30 @@
 }
 
 .is-vip {
-  --strava-orange: var(--vip-gold);
-  --strava-orange-dark: var(--vip-gold-dark);
-  --strava-orange-glow: var(--vip-gold-glow);
-  --gradient-primary: var(--gradient-vip);
-  --border-focus: var(--vip-gold);
-  --shadow-glow: 0 0 30px rgba(245, 158, 11, 0.2);
+  --strava-orange: #f59e0b;
+  --strava-orange-dark: #b45309;
+  --strava-orange-glow: rgba(245, 158, 11, 0.4);
+  --gradient-primary: linear-gradient(135deg, #1c1917 0%, #451a03 30%, #92400e 60%, #f59e0b 100%);
+  --bg-primary: #0a0a08;
+  --bg-secondary: #12120d;
+  --bg-card: #1a1a14;
+  --bg-card-hover: #23231a;
+  --border: #3d3d25;
+  --border-focus: #f59e0b;
+  --shadow-glow: 0 0 40px rgba(245, 158, 11, 0.3);
+  --text-primary: #fffdf5;
+  --text-secondary: #d4d4b8;
+}
+
+.is-vip .stat-card:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 0 35px rgba(245, 158, 11, 0.4), inset 0 0 15px rgba(245, 158, 11, 0.1);
+  transform: translateY(-3px) scale(1.02);
+}
+
+.is-vip .btn-primary {
+  background: linear-gradient(135deg, #92400e 0%, #f59e0b 100%);
+  box-shadow: 0 4px 15px rgba(146, 64, 14, 0.4);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
