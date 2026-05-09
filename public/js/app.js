@@ -498,7 +498,7 @@ const LOCAL_PAGE_SIZE = 10;
 async function loadActivities() {
   try {
     const allActivities = await api('/activities');
-    console.log(`[Local] Fetched ${allActivities.length} activities:`, allActivities);
+    console.log(`[Local] Fetched ${allActivities.length} activities`);
     const container = document.getElementById('activityList');
     const total = allActivities.length;
     const totalPages = Math.max(1, Math.ceil(total / LOCAL_PAGE_SIZE));
