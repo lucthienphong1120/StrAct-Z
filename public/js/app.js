@@ -317,11 +317,8 @@ function validateInputs(config) {
   if (minPace > maxPace) { showToast('Min Pace must be less than or equal to Max Pace', 'error'); return false; }
 
   if (config.heart_rate_enabled === 'true') {
-    const minHR = parseInt(config.min_heart_rate, 10);
     const maxHR = parseInt(config.max_heart_rate, 10);
-    if (minHR < 60 || minHR > 120) { showToast('Min Heart Rate must be between 60 and 120', 'error'); return false; }
-    if (maxHR < 120 || maxHR > 200) { showToast('Max Heart Rate must be between 120 and 200', 'error'); return false; }
-    if (minHR >= maxHR) { showToast('Min Heart Rate must be less than Max Heart Rate', 'error'); return false; }
+    if (maxHR < 120 || maxHR > 220) { showToast('Max Heart Rate must be between 120 and 220', 'error'); return false; }
   }
 
   return true;
@@ -350,7 +347,6 @@ async function saveConfig() {
     max_pace: document.getElementById('cfgMaxPace').value,
     activity_type: document.getElementById('cfgActivityType').value,
     heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
-    min_heart_rate: document.getElementById('cfgMinHR').value,
     max_heart_rate: document.getElementById('cfgMaxHR').value,
     sim_weather: document.getElementById('cfgSimWeather')?.checked ? 'true' : 'false',
     sim_redlights: document.getElementById('cfgSimRedLights')?.checked ? 'true' : 'false',
