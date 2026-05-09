@@ -498,7 +498,7 @@ const LOCAL_PAGE_SIZE = 10;
 async function loadActivities() {
   try {
     const allActivities = await api('/activities');
-    console.log(`[Local] Fetched ${allActivities.length} activities`);
+    console.log(`[Local] Fetched ${allActivities.length} activities:`, allActivities);
     const container = document.getElementById('activityList');
     const total = allActivities.length;
     const totalPages = Math.max(1, Math.ceil(total / LOCAL_PAGE_SIZE));
@@ -775,8 +775,7 @@ async function generateAndUpload() {
         showToast(result.message || 'Upload failed', 'error');
       }
     }
-    loadActivities();
-    loadStats();
+    await loadDashboard(true); // Full refresh
   } catch (err) {
     showToast('Failed: ' + err.message, 'error');
   } finally {
@@ -794,8 +793,7 @@ async function uploadActivity(id) {
     } else {
       showToast(result.error || 'Upload failed', 'error');
     }
-    loadActivities();
-    loadStats();
+    await loadDashboard(true);
   } catch (err) {
     showToast('Upload failed: ' + err.message, 'error');
   }
@@ -814,9 +812,7 @@ async function deleteActivity(id, hasStrava) {
       } else {
         showToast(result.message || 'Activity deleted', 'success');
       }
-      loadActivities();
-      loadStats();
-      loadStravaActivities();
+      await loadDashboard(true);
     } else {
       showToast(result.error || 'Failed to delete activity', 'error');
     }

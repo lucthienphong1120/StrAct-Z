@@ -107,7 +107,22 @@ router.get('/strava-activities', async (req, res) => {
     const perPage = parseInt(req.query.per_page) || 10;
     const after = req.query.after ? parseInt(req.query.after) : null;
     const forceRefresh = req.query.refresh === 'true';
-    const activities = await stravaApi.getActivities(req.user.id, page, perPage, after, forceRefresh);
+    
+    // When filtering by 'after', we fetch a larger set (100) to ensure we get the latest activities 
+    // since Strava might return them in ascending order when 'after' is specified.
+    const fetchLimit = after ? 100 : perPage;
+    const fetchPage = after ? 1 : page; // Fetch from page 1 to get the most recent set
+    
+    let activities = await stravaApi.getActivities(req.user.id, fetchPage, fetchLimit, after, forceRefresh);
+    
+    // Always sort descending (newest first)
+    activities.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
+    
+    // Apply local pagination if we fetched a larger set
+    if (after) {
+      const start = (page - 1) * perPage;
+      activities = activities.slice(start, start + perPage);
+    }
     
     if (forceRefresh || page === 1) {
       console.log(`[Strava API] User ${req.user.id} fetched ${activities.length} acts (Page ${page}, After: ${after})`);
