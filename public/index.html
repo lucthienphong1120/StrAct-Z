@@ -18,7 +18,7 @@
     <div class="header-inner">
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
-        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.27.1</small></span>
+        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.28.1</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;" onclick="systemLogout()">Logout</button>
@@ -71,8 +71,7 @@
       <div class="card" style="margin-bottom: 2rem;">
         <div class="card-header">
           <div class="card-title">📈 Activity Insights (Cloud)</div>
-          <button class="btn btn-sm btn-secondary" onclick="loadInsights(true)" title="Refresh from Strava">🔄 Refresh</button>
-          <select id="insightsTimeRange" class="form-select" style="width: 140px; font-size: 0.8rem; padding: 4px 8px;" onchange="loadInsights()">
+        <select id="insightsTimeRange" class="form-select" style="width: 140px; font-size: 0.8rem; padding: 4px 8px;" onchange="loadInsights()">
             <option value="3">Last 3 Days</option>
             <option value="5">Last 5 Days</option>
             <option value="7">Last 7 Days</option>
@@ -386,7 +385,7 @@
         <div class="card full-width">
           <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="card-title" style="flex:1;">☁️ Strava Cloud Activities</div>
-            <button class="btn btn-sm btn-secondary" onclick="loadStravaActivities(true)" title="Refresh from Strava">🔄 Refresh</button>
+            <button class="btn btn-sm btn-secondary" onclick="refreshCloudData()" title="Refresh all cloud data">🔄 Refresh All</button>
 
             <div style="display:flex; gap:10px; align-items:center;">
               <select id="stravaFilterRange" class="form-select" style="padding:4px 8px; font-size:0.8rem; width:120px;" onchange="onStravaFilterChange()">

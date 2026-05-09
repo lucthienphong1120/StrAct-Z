@@ -487,6 +487,15 @@ function onStravaFilterChange() {
   loadStravaActivities();
 }
 
+async function refreshCloudData() {
+  showToast('Refreshing cloud data...', 'info');
+  await Promise.all([
+    loadStravaActivities(true),
+    loadInsights(true)
+  ]);
+  showToast('Cloud data updated!', 'success');
+}
+
 async function loadStravaActivities(forceRefresh = false) {
   const container = document.getElementById('stravaActivityList');
   if (!container) return;
