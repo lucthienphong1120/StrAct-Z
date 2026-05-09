@@ -55,4 +55,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] đồng nhất định dạng hint cho phần thông báo xóa activity trên strava
 + [x] thêm highlight biên giới các quận viền đỏ đậm hơn trong Activity Areas Map (với danh sách các quận nội thành HN đã list - highlight polygon thực tế)
 + [x] tải source GeoJSON về project và update AI_RULES.md, README.md, kiến trúc
++ [x] fix lỗi 404 khi tải GeoJSON bằng cách thêm explicit route trong server.js
 + [x] cập nhật hint của Activity Areas (Map) về tỷ lệ random và xuống dòng
