@@ -1039,17 +1039,21 @@ function updateLockUI() {
 async function renderDistrictBorders() {
   if (!map) return;
   try {
-    const districts = await api('/districts');
-    districts.forEach(d => {
-      L.circle([d.lat, d.lng], {
-        radius: d.radiusKm * 1000,
-        color: 'rgba(255, 0, 0, 0.4)',
-        weight: 1,
-        fill: false,
-        dashArray: '4, 4',
-        interactive: false
-      }).addTo(map);
-    });
+    // Load GeoJSON for urban districts (extracted administrative polygons)
+    const res = await fetch('/data/hanoi_urban_districts.geojson');
+    if (!res.ok) throw new Error('Could not load districts GeoJSON');
+    const geojson = await res.json();
+    
+    L.geoJSON(geojson, {
+      style: {
+        color: '#ef4444',      // Bolder red
+        weight: 2.5,           // Thicker border
+        opacity: 0.7,          // Higher opacity
+        fillColor: '#ef4444',
+        fillOpacity: 0.05,     // Very light fill to distinguish area
+        interactive: false     // Click through to map/markers
+      }
+    }).addTo(map);
   } catch (err) {
     console.error('Failed to render district borders:', err);
   }
