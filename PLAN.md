@@ -52,3 +52,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] tính năng switch to normal theme và switch back để preview sự khác biệt của theme (chỉ vip user mới có) -> đảm bảo bảo mật, chống lạm dụng và gian lận dựa trên tính năng này
 + [x] chỉnh lại giảm trọng số của home và work location
 + [x] fix lại chức năng nút save chưa hoạt động, phải hiện toast
++ [x] đồng nhất định dạng hint cho phần thông báo xóa activity trên strava

@@ -606,7 +606,7 @@ async function loadActivities() {
             ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
             ${a.upload_status === 'generated' ? 
               `<button class="btn btn-sm btn-danger" style="padding:4px 8px;" title="Delete locally" onclick="deleteActivity(${a.id}, false)">🗑️</button>` : 
-              `<span class="tooltip-icon" data-tooltip="Uploaded activities must be deleted on Strava.com" style="opacity:0.5; cursor:help;">ℹ️</span>`
+              `<span class="tooltip-icon tooltip-left" data-tooltip="Uploaded activities must be deleted on Strava.com">?</span>`
             }
           </div>
         </div>`;
