@@ -53,8 +53,22 @@
   --border: #475569;
   --border-focus: #fbbf24;
   --shadow-glow: 0 0 45px rgba(245, 158, 11, 0.35);
-  --text-primary: #fbbf24;
-  --text-secondary: #fcd34d;
+  --text-primary: #f0f2f8;
+  --text-secondary: #8892b0;
+}
+
+.is-vip .logo {
+  color: #fbbf24;
+  -webkit-text-fill-color: #fbbf24;
+  text-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+}
+
+.is-vip .stat-value {
+  -webkit-text-fill-color: #fbbf24;
+}
+
+.is-vip .stat-label {
+  color: #fcd34d;
 }
 
 .is-vip .stat-card:hover {
