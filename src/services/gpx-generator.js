@@ -14,6 +14,7 @@ const {
   randomInRange,
   haversineDistance,
 } = require('./route-engine');
+const systemLimits = require('../config/limits');
 
 const GPX_DIR = path.join(__dirname, '..', '..', 'data', 'gpx');
 fs.mkdirSync(GPX_DIR, { recursive: true });
@@ -104,14 +105,18 @@ async function generateActivity(config = {}) {
     maxHeartRate = 165,
     startTime = null,
     useOSRM = true,
+    userRole = 'normal',
   } = config;
+
+  const limits = systemLimits[userRole] || systemLimits.normal;
 
   // Determine Activity Type
   let finalActivityType = activityType;
   if (activityType === 'Random') {
     const r = Math.random();
-    if (r < 0.6) finalActivityType = 'Run';
-    else if (r < 0.9) finalActivityType = 'Walk';
+    const w = limits.activity_type_weights;
+    if (r < w.Run) finalActivityType = 'Run';
+    else if (r < w.Run + w.Walk) finalActivityType = 'Walk';
     else finalActivityType = 'Ride';
   }
 
@@ -131,25 +136,23 @@ async function generateActivity(config = {}) {
     finalMaxDist = maxDistanceKm * 0.7;
     finalMinPace = Math.max(10.0, minPace);
     finalMaxPace = Math.max(15.0, maxPace);
-    // 50% - 60% MHR
-    finalMinHR = Math.round(mhr * 0.50);
-    finalMaxHR = Math.round(mhr * 0.60);
+    // HR Zones from config
+    finalMinHR = Math.round(mhr * limits.hr_zones.Walk.min);
+    finalMaxHR = Math.round(mhr * limits.hr_zones.Walk.max);
   } else if (finalActivityType === 'Ride') {
     finalMinDist = minDistanceKm * 1.5;
     finalMaxDist = maxDistanceKm * 1.5;
     finalMinPace = 2.5;
     finalMaxPace = 5.0;
-    // 60% - 70% MHR
-    finalMinHR = Math.round(mhr * 0.60);
-    finalMaxHR = Math.round(mhr * 0.70);
+    finalMinHR = Math.round(mhr * limits.hr_zones.Ride.min);
+    finalMaxHR = Math.round(mhr * limits.hr_zones.Ride.max);
   } else { // Run
     finalMinDist = minDistanceKm;
     finalMaxDist = maxDistanceKm;
     finalMinPace = Math.min(7.0, minPace);
     finalMaxPace = Math.min(10.0, maxPace);
-    // 70% - 85% MHR
-    finalMinHR = Math.round(mhr * 0.70);
-    finalMaxHR = Math.round(mhr * 0.85);
+    finalMinHR = Math.round(mhr * limits.hr_zones.Run.min);
+    finalMaxHR = Math.round(mhr * limits.hr_zones.Run.max);
   }
 
   // Determine District (Random if 'random' or not provided)

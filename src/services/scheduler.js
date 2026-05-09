@@ -6,6 +6,7 @@ const cron = require('node-cron');
 const db = require('../db/database');
 const { generateActivity } = require('./gpx-generator');
 const stravaApi = require('./strava-api');
+const systemLimits = require('../config/limits');
 
 const scheduledTasks = new Map(); // accountId -> cronTask
 const isRunning = new Map(); // accountId -> boolean
@@ -30,8 +31,11 @@ async function executeJob(accountId) {
 
     // Check daily limit
     const stats = await db.getActivityStats(accountId);
-    if (stats.todayCount >= 2) {
-      console.log(`[Scheduler] Limit reached for account ${accountId} (2 activities/day). VIP required.`);
+    const role = await db.getAccountRole(accountId);
+    const limits = systemLimits[role] || systemLimits.normal;
+
+    if (stats.todayCount >= limits.daily_upload_limit) {
+      console.log(`[Scheduler] Limit reached for account ${accountId} (${limits.daily_upload_limit} activities/day).`);
       return { success: false, message: 'VIP_REQUIRED' };
     }
 
@@ -40,7 +44,7 @@ async function executeJob(accountId) {
     const minCount = parseInt(config.schedule_count_min) || 1;
     const maxCount = parseInt(config.schedule_count_max) || 1;
     let taskCount = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
-    if (taskCount > 3) taskCount = 3; // Safety cap
+    if (taskCount > limits.schedule_count_max) taskCount = limits.schedule_count_max; // Dynamic safety cap
 
     console.log(`[Scheduler] Account ${accountId} will generate ${taskCount} activities...`);
     
@@ -50,7 +54,7 @@ async function executeJob(accountId) {
     for (let i = 0; i < taskCount; i++) {
       // Check daily limit inside loop
       const loopStats = await db.getActivityStats(accountId);
-      if (loopStats.todayCount >= 2) {
+      if (loopStats.todayCount >= limits.daily_upload_limit) {
         console.log(`[Scheduler] Limit reached for account ${accountId}.`);
         if (i === 0) return { success: false, message: 'VIP_REQUIRED' };
         break; // Stop generating more if limit reached
@@ -79,6 +83,7 @@ async function executeJob(accountId) {
         useOSRM: config.use_osrm !== 'false',
         simWeather: config.sim_weather !== 'false',
         simRedLights: config.sim_redlights !== 'false',
+        userRole: role, // Pass user role for internal weights
       });
 
       console.log(`[Scheduler] Generated: ${activity.activityName} - ${activity.distanceKm}km in ${activity.durationMin}min`);

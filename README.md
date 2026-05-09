@@ -46,6 +46,15 @@ For detailed information, please refer to our documentation guides:
 
 ## 📋 Changelog
 
+### v1.30.0
+- ⚙️ **Centralized Config:** Chuyển toàn bộ các giới hạn validate và đặc quyền VIP vào hệ thống cấu hình tập trung (`src/config/limits.js`).
+- 🛠️ **Dynamic UI Limits:** Giao diện tự động cập nhật các ràng buộc (min/max), thông báo lỗi và **Tooltips** dựa trên vai trò của người dùng (Normal/VIP) lấy từ server.
+- 🧪 **GPX Engine Refactor:** Bộ máy tạo GPX giờ đây sử dụng các trọng số xác suất và dải nhịp tim động từ file cấu hình, cho phép tùy chỉnh nhanh trên production server.
+- 🚀 **Increased VIP Limits:** Nâng giới hạn upload hàng ngày cho VIP lên 10 hoạt động/ngày.
+
+### v1.29.1
+- 🐛 **Bug Fixes:** Sửa lỗi ReferenceError trong `app.js` và vấn đề lưu trữ cấu hình.
+
 ### v1.29.0
 - 📊 **Dual Metric Insights:** Cải tiến biểu đồ **Activity Insights (Cloud)** thành dạng kết hợp (Dual Metrics):
   - **Bar Chart (Orange):** Thống kê tổng quãng đường (km).

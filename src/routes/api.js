@@ -10,6 +10,7 @@ const db = require('../db/database');
 const scheduler = require('../services/scheduler');
 const { generateActivity, HANOI_DISTRICTS } = require('../services/gpx-generator');
 const stravaApi = require('../services/strava-api');
+const systemLimits = require('../config/limits');
 
 // ─── Districts ──────────────────────────────────────────────────────────────
 
@@ -26,17 +27,27 @@ router.get('/config', async (req, res) => {
   res.json(await db.getAllConfig(req.user.id));
 });
 
+router.get('/system-limits', (req, res) => {
+  const role = req.user.role || 'normal';
+  res.json(systemLimits[role] || systemLimits.normal);
+});
+
 router.post('/config', async (req, res) => {
   const updates = req.body;
+  const role = req.user.role || 'normal';
+  const limits = systemLimits[role] || systemLimits.normal;
   
-  // Enforce VIP limits
-  if (req.user.role !== 'vip') {
-    if (updates.max_district_span && parseInt(updates.max_district_span) > 2) {
-      return res.status(403).json({ error: 'Max 2 districts allowed. VIP required.' });
-    }
-    if (updates.schedule_count_max && parseInt(updates.schedule_count_max) > 2) {
-      return res.status(403).json({ error: 'Max 2 scheduled activities allowed. VIP required.' });
-    }
+  // Enforce limits from config file
+  if (updates.max_district_span && parseInt(updates.max_district_span) > limits.max_district_span) {
+    return res.status(403).json({ error: `Max ${limits.max_district_span} districts allowed for your account.` });
+  }
+
+  // Basic numeric range validation (optional but good practice)
+  if (updates.min_distance_km && (parseFloat(updates.min_distance_km) < limits.distance_km.min || parseFloat(updates.min_distance_km) > limits.distance_km.max)) {
+     return res.status(400).json({ error: `Min distance must be between ${limits.distance_km.min} and ${limits.distance_km.max} km` });
+  }
+  if (updates.max_distance_km && parseFloat(updates.max_distance_km) > limits.max_distance_km_limit) {
+     return res.status(400).json({ error: `Max distance cannot exceed ${limits.max_distance_km_limit} km` });
   }
 
   for (const [key, value] of Object.entries(updates)) {
@@ -125,6 +136,7 @@ router.post('/generate', async (req, res) => {
       useOSRM: (ov.use_osrm || config.use_osrm) !== 'false',
       simWeather: (ov.sim_weather || config.sim_weather) !== 'false',
       simRedLights: (ov.sim_redlights || config.sim_redlights) !== 'false',
+      userRole: req.user.role || 'normal',
     });
 
     const activityId = await db.saveActivity(req.user.id, {
@@ -187,6 +199,7 @@ router.post('/generate-and-upload', async (req, res) => {
       useOSRM: (ov.use_osrm || config.use_osrm) !== 'false',
       simWeather: (ov.sim_weather || config.sim_weather) !== 'false',
       simRedLights: (ov.sim_redlights || config.sim_redlights) !== 'false',
+      userRole: req.user.role || 'normal',
     });
 
     const activityId = await db.saveActivity(req.user.id, {
@@ -318,8 +331,11 @@ router.get('/scheduler', async (req, res) => res.json(await scheduler.getStatus(
 
 router.post('/scheduler', async (req, res) => {
   const { enabled, time, countMin, countMax } = req.body;
-  if (req.user.role !== 'vip' && (parseInt(countMin) > 2 || parseInt(countMax) > 2)) {
-    return res.status(403).json({ error: 'Max 2 scheduled activities allowed. VIP required.' });
+  const role = req.user.role || 'normal';
+  const limits = systemLimits[role] || systemLimits.normal;
+
+  if (parseInt(countMin) > limits.schedule_count_max || parseInt(countMax) > limits.schedule_count_max) {
+    return res.status(403).json({ error: `Max ${limits.schedule_count_max} scheduled activities allowed for your account.` });
   }
   await scheduler.updateSchedule(req.user.id, enabled, time, countMin, countMax);
   res.json(await scheduler.getStatus(req.user.id));

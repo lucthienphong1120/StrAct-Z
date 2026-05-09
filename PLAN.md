@@ -21,7 +21,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] tích hợp đẩy data về các luồng công cụ Health Hub như Google Fit, Health connect, Samsung Health, Apple Health
 + [ ] tích hợp bổ sung (hint optional, not tested) cho các công cụ luyện tập khác như adidas running, nike run club, runkeeper
 + [ ] restrict linked tài khoản stract z với tối đa 1 tài khoản strava và 1 với mỗi hệ thống tích hợp 3rd (nếu có)
-+ [ ] review và sửa lại min, max, range các option + validate (min/max/range)
++ [x] review và sửa lại min, max, range các option + validate (min/max/range)
 + [x] update logic random heart rate trọng số theo hoạt động
 + [x] update logic trọng số vị trí
 + [x] sửa Max heart rate thành input field tự count (hiển thị nhưng readonly), thêm 1 field bên cạnh là tuổi, default 25 tuổi -> MHR tự tính là 195
@@ -46,6 +46,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] fix hint z-index cao trên menu, tránh bị overflow, xử lý xuống dòng
 + [ ] thêm nút khóa scale và move cho Activity Areas Map (default yes)
 + [ ] tùy chỉnh mở rộng/thu hẹp vòng tròn vị trí trong Activity Areas Map (kèm thông số ràng buộc min size = hiện tại, max tối đa x2)
-+ [ ] file config based các giá trị gồm default validate, range, type cho normal/vip account để tôi tự tùy chỉnh và update (cập nhật readme và kiến trúc luôn, hướng dẫn cách manual update)
-+ [ ] hint ngoài thông tin về config sẽ xuống dòng và thêm thông tin dynamic từ config file (validate, range, type)
++ [x] file config based các giá trị gồm default validate, range, type cho normal/vip account để tôi tự tùy chỉnh và update (cập nhật readme và kiến trúc luôn, hướng dẫn cách manual update)
++ [x] hint ngoài thông tin về config sẽ xuống dòng và thêm thông tin dynamic từ config file (validate, range, type)
 + [ ] 

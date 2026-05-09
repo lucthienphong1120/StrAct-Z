@@ -108,8 +108,92 @@ async function disconnect() {
 // ─── Dashboard ──────────────────────────────────────────
 
 let userRole = 'normal';
+let sysLimits = null;
+
+async function fetchLimits() {
+  try {
+    sysLimits = await api('/system-limits');
+    applyLimitsToUI();
+  } catch (err) { console.error('Limits fetch error:', err); }
+}
+
+function applyLimitsToUI() {
+  if (!sysLimits) return;
+
+  // Distance
+  const minDist = document.getElementById('cfgMinDist');
+  const maxDist = document.getElementById('cfgMaxDist');
+  if (minDist) {
+    minDist.min = sysLimits.distance_km.min;
+    minDist.max = sysLimits.distance_km.max;
+  }
+  if (maxDist) {
+    maxDist.min = sysLimits.distance_km.min; // Or 1.0 as per UI
+    maxDist.max = sysLimits.max_distance_km_limit;
+  }
+
+  // Pace
+  const minPace = document.getElementById('cfgMinPace');
+  const maxPace = document.getElementById('cfgMaxPace');
+  if (minPace) {
+    minPace.min = sysLimits.pace_min_km.min;
+    minPace.max = sysLimits.pace_min_km.max;
+  }
+  if (maxPace) {
+    maxPace.min = sysLimits.pace_max_km.min;
+    maxPace.max = sysLimits.pace_max_km.max;
+  }
+
+  // HR & Age
+  const age = document.getElementById('cfgUserAge');
+  if (age) {
+    age.min = sysLimits.age.min;
+    age.max = sysLimits.age.max;
+  }
+
+  // Schedule
+  const sMin = document.getElementById('scheduleCountMin');
+  const sMax = document.getElementById('scheduleCountMax');
+  if (sMin) sMin.max = sysLimits.schedule_count_max;
+  if (sMax) sMax.max = sysLimits.schedule_count_max;
+
+  const maxSpan = document.getElementById('cfgMaxSpan');
+  if (maxSpan) maxSpan.max = sysLimits.max_district_span;
+
+  // Dynamic Tooltips
+  updateDynamicTooltips();
+}
+
+function updateDynamicTooltips() {
+  if (!sysLimits) return;
+  
+  const tooltipMap = {
+    'cfgMinDist': `Minimum distance for generated activity (${sysLimits.distance_km.min} - ${sysLimits.distance_km.max})`,
+    'cfgMaxDist': `Maximum distance for generated activity (1.0 - ${sysLimits.max_distance_km_limit})`,
+    'cfgMinPace': `Fastest pace for the activity (${sysLimits.pace_min_km.min} - ${sysLimits.pace_min_km.max})`,
+    'cfgMaxPace': `Slowest pace for the activity (${sysLimits.pace_max_km.min} - ${sysLimits.pace_max_km.max})`,
+    'cfgMaxSpan': `Max districts a route can cross. Your limit: ${sysLimits.max_district_span}`,
+    'scheduleCountMax': `Max number of activities. Your limit: ${sysLimits.schedule_count_max}`,
+    'cfgUserAge': `Used to calculate Max Heart Rate: 220 - Age. Range: ${sysLimits.age.min}-${sysLimits.age.max}.`
+  };
+
+  for (const [id, text] of Object.entries(tooltipMap)) {
+    const input = document.getElementById(id);
+    if (!input) continue;
+    
+    // Find associated tooltip icon
+    const group = input.closest('.form-group');
+    if (group) {
+      const icon = group.querySelector('.tooltip-icon');
+      if (icon) {
+        icon.setAttribute('data-tooltip', text);
+      }
+    }
+  }
+}
 
 async function loadDashboard() {
+  await fetchLimits();
   await Promise.all([loadStats(), loadDistricts(), loadConfig(), loadSchedule(), loadActivities(), loadStravaActivities(), loadInsights()]);
   initMap();
   resetMapView();
@@ -275,14 +359,26 @@ function validateInputs(config) {
   
   const minDist = parseFloat(config.min_distance_km);
   const maxDist = parseFloat(config.max_distance_km);
-  if (minDist < 0.2 || minDist > 4) { showToast('Min Distance must be between 0.2 and 4 km', 'error'); return false; }
-  if (maxDist < 1 || maxDist > 15) { showToast('Max Distance must be between 1 and 15 km', 'error'); return false; }
+  if (minDist < sysLimits.distance_km.min || minDist > sysLimits.distance_km.max) { 
+    showToast(`Min Distance must be between ${sysLimits.distance_km.min} and ${sysLimits.distance_km.max} km`, 'error'); 
+    return false; 
+  }
+  if (maxDist < 1 || maxDist > sysLimits.max_distance_km_limit) { 
+    showToast(`Max Distance must be between 1 and ${sysLimits.max_distance_km_limit} km`, 'error'); 
+    return false; 
+  }
   if (minDist >= maxDist) { showToast('Min Distance must be less than Max Distance', 'error'); return false; }
   
   const minPace = parseFloat(config.min_pace);
   const maxPace = parseFloat(config.max_pace);
-  if (minPace < 6 || minPace > 12) { showToast('Min Pace must be between 6 and 12 min/km', 'error'); return false; }
-  if (maxPace < 10 || maxPace > 15) { showToast('Max Pace must be between 10 and 15 min/km', 'error'); return false; }
+  if (minPace < sysLimits.pace_min_km.min || minPace > sysLimits.pace_min_km.max) { 
+    showToast(`Min Pace must be between ${sysLimits.pace_min_km.min} and ${sysLimits.pace_min_km.max} min/km`, 'error'); 
+    return false; 
+  }
+  if (maxPace < sysLimits.pace_max_km.min || maxPace > sysLimits.pace_max_km.max) { 
+    showToast(`Max Pace must be between ${sysLimits.pace_max_km.min} and ${sysLimits.pace_max_km.max} min/km`, 'error'); 
+    return false; 
+  }
   if (minPace > maxPace) { showToast('Min Pace must be less than or equal to Max Pace', 'error'); return false; }
 
   if (config.heart_rate_enabled === 'true') {
@@ -365,16 +461,10 @@ async function updateSchedule() {
   const countMin = document.getElementById('scheduleCountMin').value;
   const countMax = document.getElementById('scheduleCountMax').value;
   
-  if (userRole !== 'vip' && (parseInt(countMax) > 2 || parseInt(countMin) > 2)) {
-    showToast('VIP Required: Max 2 daily scheduled activities.', 'warning');
-    document.getElementById('scheduleCountMax').value = Math.min(2, parseInt(countMax));
-    document.getElementById('scheduleCountMin').value = Math.min(2, parseInt(countMin));
-    return;
-  }
-  if (userRole === 'vip' && (parseInt(countMax) > 3 || parseInt(countMin) > 3)) {
-    showToast('Max 3 activities at once.', 'warning');
-    document.getElementById('scheduleCountMax').value = Math.min(3, parseInt(countMax));
-    document.getElementById('scheduleCountMin').value = Math.min(3, parseInt(countMin));
+  if (parseInt(countMin) > sysLimits.schedule_count_max || parseInt(countMax) > sysLimits.schedule_count_max) {
+    showToast(`Your account is limited to ${sysLimits.schedule_count_max} daily scheduled activities.`, 'warning');
+    document.getElementById('scheduleCountMax').value = Math.min(sysLimits.schedule_count_max, parseInt(countMax));
+    document.getElementById('scheduleCountMin').value = Math.min(sysLimits.schedule_count_max, parseInt(countMin));
     return;
   }
   
@@ -742,9 +832,9 @@ async function updatePassword() {
 
 function checkMaxSpan() {
   const el = document.getElementById('cfgMaxSpan');
-  if (userRole !== 'vip' && parseInt(el.value, 10) > 2) {
-    showToast('Max 2 districts allowed. VIP Required.', 'warning');
-    el.value = 2;
+  if (parseInt(el.value, 10) > sysLimits.max_district_span) {
+    showToast(`Max ${sysLimits.max_district_span} districts allowed for your account.`, 'warning');
+    el.value = sysLimits.max_district_span;
   }
 }
 

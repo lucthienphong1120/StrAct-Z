@@ -344,6 +344,12 @@ async function getAllAccounts() {
   return await db.all('SELECT id, username, role, created_at FROM accounts');
 }
 
+async function getAccountRole(accountId) {
+  const db = await getDb();
+  const row = await db.get('SELECT role FROM accounts WHERE id = ?', [accountId]);
+  return row ? row.role : 'normal';
+}
+
 async function activateVip(accountId, code) {
   const db = await getDb();
   const now = new Date().toISOString();
@@ -391,5 +397,5 @@ module.exports = {
   saveActivity, updateActivity, getActivities,
   getActivityStats, deleteActivity,
   getUserByUsername, createAccount, getAccountCount, getAllAccounts, updateAccountPassword,
-  activateVip, checkBruteForce,
+  activateVip, checkBruteForce, getAccountRole,
 };

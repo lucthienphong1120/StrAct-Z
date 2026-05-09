@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform. Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.30.0). Follow these guidelines strictly.
 
 ## 🏗️ Technical Architecture
 - **Backend**: Node.js (Express), SQLite (Key-Value & Activity logging).
@@ -17,17 +17,14 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ### 1. Heart Rate (HR) Simulation
 - **Formula**: `MHR = 220 - Age`.
-- **Intensity Zones**:
-  - `Walk`: 50% - 60% MHR.
-  - `Ride`: 60% - 70% MHR.
-  - `Run`: 70% - 85% MHR.
+- **Intensity Zones**: Defined in `src/config/limits.js` per role.
 - **Pause Behavior (Red Lights)**: 1.5% chance per GPS point. Pause 15-60s. HR must decay towards `restingHR` (65 bpm) during pauses.
 - **Heat Stress**:
   - Hot weather (30% chance): `+3~8 BPM`.
   - Peak Sun (11:00 - 16:00): Additional `+2~5 BPM`.
 
 ### 2. Distance Multipliers
-Base distance is randomized from config, then scaled by sport:
+Base distance is randomized from config, then scaled by sport (see `limits.js`):
 - **Walk**: `0.7x`.
 - **Run**: `1.0x`.
 - **Ride**: `1.5x`.
@@ -62,10 +59,12 @@ Base distance is randomized from config, then scaled by sport:
 - Preserve existing comments and architecture.
 - Use `api()` wrapper in `app.js` for all fetch calls.
 - Keep `route-engine.js` as the source of truth for simulation math.
+- All validation ranges and VIP limits must be defined in `src/config/limits.js`.
 
 ## 📂 File Map
 - `public/js/app.js`: Main frontend controller.
 - `src/services/gpx-generator.js`: Activity orchestrator.
 - `src/services/route-engine.js`: The "brain" (Math, Physics, OSRM).
+- `src/config/limits.js`: System limits, validation ranges, and VIP features.
 - `src/routes/api.js`: API endpoints.
 - `db/database.js`: Persistence layer.
