@@ -49,15 +49,6 @@ async function checkAuth() {
     const badge = document.getElementById('authBadge');
     const authText = document.getElementById('authText');
     
-    if (data.authenticated) {
-      badge.className = 'auth-badge';
-      authText.textContent = data.athlete?.name || 'Connected';
-      document.getElementById('dashboard').style.display = 'block';
-      document.getElementById('connectPrompt').style.display = 'none';
-      document.getElementById('stravaSection').style.display = 'block';
-      document.getElementById('historySection').style.display = 'block';
-      document.getElementById('stravaAccountCard').style.display = 'block';
-      document.getElementById('btnLogout').style.display = 'block';
       renderAccountInfo(data.athlete);
       loadDashboard();
     } else {
@@ -69,7 +60,7 @@ async function checkAuth() {
       document.getElementById('historySection').style.display = 'none';
       document.getElementById('stravaAccountCard').style.display = 'none';
       document.getElementById('btnLogout').style.display = 'block';
-      // Load basic stats to get role
+      // Initial stats load to get role/theme
       loadStats();
     }
   } catch (err) {
@@ -79,12 +70,24 @@ async function checkAuth() {
 
 function renderAccountInfo(athlete) {
   const el = document.getElementById('accountInfo');
+  const badgeContainer = document.getElementById('vipBadgePlaceholder');
   if (!el) return;
 
-  const roleBadge = userRole === 'vip' ? '<span class="status-badge" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; padding:2px 8px; font-size:0.7rem; border:none; margin-left:8px;">VIP</span>' : '';
+  const isVip = userRole === 'vip';
+  
+  // Theme & Badge
+  if (isVip) {
+    document.body.classList.add('vip-theme');
+    if (badgeContainer) badgeContainer.innerHTML = '<span class="vip-badge-header">VIP</span>';
+  } else {
+    document.body.classList.remove('vip-theme');
+    if (badgeContainer) badgeContainer.innerHTML = '';
+  }
+
+  const roleBadge = isVip ? '<span class="status-badge" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; padding:2px 8px; font-size:0.7rem; border:none; margin-left:8px;">VIP</span>' : '';
   el.innerHTML = `
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-      ${athlete?.avatar ? `<img src="${athlete.avatar}" style="width:48px;height:48px;border-radius:50%;border:2px solid var(--strava-orange);" alt="avatar">` : '<div style="width:48px;height:48px;border-radius:50%;background:var(--strava-orange);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🏃</div>'}
+      ${athlete?.avatar ? `<img src="${athlete.avatar}" style="width:48px;height:48px;border-radius:50%;border:2px solid var(--strava-orange);" alt="avatar">` : `<div style="width:48px;height:48px;border-radius:50%;background:var(--strava-orange);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">${isVip ? '💎' : '🏃'}</div>`}
       <div>
         <div style="font-weight:600; display:flex; align-items:center;">${athlete?.name || 'Strava User'} ${roleBadge}</div>
         <div style="font-size:0.8rem;color:var(--text-muted);">ID: ${athlete?.id || 'N/A'}</div>
@@ -97,7 +100,7 @@ function renderAccountInfo(athlete) {
   // Update VIP section state
   const vipSection = document.getElementById('vipSection');
   if (vipSection) {
-    if (userRole === 'vip') {
+    if (isVip) {
       vipSection.innerHTML = `
         <div style="margin-top: 15px; padding: 15px; border-top: 1px solid var(--border); background: rgba(245, 158, 11, 0.05); border-radius: 8px; text-align: center;">
           <div style="color: #f59e0b; font-weight: 600; margin-bottom: 4px;">🌟 You are already a VIP account!</div>
@@ -110,7 +113,7 @@ function renderAccountInfo(athlete) {
           <label class="form-label">Activate VIP Code</label>
           <div style="display:flex; gap:8px;">
             <input type="text" id="cfgVipCode" class="form-input" placeholder="Enter VIP Code" style="flex:1; font-family:monospace;">
-            <button class="btn btn-sm btn-accent" onclick="activateVip()">Activate</button>
+            <button class="btn btn-sm btn-primary" onclick="activateVip()">Activate</button>
           </div>
           <div style="margin-top:10px; font-size:0.75rem; color:var(--text-muted); text-align:right;">
             Contact for VIP: <a href="mailto:stract-z@crfnetwork.com" style="color:inherit;text-decoration:none;">stract-z@crfnetwork.com</a>
@@ -455,6 +458,8 @@ async function loadActivities() {
       }
 
       const statusClass = a.upload_status;
+      const isUploaded = a.upload_status === 'uploaded';
+      
       return `
         <div class="activity-item">
           <div>
@@ -470,8 +475,8 @@ async function loadActivities() {
           <div style="display:flex;gap:6px;align-items:center;">
             <span class="status-badge ${statusClass}">${a.upload_status}</span>
             ${a.upload_status === 'generated' ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
-            ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
-            <button class="btn btn-sm btn-danger" style="padding:4px 8px;" onclick="deleteActivity(${a.id}, ${!!a.strava_activity_id})">🗑️</button>
+            ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-strava-link" title="Open in Strava">Strava 🔗</a>` : ''}
+            ${!isUploaded ? `<button class="btn btn-sm btn-danger" style="padding:4px 8px;" onclick="deleteActivity(${a.id}, false)">🗑️</button>` : ''}
           </div>
         </div>`;
     }).join('');
