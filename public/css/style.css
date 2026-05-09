@@ -33,7 +33,7 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 30px rgba(252, 76, 2, 0.15);
+  --shadow-glow: 0 0 30px rgba(255, 255, 255, 0.08);
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -55,6 +55,42 @@
   --shadow-glow: 0 0 45px rgba(245, 158, 11, 0.35);
   --text-primary: #f0f2f8;
   --text-secondary: #8892b0;
+}
+
+/* Theme Preview Override for VIP */
+body.theme-preview-normal.is-vip {
+  --strava-orange: #fc4c02;
+  --strava-orange-dark: #d43d00;
+  --strava-orange-glow: rgba(252, 76, 2, 0.3);
+  --gradient-primary: linear-gradient(135deg, #fc4c02 0%, #ff6b35 50%, #ff8f5e 100%);
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #111827;
+  --bg-card: #1a1f35;
+  --bg-card-hover: #222845;
+  --border: #2a3150;
+  --border-focus: #fc4c02;
+  --shadow-glow: 0 0 30px rgba(255, 255, 255, 0.08);
+}
+
+body.theme-preview-normal.is-vip .logo,
+body.theme-preview-normal.is-vip .stat-value {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+body.theme-preview-normal.is-vip .stat-label {
+  color: var(--text-secondary);
+}
+
+body.theme-preview-normal.is-vip .card {
+  border-color: var(--border);
+}
+
+body.theme-preview-normal.is-vip .btn-primary {
+  background: var(--gradient-primary);
+  color: white;
 }
 
 .is-vip .logo {
@@ -196,7 +232,7 @@ body::before {
   gap: 4px 12px;
 }
 
-.stat-card:hover {
+.stat-card:hover, .card:hover {
   transform: translateY(-2px);
   border-color: var(--strava-orange);
   box-shadow: var(--shadow-glow);
@@ -291,6 +327,16 @@ body::before {
 .btn-sm { padding: 6px 12px; font-size: 0.75rem; }
 .btn-lg { padding: 14px 28px; font-size: 1rem; }
 .btn-block { width: 100%; }
+
+.btn-outline-gold {
+  background: transparent;
+  border: 1px solid var(--vip-gold);
+  color: var(--vip-gold);
+}
+.btn-outline-gold:hover {
+  background: rgba(245, 158, 11, 0.1);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+}
 
 .btn-strava {
   background: var(--strava-orange); color: white;

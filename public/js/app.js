@@ -253,6 +253,11 @@ async function loadStats() {
             <div style="color: #f59e0b; font-weight: 600; font-size: 0.9rem;">✨ You already VIP account!</div>
             <div style="margin-top:4px; font-size:0.75rem; color:var(--text-muted);">Thank you for supporting StrAct Z.</div>
           </div>
+          <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
+            <button id="btnThemeToggle" class="btn btn-sm btn-outline-gold btn-block" onclick="toggleThemePreview()">
+              ${document.body.classList.contains('theme-preview-normal') ? '✨ Restore VIP Gold Theme' : '👁️ Preview Normal Theme'}
+            </button>
+          </div>
           <div style="margin-top:10px; font-size:0.75rem; color:var(--text-muted); text-align:right;">
             Contact for VIP: <a href="mailto:stract-z@crfnetwork.com" style="color:inherit;text-decoration:none;">stract-z@crfnetwork.com</a>
           </div>`;
@@ -1211,6 +1216,26 @@ async function activateVip() {
   } catch (err) {
     showToast('Failed: ' + err.message, 'error');
   }
+}
+
+function toggleThemePreview() {
+  if (userRole !== 'vip') return;
+  
+  const isNormal = document.body.classList.toggle('theme-preview-normal');
+  localStorage.setItem('stractz_theme_preview', isNormal ? 'normal' : 'vip');
+  
+  // Update button text if it exists
+  const btn = document.getElementById('btnThemeToggle');
+  if (btn) {
+    btn.innerHTML = isNormal ? '✨ Restore VIP Gold Theme' : '👁️ Preview Normal Theme';
+  }
+  
+  showToast(isNormal ? 'Switched to Normal Theme (Preview)' : 'Restored VIP Gold Theme', 'success');
+}
+
+// Initialize theme preview if saved
+if (localStorage.getItem('stractz_theme_preview') === 'normal') {
+  document.body.classList.add('theme-preview-normal');
 }
 
 // ─── PWA Service Worker Registration ────────────────────
