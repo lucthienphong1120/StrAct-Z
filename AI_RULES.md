@@ -7,7 +7,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Frontend**: Single-page application (Vanilla HTML/CSS/JS).
 - **Maps**: Leaflet.js with OpenStreetMap.
 - **Routing**: OSRM (Open Source Routing Machine) for road-snapping.
-- **Visualization**: Chart.js for Activity Insights (Cloud-based).
+- **Visualization**: Chart.js for Activity Insights (Cloud-based). Supports dual-metrics: Bar (Distance/km) and Line (Duration/min) with dual Y-axes.
 - **Storage**: GPX files stored in `data/gpx/`.
 - **VIP System**: Multi-user codes (stored in `vip_codes`). Usage logged per user in `vip_code_usage`. Brute-force protection enabled.
 - **Strava Cloud Caching**: Data from Strava is cached for 5 minutes (`CACHE_TTL_MS`). Use `?refresh=true` to bypass/clear cache for specific queries.

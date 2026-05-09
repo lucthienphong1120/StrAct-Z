@@ -963,11 +963,19 @@ function updateActivityChart(activities, days = 14) {
   const dailyDist = rangeDays.map(date => {
     return activities
       .filter(a => {
-        // Strava API uses start_date (ISO)
         const startDate = a.start_date || a.created_at; 
         return startDate && startDate.startsWith(date);
       })
       .reduce((sum, a) => sum + (a.distance / 1000 || a.distance_km || 0), 0);
+  });
+
+  const dailyTime = rangeDays.map(date => {
+    return activities
+      .filter(a => {
+        const startDate = a.start_date || a.created_at;
+        return startDate && startDate.startsWith(date);
+      })
+      .reduce((sum, a) => sum + (a.moving_time / 60 || a.duration_min || 0), 0);
   });
 
   if (activityChart) {
@@ -975,26 +983,53 @@ function updateActivityChart(activities, days = 14) {
   }
 
   activityChart = new Chart(ctx, {
-    type: 'bar',
     data: {
       labels: rangeDays.map(d => d.split('-').slice(1).reverse().join('/')), // MM/DD -> DD/MM
-      datasets: [{
-        label: 'Distance (km)',
-        data: dailyDist,
-        backgroundColor: 'rgba(252, 76, 2, 0.5)',
-        borderColor: 'rgba(252, 76, 2, 1)',
-        borderWidth: 1,
-        borderRadius: 4,
-        hoverBackgroundColor: 'rgba(252, 76, 2, 0.8)'
-      }]
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Distance (km)',
+          data: dailyDist,
+          backgroundColor: 'rgba(252, 76, 2, 0.5)',
+          borderColor: 'rgba(252, 76, 2, 1)',
+          borderWidth: 1,
+          borderRadius: 4,
+          yAxisID: 'y',
+        },
+        {
+          type: 'line',
+          label: 'Duration (min)',
+          data: dailyTime,
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderColor: 'rgba(59, 130, 246, 1)',
+          borderWidth: 2,
+          pointRadius: 3,
+          tension: 0.3,
+          fill: true,
+          yAxisID: 'y1',
+        }
+      ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
         y: {
+          type: 'linear',
+          display: true,
+          position: 'left',
           beginAtZero: true,
+          title: { display: true, text: 'km', color: 'rgba(252, 76, 2, 0.8)', font: { size: 10 } },
           grid: { color: 'rgba(255, 255, 255, 0.05)' },
+          ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { size: 10 } }
+        },
+        y1: {
+          type: 'linear',
+          display: true,
+          position: 'right',
+          beginAtZero: true,
+          title: { display: true, text: 'min', color: 'rgba(59, 130, 246, 0.8)', font: { size: 10 } },
+          grid: { drawOnChartArea: false },
           ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { size: 10 } }
         },
         x: {
@@ -1003,16 +1038,21 @@ function updateActivityChart(activities, days = 14) {
         }
       },
       plugins: {
-        legend: { display: false },
+        legend: {
+          display: true,
+          position: 'top',
+          labels: { color: 'rgba(255, 255, 255, 0.6)', font: { size: 10 }, boxWidth: 12 }
+        },
         tooltip: {
           backgroundColor: 'rgba(15, 23, 42, 0.9)',
           titleColor: '#fff',
           bodyColor: '#fff',
           borderColor: 'rgba(252, 76, 2, 0.4)',
           borderWidth: 1,
-          displayColors: false,
+          mode: 'index',
+          intersect: false,
           callbacks: {
-            label: (context) => `Distance: ${context.parsed.y.toFixed(2)} km`
+            label: (context) => `${context.dataset.label}: ${context.parsed.y.toFixed(1)} ${context.dataset.label.includes('km') ? 'km' : 'min'}`
           }
         }
       }

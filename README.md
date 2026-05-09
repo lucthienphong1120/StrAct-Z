@@ -1,8 +1,12 @@
-# 🏃 StrAct Z v1.28.1
+# 🏃 StrAct Z v1.29.0
 
 **StrAct Z** (Strava Auto Activity Generator) is a robust, multi-tenant backend platform that automatically generates hyper-realistic GPS running, walking, and cycling activities and syncs them to Strava.
 
-It intelligently uses **OSRM (Open Source Routing Machine)** to snap routes to real-world roads in Hanoi, simulates human heart rate variability, weather effects, red light stops, and pace fluctuations to make the activities virtually indistinguishable from real workouts.
+It intelligently uses:
+- **Routing**: OSRM (Open Source Routing Machine) for road-snapping in Hanoi.
+- **Visualization**: Chart.js for Activity Insights (Cloud-based). Supports dual-axis (Bar for Distance, Line for Duration).
+
+It simulates human heart rate variability, weather effects, red light stops, and pace fluctuations to make the activities virtually indistinguishable from real workouts.
 
 ## ✨ Key Features
 
@@ -42,10 +46,12 @@ For detailed information, please refer to our documentation guides:
 
 ## 📋 Changelog
 
-### v1.28.1
-- 🔄 **Unified Cloud Refresh:** Hợp nhất nút làm mới dữ liệu Cloud vào một nút duy nhất **🔄 Refresh All** nằm tại phần Strava Cloud Activities.
-  - Khi nhấn, hệ thống sẽ làm mới cả danh sách hoạt động và biểu đồ Insights (bỏ qua cache).
-  - Tối ưu giao diện để tránh lặp lại các nút chức năng.
+### v1.29.0
+- 📊 **Dual Metric Insights:** Cải tiến biểu đồ **Activity Insights (Cloud)** thành dạng kết hợp (Dual Metrics):
+  - **Bar Chart (Orange):** Thống kê tổng quãng đường (km).
+  - **Line Chart (Blue):** Thống kê tổng thời gian vận động (min).
+  - Hỗ trợ trục Y kép (Y-axis) để quan sát hai thông số có thang đo khác nhau.
+- 🕒 **Default Range:** Thiết lập mặc định cho phần Insights là **7 ngày** gần nhất.
 
 ### v1.28.0
 - 🔄 **Realtime Cloud Sync:** Added "Refresh" buttons to both **Strava Cloud Activities** and **Activity Insights** cards.
