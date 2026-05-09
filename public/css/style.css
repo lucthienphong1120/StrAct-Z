@@ -45,7 +45,7 @@
   --strava-orange: #f59e0b;
   --strava-orange-dark: #d97706;
   --strava-orange-glow: rgba(245, 158, 11, 0.4);
-  --gradient-primary: linear-gradient(135deg, #000000 0%, #1f2937 40%, #f59e0b 80%, #fbbf24 100%);
+  --gradient-primary: linear-gradient(135deg, #000000 0%, #1f2937 30%, #f59e0b 40%, #fbbf24 100%);
   --bg-primary: #020617;
   --bg-secondary: #0f172a;
   --bg-card: #1e293b;
