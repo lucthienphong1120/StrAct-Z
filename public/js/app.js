@@ -71,7 +71,7 @@ async function checkAuth() {
 
 function renderAccountInfo(athlete) {
   const el = document.getElementById('accountInfo');
-  const roleBadge = userRole === 'vip' ? '<span class="status-badge" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; padding:2px 8px; font-size:0.7rem; border:none; margin-left:8px;">VIP</span>' : '';
+  const roleBadge = userRole === 'vip' ? '<span class="status-badge" style="background:var(--gradient-vip); color:rgba(0,0,0,0.8); padding:2px 10px; font-size:0.65rem; border:none; margin-left:8px; box-shadow: 0 0 10px rgba(245,158,11,0.4); font-weight:800;">VIP GOLD</span>' : '';
   el.innerHTML = `
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
       ${athlete?.avatar ? `<img src="${athlete.avatar}" style="width:48px;height:48px;border-radius:50%;border:2px solid var(--strava-orange);" alt="avatar">` : '<div style="width:48px;height:48px;border-radius:50%;background:var(--strava-orange);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🏃</div>'}
@@ -220,6 +220,12 @@ async function loadStats() {
   try {
     const stats = await api('/stats');
     userRole = stats.role || 'normal';
+    if (userRole === 'vip') {
+      document.body.classList.add('is-vip');
+    } else {
+      document.body.classList.remove('is-vip');
+    }
+    
     document.getElementById('statTotal').textContent = stats.total;
     document.getElementById('statUploaded').textContent = stats.uploaded;
     document.getElementById('statDistance').textContent = stats.totalDistanceKm;

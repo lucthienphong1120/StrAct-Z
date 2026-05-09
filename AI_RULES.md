@@ -1,6 +1,12 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.30.0). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.31.0). Follow these guidelines strictly.
+
+## 🎨 VIP GOLD Theme
+- VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
+- Implementation: `document.body.classList.add('is-vip')` is called in `app.js`.
+- CSS variables like `--strava-orange` and `--gradient-primary` are overridden inside the `.is-vip` scope in `style.css`.
+- Use `var(--gradient-vip)` for VIP-specific badges and highlights.
 
 ## 🚀 Workflow & Deployment
 - **Repository**: The `StrAct-Z` workspace is a public Git repository.
