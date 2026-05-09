@@ -986,8 +986,12 @@ function initMap() {
   if (map || !document.getElementById('activityMap')) return;
   
   map = L.map('activityMap').setView([21.0285, 105.8542], 12);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
+  
+  // Use CartoDB Dark Matter for a premium, high-contrast look that matches the UI
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 20
   }).addTo(map);
 
   // Apply default lock
@@ -1044,13 +1048,16 @@ async function renderDistrictBorders() {
     if (!res.ok) throw new Error('Could not load districts GeoJSON');
     const geojson = await res.json();
     
+    // Choose color based on user role (Gold for VIP, Cyan for Normal)
+    const borderColor = (typeof userRole !== 'undefined' && userRole === 'vip') ? '#fbbf24' : '#22d3ee';
+    
     L.geoJSON(geojson, {
       style: {
-        color: '#ef4444',      // Bolder red
-        weight: 2.5,           // Thicker border
-        opacity: 0.7,          // Higher opacity
-        fillColor: '#ef4444',
-        fillOpacity: 0.05,     // Very light fill to distinguish area
+        color: borderColor,    // High contrast color
+        weight: 1.5,           // Thinner but cleaner border
+        opacity: 0.8,          // Clear boundary
+        fillColor: borderColor,
+        fillOpacity: 0.08,     // Subtle area tint
         interactive: false     // Click through to map/markers
       }
     }).addTo(map);
