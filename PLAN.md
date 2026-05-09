@@ -35,7 +35,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] tạo và rule file markdown cho AI coding để lưu kiến trúc, ghi nhớ, context cần thiết về project này
 + [x] các quận default enable thêm long biên
 + [x] update navigator prev và next chạm biên thì phải làm mờ
-+ [x] bỏ tính năng xóa với hoạt động uploaded, xóa chỉ áp dụng với generate và chưa upload, với hoạt động đã upload cần vào strava xóa (có thể thêm hint hoặc thay bằng nút open in strava: https://www.strava.com/athlete/training)
++ [x] bỏ tính năng xóa với hoạt động uploaded, xóa chỉ áp dụng với generate và chưa upload, với hoạt động đã upload cần vào strava xóa (có thể thêm hint hoặc thay bằng nút open in strava)
 + [x] Activity Insights (Cloud) thêm dữ liệu thời gian hoạt động dạng line chart màu xanh dương -> biểu đồ dual metrics kết hợp bar+line
 + [x] Activity Insights (Cloud) default time select là 7 days
 + [ ] tích hợp thành app addin có thể cài đặt trên chrome (windows/android)

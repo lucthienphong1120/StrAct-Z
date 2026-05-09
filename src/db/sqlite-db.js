@@ -294,7 +294,8 @@ async function getActivityStats(accountId) {
   const total = (await db.get('SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND deleted_at IS NULL', [accountId])).c;
   const uploaded = (await db.get("SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND upload_status = 'uploaded' AND deleted_at IS NULL", [accountId])).c;
   const failed = (await db.get("SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND upload_status = 'failed' AND deleted_at IS NULL", [accountId])).c;
-  const sums = await db.get("SELECT SUM(distance_km) as dist, SUM(duration_min) as dur FROM activities WHERE account_id = ? AND upload_status = 'uploaded' AND deleted_at IS NULL", [accountId]);
+  // Sum distance and duration for ALL generated activities (except deleted ones)
+  const sums = await db.get("SELECT SUM(distance_km) as dist, SUM(duration_min) as dur FROM activities WHERE account_id = ? AND deleted_at IS NULL", [accountId]);
   const todayCount = (await db.get('SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND created_at LIKE ? AND deleted_at IS NULL', [accountId, today])).c;
 
   return {

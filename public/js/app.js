@@ -498,6 +498,7 @@ const LOCAL_PAGE_SIZE = 10;
 async function loadActivities() {
   try {
     const allActivities = await api('/activities');
+    console.log(`[Local] Fetched ${allActivities.length} activities`);
     const container = document.getElementById('activityList');
     const total = allActivities.length;
     const totalPages = Math.max(1, Math.ceil(total / LOCAL_PAGE_SIZE));
@@ -603,8 +604,25 @@ async function loadStravaActivities(forceRefresh = false) {
   container.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Loading...</p></div>';
   
   try {
+    const range = document.getElementById('stravaFilterRange').value;
+    let afterQuery = '';
+    if (range !== 'total') {
+      let days = 7;
+      if (range === '3_days') days = 3;
+      else if (range === '5_days') days = 5;
+      else if (range === '7_days') days = 7;
+      else if (range === '1_month') days = 30;
+      else if (range === '3_months') days = 90;
+
+      // Set "after" to local midnight of N days ago
+      const d = new Date();
+      d.setHours(0, 0, 0, 0);
+      d.setDate(d.getDate() - (days - 1));
+      afterQuery = `&after=${Math.floor(d.getTime() / 1000)}`;
+    }
+
     const refreshQuery = forceRefresh ? '&refresh=true' : '';
-    let activities = await api(`/strava-activities?page=${stravaCurrentPage}&per_page=10${refreshQuery}`);
+    let activities = await api(`/strava-activities?page=${stravaCurrentPage}&per_page=10${afterQuery}${refreshQuery}`);
     document.getElementById('stravaPageInfo').textContent = `Page ${stravaCurrentPage}`;
     
     if (!activities || !activities.length) {
