@@ -114,6 +114,11 @@ async function getDb() {
   // Migrate from JSON if SQLite config is empty
   const configCount = await dbInstance.get('SELECT COUNT(*) as c FROM config');
   
+  // Seed default VIP code
+  try {
+    await dbInstance.run("INSERT OR IGNORE INTO vip_codes (code, status) VALUES (?, ?)", ['CRF@2026', 'available']);
+  } catch (e) {}
+
   try {
     await dbInstance.exec('ALTER TABLE activities ADD COLUMN route_start_time TEXT');
     console.log('[SQLite] Added route_start_time column');

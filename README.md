@@ -1,4 +1,4 @@
-# 🏃 StrAct Z v1.26.0
+# 🏃 StrAct Z v1.26.1
 
 **StrAct Z** (Strava Auto Activity Generator) is a robust, multi-tenant backend platform that automatically generates hyper-realistic GPS running, walking, and cycling activities and syncs them to Strava.
 
@@ -41,20 +41,22 @@ For detailed information, please refer to our documentation guides:
 4. Visit `http://localhost:3000`. If this is the first run, you will be redirected to the Setup Wizard to create your Admin account.
 
 ## 📋 Changelog
-+
-+### v1.26.0
-+- 💎 **VIP Activation System:** Added a secure method to activate VIP status using one-time codes.
-+  - **Security:** Integrated anti-bruteforce protection (max 5 fails/hour) and security logging.
-+  - **UI:** New VIP activation section in Account Settings and distinctive VIP badges for users.
-+- 🦶 **UI Refinements:** Added a site footer and direct support contact information.
-+
-+
-+### v1.25.0
-+- 🧠 **AI-Assisted Coding Context:** Created `AI_RULES.md` to store persistent project context, architectural decisions, and logic rules for AI coding assistants.
-+- 📝 **Rule Enforcement:** Standardized versioning and UI/UX rules for all future developments.
-+
-+
-+### v1.24.0
+
+### v1.26.1
+- 📧 **Support Contact Update:** Updated support email to `stract-z@crfnetwork.com`.
+- 🔑 **VIP Seed:** Added default VIP activation code `CRF@2026`.
+
+### v1.26.0
+- 💎 **VIP Activation System:** Added a secure method to activate VIP status using one-time codes.
+  - **Security:** Integrated anti-bruteforce protection (max 5 fails/hour) and security logging.
+  - **UI:** New VIP activation section in Account Settings and distinctive VIP badges for users.
+- 🦶 **UI Refinements:** Added a site footer and direct support contact information.
+
+### v1.25.0
+- 🧠 **AI-Assisted Coding Context:** Created `AI_RULES.md` to store persistent project context, architectural decisions, and logic rules for AI coding assistants.
+- 📝 **Rule Enforcement:** Standardized versioning and UI/UX rules for all future developments.
+
+### v1.24.0
 +- 🌦️ **Enhanced HR Realism:** 
 +  - Heart Rate now realistically drops during "Red Light" pauses towards your resting rate.
 +  - Added time-of-day HR influence: Workouts between 11 AM and 4 PM (peak heat) will now show a +2~5 bpm increase to simulate heat stress.
