@@ -68,13 +68,23 @@
 }
 
 .is-vip .stat-label {
-  color: #fcd34d;
+  color: #fbbf24;
 }
 
-.is-vip .stat-card:hover {
-  border-color: #fbbf24;
-  box-shadow: 0 0 40px rgba(245, 158, 11, 0.5), inset 0 0 20px rgba(245, 158, 11, 0.15);
-  transform: translateY(-4px) scale(1.03);
+.is-vip .stat-label small {
+  color: var(--text-muted) !important;
+  -webkit-text-fill-color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.is-vip .card {
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.is-vip .stat-card:hover, .is-vip .card:hover {
+  border-color: #fbbf24 !important;
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.45), inset 0 0 15px rgba(245, 158, 11, 0.1);
+  transform: translateY(-4px) scale(1.02);
 }
 
 .is-vip .btn-primary {
