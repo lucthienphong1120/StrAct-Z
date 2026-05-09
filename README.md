@@ -1,4 +1,4 @@
-# 🏃 StrAct Z v1.22.0
+# 🏃 StrAct Z v1.23.0
 
 **StrAct Z** (Strava Auto Activity Generator) is a robust, multi-tenant backend platform that automatically generates hyper-realistic GPS running, walking, and cycling activities and syncs them to Strava.
 
@@ -41,6 +41,12 @@ For detailed information, please refer to our documentation guides:
 4. Visit `http://localhost:3000`. If this is the first run, you will be redirected to the Setup Wizard to create your Admin account.
 
 ## 📋 Changelog
++
++### v1.23.0
++- 🎂 **Age-based MHR:** Added "User Age" field. Max Heart Rate (MHR) is now automatically calculated using the standard formula `220 - Age`.
++- 🔒 **Read-only MHR:** MHR field is now read-only and updates instantly when Age changes.
++- ✅ **Intensity Verification:** Verified HR intensity zones for all activity types (Walk 50-60%, Ride 60-70%, Run 70-85%).
++
 +
 +### v1.22.0
 +- ❤️ **Smart Heart Rate Logic:** Simplified HR settings by removing "Min HR". HR ranges are now automatically calculated based on your **Max Heart Rate (MHR)** and activity type:

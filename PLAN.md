@@ -1,4 +1,4 @@
-Lưu ý: tất cả cập nhật tính năng đều phải note version và update README
+Lưu ý: tất cả cập nhật tính năng đều phải note version (index.html, package.json) và update README
 + [x] update tính năng register (multi user)
 + [x] mỗi user seperate quản lý own session để đảm bảo quyền riêng tư và bảo mật (ko có admin user)
 + [x] ko có admin user nhưng có phân biệt vip user và normal (chỉ có thể update từ db)
@@ -18,7 +18,7 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version và upda
 + [x] update logic random heart rate trọng số theo hoạt động
 + [x] update logic trọng số vị trí
 + [ ] sửa Max heart rate thành input field tự count (hiển thị nhưng readonly), thêm 1 field bên cạnh là tuổi, default 25 tuổi -> MHR tự tính là 195
-+ [ ] check lại các công thức trọng số hoạt động đi bộ/đạp xe/chạy bộ - 50-60/60-70/70-85 % MHR
++ [ ] check lại các công thức trọng số hoạt động đi bộ/đạp xe/chạy bộ là 50-60/60-70/70-85 % MHR
 + [ ] check lại logic nghỉ đèn đỏ -> nghỉ giảm heart rate và thời tiết nắng/mát ảnh hưởng heart rate, trưa/chiều nắng cũng tăng chút
 + [ ] thêm phần account setting vào giao diện sau login và trước khi kết nối strava
 + [ ] đổi tên app trong strava oauth về StrAct Z

@@ -18,7 +18,7 @@
     <div class="header-inner">
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
-        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.22.0</small></span>
+        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.23.0</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;" onclick="systemLogout()">Logout</button>
@@ -239,9 +239,13 @@
                 </div>
               </div>
               <div class="form-row">
-                <div class="form-group" style="grid-column: 1 / -1;">
-                  <label class="form-label">Max Heart Rate (MHR) <span class="tooltip-icon" data-tooltip="Your Maximum Heart Rate (120 - 160). Used as base for intensity calculation.">?</span></label>
-                  <input type="number" id="cfgMaxHR" class="form-input" value="160" min="120" max="160">
+                <div class="form-group">
+                  <label class="form-label">User Age <span class="tooltip-icon" data-tooltip="Used to calculate Max Heart Rate: 220 - Age. Default: 25.">?</span></label>
+                  <input type="number" id="cfgUserAge" class="form-input" value="25" min="10" max="100" oninput="updateMHR()">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Max Heart Rate (MHR) <span class="tooltip-icon" data-tooltip="Estimated Maximum Heart Rate (220 - Age). Used for intensity zones.">?</span></label>
+                  <input type="number" id="cfgMaxHR" class="form-input" value="195" readonly style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
                 </div>
               </div>
               <div class="form-row" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);">

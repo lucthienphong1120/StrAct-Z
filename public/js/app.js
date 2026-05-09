@@ -205,7 +205,8 @@ async function loadConfig() {
     document.getElementById('cfgMaxPace').value = config.max_pace || '15.0';
     document.getElementById('cfgActivityType').value = config.activity_type || 'Random';
     document.getElementById('cfgHeartRate').checked = config.heart_rate_enabled === 'true';
-    document.getElementById('cfgMaxHR').value = config.max_heart_rate || '160';
+    document.getElementById('cfgUserAge').value = config.user_age || '25';
+    updateMHR(); 
     
     if (document.getElementById('cfgSimWeather')) {
       document.getElementById('cfgSimWeather').checked = config.sim_weather !== 'false';
@@ -539,6 +540,7 @@ function getOverrideConfig() {
     max_pace: document.getElementById('cfgMaxPace').value,
     activity_type: document.getElementById('cfgActivityType').value,
     heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
+    user_age: document.getElementById('cfgUserAge').value,
     max_heart_rate: document.getElementById('cfgMaxHR').value,
   };
 
@@ -957,4 +959,9 @@ function updateActivityChart(activities, days = 14) {
       }
     }
   });
+}
+function updateMHR() {
+  const age = parseInt(document.getElementById('cfgUserAge').value || '25', 10);
+  const mhr = 220 - age;
+  document.getElementById('cfgMaxHR').value = mhr;
 }
