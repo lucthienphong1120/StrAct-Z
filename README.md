@@ -1,4 +1,4 @@
-# 🏃 StrAct Z v1.24.0
+# 🏃 StrAct Z v1.24.1
 
 **StrAct Z** (Strava Auto Activity Generator) is a robust, multi-tenant backend platform that automatically generates hyper-realistic GPS running, walking, and cycling activities and syncs them to Strava.
 
@@ -48,6 +48,8 @@ For detailed information, please refer to our documentation guides:
 +  - Added time-of-day HR influence: Workouts between 11 AM and 4 PM (peak heat) will now show a +2~5 bpm increase to simulate heat stress.
 +- 📍 **District Defaults:** "Long Biên" is now enabled by default for all new configurations.
 +- 🧭 **UI Navigation:** Pagination buttons (Prev/Next) now automatically dim and disable when you reach the first or last page of your activity history.
++- ℹ️ **Tooltip Updates:** Refined tooltips for Weather and Red Lights to accurately describe HR behavior (heat stress and pause decay).
++
 +
 +
 +### v1.23.0
