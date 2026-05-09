@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.39.2). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.39.3). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -29,7 +29,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **VIP System**: Multi-user codes (stored in `vip_codes`). Usage logged per user in `vip_code_usage`. Brute-force protection enabled.
 - **Strava Cloud Caching**: Data from Strava is cached for 5 minutes (`CACHE_TTL_MS`). Use `?refresh=true` to bypass/clear cache for specific queries.
 - **Data Assets**:
-  - `public/data/hanoi_urban_districts.geojson`: Extracted administrative boundaries for 12 urban districts of Hanoi. Used for visual map highlights. Source: `dvhcvn` GIS data.
+  - `public/geo/hanoi_urban_districts.geojson`: Extracted administrative boundaries for 12 urban districts of Hanoi. Used for visual map highlights. Source: `dvhcvn` GIS data.
 
 
 ## 📏 Core Logic & Weighting

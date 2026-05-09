@@ -68,8 +68,8 @@ app.get('/register.html', (req, res) => {
 });
 
 // Explicitly serve district data GeoJSON
-app.get('/data/hanoi_urban_districts.geojson', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'data', 'hanoi_urban_districts.geojson'));
+app.get('/geo/hanoi_urban_districts.geojson', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'geo', 'hanoi_urban_districts.geojson'));
 });
 
 // Protect static files

@@ -1,4 +1,4 @@
-# 🏃 StrAct Z v1.39.2
+# 🏃 StrAct Z v1.39.3
 
 **StrAct Z** (Strava Auto Activity Generator) is a robust, multi-tenant backend platform that automatically generates hyper-realistic GPS running, walking, and cycling activities and syncs them to Strava.
 
@@ -45,6 +45,9 @@ For detailed information, please refer to our documentation guides:
 4. Visit `http://localhost:3000`. If this is the first run, you will be redirected to the Setup Wizard to create your Admin account.
 
 ## 📋 Changelog
+
+### v1.39.3 (2026-05-09)
+- **Bugfix**: Renamed `public/data/` directory to `public/geo/` to resolve a conflict with `.gitignore` that was preventing the GeoJSON file from being deployed to production.
 
 ### v1.39.2 (2026-05-09)
 - **Fix**: Added an explicit server route for the Hanoi urban districts GeoJSON to resolve 404 errors during client-side fetching.
@@ -114,7 +117,7 @@ For detailed information, please refer to our documentation guides:
 
 ### Hanoi District Boundaries
 The project uses high-quality administrative boundary data for Hanoi's 12 urban districts:
-- **File**: `public/data/hanoi_urban_districts.geojson`
+- **File**: `public/geo/hanoi_urban_districts.geojson`
 - **Source**: [dvhcvn GIS Data](https://github.com/daohoangson/dvhcvn)
 - **Usage**: Used in `public/js/app.js` to render bold, accurate red borders for districts on the Activity Areas Map.
 
