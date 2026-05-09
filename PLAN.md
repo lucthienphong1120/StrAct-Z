@@ -38,7 +38,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] bỏ tính năng xóa với hoạt động uploaded, xóa chỉ áp dụng với generate và chưa upload, với hoạt động đã upload cần vào strava xóa (có thể thêm hint hoặc thay bằng nút open in strava)
 + [x] Activity Insights (Cloud) thêm dữ liệu thời gian hoạt động dạng line chart màu xanh dương -> biểu đồ dual metrics kết hợp bar+line
 + [x] Activity Insights (Cloud) default time select là 7 days
-+ [ ] tích hợp thành app addin có thể cài đặt trên chrome (windows/android)
++ [x] tích hợp thành PWA/Addin có thể cài đặt trên chrome (windows/android)
 + [x] hiển thị sự khác biệt giữa vip và normal account trên UI (nhận diện - nhãn, màu sắc, nổi bật - có thể update cả color/theme giống app ngân hàng) -> lưu ý chỉ đổi màu và interface cơ bản, không thay layout, không thay đổi logic vận hành
 + [ ] update logic chống trùng lặp với dữ liệu đã có (uploaded/cloud), thêm comfig safe time default 30p -> tránh random data mới quanh thời gian start/end hoạt động đã có
 + [ ] chuyển min/max pace sang phần activity settings (defailt vẫn 8 và 12)
