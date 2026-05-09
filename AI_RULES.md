@@ -9,8 +9,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Routing**: OSRM (Open Source Routing Machine) for road-snapping.
 - **Visualization**: Chart.js for Activity Insights (Cloud-based).
 - **Storage**: GPX files stored in `data/gpx/`.
-- **VIP System**: SQLite-backed one-time codes with brute-force protection (security_logs). `activated_by` logs the account ID.
-- **UI Visibility**: Account Settings are visible immediately after login. Strava-dependent features (stats, map, history) are hidden until Strava is connected.
+- **VIP System**: SQLite-backed one-time codes with brute-force protection (security_logs).
 
 
 ## 📏 Core Logic & Weighting
@@ -57,6 +56,7 @@ Base distance is randomized from config, then scaled by sport:
 - **Toasts**: Use `showToast(msg, type)` for all feedback.
 - **Tooltips**: All configuration labels should have a `?` icon with a descriptive `data-tooltip`.
 - **Navigation**: Prev/Next buttons must be dimmed (`opacity: 0.4`) and `disabled` at boundaries.
+- **Deletion Policy**: Activities with `upload_status === 'uploaded'` CANNOT be deleted via the local interface. Users must delete them via Strava.
 
 ### 3. Code Integrity
 - Preserve existing comments and architecture.

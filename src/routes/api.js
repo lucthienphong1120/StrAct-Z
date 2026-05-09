@@ -51,10 +51,9 @@ router.get('/stats', async (req, res) => {
   const stats = await db.getActivityStats(req.user.id);
   const scheduleStatus = await scheduler.getStatus(req.user.id);
   const tokens = await db.getTokens(req.user.id);
-  const user = await db.getUserById(req.user.id);
   res.json({
     ...stats,
-    role: user?.role || 'normal',
+    role: req.user.role,
     schedule: scheduleStatus,
     authenticated: !!(tokens && tokens.access_token),
     athleteName: tokens?.athlete_name || null,
@@ -274,13 +273,13 @@ router.delete('/activities/:id', async (req, res) => {
   const activity = activities.find(a => a.id === id);
   if (!activity) return res.status(404).json({ error: 'Activity not found' });
 
-  // v1.28.0: Prevent deletion of uploaded activities
   if (activity.upload_status === 'uploaded') {
-    return res.status(400).json({ error: 'Cannot delete uploaded activities. Please delete directly on Strava.' });
+    return res.status(403).json({ error: 'Cannot delete uploaded activity. Please delete it via Strava app.' });
   }
 
-  console.log(`[API] Deleting activity ${id}`);
+  console.log(`[API] Deleting activity ${id} (Strava ID: ${activity.strava_activity_id || 'none'})`);
 
+  let stravaDeleted = false;
   let stravaError = null;
 
   // Try to delete from Strava first if requested

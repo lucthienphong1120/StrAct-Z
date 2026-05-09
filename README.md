@@ -43,12 +43,11 @@ For detailed information, please refer to our documentation guides:
 ## 📋 Changelog
 
 ### v1.27.0
-- 🔒 **Unified Account Settings:** Account settings are now visible immediately after login, allowing users to change passwords or activate VIP before connecting to Strava.
-- 💎 **VIP UX Improvements:** 
-  - After activation, the VIP section shows a "You are already a VIP account!" message.
-  - Improved logging to track which user activated which VIP code.
-- 🦶 **Footer Refinement:** Removed redundant support email from the site footer.
-- 📐 **UI Restructuring:** Improved dashboard grid layout for better separation of Strava-dependent and account-specific content.
+- 🔒 **Deletion Restrictions:** Activities already uploaded to Strava can no longer be deleted via the StrAct Z interface. This ensures data consistency and encourages users to manage their Strava history directly on the platform.
+- ✨ **VIP UI Refinements:**
+  - If a user is already a VIP, the activation form is hidden and replaced with a "You are already a VIP account!" message.
+  - Removed redundant support email from the footer.
+- 📝 **Multi-user Logging:** Standardized VIP activation logging to track exactly which user activated which code.
 
 ### v1.26.1
 - 📧 **Support Contact Update:** Updated support email to `stract-z@crfnetwork.com`.
