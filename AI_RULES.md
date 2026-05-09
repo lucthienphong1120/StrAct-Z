@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.39.0). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.39.1). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -28,6 +28,8 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Storage**: GPX files stored in `data/gpx/`.
 - **VIP System**: Multi-user codes (stored in `vip_codes`). Usage logged per user in `vip_code_usage`. Brute-force protection enabled.
 - **Strava Cloud Caching**: Data from Strava is cached for 5 minutes (`CACHE_TTL_MS`). Use `?refresh=true` to bypass/clear cache for specific queries.
+- **Data Assets**:
+  - `public/data/hanoi_urban_districts.geojson`: Extracted administrative boundaries for 12 urban districts of Hanoi. Used for visual map highlights. Source: `dvhcvn` GIS data.
 
 
 ## 📏 Core Logic & Weighting
@@ -52,10 +54,11 @@ Base distance is randomized from config, then scaled by sport (see `limits.js`):
 - **Anti-Bruteforce**: Max 5 failed activation attempts per hour per account (enforced via `security_logs`).
 
 ### 4. Location Weighting (Hanoi Districts)
-- Districts are selected based on proximity to **Home** (Orange) and **Work** (Blue) circles on the map.
+- **Visual Highlights**: Actual administrative boundaries are rendered via `public/data/hanoi_urban_districts.geojson`.
+- **Logic Weights**: Still use circular proximity for backend efficiency (`haversineDistance` check against district centers).
 - **Weights**:
-  - Inside Home circle: `+2.5` (full), `+2.0` (center), `+1.0` (overlap).
-  - Inside Work circle: `+1.5` (full), `+1.0` (center), `+0.5` (overlap).
+  - Inside Home circle: `+2.0` (full), `+1.2` (center), `+0.5` (overlap).
+  - Inside Work circle: `+1.2` (full), `+0.8` (center), `+0.4` (overlap).
 
 ## 🛠️ Developer Rules
 
