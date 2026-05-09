@@ -980,6 +980,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let map = null;
 let activityCircles = [];
+let isMapLocked = true;
 
 function initMap() {
   if (map || !document.getElementById('activityMap')) return;
@@ -989,8 +990,47 @@ function initMap() {
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
+  // Apply default lock
+  applyMapLock();
+
   // Small delay to ensure container is ready
   setTimeout(() => map.invalidateSize(), 100);
+}
+
+function toggleMapLock() {
+  isMapLocked = !isMapLocked;
+  applyMapLock();
+  updateLockUI();
+}
+
+function applyMapLock() {
+  if (!map) return;
+  if (isMapLocked) {
+    map.dragging.disable();
+    map.touchZoom.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
+    map.boxZoom.disable();
+    map.keyboard.disable();
+    if (map.tap) map.tap.disable();
+  } else {
+    map.dragging.enable();
+    map.touchZoom.enable();
+    map.doubleClickZoom.enable();
+    map.scrollWheelZoom.enable();
+    map.boxZoom.enable();
+    map.keyboard.enable();
+    if (map.tap) map.tap.enable();
+  }
+}
+
+function updateLockUI() {
+  const btn = document.getElementById('btnLockMap');
+  if (btn) {
+    btn.innerHTML = isMapLocked ? '🔒 Map Locked' : '🔓 Map Unlocked';
+    btn.classList.toggle('btn-secondary', isMapLocked);
+    btn.classList.toggle('btn-outline-secondary', !isMapLocked);
+  }
 }
 
 function resetMapView() {
@@ -1043,11 +1083,17 @@ function createCircleLayer(lat, lng, radius, type) {
     circle.setLatLng(e.latlng);
   });
 
+  const popupId = `radius-val-${activityCircles.length - 1}`;
   marker.bindPopup(`
-    <div style="text-align:center;">
+    <div style="text-align:center; min-width:150px;">
       <b style="color:${color}">${type.toUpperCase()}</b><br>
-      Radius: <input type="number" value="${radius}" step="100" style="width:70px; background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border); border-radius:4px; padding:2px;" onchange="updateCircleRadius(${activityCircles.length-1}, this.value)">m<br>
-      <button class="btn btn-sm btn-secondary" style="margin-top:5px; padding:2px 8px; color:var(--accent-red)" onclick="removeCircle(${activityCircles.length-1})">Delete</button>
+      <div style="margin:8px 0; font-size:0.8rem;">
+        Radius: <b id="${popupId}">${radius}</b>m<br>
+        <input type="range" value="${radius}" min="2000" max="4000" step="100" 
+          style="width:100%; margin-top:5px; accent-color:var(--strava-orange);" 
+          oninput="document.getElementById('${popupId}').innerText = this.value; updateCircleRadius(${activityCircles.length - 1}, this.value)">
+      </div>
+      <button class="btn btn-sm btn-secondary" style="margin-top:5px; padding:2px 8px; color:var(--accent-red); font-size:0.7rem;" onclick="removeCircle(${activityCircles.length - 1})">🗑️ Delete Area</button>
     </div>
   `);
 }
@@ -1068,7 +1114,10 @@ function addActivityCircle(type) {
 
 function updateCircleRadius(index, newRadius) {
   if (activityCircles[index]) {
-    activityCircles[index].circle.setRadius(parseInt(newRadius));
+    let r = parseInt(newRadius);
+    if (r < 2000) r = 2000;
+    if (r > 4000) r = 4000;
+    activityCircles[index].circle.setRadius(r);
   }
 }
 

@@ -45,8 +45,8 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] khi disable Heart Rate Data thì phần nhập User Age và Max Heart Rate (MHR) sẽ bị làm mờ (disable)
 + [ ] thêm logic trọng số cho random pace theo hoạt động đi bộ/chạy bộ/đạp xe = x1.25/x0.8/x0.5 (update hint luôn)
 + [x] fix hint z-index cao trên menu, tránh bị overflow, xử lý xuống dòng
-+ [ ] thêm nút khóa scale và move cho Activity Areas Map (default yes)
-+ [ ] tùy chỉnh mở rộng/thu hẹp vòng tròn vị trí trong Activity Areas Map (kèm thông số ràng buộc min size = hiện tại, max tối đa x2)
++ [x] thêm nút khóa scale và move cho Activity Areas Map (default yes)
++ [x] tùy chỉnh mở rộng/thu hẹp vòng tròn vị trí trong Activity Areas Map (kèm thông số ràng buộc min size = hiện tại, max tối đa x2)
 + [x] file config based các giá trị gồm default validate, range, type cho normal/vip account để tôi tự tùy chỉnh và update (cập nhật readme và kiến trúc luôn, hướng dẫn cách manual update)
 + [x] hint ngoài thông tin về config sẽ xuống dòng và thêm thông tin dynamic từ config file (validate, range, type)
 + [x] tính năng switch to normal theme và switch back để preview sự khác biệt của theme (chỉ vip user mới có) -> đảm bảo bảo mật, chống lạm dụng và gian lận dựa trên tính năng này
