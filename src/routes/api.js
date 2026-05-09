@@ -76,10 +76,16 @@ router.get('/insights', async (req, res) => {
   try {
     const days = parseInt(req.query.days) || 14;
     const now = new Date();
-    const after = Math.floor((now.getTime() - (days + 1) * 24 * 60 * 60 * 1000) / 1000); // Buffer 1 day
+    // 2 days buffer to handle timezones and late night uploads safely
+    const after = Math.floor((now.getTime() - (days + 2) * 24 * 60 * 60 * 1000) / 1000); 
     
     const forceRefresh = req.query.refresh === 'true';
     const activities = await stravaApi.getActivities(req.user.id, 1, 200, after, forceRefresh);
+    
+    if (forceRefresh) {
+      console.log(`[Cloud Sync] Refreshed insights for user ${req.user.id}. Found ${activities.length} acts since ${new Date(after*1000).toISOString()}`);
+    }
+    
     res.json(activities);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -102,6 +108,14 @@ router.get('/strava-activities', async (req, res) => {
     const after = req.query.after ? parseInt(req.query.after) : null;
     const forceRefresh = req.query.refresh === 'true';
     const activities = await stravaApi.getActivities(req.user.id, page, perPage, after, forceRefresh);
+    
+    if (forceRefresh || page === 1) {
+      console.log(`[Strava API] User ${req.user.id} fetched ${activities.length} acts (Page ${page}, After: ${after})`);
+      if (activities.length > 0) {
+        console.log(`[Strava API] Newest act: ${activities[0].name} (${activities[0].start_date})`);
+      }
+    }
+    
     res.json(activities);
   } catch (err) {
     res.status(500).json({ error: err.message });

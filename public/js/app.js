@@ -543,7 +543,10 @@ async function loadActivities() {
             <span class="status-badge ${statusClass}">${a.upload_status}</span>
             ${a.upload_status === 'generated' ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
             ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
-            <button class="btn btn-sm btn-danger" style="padding:4px 8px;" onclick="deleteActivity(${a.id}, ${!!a.strava_activity_id})">🗑️</button>
+            ${a.upload_status === 'generated' ? 
+              `<button class="btn btn-sm btn-danger" style="padding:4px 8px;" title="Delete locally" onclick="deleteActivity(${a.id}, false)">🗑️</button>` : 
+              `<span class="tooltip-icon" data-tooltip="Uploaded activities must be deleted on Strava.com" style="opacity:0.5; cursor:help;">ℹ️</span>`
+            }
           </div>
         </div>`;
     }).join('');
@@ -595,15 +598,18 @@ async function loadStravaActivities(forceRefresh = false) {
     const range = document.getElementById('stravaFilterRange').value;
     let afterQuery = '';
     if (range !== 'total') {
-      const now = new Date();
-      let days = 30;
+      let days = 7;
       if (range === '3_days') days = 3;
       else if (range === '5_days') days = 5;
       else if (range === '7_days') days = 7;
       else if (range === '1_month') days = 30;
       else if (range === '3_months') days = 90;
-      
-      const afterTimestamp = Math.floor((now.getTime() - days * 24 * 60 * 60 * 1000) / 1000);
+
+      // Set "after" to the beginning of the N-th day ago in local time
+      const d = new Date();
+      d.setHours(0, 0, 0, 0); // Start of today local
+      d.setDate(d.getDate() - (days - 1)); // Start of N days ago
+      const afterTimestamp = Math.floor(d.getTime() / 1000);
       afterQuery = `&after=${afterTimestamp}`;
     }
 
@@ -1053,8 +1059,11 @@ function updateActivityChart(activities, days = 14) {
   const dailyDist = rangeDays.map(date => {
     return activities
       .filter(a => {
-        const startDate = a.start_date || a.created_at; 
-        return startDate && startDate.startsWith(date);
+        const startDate = a.start_date || a.created_at;
+        if (!startDate) return false;
+        // Convert Strava UTC date to Hanoi local date string (YYYY-MM-DD)
+        const localDate = new Date(startDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+        return localDate === date;
       })
       .reduce((sum, a) => sum + (a.distance / 1000 || a.distance_km || 0), 0);
   });
@@ -1063,7 +1072,10 @@ function updateActivityChart(activities, days = 14) {
     return activities
       .filter(a => {
         const startDate = a.start_date || a.created_at;
-        return startDate && startDate.startsWith(date);
+        if (!startDate) return false;
+        // Convert Strava UTC date to Hanoi local date string (YYYY-MM-DD)
+        const localDate = new Date(startDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+        return localDate === date;
       })
       .reduce((sum, a) => sum + (a.moving_time / 60 || a.duration_min || 0), 0);
   });
