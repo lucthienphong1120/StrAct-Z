@@ -1,4 +1,4 @@
-# 🏃 StrAct Z v1.31.0
+# 🏃 StrAct Z v1.31.5
 
 **StrAct Z** (Strava Auto Activity Generator) is a robust, multi-tenant backend platform that automatically generates hyper-realistic GPS running, walking, and cycling activities and syncs them to Strava.
 
@@ -45,6 +45,11 @@ For detailed information, please refer to our documentation guides:
 4. Visit `http://localhost:3000`. If this is the first run, you will be redirected to the Setup Wizard to create your Admin account.
 
 ## 📋 Changelog
+
+### v1.31.5 (2026-05-09)
+- **VIP GOLD Refinement**: Finalized the mysterious Gold-Black theme. Removed brown tones, enhanced contrast with bright yellow highlights, and added a VIP badge in the header.
+- **UI Polish**: Stabilized hover effects (removed lift/scaling for a sleeker feel) and standardized card borders.
+- **Bug Fixes**: Resolved local history refresh synchronization and Strava cloud sorting order.
 
 ### v1.31.0 (2026-05-09)
 - **VIP GOLD Theme**: Added dynamic UI branding for VIP accounts. VIP users now enjoy a premium Gold/Amber theme across the dashboard (similar to premium bank apps).

@@ -84,7 +84,7 @@
 .is-vip .stat-card:hover, .is-vip .card:hover {
   border-color: #fbbf24 !important;
   box-shadow: 0 0 30px rgba(245, 158, 11, 0.45), inset 0 0 15px rgba(245, 158, 11, 0.1);
-  transform: translateY(-4px) scale(1.02);
+  transform: none;
 }
 
 .is-vip .btn-primary {
