@@ -35,48 +35,6 @@
   --radius-lg: 16px;
   --radius-xl: 20px;
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* VIP Colors */
-  --vip-gold: #D4AF37;
-  --vip-gold-dark: #B8860B;
-  --vip-gold-glow: rgba(212, 175, 55, 0.3);
-  --vip-gradient: linear-gradient(135deg, #D4AF37 0%, #F5D76E 50%, #B8860B 100%);
-}
-
-/* ─── VIP Theme Overrides ────────────────────────────── */
-.vip-theme {
-  --bg-primary: #05070a;
-  --bg-secondary: #0a0e1a;
-  --bg-card: #0f1424;
-  --bg-card-hover: #151b30;
-  --bg-input: #0a0e1a;
-  --border: #332b1a; /* Golden tinted border */
-  --border-focus: var(--vip-gold);
-  --strava-orange: var(--vip-gold);
-  --strava-orange-dark: var(--vip-gold-dark);
-  --strava-orange-glow: var(--vip-gold-glow);
-  --gradient-primary: var(--vip-gradient);
-  --shadow-glow: 0 0 30px rgba(212, 175, 55, 0.15);
-}
-
-.vip-theme body::before {
-  background:
-    radial-gradient(ellipse at 20% 0%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(184, 134, 11, 0.08) 0%, transparent 50%);
-}
-
-.vip-badge-header {
-  background: var(--vip-gradient);
-  color: #000;
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-left: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
-  -webkit-text-fill-color: #000 !important;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -253,21 +211,6 @@ body::before {
 .btn-sm { padding: 6px 12px; font-size: 0.75rem; }
 .btn-lg { padding: 14px 28px; font-size: 1rem; }
 .btn-block { width: 100%; }
-
-.btn-strava-link {
-  background: #2a3150;
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-}
-.btn-strava-link:hover {
-  background: #3b4260;
-  border-color: #fc4c02;
-  color: white;
-}
-
-.vip-theme .btn-strava-link:hover {
-  border-color: var(--vip-gold);
-}
 
 .btn-strava {
   background: var(--strava-orange); color: white;

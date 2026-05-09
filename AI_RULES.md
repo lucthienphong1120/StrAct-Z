@@ -11,8 +11,6 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Storage**: GPX files stored in `data/gpx/`.
 - **VIP System**: SQLite-backed one-time codes with brute-force protection (security_logs). `activated_by` logs the account ID.
 - **UI Visibility**: Account Settings are visible immediately after login. Strava-dependent features (stats, map, history) are hidden until Strava is connected.
-- **Theming**: VIP accounts use the `.vip-theme` (Gold accents), while Normal accounts use Strava Orange.
-- **Deletion Policy**: Only `generated` (local-only) activities can be deleted from the dashboard. `uploaded` activities must be managed directly on Strava.
 
 
 ## 📏 Core Logic & Weighting

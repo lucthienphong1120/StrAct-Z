@@ -39,8 +39,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] Activity Insights (Cloud) thêm dữ liệu thời gian hoạt động dạng line chart màu xanh dương -> biểu đồ dual metrics kết hợp bar+line
 + [ ] Activity Insights (Cloud) default time select là 7 days
 + [ ] tích hợp thành app addin có thể cài đặt trên chrome (windows/android)
-+ [x] hiển thị sự khác biệt giữa vip và normal account trên UI (nhận diện - nhãn, màu sắc, nổi bật - có thể update cả color/theme giống app ngân hàng)
-+ [ ] thêm nút switch to normal account trong account setting và switch back để preview sự khác biệt giao diện (chỉ có ở vip account, đảm bảo cơ chế bảo mật, chống gian lận, lạm dụng trên tính năng này)
++ [ ] hiển thị sự khác biệt giữa vip và normal account trên UI (nhận diện - nhãn, màu sắc, nổi bật - có thể update cả color/theme giống app ngân hàng)
 + [ ] update logic chống trùng lặp với dữ liệu đã có (uploaded/cloud), thêm comfig safe time default 30p -> tránh random data mới quanh thời gian start/end hoạt động đã có
 + [ ] chuyển min/max pace sang phần activity settings (defailt vẫn 8 và 12)
 + [ ] thêm logic trọng số cho random pace theo hoạt động đi bộ/chạy bộ/đạp xe = x1.25/x0.8/x0.5 (update hint luôn)
