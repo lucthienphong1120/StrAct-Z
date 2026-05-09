@@ -177,8 +177,8 @@ async function generateActivity(config = {}) {
         
         if (area.type === 'home') {
           if (d + distRadiusM <= areaRadiusM) weight += 2.0; // Bao trọn
-          else if (d <= areaRadiusM) weight += 1.5;         // Nhiều (Center inside)
-          else if (d - distRadiusM <= areaRadiusM) weight += 1.0; // Ít (Overlap)
+          else if (d <= areaRadiusM) weight += 1.2;         // Nhiều (Center inside)
+          else if (d - distRadiusM <= areaRadiusM) weight += 0.5; // Ít (Overlap)
         } else if (area.type === 'work') {
           if (d + distRadiusM <= areaRadiusM) weight += 1.2; // Bao trọn
           else if (d <= areaRadiusM) weight += 0.8;         // Nhiều

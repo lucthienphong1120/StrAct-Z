@@ -5,12 +5,21 @@
 // ─── API Helpers ────────────────────────────────────────
 
 async function api(endpoint, options = {}) {
-  const res = await fetch(`/api${endpoint}`, {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-    ...options,
-    body: options.body ? JSON.stringify(options.body) : undefined,
-  });
-  return res.json();
+  try {
+    const res = await fetch(`/api${endpoint}`, {
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+      body: options.body ? JSON.stringify(options.body) : undefined,
+    });
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({ error: res.statusText }));
+      return { error: errorData.error || `HTTP ${res.status}` };
+    }
+    return res.json();
+  } catch (err) {
+    console.error(`API Error (${endpoint}):`, err);
+    return { error: err.message };
+  }
 }
 
 // ─── Toast Notifications ────────────────────────────────
@@ -470,11 +479,16 @@ async function saveConfig() {
 
   if (!validateInputs(config)) return;
 
-  const res = await api('/config', { method: 'POST', body: config });
-  if (res.error) {
-    showToast(res.error, 'error');
-  } else {
-    showToast('Configuration saved!', 'success');
+  try {
+    const res = await api('/config', { method: 'POST', body: config });
+    if (res && res.success) {
+      showToast('Configuration saved!', 'success');
+    } else {
+      showToast(res?.error || 'Failed to save configuration', 'error');
+    }
+  } catch (err) {
+    console.error('Save config error:', err);
+    showToast('Save failed: ' + err.message, 'error');
   }
 }
 
