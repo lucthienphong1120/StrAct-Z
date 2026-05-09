@@ -634,7 +634,7 @@ body::before {
   border-radius: 8px;
   font-size: 0.75rem;
   font-weight: normal;
-  white-space: normal;
+  white-space: pre-wrap;
   word-wrap: break-word;
   width: 220px;
   opacity: 0;
