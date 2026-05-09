@@ -55,9 +55,7 @@ async function checkAuth() {
       document.getElementById('dashboard').style.display = 'block';
       document.getElementById('connectPrompt').style.display = 'none';
       document.getElementById('stravaSection').style.display = 'block';
-      document.getElementById('configSection').style.display = 'flex';
-      document.getElementById('historySection').style.display = 'flex';
-      document.getElementById('stravaAccountCard').style.display = 'block';
+      document.getElementById('historySection').style.display = 'block';
       document.getElementById('btnLogout').style.display = 'block';
       renderAccountInfo(data.athlete);
       loadDashboard();
@@ -67,11 +65,9 @@ async function checkAuth() {
       document.getElementById('dashboard').style.display = 'block';
       document.getElementById('connectPrompt').style.display = 'block';
       document.getElementById('stravaSection').style.display = 'none';
-      document.getElementById('configSection').style.display = 'none';
       document.getElementById('historySection').style.display = 'none';
-      document.getElementById('stravaAccountCard').style.display = 'none';
       document.getElementById('btnLogout').style.display = 'block';
-      // Initial stats load to get role/theme
+      // Load basic stats to get role
       loadStats();
     }
   } catch (err) {
