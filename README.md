@@ -1,4 +1,4 @@
-# 🏃 StrAct Z v1.29.0
+# 🏃 StrAct Z v1.30.1
 
 **StrAct Z** (Strava Auto Activity Generator) is a robust, multi-tenant backend platform that automatically generates hyper-realistic GPS running, walking, and cycling activities and syncs them to Strava.
 
@@ -46,7 +46,14 @@ For detailed information, please refer to our documentation guides:
 
 ## 📋 Changelog
 
-### v1.30.0
+### v1.30.1 (2026-05-09)
+- **Merge Refresh**: Combined "Refresh All" (Cloud) into the main "Refresh" dashboard button.
+- **Sorting Fix**: Guaranteed newest-to-oldest sorting for Strava Cloud Activities by removing problematic date filters.
+- **Timezone Fix**: Fixed Activity Insights chart grouping for early morning activities (Hanoi time).
+- **Deletion Policy**: Restricted deletion of activities already uploaded to Strava.
+- **Workflow**: Updated `AI_RULES.md` with deployment and Git repository guidelines.
+
+### v1.30.0 (2026-05-09)
 - ⚙️ **Centralized Config:** Chuyển toàn bộ các giới hạn validate và đặc quyền VIP vào hệ thống cấu hình tập trung (`src/config/limits.js`).
 - 🛠️ **Dynamic UI Limits:** Giao diện tự động cập nhật các ràng buộc (min/max), thông báo lỗi và **Tooltips** dựa trên vai trò của người dùng (Normal/VIP) lấy từ server.
 - 🧪 **GPX Engine Refactor:** Bộ máy tạo GPX giờ đây sử dụng các trọng số xác suất và dải nhịp tim động từ file cấu hình, cho phép tùy chỉnh nhanh trên production server.

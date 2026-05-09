@@ -22,7 +22,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.30.0</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.30.1</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -107,7 +107,7 @@
           🚀 Generate & Upload to Strava
         </button>
         <button class="btn btn-secondary"
-          onclick="loadDashboard().then(() => showToast('Dashboard refreshed', 'success'))">
+          onclick="loadDashboard(true).then(() => showToast('All data refreshed', 'success'))">
           🔄 Refresh
         </button>
       </div>
@@ -445,19 +445,8 @@
         <div class="card full-width">
           <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="card-title" style="flex:1;">☁️ Strava Cloud Activities</div>
-            <button class="btn btn-sm btn-secondary" onclick="refreshCloudData()" title="Refresh all cloud data">🔄
-              Refresh All</button>
 
             <div style="display:flex; gap:10px; align-items:center;">
-              <select id="stravaFilterRange" class="form-select" style="padding:4px 8px; font-size:0.8rem; width:120px;"
-                onchange="onStravaFilterChange()">
-                <option value="3_days">Last 3 Days</option>
-                <option value="5_days">Last 5 Days</option>
-                <option value="7_days" selected>Last 7 Days</option>
-                <option value="1_month">Last 1 Month</option>
-                <option value="3_months">Last 3 Months</option>
-                <option value="total">Total</option>
-              </select>
               <button class="btn btn-sm btn-secondary" onclick="changeStravaPage(-1)">◀ Prev</button>
               <span id="stravaPageInfo" style="font-size:0.8rem;color:var(--text-muted)">Page 1</span>
               <button class="btn btn-sm btn-secondary" onclick="changeStravaPage(1)">Next ▶</button>

@@ -192,9 +192,17 @@ function updateDynamicTooltips() {
   }
 }
 
-async function loadDashboard() {
+async function loadDashboard(forceRefresh = false) {
   await fetchLimits();
-  await Promise.all([loadStats(), loadDistricts(), loadConfig(), loadSchedule(), loadActivities(), loadStravaActivities(), loadInsights()]);
+  await Promise.all([
+    loadStats(),
+    loadDistricts(),
+    loadConfig(),
+    loadSchedule(),
+    loadActivities(),
+    loadStravaActivities(forceRefresh),
+    loadInsights(forceRefresh)
+  ]);
   initMap();
   resetMapView();
 }
@@ -595,26 +603,8 @@ async function loadStravaActivities(forceRefresh = false) {
   container.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Loading...</p></div>';
   
   try {
-    const range = document.getElementById('stravaFilterRange').value;
-    let afterQuery = '';
-    if (range !== 'total') {
-      let days = 7;
-      if (range === '3_days') days = 3;
-      else if (range === '5_days') days = 5;
-      else if (range === '7_days') days = 7;
-      else if (range === '1_month') days = 30;
-      else if (range === '3_months') days = 90;
-
-      // Set "after" to the beginning of the N-th day ago in local time
-      const d = new Date();
-      d.setHours(0, 0, 0, 0); // Start of today local
-      d.setDate(d.getDate() - (days - 1)); // Start of N days ago
-      const afterTimestamp = Math.floor(d.getTime() / 1000);
-      afterQuery = `&after=${afterTimestamp}`;
-    }
-
     const refreshQuery = forceRefresh ? '&refresh=true' : '';
-    let activities = await api(`/strava-activities?page=${stravaCurrentPage}&per_page=10${afterQuery}${refreshQuery}`);
+    let activities = await api(`/strava-activities?page=${stravaCurrentPage}&per_page=10${refreshQuery}`);
     document.getElementById('stravaPageInfo').textContent = `Page ${stravaCurrentPage}`;
     
     if (!activities || !activities.length) {
@@ -623,7 +613,11 @@ async function loadStravaActivities(forceRefresh = false) {
     }
     
     // Sort descending (latest first)
-    activities.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
+    activities.sort((a, b) => {
+      const dateA = new Date(a.start_date || a.created_at || 0);
+      const dateB = new Date(b.start_date || b.created_at || 0);
+      return dateB - dateA;
+    });
     
     container.innerHTML = activities.map(a => {
       const date = new Date(a.start_date).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });

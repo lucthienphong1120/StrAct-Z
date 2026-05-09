@@ -2,6 +2,17 @@
 
 This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.30.0). Follow these guidelines strictly.
 
+## 🚀 Workflow & Deployment
+- **Repository**: The `StrAct-Z` workspace is a public Git repository.
+  - `.gitignore` is used to exclude secrets (`.env`), data (`data/`), and database files.
+- **Update Process**:
+  - After completing every feature or update, **COMMIT** and **PUSH** to the Git repo.
+  - Ensure versioning is bumped correctly (see Developer Rules).
+- **Production Deployment**:
+  - Code is deployed to the production server via `git pull` in the SSH terminal.
+  - Production URL: [https://strava.crfnetwork.com/](https://strava.crfnetwork.com/)
+  - Test UI changes using the production URL in the browser tool if needed.
+
 ## 🏗️ Technical Architecture
 - **Backend**: Node.js (Express), SQLite (Key-Value & Activity logging).
 - **Frontend**: Single-page application (Vanilla HTML/CSS/JS).
