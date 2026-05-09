@@ -267,7 +267,7 @@ function validateTimeBounds(minTimeStr, maxTimeStr, targetDateStr, isCustomTime)
 }
 
 function validateInputs(config) {
-  if (parseInt(config.max_district_span, 10) > 2) {
+  if (userRole !== 'vip' && parseInt(config.max_district_span, 10) > 2) {
     showToast('Max 2 districts allowed. Contact Admin to upgrade (VIP feature).', 'warning');
     document.getElementById('cfgMaxSpan').value = 2;
     return false;
@@ -321,6 +321,7 @@ async function saveConfig() {
     heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
     min_heart_rate: document.getElementById('cfgMinHR').value,
     max_heart_rate: document.getElementById('cfgMaxHR').value,
+    user_age: document.getElementById('cfgUserAge').value,
     sim_weather: document.getElementById('cfgSimWeather')?.checked ? 'true' : 'false',
     sim_redlights: document.getElementById('cfgSimRedLights')?.checked ? 'true' : 'false',
   };

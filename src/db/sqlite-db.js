@@ -31,7 +31,7 @@ const DEFAULT_CONFIG = {
   start_lng: '105.8542',
   district_key: 'random',
   max_district_span: '1',
-  selected_districts: 'hoan_kiem,hai_ba_trung,hoang_mai,dong_da,ba_dinh,thanh_xuan,cau_giay,tay_ho,ha_dong',
+  selected_districts: 'hoan_kiem,hai_ba_trung,hoang_mai,dong_da,ba_dinh,thanh_xuan,cau_giay,tay_ho,ha_dong,long_bien',
   activity_type: 'Random',
   variation_enabled: 'true',
   heart_rate_enabled: 'true',

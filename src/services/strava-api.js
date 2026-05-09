@@ -261,11 +261,11 @@ async function checkUploadStatus(accountId, uploadId) {
 /**
  * Wait for upload to complete (polling)
  */
-async function waitForUpload(uploadId, maxAttempts = 30) {
+async function waitForUpload(accountId, uploadId, maxAttempts = 30) {
   for (let i = 0; i < maxAttempts; i++) {
     await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds between polls
     try {
-      const status = await checkUploadStatus(uploadId);
+      const status = await checkUploadStatus(accountId, uploadId);
       if (status.activity_id) {
         return status;
       }
