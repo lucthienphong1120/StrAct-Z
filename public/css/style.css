@@ -286,7 +286,7 @@ body::before {
   background: var(--gradient-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  overflow: visible;
   transition: var(--transition);
 }
 
@@ -296,6 +296,8 @@ body::before {
   display: flex; align-items: center; justify-content: space-between;
   padding: 1.25rem 1.5rem;
   border-bottom: 1px solid var(--border);
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
 }
 
 .card-title {
@@ -626,23 +628,23 @@ body::before {
   bottom: 125%;
   left: 50%;
   transform: translateX(-50%) scale(0.9);
-  background: rgba(15, 23, 42, 0.95);
+  background: rgba(15, 23, 42, 0.98);
   color: #fff;
-  padding: 8px 12px;
-  border-radius: 6px;
+  padding: 10px 14px;
+  border-radius: 8px;
   font-size: 0.75rem;
   font-weight: normal;
-  white-space: pre-wrap;
-  width: max-content;
-  max-width: 250px;
+  white-space: normal;
+  word-wrap: break-word;
+  width: 220px;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.2s ease;
-  z-index: 1000;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10001;
   border: 1px solid var(--border);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
   pointer-events: none;
-  line-height: 1.4;
+  line-height: 1.5;
   text-align: left;
 }
 
@@ -652,14 +654,21 @@ body::before {
   transform: translateX(-50%) scale(1);
 }
 
-/* Align tooltips to the right if they are near the right edge */
+/* Align tooltips near edges */
 .tooltip-left::after {
   left: auto;
   right: 0;
   transform: scale(0.9);
 }
-
 .tooltip-left:hover::after {
+  transform: scale(1);
+}
+
+.tooltip-right::after {
+  left: 0;
+  transform: scale(0.9);
+}
+.tooltip-right:hover::after {
   transform: scale(1);
 }
 

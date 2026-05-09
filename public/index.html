@@ -26,7 +26,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.34.0</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.35.0</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -212,12 +212,12 @@
 
                 <div id="timeCustomInputs" class="form-row" style="margin-top:10px; opacity:0.4; pointer-events:none;">
                   <div class="form-group">
-                    <label class="form-label">Target Date <span class="tooltip-icon"
+                    <label class="form-label">Target Date <span class="tooltip-icon tooltip-right"
                         data-tooltip="Generate an activity for a specific date in the past">?</span></label>
                     <input type="date" id="cfgTargetDate" class="form-input">
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Time Range <span class="tooltip-icon"
+                    <label class="form-label">Time Range <span class="tooltip-icon tooltip-left"
                         data-tooltip="Limits the start time for the target date">?</span></label>
                     <div style="display:flex;gap:10px;">
                       <input type="time" id="cfgCustomMinTime" class="form-input" value="04:30">
@@ -229,24 +229,24 @@
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Min Distance (km) <span class="tooltip-icon"
+                  <label class="form-label">Min Distance (km) <span class="tooltip-icon tooltip-right"
                       data-tooltip="Minimum distance for generated activity (0.2 - 4.0)">?</span></label>
                   <input type="number" step="0.1" id="cfgMinDist" class="form-input" value="0.5" min="0.2" max="4.0">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Max Distance (km) <span class="tooltip-icon"
+                  <label class="form-label">Max Distance (km) <span class="tooltip-icon tooltip-left"
                       data-tooltip="Maximum distance for generated activity (1.0 - 15.0)">?</span></label>
                   <input type="number" step="0.1" id="cfgMaxDist" class="form-input" value="8.0" min="1.0" max="15.0">
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Min Pace (min/km) <span class="tooltip-icon"
+                  <label class="form-label">Min Pace (min/km) <span class="tooltip-icon tooltip-right"
                       data-tooltip="Fastest pace for the activity (6.0 - 12.0)">?</span></label>
                   <input type="number" step="0.1" id="cfgMinPace" class="form-input" value="8.0" min="6.0" max="12.0">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Max Pace (min/km) <span class="tooltip-icon"
+                  <label class="form-label">Max Pace (min/km) <span class="tooltip-icon tooltip-left"
                       data-tooltip="Slowest pace for the activity (10.0 - 15.0)">?</span></label>
                   <input type="number" step="0.1" id="cfgMaxPace" class="form-input" value="12.0" min="10.0" max="15.0">
                 </div>
@@ -263,7 +263,7 @@
             <div class="card-body">
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Activity Type <span class="tooltip-icon"
+                  <label class="form-label">Activity Type <span class="tooltip-icon tooltip-right"
                       data-tooltip="Type of sport for the GPX file.&#10;Distance multipliers:&#10;• Walk: 0.7x&#10;• Run: 1.0x&#10;• Ride: 1.5x">?</span></label>
                   <select id="cfgActivityType" class="form-select" onchange="updateActivityTypeHint()">
                     <option value="Random">Random</option>
@@ -278,20 +278,20 @@
                   <label class="toggle">
                     <input type="checkbox" id="cfgHeartRate" checked>
                     <div class="toggle-track"></div>
-                    <span class="toggle-label">Heart Rate Data <span class="tooltip-icon"
+                    <span class="toggle-label">Heart Rate Data <span class="tooltip-icon tooltip-left"
                         data-tooltip="Simulate HR stream in GPX.&#10;MHR = 220 - Age.&#10;• Walk: 50-60% MHR&#10;• Ride: 60-70% MHR&#10;• Run: 70-85% MHR">?</span></span>
                   </label>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">User Age <span class="tooltip-icon"
+                  <label class="form-label">User Age <span class="tooltip-icon tooltip-right"
                       data-tooltip="Used to calculate Max Heart Rate: 220 - Age. Default: 25.">?</span></label>
                   <input type="number" id="cfgUserAge" class="form-input" value="25" min="10" max="100"
                     oninput="updateMHR()">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Max Heart Rate (MHR) <span class="tooltip-icon"
+                  <label class="form-label">Max Heart Rate (MHR) <span class="tooltip-icon tooltip-left"
                       data-tooltip="Estimated Maximum Heart Rate (220 - Age). Used for intensity zones.">?</span></label>
                   <input type="number" id="cfgMaxHR" class="form-input" value="195" readonly
                     style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
@@ -302,7 +302,7 @@
                   <label class="toggle" style="margin-bottom: 5px;">
                     <input type="checkbox" id="cfgSimWeather" checked>
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size: 0.85rem;">🌤️ Weather Sim <span class="tooltip-icon"
+                    <span class="toggle-label" style="font-size: 0.85rem;">🌤️ Weather Sim <span class="tooltip-icon tooltip-right"
                         data-tooltip="30% chance for hot weather (+3~8 BPM). Activities between 11AM-4PM get additional +2~5 BPM heat stress.">?</span></span>
                   </label>
                 </div>
@@ -310,7 +310,7 @@
                   <label class="toggle" style="margin-bottom: 5px;">
                     <input type="checkbox" id="cfgSimRedLights" checked>
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size: 0.85rem;">🚦 Red Lights <span class="tooltip-icon"
+                    <span class="toggle-label" style="font-size: 0.85rem;">🚦 Red Lights <span class="tooltip-icon tooltip-left"
                         data-tooltip="Simulate traffic lights (1.5% chance per point). GPS pauses for 15-60s, naturally decaying HR towards resting rate.">?</span></span>
                   </label>
                 </div>
@@ -339,13 +339,13 @@
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Min Count <span class="tooltip-icon"
+                  <label class="form-label">Min Count <span class="tooltip-icon tooltip-right"
                       data-tooltip="Min number of activities to generate daily">?</span></label>
                   <input type="number" id="scheduleCountMin" class="form-input" value="1" min="1" max="3"
                     onchange="updateSchedule()">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Max Count <span class="tooltip-icon"
+                  <label class="form-label">Max Count <span class="tooltip-icon tooltip-left"
                       data-tooltip="Max number of activities. Normal: 2, VIP: 3">?</span></label>
                   <input type="number" id="scheduleCountMax" class="form-input" value="2" min="1" max="3"
                     onchange="updateSchedule()">
