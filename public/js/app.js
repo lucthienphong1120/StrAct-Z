@@ -143,7 +143,7 @@ const HANOI_DISTRICTS = [
   { key: 'thanh_xuan', name: 'Thanh Xuân' },
   { key: 'cau_giay', name: 'Cầu Giấy' },
   { key: 'tay_ho', name: 'Tây Hồ' },
-  { key: 'long_bien', name: 'Long Biên', defaultOff: true },
+  { key: 'long_bien', name: 'Long Biên' },
   { key: 'ha_dong', name: 'Hà Đông' },
   { key: 'bac_tu_liem', name: 'Bắc Từ Liêm', defaultOff: true },
   { key: 'nam_tu_liem', name: 'Nam Từ Liêm', defaultOff: true }
@@ -403,6 +403,7 @@ async function loadActivities() {
     const pageActivities = allActivities.slice(start, start + LOCAL_PAGE_SIZE);
 
     container.innerHTML = pageActivities.map(a => {
+      // ... (keep existing mapping logic)
       const actualTime = a.route_start_time || a.created_at;
       const dateStr = actualTime.endsWith('Z') ? actualTime : actualTime + 'Z';
       const dateObj = new Date(dateStr);
@@ -414,7 +415,7 @@ async function loadActivities() {
          const keys = a.district_keys.split(',');
          districtTags = keys.map(k => {
            const name = HANOI_DISTRICTS.find(d => d.key === k)?.name || k;
-           return `<span class="status-badge" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); padding: 2px 6px;">\ud83d\udccd ${name}</span>`;
+           return `<span class="status-badge" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); padding: 2px 6px;">📍 ${name}</span>`;
          }).join('');
       }
 
@@ -424,7 +425,7 @@ async function loadActivities() {
           <div>
             <div class="activity-name">${a.activity_name || 'Unnamed'}</div>
             <div class="activity-date" style="display:flex; gap:6px; margin-top:4px; flex-wrap:wrap; align-items:center;">
-               <span class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); padding: 2px 6px;">\u23f1\ufe0f ${timeStr} ${dateOnlyStr}</span>
+               <span class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); padding: 2px 6px;">🕒 ${timeStr} ${dateOnlyStr}</span>
                ${districtTags}
             </div>
           </div>
@@ -435,10 +436,24 @@ async function loadActivities() {
             <span class="status-badge ${statusClass}">${a.upload_status}</span>
             ${a.upload_status === 'generated' ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
             ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
-            <button class="btn btn-sm btn-danger" style="padding:4px 8px;" onclick="deleteActivity(${a.id}, ${!!a.strava_activity_id})">\ud83d\uddd1\ufe0f</button>
+            <button class="btn btn-sm btn-danger" style="padding:4px 8px;" onclick="deleteActivity(${a.id}, ${!!a.strava_activity_id})">🗑️</button>
           </div>
         </div>`;
     }).join('');
+
+    // Dim Navigator buttons
+    const prevBtn = document.querySelector('button[onclick="changeLocalPage(-1)"]');
+    const nextBtn = document.querySelector('button[onclick="changeLocalPage(1)"]');
+    if (prevBtn) {
+      prevBtn.disabled = localCurrentPage <= 1;
+      prevBtn.style.opacity = localCurrentPage <= 1 ? '0.4' : '1';
+      prevBtn.style.cursor = localCurrentPage <= 1 ? 'not-allowed' : 'pointer';
+    }
+    if (nextBtn) {
+      nextBtn.disabled = localCurrentPage >= totalPages;
+      nextBtn.style.opacity = localCurrentPage >= totalPages ? '0.4' : '1';
+      nextBtn.style.cursor = localCurrentPage >= totalPages ? 'not-allowed' : 'pointer';
+    }
   } catch (err) { console.error('Activities error:', err); }
 }
 
@@ -506,6 +521,21 @@ async function loadStravaActivities() {
           </div>
         </div>`;
     }).join('');
+
+    // Dim Navigator buttons
+    const prevBtn = document.querySelector('button[onclick="changeStravaPage(-1)"]');
+    const nextBtn = document.querySelector('button[onclick="changeStravaPage(1)"]');
+    if (prevBtn) {
+      prevBtn.disabled = stravaCurrentPage <= 1;
+      prevBtn.style.opacity = stravaCurrentPage <= 1 ? '0.4' : '1';
+      prevBtn.style.cursor = stravaCurrentPage <= 1 ? 'not-allowed' : 'pointer';
+    }
+    if (nextBtn) {
+      const hasMore = (activities && activities.length === 10);
+      nextBtn.disabled = !hasMore;
+      nextBtn.style.opacity = !hasMore ? '0.4' : '1';
+      nextBtn.style.cursor = !hasMore ? 'not-allowed' : 'pointer';
+    }
   } catch (err) {
     container.innerHTML = `<div class="empty-state"><div class="icon">❌</div><p>Failed to load Strava activities: ${err.message}</p></div>`;
   }

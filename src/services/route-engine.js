@@ -448,27 +448,44 @@ function generateTimestamps(points, options = {}) {
 // ─── Heart Rate ───────────────────────────────────────────────────────────────
 
 function generateHeartRate(points, options = {}) {
+  const { minHR = 130, maxHR = 165, restingHR = 65, startTime = null } = options;
+  
   // Simulate weather factor randomly (hot weather = +HR)
-  const weatherFactor = (options.simWeather !== false && Math.random() > 0.7) ? randomInRange(3, 8) : 0;
-  const { minHR = 130, maxHR = 165, restingHR = 65 } = options;
+  const isHotWeather = options.simWeather !== false && Math.random() > 0.7;
+  let weatherFactor = isHotWeather ? randomInRange(3, 8) : 0;
+  
+  // Time-of-day factor: trưa/chiều (11:00 - 16:00) nắng cũng tăng chút
+  const startHour = startTime ? new Date(startTime).getHours() : 10;
+  if (startHour >= 11 && startHour <= 16) {
+    weatherFactor += randomInRange(2, 5);
+  }
+
   const n = points.length;
+  let lastActiveHR = minHR;
+  let pauseDuration = 0;
 
   for (let i = 0; i < n; i++) {
     const p = i / n;
     let hr;
     
     if (points[i].isPause) {
-       // HR drops during pauses
-       hr = restingHR + (minHR - restingHR) * 0.5 + randomInRange(-2, 2);
-    } else if (p < 0.1) {
-       hr = restingHR + (minHR - restingHR) * (p / 0.1);
-    } else if (p < 0.9) {
-      const mp = (p - 0.1) / 0.8;
-      hr = minHR + (maxHR - minHR) * (0.5 + 0.3 * Math.sin(2 * Math.PI * 3 * mp)) + randomInRange(-5, 5);
-      if (points[i].elevation !== undefined && i > 0 && points[i - 1].elevation !== undefined)
-        hr += (points[i].elevation - points[i - 1].elevation) * 2;
+       // HR drops during pauses towards restingHR
+       pauseDuration += 5; // each pause point is 5s
+       const dropFactor = Math.min(0.8, pauseDuration / 120); // max 80% drop towards resting after 2 mins
+       hr = lastActiveHR - (lastActiveHR - restingHR) * dropFactor + randomInRange(-2, 2);
     } else {
-      hr = minHR + (restingHR - minHR) * ((p - 0.9) / 0.1) * 0.5;
+       pauseDuration = 0; // Reset pause counter when moving
+       if (p < 0.1) {
+          hr = restingHR + (minHR - restingHR) * (p / 0.1);
+       } else if (p < 0.9) {
+         const mp = (p - 0.1) / 0.8;
+         hr = minHR + (maxHR - minHR) * (0.5 + 0.3 * Math.sin(2 * Math.PI * 3 * mp)) + randomInRange(-5, 5);
+         if (points[i].elevation !== undefined && i > 0 && points[i - 1].elevation !== undefined)
+           hr += (points[i].elevation - points[i - 1].elevation) * 2;
+       } else {
+         hr = minHR + (restingHR - minHR) * ((p - 0.9) / 0.1) * 0.5;
+       }
+       lastActiveHR = hr;
     }
     
     points[i].heartRate = Math.round(Math.max(restingHR, Math.min(maxHR + 15, hr + weatherFactor)));
