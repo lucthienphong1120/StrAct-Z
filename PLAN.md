@@ -53,3 +53,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] chỉnh lại giảm trọng số của home và work location
 + [x] fix lại chức năng nút save chưa hoạt động, phải hiện toast
 + [x] đồng nhất định dạng hint cho phần thông báo xóa activity trên strava
++ [x] thêm highlight biên giới các quận viền đỏ nhẹ 1px trong Activity Areas Map (với danh sách các quận nội thành HN đã list)

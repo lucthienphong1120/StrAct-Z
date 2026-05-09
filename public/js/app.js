@@ -993,6 +993,9 @@ function initMap() {
   // Apply default lock
   applyMapLock();
 
+  // Render district highlights
+  renderDistrictBorders();
+
   // Small delay to ensure container is ready
   setTimeout(() => map.invalidateSize(), 100);
 }
@@ -1030,6 +1033,25 @@ function updateLockUI() {
     btn.innerHTML = isMapLocked ? '🔒 Map Locked' : '🔓 Map Unlocked';
     btn.classList.toggle('btn-secondary', isMapLocked);
     btn.classList.toggle('btn-outline-secondary', !isMapLocked);
+  }
+}
+
+async function renderDistrictBorders() {
+  if (!map) return;
+  try {
+    const districts = await api('/districts');
+    districts.forEach(d => {
+      L.circle([d.lat, d.lng], {
+        radius: d.radiusKm * 1000,
+        color: 'rgba(255, 0, 0, 0.4)',
+        weight: 1,
+        fill: false,
+        dashArray: '4, 4',
+        interactive: false
+      }).addTo(map);
+    });
+  } catch (err) {
+    console.error('Failed to render district borders:', err);
   }
 }
 
