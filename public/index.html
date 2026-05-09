@@ -26,7 +26,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.35.0</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.36.0</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -239,18 +239,6 @@
                   <input type="number" step="0.1" id="cfgMaxDist" class="form-input" value="8.0" min="1.0" max="15.0">
                 </div>
               </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label class="form-label">Min Pace (min/km) <span class="tooltip-icon tooltip-right"
-                      data-tooltip="Fastest pace for the activity (6.0 - 12.0)">?</span></label>
-                  <input type="number" step="0.1" id="cfgMinPace" class="form-input" value="8.0" min="6.0" max="12.0">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Max Pace (min/km) <span class="tooltip-icon tooltip-left"
-                      data-tooltip="Slowest pace for the activity (10.0 - 15.0)">?</span></label>
-                  <input type="number" step="0.1" id="cfgMaxPace" class="form-input" value="12.0" min="10.0" max="15.0">
-                </div>
-              </div>
             </div>
           </div>
 
@@ -281,6 +269,18 @@
                     <span class="toggle-label">Heart Rate Data <span class="tooltip-icon tooltip-left"
                         data-tooltip="Simulate HR stream in GPX.&#10;MHR = 220 - Age.&#10;• Walk: 50-60% MHR&#10;• Ride: 60-70% MHR&#10;• Run: 70-85% MHR">?</span></span>
                   </label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Min Pace (min/km) <span class="tooltip-icon tooltip-right"
+                      data-tooltip="Fastest pace for the activity (6.0 - 12.0)">?</span></label>
+                  <input type="number" step="0.1" id="cfgMinPace" class="form-input" value="8.0" min="6.0" max="12.0">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Max Pace (min/km) <span class="tooltip-icon tooltip-left"
+                      data-tooltip="Slowest pace for the activity (10.0 - 15.0)">?</span></label>
+                  <input type="number" step="0.1" id="cfgMaxPace" class="form-input" value="12.0" min="10.0" max="15.0">
                 </div>
               </div>
               <div class="form-row">

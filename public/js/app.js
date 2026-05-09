@@ -362,6 +362,9 @@ async function loadConfig() {
       document.getElementById('cfgSimRedLights').checked = config.sim_redlights !== 'false';
     }
     
+    // Initial HR state
+    toggleHRInputs();
+
     // Render Map Areas
     if (config.activity_areas) {
       renderCircles(config.activity_areas);
@@ -923,6 +926,20 @@ function updateActivityTypeHint() {
   }
 }
 
+function toggleHRInputs() {
+  const hrEnabled = document.getElementById('cfgHeartRate').checked;
+  const ageInput = document.getElementById('cfgUserAge');
+  const mhrInput = document.getElementById('cfgMaxHR');
+  
+  if (ageInput) {
+    ageInput.disabled = !hrEnabled;
+    ageInput.closest('.form-group').style.opacity = hrEnabled ? '1' : '0.4';
+  }
+  if (mhrInput) {
+    mhrInput.closest('.form-group').style.opacity = hrEnabled ? '1' : '0.4';
+  }
+}
+
 // ─── URL Params ─────────────────────────────────────────
 
 function checkUrlParams() {
@@ -942,6 +959,12 @@ function checkUrlParams() {
 document.addEventListener('DOMContentLoaded', () => {
   checkUrlParams();
   checkAuth();
+  
+  // Attach HR toggle listener
+  const hrToggle = document.getElementById('cfgHeartRate');
+  if (hrToggle) {
+    hrToggle.addEventListener('change', toggleHRInputs);
+  }
 });
 // ─── Map & Activity Areas ─────────────────────────────────
 
