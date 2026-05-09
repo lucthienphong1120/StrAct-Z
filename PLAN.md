@@ -1,4 +1,10 @@
-Lưu ý: tất cả cập nhật tính năng đều phải note version (index.html, package.json) và update README
+## Prompt:
+```
+"Hãy đọc file AI_RULES.md trong thư mục gốc để nắm bắt kiến trúc dự án, các quy tắc logic vận hành và các tiêu chuẩn versioning của dự án này. Hãy luôn tuân thủ các quy tắc trong đó khi thực hiện mọi yêu cầu tiếp theo."
+Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay đổi công thức tính MHR), hãy cập nhật nó vào AI_RULES.md để "bộ nhớ" này luôn luôn mới nhất!
+```
+
+## Features:
 + [x] update tính năng register (multi user)
 + [x] mỗi user seperate quản lý own session để đảm bảo quyền riêng tư và bảo mật (ko có admin user)
 + [x] ko có admin user nhưng có phân biệt vip user và normal (chỉ có thể update từ db)
@@ -22,9 +28,9 @@ Lưu ý: tất cả cập nhật tính năng đều phải note version (index.h
 + [x] check lại các công thức trọng số hoạt động đi bộ/đạp xe/chạy bộ là 50-60/60-70/70-85 % MHR
 + [x] check lại logic nghỉ đèn đỏ -> nghỉ giảm heart rate và thời tiết nắng/mát ảnh hưởng heart rate, trưa/chiều nắng cũng tăng chút
 + [ ] thêm phần account setting vào giao diện sau login và trước khi kết nối strava
-+ [ ] menu account setting thêm phần nhập code để kích hoạt vip (đồng thời bổ sung cơ chế chống gian lận, sniffing, bruteforce, relay,...)
-+ [ ] footer thêm thông tin copyright, email
-+ [ ] cuối phần account setting thêm 1 dòng contact for vip: email (chữ xám)
++ [x] menu account setting thêm phần nhập code để kích hoạt vip (đồng thời bổ sung cơ chế chống gian lận, sniffing, bruteforce, relay,...)
++ [x] footer thêm thông tin copyright, email
++ [x] cuối phần account setting thêm 1 dòng contact for vip: email (chữ xám)
 + [x] đổi tên app trong strava oauth về StrAct Z
 + [x] tạo và rule file markdown cho AI coding để lưu kiến trúc, ghi nhớ, context cần thiết về project này
 + [x] các quận default enable thêm long biên

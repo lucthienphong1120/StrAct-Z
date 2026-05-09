@@ -71,11 +71,12 @@ async function checkAuth() {
 
 function renderAccountInfo(athlete) {
   const el = document.getElementById('accountInfo');
+  const roleBadge = userRole === 'vip' ? '<span class="status-badge" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; padding:2px 8px; font-size:0.7rem; border:none; margin-left:8px;">VIP</span>' : '';
   el.innerHTML = `
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
       ${athlete?.avatar ? `<img src="${athlete.avatar}" style="width:48px;height:48px;border-radius:50%;border:2px solid var(--strava-orange);" alt="avatar">` : '<div style="width:48px;height:48px;border-radius:50%;background:var(--strava-orange);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🏃</div>'}
       <div>
-        <div style="font-weight:600;">${athlete?.name || 'Strava User'}</div>
+        <div style="font-weight:600; display:flex; align-items:center;">${athlete?.name || 'Strava User'} ${roleBadge}</div>
         <div style="font-size:0.8rem;color:var(--text-muted);">ID: ${athlete?.id || 'N/A'}</div>
       </div>
     </div>
@@ -995,3 +996,23 @@ function updateMHR() {
   const mhr = 220 - age;
   document.getElementById('cfgMaxHR').value = mhr;
 }
+
+async function activateVip() {
+  const code = document.getElementById('cfgVipCode').value;
+  if (!code) return showToast('Please enter a VIP code', 'warning');
+  
+  showToast('Activating...', 'info');
+  try {
+    const result = await api('/account/activate-vip', { method: 'POST', body: { code } });
+    if (result.success) {
+      showToast(result.message, 'success');
+      document.getElementById('cfgVipCode').value = '';
+      setTimeout(() => location.reload(), 2000);
+    } else {
+      showToast(result.error || 'Activation failed', 'error');
+    }
+  } catch (err) {
+    showToast('Failed: ' + err.message, 'error');
+  }
+}
+

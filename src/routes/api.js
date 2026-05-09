@@ -356,4 +356,27 @@ router.put('/account/password', async (req, res) => {
   }
 });
 
+router.post('/account/activate-vip', async (req, res) => {
+  try {
+    const { code } = req.body;
+    if (!code) return res.status(400).json({ error: 'Code is required' });
+
+    // Check Bruteforce
+    const isLocked = await db.checkBruteForce(req.user.id);
+    if (isLocked) {
+      return res.status(429).json({ error: 'Too many failed attempts. Try again in an hour.' });
+    }
+
+    const result = await db.activateVip(req.user.id, code);
+    if (result.success) {
+      res.json({ success: true, message: 'VIP activated! Please refresh to enjoy VIP benefits.' });
+    } else {
+      res.status(400).json({ error: result.message });
+    }
+  } catch (err) {
+    console.error('VIP activation error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

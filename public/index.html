@@ -18,7 +18,7 @@
     <div class="header-inner">
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
-        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.25.0</small></span>
+        <span>StrAct Z <small style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.26.0</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;" onclick="systemLogout()">Logout</button>
@@ -346,6 +346,16 @@
                   <button class="btn btn-sm btn-primary" onclick="updatePassword()">Update</button>
                 </div>
               </div>
+              <div class="form-group" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border);">
+                <label class="form-label">Activate VIP Code</label>
+                <div style="display:flex; gap:8px;">
+                  <input type="text" id="cfgVipCode" class="form-input" placeholder="Enter VIP Code" style="flex:1; font-family:monospace;">
+                  <button class="btn btn-sm btn-accent" onclick="activateVip()">Activate</button>
+                </div>
+                <div style="margin-top:10px; font-size:0.75rem; color:var(--text-muted); text-align:right;">
+                  Contact for VIP: <a href="mailto:support@stractz.com" style="color:inherit;text-decoration:none;">support@stractz.com</a>
+                </div>
+              </div>
             </div>
           </div>
         </div> <!-- End Right Column -->
@@ -402,6 +412,11 @@
       </div>
     </div>
   </main>
+
+  <footer style="margin-top: 40px; padding: 20px; text-align: center; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border);">
+    <div>&copy; 2024 StrAct Z. All rights reserved.</div>
+    <div style="margin-top:5px;">Support: <a href="mailto:support@stractz.com" style="color:var(--text-secondary); text-decoration:none;">support@stractz.com</a></div>
+  </footer>
 
   <!-- Toast Container -->
   <div id="toastContainer" class="toast-container"></div>

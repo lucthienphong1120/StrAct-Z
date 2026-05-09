@@ -9,6 +9,8 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Routing**: OSRM (Open Source Routing Machine) for road-snapping.
 - **Visualization**: Chart.js for Activity Insights (Cloud-based).
 - **Storage**: GPX files stored in `data/gpx/`.
+- **VIP System**: SQLite-backed one-time codes with brute-force protection (security_logs).
+
 
 ## 📏 Core Logic & Weighting
 
@@ -29,7 +31,12 @@ Base distance is randomized from config, then scaled by sport:
 - **Run**: `1.0x`.
 - **Ride**: `1.5x`.
 
-### 3. Location Weighting (Hanoi Districts)
+### 3. VIP & Security
+- **VIP Codes**: Stored in `vip_codes` table. Status: `available` | `used`.
+- **Anti-Bruteforce**: Max 5 failed activation attempts per hour per account (enforced via `security_logs`).
+- **IP Protection**: (Future) IP-based rate limiting on `/api/activate-vip`.
+
+### 4. Location Weighting (Hanoi Districts)
 - Districts are selected based on proximity to **Home** (Orange) and **Work** (Blue) circles on the map.
 - **Weights**:
   - Inside Home circle: `+2.5` (full), `+2.0` (center), `+1.0` (overlap).

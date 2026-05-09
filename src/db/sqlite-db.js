@@ -96,6 +96,19 @@ async function getDb() {
       role TEXT DEFAULT 'normal',
       created_at TEXT
     );
+    CREATE TABLE IF NOT EXISTS vip_codes (
+      code TEXT PRIMARY KEY,
+      status TEXT DEFAULT 'available',
+      activated_by INTEGER,
+      activated_at TEXT
+    );
+    CREATE TABLE IF NOT EXISTS security_logs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      account_id INTEGER,
+      action TEXT,
+      ip TEXT,
+      created_at TEXT
+    );
   `);
   
   // Migrate from JSON if SQLite config is empty
@@ -320,6 +333,32 @@ async function getAllAccounts() {
   return await db.all('SELECT id, username, role, created_at FROM accounts');
 }
 
+async function activateVip(accountId, code) {
+  const db = await getDb();
+  const now = new Date().toISOString();
+  
+  // Check if code exists and is available
+  const row = await db.get("SELECT * FROM vip_codes WHERE code = ? AND status = 'available'", [code]);
+  if (!row) {
+    // Log failure for bruteforce protection
+    await db.run('INSERT INTO security_logs (account_id, action, created_at) VALUES (?, ?, ?)', [accountId, 'activate_vip_fail', now]);
+    return { success: false, message: 'Invalid or already used code.' };
+  }
+
+  // Transaction-ish update
+  await db.run("UPDATE vip_codes SET status = 'used', activated_by = ?, activated_at = ? WHERE code = ?", [accountId, now, code]);
+  await db.run("UPDATE accounts SET role = 'vip' WHERE id = ?", [accountId]);
+  
+  return { success: true };
+}
+
+async function checkBruteForce(accountId) {
+  const db = await getDb();
+  const oneHourAgo = new Date(Date.now() - 3600000).toISOString();
+  const row = await db.get("SELECT COUNT(*) as c FROM security_logs WHERE account_id = ? AND action = 'activate_vip_fail' AND created_at > ?", [accountId, oneHourAgo]);
+  return row.c >= 5; // Max 5 fails per hour
+}
+
 module.exports = {
   getDb,
   getConfig, setConfig, getAllConfig,
@@ -327,4 +366,5 @@ module.exports = {
   saveActivity, updateActivity, getActivities,
   getActivityStats, deleteActivity,
   getUserByUsername, createAccount, getAccountCount, getAllAccounts, updateAccountPassword,
+  activateVip, checkBruteForce,
 };
