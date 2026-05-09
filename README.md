@@ -1,4 +1,4 @@
-# 🏃 StrAct Z v1.27.1
+# 🏃 StrAct Z v1.28.0
 
 **StrAct Z** (Strava Auto Activity Generator) is a robust, multi-tenant backend platform that automatically generates hyper-realistic GPS running, walking, and cycling activities and syncs them to Strava.
 
@@ -42,34 +42,32 @@ For detailed information, please refer to our documentation guides:
 
 ## 📋 Changelog
 
+### v1.28.0
+- 🔄 **Realtime Cloud Sync:** Added "Refresh" buttons to both **Strava Cloud Activities** and **Activity Insights** cards.
+  - Những nút này cho phép người dùng bỏ qua bộ nhớ đệm (cache 5 phút) để lấy dữ liệu mới nhất trực tiếp từ Strava.
+- 🎨 **UI Improvements:** Thêm biểu tượng 🔄 vào các nút Refresh để dễ nhận diện.
+
 ### v1.27.1
 - 🐛 **Bug Fixes:**
-  - Fixed a critical bug in Strava upload polling where the account ID was missing from the status check request (causing 404/invalid ID errors).
+  - Fixed a critical bug in Strava upload polling where the account ID was missing from the status check request.
   - Fixed configuration persistence issues for "User Age" and district settings.
-  - Corrected VIP validation logic to allow 3 districts per route as intended.
+  - Corrected VIP validation logic to allow 3 districts per route.
   - Enabled **Long Biên** by default in the system's global configuration.
 
 ### v1.27.0
-- 💎 **Multi-User VIP Codes:** VIP codes can now be configured for multiple users. 
-  - Added `vip_code_usage` table to log exactly which account used which code.
-  - Improved UI: Users already having VIP status will see a "You already VIP account!" message instead of the activation input.
-- 🎨 **UI Cleanup:** Removed redundant support email from the site footer.
+- 💎 **Multi-User VIP Codes:** VIP codes can now be used by multiple users with detailed usage logging.
+- ✨ **VIP UI Status:** Added "You already VIP account!" message for activated users.
+- 🎨 **UI Cleanup:** Removed redundant support email from footer.
 
-### v1.26.0
-- 💎 **VIP Activation System:** Added a secure method to activate VIP status using one-time codes.
-  - **Security:** Integrated anti-bruteforce protection (max 5 fails/hour) and security logging.
-  - **UI:** New VIP activation section in Account Settings and distinctive VIP badges for users.
-- 🦶 **UI Refinements:** Added a site footer and direct support contact information.
+### v1.26.1
+- 📧 **Support Contact Update:** Updated support email to `stract-z@crfnetwork.com`.
+- 🔑 **VIP Seed:** Added default VIP activation code `CRF@2026`.
 
 ### v1.25.0
-- 🧠 **AI-Assisted Coding Context:** Created `AI_RULES.md` to store persistent project context, architectural decisions, and logic rules for AI coding assistants.
-- 📝 **Rule Enforcement:** Standardized versioning and UI/UX rules for all future developments.
+- 🧠 **AI-Assisted Coding Context:** Created `AI_RULES.md` for persistent project context.
+- 📝 **Rule Enforcement:** Standardized versioning and UI/UX rules.
 
 ### v1.24.0
-+- 🌦️ **Enhanced HR Realism:** 
-+  - Heart Rate now realistically drops during "Red Light" pauses towards your resting rate.
-+  - Added time-of-day HR influence: Workouts between 11 AM and 4 PM (peak heat) will now show a +2~5 bpm increase to simulate heat stress.
-+- 📍 **District Defaults:** "Long Biên" is now enabled by default for all new configurations.
 +- 🧭 **UI Navigation:** Pagination buttons (Prev/Next) now automatically dim and disable when you reach the first or last page of your activity history.
 +- ℹ️ **Tooltip Updates:** Refined tooltips for Weather and Red Lights to accurately describe HR behavior (heat stress and pause decay).
 +

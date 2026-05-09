@@ -10,6 +10,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Visualization**: Chart.js for Activity Insights (Cloud-based).
 - **Storage**: GPX files stored in `data/gpx/`.
 - **VIP System**: Multi-user codes (stored in `vip_codes`). Usage logged per user in `vip_code_usage`. Brute-force protection enabled.
+- **Strava Cloud Caching**: Data from Strava is cached for 5 minutes (`CACHE_TTL_MS`). Use `?refresh=true` to bypass/clear cache for specific queries.
 
 
 ## 📏 Core Logic & Weighting

@@ -67,7 +67,8 @@ router.get('/insights', async (req, res) => {
     const now = new Date();
     const after = Math.floor((now.getTime() - (days + 1) * 24 * 60 * 60 * 1000) / 1000); // Buffer 1 day
     
-    const activities = await stravaApi.getActivities(req.user.id, 1, 200, after);
+    const forceRefresh = req.query.refresh === 'true';
+    const activities = await stravaApi.getActivities(req.user.id, 1, 200, after, forceRefresh);
     res.json(activities);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -88,7 +89,8 @@ router.get('/strava-activities', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const perPage = parseInt(req.query.per_page) || 10;
     const after = req.query.after ? parseInt(req.query.after) : null;
-    const activities = await stravaApi.getActivities(req.user.id, page, perPage, after);
+    const forceRefresh = req.query.refresh === 'true';
+    const activities = await stravaApi.getActivities(req.user.id, page, perPage, after, forceRefresh);
     res.json(activities);
   } catch (err) {
     res.status(500).json({ error: err.message });

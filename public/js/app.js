@@ -487,8 +487,9 @@ function onStravaFilterChange() {
   loadStravaActivities();
 }
 
-async function loadStravaActivities() {
+async function loadStravaActivities(forceRefresh = false) {
   const container = document.getElementById('stravaActivityList');
+  if (!container) return;
   container.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Loading...</p></div>';
   
   try {
@@ -507,7 +508,8 @@ async function loadStravaActivities() {
       afterQuery = `&after=${afterTimestamp}`;
     }
 
-    let activities = await api(`/strava-activities?page=${stravaCurrentPage}&per_page=10${afterQuery}`);
+    const refreshQuery = forceRefresh ? '&refresh=true' : '';
+    let activities = await api(`/strava-activities?page=${stravaCurrentPage}&per_page=10${afterQuery}${refreshQuery}`);
     document.getElementById('stravaPageInfo').textContent = `Page ${stravaCurrentPage}`;
     
     if (!activities || !activities.length) {
@@ -923,10 +925,11 @@ async function saveActivityAreas() {
 }
 // ─── Statistics Chart ────────────────────────────────────
 
-async function loadInsights() {
+async function loadInsights(forceRefresh = false) {
   const range = document.getElementById('insightsTimeRange').value || 14;
   try {
-    const activities = await api(`/insights?days=${range}`);
+    const refreshQuery = forceRefresh ? '&refresh=true' : '';
+    const activities = await api(`/insights?days=${range}${refreshQuery}`);
     updateActivityChart(activities, parseInt(range));
   } catch (err) {
     console.error('Insights error:', err);

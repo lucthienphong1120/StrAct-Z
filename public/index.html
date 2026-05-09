@@ -71,6 +71,7 @@
       <div class="card" style="margin-bottom: 2rem;">
         <div class="card-header">
           <div class="card-title">📈 Activity Insights (Cloud)</div>
+          <button class="btn btn-sm btn-secondary" onclick="loadInsights(true)" title="Refresh from Strava">🔄 Refresh</button>
           <select id="insightsTimeRange" class="form-select" style="width: 140px; font-size: 0.8rem; padding: 4px 8px;" onchange="loadInsights()">
             <option value="3">Last 3 Days</option>
             <option value="5">Last 5 Days</option>
@@ -385,6 +386,8 @@
         <div class="card full-width">
           <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="card-title" style="flex:1;">☁️ Strava Cloud Activities</div>
+            <button class="btn btn-sm btn-secondary" onclick="loadStravaActivities(true)" title="Refresh from Strava">🔄 Refresh</button>
+
             <div style="display:flex; gap:10px; align-items:center;">
               <select id="stravaFilterRange" class="form-select" style="padding:4px 8px; font-size:0.8rem; width:120px;" onchange="onStravaFilterChange()">
                 <option value="3_days">Last 3 Days</option>

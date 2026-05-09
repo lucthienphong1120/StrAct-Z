@@ -363,11 +363,15 @@ async function disconnect(accountId) {
 /**
  * Get athlete's past activities
  */
-async function getActivities(accountId, page = 1, perPage = 30, after = null) {
+async function getActivities(accountId, page = 1, perPage = 30, after = null, forceRefresh = false) {
   const cacheKey = `${accountId}-${page}-${perPage}-${after}`;
-  const cached = activityCache.get(cacheKey);
-  if (cached && cached.expires > Date.now()) {
-    return cached.data;
+  if (forceRefresh) {
+    activityCache.delete(cacheKey);
+  } else {
+    const cached = activityCache.get(cacheKey);
+    if (cached && cached.expires > Date.now()) {
+      return cached.data;
+    }
   }
 
   const token = await refreshToken(accountId);
