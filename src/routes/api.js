@@ -51,9 +51,10 @@ router.get('/stats', async (req, res) => {
   const stats = await db.getActivityStats(req.user.id);
   const scheduleStatus = await scheduler.getStatus(req.user.id);
   const tokens = await db.getTokens(req.user.id);
+  const user = await db.getUserById(req.user.id);
   res.json({
     ...stats,
-    role: req.user.role,
+    role: user?.role || 'normal',
     schedule: scheduleStatus,
     authenticated: !!(tokens && tokens.access_token),
     athleteName: tokens?.athlete_name || null,

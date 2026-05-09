@@ -52,17 +52,25 @@ async function checkAuth() {
     if (data.authenticated) {
       badge.className = 'auth-badge';
       authText.textContent = data.athlete?.name || 'Connected';
-      document.getElementById('connectScreen').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('connectPrompt').style.display = 'none';
+      document.getElementById('stravaSection').style.display = 'block';
+      document.getElementById('historySection').style.display = 'block';
+      document.getElementById('stravaAccountCard').style.display = 'block';
       document.getElementById('btnLogout').style.display = 'block';
       renderAccountInfo(data.athlete);
       loadDashboard();
     } else {
       badge.className = 'auth-badge disconnected';
       authText.textContent = 'Disconnected';
-      document.getElementById('connectScreen').style.display = 'flex';
-      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('connectPrompt').style.display = 'block';
+      document.getElementById('stravaSection').style.display = 'none';
+      document.getElementById('historySection').style.display = 'none';
+      document.getElementById('stravaAccountCard').style.display = 'none';
       document.getElementById('btnLogout').style.display = 'block';
+      // Load basic stats to get role
+      loadStats();
     }
   } catch (err) {
     console.error('Auth check failed:', err);
@@ -71,6 +79,8 @@ async function checkAuth() {
 
 function renderAccountInfo(athlete) {
   const el = document.getElementById('accountInfo');
+  if (!el) return;
+
   const roleBadge = userRole === 'vip' ? '<span class="status-badge" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; padding:2px 8px; font-size:0.7rem; border:none; margin-left:8px;">VIP</span>' : '';
   el.innerHTML = `
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
@@ -83,6 +93,32 @@ function renderAccountInfo(athlete) {
     <button class="btn btn-danger btn-sm btn-block" onclick="disconnect()">Disconnect Strava</button>
     <button class="btn btn-outline-danger btn-sm btn-block" style="margin-top:10px;" onclick="systemLogout()">Logout System</button>
   `;
+
+  // Update VIP section state
+  const vipSection = document.getElementById('vipSection');
+  if (vipSection) {
+    if (userRole === 'vip') {
+      vipSection.innerHTML = `
+        <div style="margin-top: 15px; padding: 15px; border-top: 1px solid var(--border); background: rgba(245, 158, 11, 0.05); border-radius: 8px; text-align: center;">
+          <div style="color: #f59e0b; font-weight: 600; margin-bottom: 4px;">🌟 You are already a VIP account!</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">Enjoy unlimited activities and advanced features.</div>
+        </div>
+      `;
+    } else {
+      vipSection.innerHTML = `
+        <div class="form-group" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border);">
+          <label class="form-label">Activate VIP Code</label>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="cfgVipCode" class="form-input" placeholder="Enter VIP Code" style="flex:1; font-family:monospace;">
+            <button class="btn btn-sm btn-accent" onclick="activateVip()">Activate</button>
+          </div>
+          <div style="margin-top:10px; font-size:0.75rem; color:var(--text-muted); text-align:right;">
+            Contact for VIP: <a href="mailto:stract-z@crfnetwork.com" style="color:inherit;text-decoration:none;">stract-z@crfnetwork.com</a>
+          </div>
+        </div>
+      `;
+    }
+  }
 }
 
 async function systemLogout() {
@@ -128,10 +164,8 @@ async function loadStats() {
   try {
     const stats = await api('/stats');
     userRole = stats.role || 'normal';
-    document.getElementById('statTotal').textContent = stats.total;
-    document.getElementById('statUploaded').textContent = stats.uploaded;
-    document.getElementById('statDistance').textContent = stats.totalDistanceKm;
     document.getElementById('statDuration').textContent = stats.totalDurationMin;
+    renderAccountInfo(); // Re-render to show VIP badge if role loaded
   } catch (err) { console.error('Stats error:', err); }
 }
 

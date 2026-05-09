@@ -1,6 +1,6 @@
 {
   "name": "strava-auto-activity",
-  "version": "1.26.1",
+  "version": "1.27.0",
   "description": "Auto-generate and upload running activities to Strava daily",
   "main": "server.js",
   "scripts": {

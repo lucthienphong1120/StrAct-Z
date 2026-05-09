@@ -306,6 +306,11 @@ async function getUserByUsername(username) {
   return await db.get('SELECT * FROM accounts WHERE username = ?', [username]);
 }
 
+async function getUserById(id) {
+  const db = await getDb();
+  return await db.get('SELECT * FROM accounts WHERE id = ?', [id]);
+}
+
 async function createAccount(username, plainPassword) {
   const db = await getDb();
   const hash = bcrypt.hashSync(plainPassword, 10);
@@ -370,6 +375,6 @@ module.exports = {
   saveTokens, getTokens, deleteTokens,
   saveActivity, updateActivity, getActivities,
   getActivityStats, deleteActivity,
-  getUserByUsername, createAccount, getAccountCount, getAllAccounts, updateAccountPassword,
+  getUserByUsername, getUserById, createAccount, getAccountCount, getAllAccounts, updateAccountPassword,
   activateVip, checkBruteForce,
 };
