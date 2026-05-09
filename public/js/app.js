@@ -1057,8 +1057,18 @@ async function renderDistrictBorders() {
         weight: 1.5,           // Thinner but cleaner border
         opacity: 0.8,          // Clear boundary
         fillColor: borderColor,
-        fillOpacity: 0.08,     // Subtle area tint
-        interactive: false     // Click through to map/markers
+        fillOpacity: 0.04,     // Reduced by half for better internal visibility
+        interactive: true      // Enable interaction for tooltips
+      },
+      onEachFeature: (feature, layer) => {
+        if (feature.properties && feature.properties.name) {
+          layer.bindTooltip(feature.properties.name, {
+            sticky: true,
+            className: 'district-tooltip',
+            direction: 'top',
+            offset: [0, -10]
+          });
+        }
       }
     }).addTo(map);
   } catch (err) {

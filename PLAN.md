@@ -27,7 +27,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] sửa Max heart rate thành input field tự count (hiển thị nhưng readonly), thêm 1 field bên cạnh là tuổi, default 25 tuổi -> MHR tự tính là 195
 + [x] check lại các công thức trọng số hoạt động đi bộ/đạp xe/chạy bộ là 50-60/60-70/70-85 % MHR
 + [x] check lại logic nghỉ đèn đỏ -> nghỉ giảm heart rate và thời tiết nắng/mát ảnh hưởng heart rate, trưa/chiều nắng cũng tăng chút
-+ [ ] thêm phần account setting vào giao diện sau login và trước khi kết nối strava
 + [x] menu account setting thêm phần nhập code để kích hoạt vip (đồng thời bổ sung cơ chế chống gian lận, sniffing, bruteforce, relay,...)
 + [x] footer thêm thông tin copyright, email
 + [x] cuối phần account setting thêm 1 dòng contact for vip: email (chữ xám)
@@ -57,4 +56,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] tải source GeoJSON về project và update AI_RULES.md, README.md, kiến trúc
 + [x] fix lỗi 404 khi tải GeoJSON bằng cách thêm explicit route trong server.js
 + [x] nâng cấp theme bản đồ sang CartoDB Dark Matter và đổi màu biên giới (Gold cho VIP, Cyan cho Normal)
++ [x] cập nhật biên giới các quận trong Activity Areas Map khi hover chuột qua sẽ hiện tên quận đó
 + [x] cập nhật hint của Activity Areas (Map) về tỷ lệ random và xuống dòng

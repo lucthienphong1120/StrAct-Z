@@ -1,4 +1,4 @@
-# 🏃 StrAct Z v1.40.0
+# 🏃 StrAct Z v1.40.1
 
 **StrAct Z** (Strava Auto Activity Generator) is a robust, multi-tenant backend platform that automatically generates hyper-realistic GPS running, walking, and cycling activities and syncs them to Strava.
 
@@ -45,6 +45,10 @@ For detailed information, please refer to our documentation guides:
 4. Visit `http://localhost:3000`. If this is the first run, you will be redirected to the Setup Wizard to create your Admin account.
 
 ## 📋 Changelog
+
+### v1.40.1 (2026-05-09)
+- **Map Interaction**: Added interactive tooltips that display district names on hover, styled to match the account role color.
+- **Visual Refinement**: Reduced district highlight fill opacity by 50% to improve visibility of underlying map details and street names.
 
 ### v1.40.0 (2026-05-09)
 - **Map Theme Upgrade**: Switched to **CartoDB Dark Matter** tiles for a more premium, high-contrast look that integrates better with the dark UI.
