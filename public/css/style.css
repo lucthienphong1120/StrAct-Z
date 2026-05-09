@@ -33,7 +33,7 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 30px rgba(255, 255, 255, 0.08);
+  --shadow-glow: 0 0 30px rgba(252, 76, 2, 0.15);
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -124,6 +124,13 @@ body.theme-preview-normal.is-vip .btn-primary {
   border-color: #fbbf24 !important;
   box-shadow: 0 0 30px rgba(245, 158, 11, 0.45), inset 0 0 15px rgba(245, 158, 11, 0.1);
   transform: none;
+}
+
+body.theme-preview-normal.is-vip .stat-card:hover, 
+body.theme-preview-normal.is-vip .card:hover {
+  border-color: var(--strava-orange) !important;
+  box-shadow: var(--shadow-glow) !important;
+  transform: translateY(-2px);
 }
 
 .is-vip .btn-primary {

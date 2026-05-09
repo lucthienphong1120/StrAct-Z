@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.33.0). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.34.0). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).

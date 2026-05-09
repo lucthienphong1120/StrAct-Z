@@ -261,6 +261,21 @@ async function loadStats() {
           <div style="margin-top:10px; font-size:0.75rem; color:var(--text-muted); text-align:right;">
             Contact for VIP: <a href="mailto:stract-z@crfnetwork.com" style="color:inherit;text-decoration:none;">stract-z@crfnetwork.com</a>
           </div>`;
+      } else {
+        vipArea.innerHTML = `
+          <label class="form-label">Activate VIP Code</label>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="cfgVipCode" class="form-input" placeholder="Enter VIP Code" style="flex:1; font-family:monospace;">
+            <button class="btn btn-sm btn-accent" onclick="activateVip()">Activate</button>
+          </div>
+          <div style="margin-top:12px;">
+            <button id="btnThemeToggle" class="btn btn-sm btn-secondary btn-block" onclick="toggleThemePreview()">
+              ${document.body.classList.contains('is-vip') ? '🔙 Switch Back to Normal' : '👁️ Preview VIP Gold Theme'}
+            </button>
+          </div>
+          <div style="margin-top:10px; font-size:0.75rem; color:var(--text-muted); text-align:right;">
+            Contact for VIP: <a href="mailto:stract-z@crfnetwork.com" style="color:inherit;text-decoration:none;">stract-z@crfnetwork.com</a>
+          </div>`;
       }
     }
   } catch (err) { console.error('Stats error:', err); }
@@ -1219,24 +1234,31 @@ async function activateVip() {
 }
 
 function toggleThemePreview() {
-  if (userRole !== 'vip') return;
-  
-  const isNormal = document.body.classList.toggle('theme-preview-normal');
-  localStorage.setItem('stractz_theme_preview', isNormal ? 'normal' : 'vip');
-  
-  // Update button text if it exists
   const btn = document.getElementById('btnThemeToggle');
-  if (btn) {
-    btn.innerHTML = isNormal ? '✨ Restore VIP Gold Theme' : '👁️ Preview Normal Theme';
-  }
   
-  showToast(isNormal ? 'Switched to Normal Theme (Preview)' : 'Restored VIP Gold Theme', 'success');
+  if (userRole === 'vip') {
+    const isNormal = document.body.classList.toggle('theme-preview-normal');
+    localStorage.setItem('stractz_theme_preview', isNormal ? 'normal' : 'vip');
+    if (btn) btn.innerHTML = isNormal ? '✨ Restore VIP Gold Theme' : '👁️ Preview Normal Theme';
+    showToast(isNormal ? 'Switched to Normal Theme (Preview)' : 'Restored VIP Gold Theme', 'success');
+  } else {
+    // Normal user logic
+    const isVipPreview = document.body.classList.toggle('is-vip');
+    // We DON'T save to localStorage for normal users
+    if (btn) btn.innerHTML = isVipPreview ? '🔙 Switch Back to Normal' : '👁️ Preview VIP Gold Theme';
+    showToast(isVipPreview ? 'Previewing VIP Gold Theme' : 'Switched back to Normal Theme', 'info');
+  }
 }
 
-// Initialize theme preview if saved
-if (localStorage.getItem('stractz_theme_preview') === 'normal') {
-  document.body.classList.add('theme-preview-normal');
+// Initialize theme preview if saved (VIP Only)
+async function initTheme() {
+  // Wait for stats to load role
+  const stats = await api('/stats').catch(() => ({ role: 'normal' }));
+  if (stats.role === 'vip' && localStorage.getItem('stractz_theme_preview') === 'normal') {
+    document.body.classList.add('theme-preview-normal');
+  }
 }
+initTheme();
 
 // ─── PWA Service Worker Registration ────────────────────
 if ('serviceWorker' in navigator) {
