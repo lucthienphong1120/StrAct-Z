@@ -49,6 +49,15 @@ async function checkAuth() {
     const badge = document.getElementById('authBadge');
     const authText = document.getElementById('authText');
     
+    if (data.authenticated) {
+      badge.className = 'auth-badge';
+      authText.textContent = data.athlete?.name || 'Connected';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('connectPrompt').style.display = 'none';
+      document.getElementById('stravaSection').style.display = 'block';
+      document.getElementById('historySection').style.display = 'block';
+      document.getElementById('stravaAccountCard').style.display = 'block';
+      document.getElementById('btnLogout').style.display = 'block';
       renderAccountInfo(data.athlete);
       loadDashboard();
     } else {
