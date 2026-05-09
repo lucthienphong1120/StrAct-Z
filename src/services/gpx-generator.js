@@ -176,13 +176,13 @@ async function generateActivity(config = {}) {
         const areaRadiusM = area.radius;
         
         if (area.type === 'home') {
-          if (d + distRadiusM <= areaRadiusM) weight += 2.5; // Bao trọn
-          else if (d <= areaRadiusM) weight += 2.0;         // Nhiều (Center inside)
+          if (d + distRadiusM <= areaRadiusM) weight += 2.0; // Bao trọn
+          else if (d <= areaRadiusM) weight += 1.5;         // Nhiều (Center inside)
           else if (d - distRadiusM <= areaRadiusM) weight += 1.0; // Ít (Overlap)
         } else if (area.type === 'work') {
-          if (d + distRadiusM <= areaRadiusM) weight += 1.5; // Bao trọn
-          else if (d <= areaRadiusM) weight += 1.0;         // Nhiều
-          else if (d - distRadiusM <= areaRadiusM) weight += 0.5; // Ít
+          if (d + distRadiusM <= areaRadiusM) weight += 1.2; // Bao trọn
+          else if (d <= areaRadiusM) weight += 0.8;         // Nhiều
+          else if (d - distRadiusM <= areaRadiusM) weight += 0.4; // Ít
         }
       });
       return weight;

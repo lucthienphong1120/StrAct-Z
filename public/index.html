@@ -26,7 +26,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.36.0</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.37.0</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -273,18 +273,6 @@
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Min Pace (min/km) <span class="tooltip-icon tooltip-right"
-                      data-tooltip="Fastest pace for the activity (6.0 - 12.0)">?</span></label>
-                  <input type="number" step="0.1" id="cfgMinPace" class="form-input" value="8.0" min="6.0" max="12.0">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Max Pace (min/km) <span class="tooltip-icon tooltip-left"
-                      data-tooltip="Slowest pace for the activity (10.0 - 15.0)">?</span></label>
-                  <input type="number" step="0.1" id="cfgMaxPace" class="form-input" value="12.0" min="10.0" max="15.0">
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
                   <label class="form-label">User Age <span class="tooltip-icon tooltip-right"
                       data-tooltip="Used to calculate Max Heart Rate: 220 - Age. Default: 25.">?</span></label>
                   <input type="number" id="cfgUserAge" class="form-input" value="25" min="10" max="100"
@@ -295,6 +283,18 @@
                       data-tooltip="Estimated Maximum Heart Rate (220 - Age). Used for intensity zones.">?</span></label>
                   <input type="number" id="cfgMaxHR" class="form-input" value="195" readonly
                     style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Min Pace (min/km) <span class="tooltip-icon tooltip-right"
+                      data-tooltip="Fastest pace for the activity (6.0 - 12.0)">?</span></label>
+                  <input type="number" step="0.1" id="cfgMinPace" class="form-input" value="8.0" min="6.0" max="12.0">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Max Pace (min/km) <span class="tooltip-icon tooltip-left"
+                      data-tooltip="Slowest pace for the activity (10.0 - 15.0)">?</span></label>
+                  <input type="number" step="0.1" id="cfgMaxPace" class="form-input" value="12.0" min="10.0" max="15.0">
                 </div>
               </div>
               <div class="form-row" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);">
@@ -364,7 +364,7 @@
           <div class="card">
             <div class="card-header">
               <div class="card-title">📍 Activity Areas (Map) <span class="tooltip-icon tooltip-left"
-                  data-tooltip="Base ratio is 1:1.&#10;• Home: +2.5 / +2.0 / +1.0&#10;• Work: +1.5 / +1.0 / +0.5&#10;Districts covered get the boost.">?</span>
+                  data-tooltip="Base ratio is 1:1.&#10;• Home: +2.0 / +1.5 / +1.0&#10;• Work: +1.2 / +0.8 / +0.4 Districts covered get the boost.">?</span>
               </div>
               <div style="display:flex; gap:5px;">
                 <button class="btn btn-sm btn-secondary" onclick="addActivityCircle('home')">🏠 Home</button>
