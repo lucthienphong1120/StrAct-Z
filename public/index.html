@@ -141,44 +141,42 @@
                   </label>
                 </div>
               </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                  <label class="form-label" style="margin-bottom:0;">Time Configuration</label>
-                  <label class="toggle" style="font-size:0.75rem;">
-                    <input type="checkbox" id="cfgCustomTime" onchange="toggleCustomTime()">
-                    <div class="toggle-track"></div>
-                    <span>Custom Time</span>
-                  </label>
-                </div>
+              
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <label class="form-label" style="margin-bottom:0;">Time Configuration</label>
+                <label class="toggle" style="font-size:0.75rem;">
+                  <input type="checkbox" id="cfgCustomTime" onchange="toggleCustomTime()">
+                  <div class="toggle-track"></div>
+                  <span>Custom Time</span>
+                </label>
+              </div>
 
-                <div id="timeRandomInputs">
-                  <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
-                    <button class="btn btn-sm btn-secondary" onclick="setQuickTime('05:00','07:00')">🌅 Morning</button>
-                    <button class="btn btn-sm btn-secondary" onclick="setQuickTime('16:00','18:30')">🌇 Afternoon</button>
-                    <button class="btn btn-sm btn-secondary" onclick="setQuickTime('19:30','22:00')">🌙 Evening</button>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group"><label class="form-label">Start</label><input type="time" id="cfgRandMinTime"
-                        class="form-input" value="05:00"></div>
-                    <div class="form-group"><label class="form-label">End</label><input type="time" id="cfgRandMaxTime"
-                        class="form-input" value="22:00"></div>
-                  </div>
-                  <div class="form-row" style="font-size:0.7rem; opacity:0.6; margin-top:-8px; margin-bottom:10px;">
-                    <input type="hidden" id="cfgWorkStart1" value="08:00">
-                    <input type="hidden" id="cfgWorkEnd1" value="11:30">
-                    <input type="hidden" id="cfgWorkStart2" value="13:30">
-                    <input type="hidden" id="cfgWorkEnd2" value="17:30">
-                  </div>
+              <div id="timeRandomInputs">
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+                  <button class="btn btn-sm btn-secondary" onclick="setQuickTime('05:00','07:00')">🌅 Morning</button>
+                  <button class="btn btn-sm btn-secondary" onclick="setQuickTime('16:00','18:30')">🌇 Afternoon</button>
+                  <button class="btn btn-sm btn-secondary" onclick="setQuickTime('19:30','22:00')">🌙 Evening</button>
                 </div>
+                <div class="form-row">
+                  <div class="form-group"><label class="form-label">Start</label><input type="time" id="cfgRandMinTime" class="form-input" value="05:00"></div>
+                  <div class="form-group"><label class="form-label">End</label><input type="time" id="cfgRandMaxTime" class="form-input" value="22:00"></div>
+                </div>
+                <div class="form-row" style="font-size:0.7rem; opacity:0.6; margin-top:-8px;">
+                  <input type="hidden" id="cfgWorkStart1" value="08:00">
+                  <input type="hidden" id="cfgWorkEnd1" value="11:30">
+                  <input type="hidden" id="cfgWorkStart2" value="13:30">
+                  <input type="hidden" id="cfgWorkEnd2" value="17:30">
+                </div>
+              </div>
 
-                <div id="timeCustomInputs" style="display:none; opacity:0.4; pointer-events:none; border-left:2px solid var(--strava-orange); padding-left:12px;">
-                  <div class="form-group">
-                    <label class="form-label">Target Date</label>
-                    <input type="date" id="cfgTargetDate" class="form-input">
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group"><label class="form-label">Start</label><input type="time" id="cfgCustomMinTime" class="form-input" value="06:00"></div>
-                    <div class="form-group"><label class="form-label">End</label><input type="time" id="cfgCustomMaxTime" class="form-input" value="08:00"></div>
-                  </div>
+              <div id="timeCustomInputs" style="display:none; opacity:0.4; pointer-events:none; border-left:2px solid var(--strava-orange); padding-left:12px;">
+                <div class="form-group">
+                  <label class="form-label">Target Date</label>
+                  <input type="date" id="cfgTargetDate" class="form-input">
+                </div>
+                <div class="form-row">
+                  <div class="form-group"><label class="form-label">Start</label><input type="time" id="cfgCustomMinTime" class="form-input" value="06:00"></div>
+                  <div class="form-group"><label class="form-label">End</label><input type="time" id="cfgCustomMaxTime" class="form-input" value="08:00"></div>
                 </div>
               </div>
             </div>
@@ -215,6 +213,8 @@
                   <div class="schedule-time" id="scheduleTimeDisplay">06:00</div>
                 </div>
               </div>
+            </div>
+          </div>
 
           <!-- Activity Settings Card -->
           <div class="card">
@@ -233,28 +233,33 @@
                     <option value="Ride">Ride</option>
                   </select>
                 </div>
-                <div class="form-group" style="display:flex;align-items:center;"><label class="toggle"><input
-                      type="checkbox" id="cfgHeartRate" checked>
-                    <div class="toggle-track"></div><span class="toggle-label">Heart Rate</span>
-                  </label></div>
+                <div class="form-group" style="display:flex;align-items:center;">
+                  <label class="toggle">
+                    <input type="checkbox" id="cfgHeartRate" checked>
+                    <div class="toggle-track"></div>
+                    <span class="toggle-label">Heart Rate</span>
+                  </label>
+                </div>
               </div>
               <div class="form-row">
-                <div class="form-group"><label class="form-label">Dist (km)</label>
-                  <div style="display:flex;gap:4px;align-items:center;"><input type="number" id="cfgMinDist"
-                      class="form-input" value="1" step="0.1"><input type="number" id="cfgMaxDist" class="form-input"
-                      value="8" step="0.1"></div>
+                <div class="form-group">
+                  <label class="form-label">Dist (km)</label>
+                  <div style="display:flex;gap:4px;align-items:center;">
+                    <input type="number" id="cfgMinDist" class="form-input" value="1" step="0.1">
+                    <input type="number" id="cfgMaxDist" class="form-input" value="8" step="0.1">
+                  </div>
                 </div>
-                <div class="form-group"><label class="form-label">Pace (min/km)</label>
-                  <div style="display:flex;gap:4px;align-items:center;"><input type="number" id="cfgMinPace"
-                      class="form-input" value="8" step="0.1"><input type="number" id="cfgMaxPace" class="form-input"
-                      value="12" step="0.1"></div>
+                <div class="form-group">
+                  <label class="form-label">Pace (min/km)</label>
+                  <div style="display:flex;gap:4px;align-items:center;">
+                    <input type="number" id="cfgMinPace" class="form-input" value="8" step="0.1">
+                    <input type="number" id="cfgMaxPace" class="form-input" value="12" step="0.1">
+                  </div>
                 </div>
               </div>
               <div class="form-row" style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border);">
-                <div class="form-group"><label class="form-label">Age</label><input type="number" id="cfgUserAge"
-                    class="form-input" value="25" onchange="updateMHR()"></div>
-                <div class="form-group"><label class="form-label">MHR</label><input type="number" id="cfgMaxHR"
-                    class="form-input" readonly style="opacity:0.6;"></div>
+                <div class="form-group"><label class="form-label">Age</label><input type="number" id="cfgUserAge" class="form-input" value="25" onchange="updateMHR()"></div>
+                <div class="form-group"><label class="form-label">MHR</label><input type="number" id="cfgMaxHR" class="form-input" readonly style="opacity:0.6;"></div>
               </div>
               <div class="form-row" style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border);">
                 <div class="form-group" style="display:flex;align-items:center;">
@@ -278,8 +283,8 @@
           <!-- Map Card -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">📍 Activity Areas</div><button class="btn btn-sm btn-secondary"
-                onclick="resetMapView()">🔄 Reset</button>
+              <div class="card-title">📍 Activity Areas</div>
+              <button class="btn btn-sm btn-secondary" onclick="resetMapView()">🔄 Reset</button>
             </div>
             <div class="card-body" style="padding:0;">
               <div id="activityMap" style="height: 300px; width: 100%;"></div>
@@ -322,9 +327,11 @@
         <div class="card">
           <div class="card-header">
             <div class="card-title">📋 Local History</div>
-            <div style="display:flex; gap:10px; align-items:center;"><button class="btn btn-sm btn-secondary"
-                onclick="changeLocalPage(-1)">◀</button><span id="localPageInfo">Page 1</span><button
-                class="btn btn-sm btn-secondary" onclick="changeLocalPage(1)">▶</button></div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <button class="btn btn-sm btn-secondary" onclick="changeLocalPage(-1)">◀</button>
+              <span id="localPageInfo">Page 1</span>
+              <button class="btn btn-sm btn-secondary" onclick="changeLocalPage(1)">▶</button>
+            </div>
           </div>
           <div class="card-body" style="padding:0;">
             <div id="activityList"></div>
