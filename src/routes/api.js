@@ -273,10 +273,6 @@ router.delete('/activities/:id', async (req, res) => {
   const activity = activities.find(a => a.id === id);
   if (!activity) return res.status(404).json({ error: 'Activity not found' });
 
-  if (activity.upload_status === 'uploaded') {
-    return res.status(403).json({ error: 'Cannot delete uploaded activity. Please delete it via Strava app.' });
-  }
-
   console.log(`[API] Deleting activity ${id} (Strava ID: ${activity.strava_activity_id || 'none'})`);
 
   let stravaDeleted = false;

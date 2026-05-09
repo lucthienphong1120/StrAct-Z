@@ -99,8 +99,14 @@ async function getDb() {
     CREATE TABLE IF NOT EXISTS vip_codes (
       code TEXT PRIMARY KEY,
       status TEXT DEFAULT 'available',
-      activated_by INTEGER,
-      activated_at TEXT
+      usage_limit INTEGER DEFAULT -1 -- -1 for unlimited
+    );
+    CREATE TABLE IF NOT EXISTS vip_code_usage (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      code TEXT,
+      account_id INTEGER,
+      activated_at TEXT,
+      UNIQUE(code, account_id)
     );
     CREATE TABLE IF NOT EXISTS security_logs (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -342,19 +348,33 @@ async function activateVip(accountId, code) {
   const db = await getDb();
   const now = new Date().toISOString();
   
-  // Check if code exists and is available
-  const row = await db.get("SELECT * FROM vip_codes WHERE code = ? AND status = 'available'", [code]);
-  if (!row) {
-    // Log failure for bruteforce protection
-    await db.run('INSERT INTO security_logs (account_id, action, created_at) VALUES (?, ?, ?)', [accountId, 'activate_vip_fail', now]);
-    return { success: false, message: 'Invalid or already used code.' };
+  // 1. Check if user is already VIP
+  const user = await db.get('SELECT role FROM accounts WHERE id = ?', [accountId]);
+  if (user && user.role === 'vip') {
+    return { success: false, message: 'Your account is already VIP.' };
   }
 
-  // Transaction-ish update
-  await db.run("UPDATE vip_codes SET status = 'used', activated_by = ?, activated_at = ? WHERE code = ?", [accountId, now, code]);
-  await db.run("UPDATE accounts SET role = 'vip' WHERE id = ?", [accountId]);
-  
-  return { success: true };
+  // 2. Check if code exists
+  const row = await db.get("SELECT * FROM vip_codes WHERE code = ?", [code]);
+  if (!row) {
+    await db.run('INSERT INTO security_logs (account_id, action, created_at) VALUES (?, ?, ?)', [accountId, 'activate_vip_fail', now]);
+    return { success: false, message: 'Invalid activation code.' };
+  }
+
+  // 3. Check if user already used THIS code (redundant due to UNIQUE constraint but good for UX)
+  const usage = await db.get("SELECT id FROM vip_code_usage WHERE code = ? AND account_id = ?", [code, accountId]);
+  if (usage) {
+    return { success: false, message: 'You have already used this code.' };
+  }
+
+  // 4. Log usage and upgrade account
+  try {
+    await db.run("INSERT INTO vip_code_usage (code, account_id, activated_at) VALUES (?, ?, ?)", [code, accountId, now]);
+    await db.run("UPDATE accounts SET role = 'vip' WHERE id = ?", [accountId]);
+    return { success: true };
+  } catch (err) {
+    return { success: false, message: 'Activation failed: ' + err.message };
+  }
 }
 
 async function checkBruteForce(accountId) {

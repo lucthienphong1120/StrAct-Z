@@ -133,11 +133,18 @@ async function loadStats() {
     document.getElementById('statDistance').textContent = stats.totalDistanceKm;
     document.getElementById('statDuration').textContent = stats.totalDurationMin;
 
-    // Update VIP Activation UI
-    const vipForm = document.getElementById('vipFormContent');
-    if (vipForm) {
+    // Update VIP Activation Area
+    const vipArea = document.getElementById('vipActivationArea');
+    if (vipArea) {
       if (userRole === 'vip') {
-        vipForm.innerHTML = '<div style="background:rgba(245, 158, 11, 0.1); color:#f59e0b; padding:10px; border-radius:8px; font-weight:600; text-align:center; border:1px solid rgba(245, 158, 11, 0.2);">✨ You are already a VIP account!</div>';
+        vipArea.innerHTML = `
+          <div style="padding: 12px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; text-align: center;">
+            <div style="color: #f59e0b; font-weight: 600; font-size: 0.9rem;">✨ You already VIP account!</div>
+            <div style="margin-top:4px; font-size:0.75rem; color:var(--text-muted);">Thank you for supporting StrAct Z.</div>
+          </div>
+          <div style="margin-top:10px; font-size:0.75rem; color:var(--text-muted); text-align:right;">
+            Contact for VIP: <a href="mailto:stract-z@crfnetwork.com" style="color:inherit;text-decoration:none;">stract-z@crfnetwork.com</a>
+          </div>`;
       }
     }
   } catch (err) { console.error('Stats error:', err); }
@@ -445,10 +452,7 @@ async function loadActivities() {
             <span class="status-badge ${statusClass}">${a.upload_status}</span>
             ${a.upload_status === 'generated' ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
             ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
-            ${a.upload_status !== 'uploaded' 
-              ? `<button class="btn btn-sm btn-danger" style="padding:4px 8px;" onclick="deleteActivity(${a.id}, ${!!a.strava_activity_id})">🗑️</button>` 
-              : `<span class="tooltip-icon" data-tooltip="Already uploaded. Delete via Strava." style="cursor:help; opacity:0.5; font-size:1rem; margin-left:4px;">🚫</span>`
-            }
+            <button class="btn btn-sm btn-danger" style="padding:4px 8px;" onclick="deleteActivity(${a.id}, ${!!a.strava_activity_id})">🗑️</button>
           </div>
         </div>`;
     }).join('');

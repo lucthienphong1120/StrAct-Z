@@ -9,7 +9,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Routing**: OSRM (Open Source Routing Machine) for road-snapping.
 - **Visualization**: Chart.js for Activity Insights (Cloud-based).
 - **Storage**: GPX files stored in `data/gpx/`.
-- **VIP System**: SQLite-backed one-time codes with brute-force protection (security_logs).
+- **VIP System**: Multi-user codes (stored in `vip_codes`). Usage logged per user in `vip_code_usage`. Brute-force protection enabled.
 
 
 ## 📏 Core Logic & Weighting
@@ -32,9 +32,9 @@ Base distance is randomized from config, then scaled by sport:
 - **Ride**: `1.5x`.
 
 ### 3. VIP & Security
-- **VIP Codes**: Stored in `vip_codes` table. Status: `available` | `used`.
+- **VIP Codes**: Stored in `vip_codes`. Can be multi-user (tracked via `vip_code_usage`).
+- **Activation**: If user is already a VIP, the activation UI is hidden/replaced by a status message.
 - **Anti-Bruteforce**: Max 5 failed activation attempts per hour per account (enforced via `security_logs`).
-- **IP Protection**: (Future) IP-based rate limiting on `/api/activate-vip`.
 
 ### 4. Location Weighting (Hanoi Districts)
 - Districts are selected based on proximity to **Home** (Orange) and **Work** (Blue) circles on the map.
@@ -56,7 +56,6 @@ Base distance is randomized from config, then scaled by sport:
 - **Toasts**: Use `showToast(msg, type)` for all feedback.
 - **Tooltips**: All configuration labels should have a `?` icon with a descriptive `data-tooltip`.
 - **Navigation**: Prev/Next buttons must be dimmed (`opacity: 0.4`) and `disabled` at boundaries.
-- **Deletion Policy**: Activities with `upload_status === 'uploaded'` CANNOT be deleted via the local interface. Users must delete them via Strava.
 
 ### 3. Code Integrity
 - Preserve existing comments and architecture.

@@ -43,15 +43,10 @@ For detailed information, please refer to our documentation guides:
 ## 📋 Changelog
 
 ### v1.27.0
-- 🔒 **Deletion Restrictions:** Activities already uploaded to Strava can no longer be deleted via the StrAct Z interface. This ensures data consistency and encourages users to manage their Strava history directly on the platform.
-- ✨ **VIP UI Refinements:**
-  - If a user is already a VIP, the activation form is hidden and replaced with a "You are already a VIP account!" message.
-  - Removed redundant support email from the footer.
-- 📝 **Multi-user Logging:** Standardized VIP activation logging to track exactly which user activated which code.
-
-### v1.26.1
-- 📧 **Support Contact Update:** Updated support email to `stract-z@crfnetwork.com`.
-- 🔑 **VIP Seed:** Added default VIP activation code `CRF@2026`.
+- 💎 **Multi-User VIP Codes:** VIP codes can now be configured for multiple users. 
+  - Added `vip_code_usage` table to log exactly which account used which code.
+  - Improved UI: Users already having VIP status will see a "You already VIP account!" message instead of the activation input.
+- 🎨 **UI Cleanup:** Removed redundant support email from the site footer.
 
 ### v1.26.0
 - 💎 **VIP Activation System:** Added a secure method to activate VIP status using one-time codes.
