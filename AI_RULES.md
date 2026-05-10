@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 2: 
-3: This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.42.0). Follow these guidelines strictly.
+3: This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.43.0). Follow these guidelines strictly.
 4: 
 5: ## 🎨 VIP GOLD Theme
 6: - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -59,6 +59,7 @@
 59: - **Weights**:
 60:   - Inside Home circle: `+2.0` (full), `+1.2` (center), `+0.5` (overlap).
 61:   - Inside Work circle: `1.2` (full), `0.8` (center), `0.4` (overlap).
+- **Map Persistence**: Center (lat/lng) and Zoom level are saved alongside activity areas to maintain the same view across sessions.
 62: 
 63: ### 5. Overlap Protection
 64: - **Safe Time**: Default `30 minutes`.

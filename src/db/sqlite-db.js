@@ -42,6 +42,9 @@ const DEFAULT_CONFIG = {
   schedule_count_max: '2',
   activity_areas: '[]',
   overlap_protection_minutes: '30',
+  map_lat: '21.0285',
+  map_lng: '105.8542',
+  map_zoom: '12',
 };
 
 async function getDb() {
@@ -217,6 +220,12 @@ async function getConfig(accountId, key) {
 async function setConfig(accountId, key, value) {
   const db = await getDb();
   await db.run('INSERT OR REPLACE INTO user_config (account_id, key, value) VALUES (?, ?, ?)', [accountId, key, String(value)]);
+}
+
+async function resetConfig(accountId) {
+  const db = await getDb();
+  // Delete all config for this account except activity_areas (to preserve circles)
+  await db.run('DELETE FROM user_config WHERE account_id = ? AND key != ?', [accountId, 'activity_areas']);
 }
 
 async function getAllConfig(accountId) {
@@ -406,5 +415,5 @@ module.exports = {
   saveActivity, updateActivity, getActivities, getActivitiesByDate,
   getActivityStats, deleteActivity,
   getUserByUsername, createAccount, getAccountCount, getAllAccounts, updateAccountPassword,
-  activateVip, checkBruteForce, getAccountRole,
+  activateVip, checkBruteForce, getAccountRole, resetConfig,
 };

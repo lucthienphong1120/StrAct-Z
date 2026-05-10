@@ -378,6 +378,14 @@ async function loadConfig() {
       document.getElementById('cfgOverlapProtection').value = config.overlap_protection_minutes || '30';
     }
 
+    if (config.map_lat && config.map_lng && config.map_zoom) {
+      savedMapState = {
+        lat: parseFloat(config.map_lat),
+        lng: parseFloat(config.map_lng),
+        zoom: parseInt(config.map_zoom)
+      };
+    }
+
     // Render Map Areas
     if (config.activity_areas) {
       renderCircles(config.activity_areas);
@@ -987,11 +995,12 @@ document.addEventListener('DOMContentLoaded', () => {
 let map = null;
 let activityCircles = [];
 let isMapLocked = true;
+let savedMapState = { lat: 21.0285, lng: 105.8542, zoom: 12 };
 
 function initMap() {
   if (map || !document.getElementById('activityMap')) return;
   
-  map = L.map('activityMap').setView([21.0285, 105.8542], 12);
+  map = L.map('activityMap').setView([savedMapState.lat, savedMapState.lng], savedMapState.zoom);
   
   // Use CartoDB Dark Matter for a premium, high-contrast look that matches the UI
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -1084,7 +1093,7 @@ async function renderDistrictBorders() {
 
 function resetMapView() {
   if (map) {
-    map.setView([21.0285, 105.8542], 12);
+    map.setView([savedMapState.lat, savedMapState.lng], savedMapState.zoom);
   }
 }
 
@@ -1194,16 +1203,46 @@ async function saveActivityAreas() {
     type: c.type
   }));
 
+  const center = map.getCenter();
+  const zoom = map.getZoom();
+
   try {
     const res = await api('/config', {
       method: 'POST',
-      body: { activity_areas: JSON.stringify(data) }
+      body: { 
+        activity_areas: JSON.stringify(data),
+        map_lat: center.lat.toString(),
+        map_lng: center.lng.toString(),
+        map_zoom: zoom.toString()
+      }
     });
     
     if (res.error) showToast(res.error, 'error');
-    else showToast('Activity areas saved!', 'success');
+    else {
+      showToast('Activity areas & map view saved!', 'success');
+      savedMapState = { lat: center.lat, lng: center.lng, zoom: zoom };
+    }
   } catch (err) {
     showToast('Failed to save areas: ' + err.message, 'error');
+  }
+}
+
+async function resetToDefault() {
+  if (!confirm('Are you sure you want to reset all settings to default? (Map areas will be preserved)')) return;
+
+  showToast('Resetting configuration...', 'info');
+  try {
+    const res = await api('/config/reset', { method: 'POST' });
+    if (res.success) {
+      showToast('Configuration reset successfully', 'success');
+      // Reset local map state to Hanoi defaults
+      savedMapState = { lat: 21.0285, lng: 105.8542, zoom: 12 };
+      await loadDashboard(true);
+    } else {
+      showToast(res.error || 'Reset failed', 'error');
+    }
+  } catch (err) {
+    showToast('Reset failed: ' + err.message, 'error');
   }
 }
 // ─── Statistics Chart ────────────────────────────────────

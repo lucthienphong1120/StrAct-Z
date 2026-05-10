@@ -56,6 +56,15 @@ router.post('/config', async (req, res) => {
   res.json({ success: true, config: await db.getAllConfig(req.user.id) });
 });
 
+router.post('/config/reset', async (req, res) => {
+  try {
+    await db.resetConfig(req.user.id);
+    res.json({ success: true, message: 'Configuration reset to defaults (Map areas preserved)' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ─── Stats ──────────────────────────────────────────────────────────────────
 
 router.get('/stats', async (req, res) => {

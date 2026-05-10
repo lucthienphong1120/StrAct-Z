@@ -339,6 +339,18 @@ body::before {
 .btn-lg { padding: 14px 28px; font-size: 1rem; }
 .btn-block { width: 100%; }
 
+.btn-outline-danger {
+  background: transparent;
+  border: 1px solid var(--accent-red);
+  color: var(--accent-red);
+  opacity: 0.8;
+}
+.btn-outline-danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
+  opacity: 1;
+  border-color: var(--accent-red);
+}
+
 .btn-outline-gold {
   background: transparent;
   border: 1px solid var(--vip-gold);
