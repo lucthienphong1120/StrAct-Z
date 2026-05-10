@@ -152,6 +152,12 @@ const LIMITS = {
     default: 'Random',
     default_label: 'Ngẫu nhiên (Tự động)',
     choices: ['Random', 'Run', 'Walk', 'Ride'],
+    weights: {
+      Random: { Run: 0.6, Walk: 0.3, Ride: 0.1 },
+      Run: { Run: 1.0, Walk: 0.0, Ride: 0.0 },
+      Walk: { Run: 0.0, Walk: 1.0, Ride: 0.0 },
+      Ride: { Run: 0.0, Walk: 0.0, Ride: 1.0 }
+    }
   },
   sport_coefficients: {
     label: 'Hệ số vận động theo loại hình (Read-only).',
@@ -161,13 +167,6 @@ const LIMITS = {
       Run: { distance: 1.0, pace: 1.0, hr: 1.0, steps: 1250 },
       Walk: { distance: 0.8, pace: 1.4, hr: 0.7, steps: 1400 },
       Ride: { distance: 3.0, pace: 0.4, hr: 0.8, steps: 0 }
-    }
-  },
-    weights: {
-      Random: { Run: 0.6, Walk: 0.3, Ride: 0.1 },
-      Run: { Run: 1.0, Walk: 0.0, Ride: 0.0 },
-      Walk: { Run: 0.0, Walk: 1.0, Ride: 0.0 },
-      Ride: { Run: 0.0, Walk: 0.0, Ride: 1.0 }
     }
   },
   heart_rate_enabled: {
