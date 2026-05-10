@@ -676,8 +676,9 @@ async function loadStravaActivities(forceRefresh = false) {
       if (range === '3_days') days = 3;
       else if (range === '5_days') days = 5;
       else if (range === '7_days') days = 7;
-      else if (range === '1_month') days = 30;
-      else if (range === '3_months') days = 90;
+      else if (range === '14_days') days = 14;
+      else if (range === '30_days') days = 30;
+      else if (range === '90_days') days = 90;
 
       // Set "after" to local midnight of N days ago
       const d = new Date();

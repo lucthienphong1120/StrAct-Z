@@ -117,10 +117,20 @@ router.get('/strava-activities', async (req, res) => {
     const after = req.query.after ? parseInt(req.query.after) : null;
     const forceRefresh = req.query.refresh === 'true';
     
-    let activities = await stravaApi.getActivities(req.user.id, page, perPage, after, forceRefresh);
+    // Fetch WITHOUT 'after' to ensure Strava returns results in reverse-chronological order.
+    // If 'after' is provided to the Strava API, it defaults to chronological (oldest first).
+    let activities = await stravaApi.getActivities(req.user.id, page, perPage, null, forceRefresh);
     
-    // Luôn đảm bảo sắp xếp mới nhất lên đầu
-    activities.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
+    // Filter by 'after' locally if needed
+    if (after) {
+      activities = activities.filter(a => {
+        const startTime = Math.floor(new Date(a.start_date).getTime() / 1000);
+        return startTime >= after;
+      });
+    }
+
+    // Always sort descending (latest first)
+    activities.sort((a, b) => new Date(b.start_date || b.start_date_local) - new Date(a.start_date || a.start_date_local));
     
     if (forceRefresh || page === 1) {
       console.log(`[Strava API] User ${req.user.id} fetched ${activities.length} acts (Page ${page}, After: ${after})`);

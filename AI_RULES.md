@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 2: 
-3: This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.43.1). Follow these guidelines strictly.
+3: This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.43.2). Follow these guidelines strictly.
 4: 
 5: ## 🎨 VIP GOLD Theme
 6: - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -67,6 +67,10 @@
 67: - **Calculation**: Blocked intervals = `[Start - SafeTime, End + SafeTime]`. Selected random time must fall outside these intervals.
 68: 
 69: ## 🛠️ Developer Rules
+
+### v1.43.2 (2026-05-10)
+- **Fix: Strava Sorting**: Resolved an issue where time filtering caused results to be returned in oldest-first order.
+- **Fix: Filter Logic**: Corrected dashboard range filter mapping.
 70: 
 71: ### 1. Versioning
 72: - ALWAYS update the version string in the following 3 locations:
