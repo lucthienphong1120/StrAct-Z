@@ -184,8 +184,8 @@ function updateDynamicTooltips() {
   const tooltipMap = {
     'cfgMinDist': `Minimum distance for generated activity (${sysLimits.distance_km.min} - ${sysLimits.distance_km.max})`,
     'cfgMaxDist': `Maximum distance for generated activity (1.0 - ${sysLimits.max_distance_km_limit})`,
-    'cfgMinPace': `Fastest pace for the activity (${sysLimits.pace_min_km.min} - ${sysLimits.pace_min_km.max})`,
-    'cfgMaxPace': `Slowest pace for the activity (${sysLimits.pace_max_km.min} - ${sysLimits.pace_max_km.max})`,
+    'cfgMinPace': `Fastest pace for the activity (${sysLimits.pace_min_km.min} - ${sysLimits.pace_min_km.max}). Scaled by type: Walk x1.25, Run x0.8, Ride x0.5.`,
+    'cfgMaxPace': `Slowest pace for the activity (${sysLimits.pace_max_km.min} - ${sysLimits.pace_max_km.max}). Scaled by type: Walk x1.25, Run x0.8, Ride x0.5.`,
     'cfgMaxSpan': `Max districts a route can cross. Your limit: ${sysLimits.max_district_span}`,
     'scheduleCountMax': `Max number of activities. Your limit: ${sysLimits.schedule_count_max}`,
     'cfgUserAge': `Used to calculate Max Heart Rate: 220 - Age. Range: ${sysLimits.age.min}-${sysLimits.age.max}.`
