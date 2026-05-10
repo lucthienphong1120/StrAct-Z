@@ -64,21 +64,14 @@ router.get('/system-limits', (req, res) => {
 // ─── Google Fit Auth ────────────────────────────────────────────────────────
 
 router.get('/auth/google', (req, res) => {
-  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
-  const host = req.get('host');
-  const redirectUri = `${protocol}://${host}/api/auth/google/callback`;
-  res.redirect(googleFit.getAuthUrl(redirectUri));
+  res.redirect(googleFit.getAuthUrl());
 });
 
 router.get('/auth/google/callback', async (req, res) => {
   try {
-    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
-    const host = req.get('host');
-    const redirectUri = `${protocol}://${host}/api/auth/google/callback`;
-    
     const { code } = req.query;
     if (!code) throw new Error('No code provided');
-    const tokens = await googleFit.exchangeCode(code, redirectUri);
+    const tokens = await googleFit.exchangeCode(code);
     await db.saveExternalTokens(req.user.id, 'google_fit', {
       access_token: tokens.access_token,
       refresh_token: tokens.refresh_token,

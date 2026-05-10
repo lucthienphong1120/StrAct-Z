@@ -11,7 +11,7 @@ const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3000/a
 /**
  * Get Google OAuth2 Authorization URL
  */
-function getAuthUrl(redirectUri) {
+function getAuthUrl() {
   const scopes = [
     'https://www.googleapis.com/auth/fitness.activity.write',
     'https://www.googleapis.com/auth/fitness.body.write',
@@ -22,7 +22,7 @@ function getAuthUrl(redirectUri) {
   
   const params = new URLSearchParams({
     client_id: GOOGLE_CLIENT_ID,
-    redirect_uri: redirectUri,
+    redirect_uri: REDIRECT_URI,
     response_type: 'code',
     scope: scopes.join(' '),
     access_type: 'offline',
@@ -35,12 +35,12 @@ function getAuthUrl(redirectUri) {
 /**
  * Exchange authorization code for tokens
  */
-async function exchangeCode(code, redirectUri) {
+async function exchangeCode(code) {
   const params = new URLSearchParams({
     code,
     client_id: GOOGLE_CLIENT_ID,
     client_secret: GOOGLE_CLIENT_SECRET,
-    redirect_uri: redirectUri,
+    redirect_uri: REDIRECT_URI,
     grant_type: 'authorization_code'
   });
 
