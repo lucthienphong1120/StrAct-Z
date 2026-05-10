@@ -586,7 +586,16 @@ async function disconnectGoogleFit() {
   if (confirm('Are you sure you want to disconnect Google Fit?')) {
     await api('/auth/google', 'DELETE');
     showToast('Google Fit disconnected', 'info');
-    loadStats(); // refresh UI
+    
+    // Immediate UI feedback
+    const gfDisc = document.getElementById('gfDisconnected');
+    const gfConn = document.getElementById('gfConnected');
+    if (gfDisc && gfConn) {
+      gfDisc.style.display = 'block';
+      gfConn.style.display = 'none';
+    }
+    
+    loadStats(); // background refresh
   }
 }
 
