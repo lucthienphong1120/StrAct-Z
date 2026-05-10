@@ -26,7 +26,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.43.2</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.44.0</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -258,6 +258,14 @@
               <button class="btn btn-sm btn-primary" onclick="saveConfig()">💾 Save</button>
             </div>
             <div class="card-body">
+              <div class="form-row" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border);">
+                <div class="form-group">
+                  <label class="form-label">Daily Upload Limit <span class="tooltip-icon tooltip-right"
+                      id="tipDailyLimit" data-tooltip="Max activities allowed to upload to Strava daily.">?</span></label>
+                  <input type="text" id="cfgDailyLimit" class="form-input" readonly
+                    style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
+                </div>
+              </div>
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Activity Type <span class="tooltip-icon tooltip-right"

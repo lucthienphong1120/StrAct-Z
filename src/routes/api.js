@@ -27,10 +27,7 @@ router.get('/config', async (req, res) => {
   res.json(await db.getAllConfig(req.user.id));
 });
 
-router.get('/system-limits', (req, res) => {
-  const role = req.user.role || 'normal';
-  res.json(systemLimits[role] || systemLimits.normal);
-});
+// System limits endpoint moved below to avoid duplication
 
 router.post('/config', async (req, res) => {
   const updates = req.body;
@@ -38,16 +35,17 @@ router.post('/config', async (req, res) => {
   const limits = systemLimits[role] || systemLimits.normal;
   
   // Enforce limits from config file
-  if (updates.max_district_span && parseInt(updates.max_district_span) > limits.max_district_span) {
-    return res.status(403).json({ error: `Max ${limits.max_district_span} districts allowed for your account.` });
+  const sysL = systemLimits.getLimits(role);
+
+  if (updates.max_district_span && parseInt(updates.max_district_span) > sysL.max_district_span.max) {
+    return res.status(403).json({ error: `Max ${sysL.max_district_span.max} districts allowed for your account.` });
   }
 
-  // Basic numeric range validation (optional but good practice)
-  if (updates.min_distance_km && (parseFloat(updates.min_distance_km) < limits.distance_km.min || parseFloat(updates.min_distance_km) > limits.distance_km.max)) {
-     return res.status(400).json({ error: `Min distance must be between ${limits.distance_km.min} and ${limits.distance_km.max} km` });
+  if (updates.min_distance_km && (parseFloat(updates.min_distance_km) < sysL.min_distance_km.min || parseFloat(updates.min_distance_km) > sysL.min_distance_km.max)) {
+     return res.status(400).json({ error: `Min distance must be between ${sysL.min_distance_km.min} and ${sysL.min_distance_km.max} km` });
   }
-  if (updates.max_distance_km && parseFloat(updates.max_distance_km) > limits.max_distance_km_limit) {
-     return res.status(400).json({ error: `Max distance cannot exceed ${limits.max_distance_km_limit} km` });
+  if (updates.max_distance_km && (parseFloat(updates.max_distance_km) < sysL.max_distance_km.min || parseFloat(updates.max_distance_km) > sysL.max_distance_km.max)) {
+     return res.status(400).json({ error: `Max distance must be between ${sysL.max_distance_km.min} and ${sysL.max_distance_km.max} km` });
   }
 
   for (const [key, value] of Object.entries(updates)) {
@@ -63,6 +61,12 @@ router.post('/config/reset', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+router.get('/system-limits', (req, res) => {
+  const systemLimits = require('../config/limits');
+  const role = req.user.role || 'normal';
+  res.json(systemLimits.getLimits(role));
 });
 
 // ─── Stats ──────────────────────────────────────────────────────────────────
@@ -162,6 +166,11 @@ router.post('/generate', async (req, res) => {
       } catch (e) { console.warn('Strava fetch failed for overlap check'); }
     }
 
+    const sysL = systemLimits.getLimits(req.user.role || 'normal');
+    if (stravaActivities.length >= sysL.daily_upload_limit.max) {
+       return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
+    }
+
     const activity = await generateActivity({
       districtKey: ov.district_key || config.district_key,
       selected_districts: ov.selected_districts || config.selected_districts,
@@ -236,6 +245,11 @@ router.post('/generate-and-upload', async (req, res) => {
         stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after);
         stravaActivities = stravaActivities.filter(a => a.start_date.startsWith(targetDate));
       } catch (e) { console.warn('Strava fetch failed for overlap check'); }
+    }
+
+    const sysL = systemLimits.getLimits(req.user.role || 'normal');
+    if (stravaActivities.length >= sysL.daily_upload_limit.max) {
+       return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
     }
 
     const activity = await generateActivity({

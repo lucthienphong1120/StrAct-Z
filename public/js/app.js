@@ -134,45 +134,69 @@ async function fetchLimits() {
 function applyLimitsToUI() {
   if (!sysLimits) return;
 
-  // Distance
+  // Daily Upload Limit
+  const dailyLimit = document.getElementById('cfgDailyLimit');
+  if (dailyLimit) {
+    dailyLimit.value = sysLimits.daily_upload_limit.default;
+  }
+  const tipDailyLimit = document.getElementById('tipDailyLimit');
+  if (tipDailyLimit) {
+    tipDailyLimit.setAttribute('data-tooltip', `Max activities allowed to upload to Strava daily. Normal: ${sysLimits.daily_upload_limit.min_range.normal}, VIP: ${sysLimits.daily_upload_limit.min_range.vip}`);
+  }
+
+  // Route Config
+  const maxSpan = document.getElementById('cfgMaxSpan');
+  if (maxSpan) {
+    maxSpan.min = sysLimits.max_district_span.min;
+    maxSpan.max = sysLimits.max_district_span.max;
+  }
+
+  const overlap = document.getElementById('cfgOverlapProtection');
+  if (overlap) {
+    overlap.min = sysLimits.overlap_protection_minutes.min;
+    overlap.max = sysLimits.overlap_protection_minutes.max;
+  }
+
   const minDist = document.getElementById('cfgMinDist');
   const maxDist = document.getElementById('cfgMaxDist');
   if (minDist) {
-    minDist.min = sysLimits.distance_km.min;
-    minDist.max = sysLimits.distance_km.max;
+    minDist.min = sysLimits.min_distance_km.min;
+    minDist.max = sysLimits.min_distance_km.max;
   }
   if (maxDist) {
-    maxDist.min = sysLimits.distance_km.min; // Or 1.0 as per UI
-    maxDist.max = sysLimits.max_distance_km_limit;
-  }
-
-  // Pace
-  const minPace = document.getElementById('cfgMinPace');
-  const maxPace = document.getElementById('cfgMaxPace');
-  if (minPace) {
-    minPace.min = sysLimits.pace_min_km.min;
-    minPace.max = sysLimits.pace_min_km.max;
-  }
-  if (maxPace) {
-    maxPace.min = sysLimits.pace_max_km.min;
-    maxPace.max = sysLimits.pace_max_km.max;
-  }
-
-  // HR & Age
-  const age = document.getElementById('cfgUserAge');
-  if (age) {
-    age.min = sysLimits.age.min;
-    age.max = sysLimits.age.max;
+    maxDist.min = sysLimits.max_distance_km.min;
+    maxDist.max = sysLimits.max_distance_km.max;
   }
 
   // Schedule
-  const sMin = document.getElementById('scheduleCountMin');
-  const sMax = document.getElementById('scheduleCountMax');
-  if (sMin) sMin.max = sysLimits.schedule_count_max;
-  if (sMax) sMax.max = sysLimits.schedule_count_max;
+  const countMin = document.getElementById('scheduleCountMin');
+  const countMax = document.getElementById('scheduleCountMax');
+  if (countMin) {
+    countMin.min = sysLimits.schedule_count_min.min;
+    countMin.max = sysLimits.schedule_count_min.max;
+  }
+  if (countMax) {
+    countMax.min = sysLimits.schedule_count_max.min;
+    countMax.max = sysLimits.schedule_count_max.max;
+  }
 
-  const maxSpan = document.getElementById('cfgMaxSpan');
-  if (maxSpan) maxSpan.max = sysLimits.max_district_span;
+  // Activity Settings
+  const userAge = document.getElementById('cfgUserAge');
+  if (userAge) {
+    userAge.min = sysLimits.user_age.min;
+    userAge.max = sysLimits.user_age.max;
+  }
+
+  const minPace = document.getElementById('cfgMinPace');
+  const maxPace = document.getElementById('cfgMaxPace');
+  if (minPace) {
+    minPace.min = sysLimits.min_pace.min;
+    minPace.max = sysLimits.min_pace.max;
+  }
+  if (maxPace) {
+    maxPace.min = sysLimits.max_pace.min;
+    maxPace.max = sysLimits.max_pace.max;
+  }
 
   // Dynamic Tooltips
   updateDynamicTooltips();
@@ -182,13 +206,14 @@ function updateDynamicTooltips() {
   if (!sysLimits) return;
   
   const tooltipMap = {
-    'cfgMinDist': `Minimum distance for generated activity (${sysLimits.distance_km.min} - ${sysLimits.distance_km.max})`,
-    'cfgMaxDist': `Maximum distance for generated activity (1.0 - ${sysLimits.max_distance_km_limit})`,
-    'cfgMinPace': `Fastest pace for the activity (${sysLimits.pace_min_km.min} - ${sysLimits.pace_min_km.max}). Scaled by type: Walk x1.25, Run x0.8, Ride x0.5.`,
-    'cfgMaxPace': `Slowest pace for the activity (${sysLimits.pace_max_km.min} - ${sysLimits.pace_max_km.max}). Scaled by type: Walk x1.25, Run x0.8, Ride x0.5.`,
-    'cfgMaxSpan': `Max districts a route can cross. Your limit: ${sysLimits.max_district_span}`,
-    'scheduleCountMax': `Max number of activities. Your limit: ${sysLimits.schedule_count_max}`,
-    'cfgUserAge': `Used to calculate Max Heart Rate: 220 - Age. Range: ${sysLimits.age.min}-${sysLimits.age.max}.`
+    'cfgMinDist': `Khoảng cách tối thiểu (${sysLimits.min_distance_km.min} - ${sysLimits.min_distance_km.max} km)`,
+    'cfgMaxDist': `Khoảng cách tối đa (${sysLimits.max_distance_km.min} - ${sysLimits.max_distance_km.max} km)`,
+    'cfgMinPace': `Pace nhanh nhất (${sysLimits.min_pace.min} - ${sysLimits.min_pace.max} min/km). Tỷ lệ: Walk x1.25, Run x0.8, Ride x0.5.`,
+    'cfgMaxPace': `Pace chậm nhất (${sysLimits.max_pace.min} - ${sysLimits.max_pace.max} min/km). Tỷ lệ: Walk x1.25, Run x0.8, Ride x0.5.`,
+    'cfgMaxSpan': `Số quận tối đa lộ trình có thể đi qua. Giới hạn: ${sysLimits.max_district_span.min}-${sysLimits.max_district_span.max}`,
+    'scheduleCountMax': `Số lượng hoạt động tối đa mỗi ngày. Giới hạn: ${sysLimits.schedule_count_max.min}-${sysLimits.schedule_count_max.max}`,
+    'cfgUserAge': `Dùng để tính Nhịp tim tối đa (MHR): 220 - Tuổi. Giới hạn: ${sysLimits.user_age.min}-${sysLimits.user_age.max}.`,
+    'cfgOverlapProtection': `Khoảng thời gian an toàn giữa các hoạt động (${sysLimits.overlap_protection_minutes.min} - ${sysLimits.overlap_protection_minutes.max} phút).`
   };
 
   for (const [id, text] of Object.entries(tooltipMap)) {
@@ -422,40 +447,39 @@ function validateTimeBounds(minTimeStr, maxTimeStr, targetDateStr, isCustomTime)
 }
 
 function validateInputs(config) {
-  if (userRole !== 'vip' && parseInt(config.max_district_span, 10) > 2) {
-    showToast('Max 2 districts allowed. Contact Admin to upgrade (VIP feature).', 'warning');
-    document.getElementById('cfgMaxSpan').value = 2;
+  const sysL = sysLimits;
+  if (!sysL) return true;
+
+  if (parseInt(config.max_district_span, 10) > sysL.max_district_span.max) {
+    showToast(`Tối đa ${sysL.max_district_span.max} quận cho tài khoản của bạn.`, 'warning');
+    document.getElementById('cfgMaxSpan').value = sysL.max_district_span.max;
     return false;
   }
   
   const minDist = parseFloat(config.min_distance_km);
   const maxDist = parseFloat(config.max_distance_km);
-  if (minDist < sysLimits.distance_km.min || minDist > sysLimits.distance_km.max) { 
-    showToast(`Min Distance must be between ${sysLimits.distance_km.min} and ${sysLimits.distance_km.max} km`, 'error'); 
+  
+  if (minDist < sysL.min_distance_km.min || minDist > sysL.min_distance_km.max) { 
+    showToast(`Min Distance phải từ ${sysL.min_distance_km.min} đến ${sysL.min_distance_km.max} km`, 'error'); 
     return false; 
   }
-  if (maxDist < 1 || maxDist > sysLimits.max_distance_km_limit) { 
-    showToast(`Max Distance must be between 1 and ${sysLimits.max_distance_km_limit} km`, 'error'); 
+  if (maxDist < sysL.max_distance_km.min || maxDist > sysL.max_distance_km.max) { 
+    showToast(`Max Distance phải từ ${sysL.max_distance_km.min} đến ${sysL.max_distance_km.max} km`, 'error'); 
     return false; 
   }
-  if (minDist >= maxDist) { showToast('Min Distance must be less than Max Distance', 'error'); return false; }
+  if (minDist >= maxDist) { showToast('Min Distance phải nhỏ hơn Max Distance', 'error'); return false; }
   
   const minPace = parseFloat(config.min_pace);
   const maxPace = parseFloat(config.max_pace);
-  if (minPace < sysLimits.pace_min_km.min || minPace > sysLimits.pace_min_km.max) { 
-    showToast(`Min Pace must be between ${sysLimits.pace_min_km.min} and ${sysLimits.pace_min_km.max} min/km`, 'error'); 
+  if (minPace < sysL.min_pace.min || minPace > sysL.min_pace.max) { 
+    showToast(`Min Pace phải từ ${sysL.min_pace.min} đến ${sysL.min_pace.max} min/km`, 'error'); 
     return false; 
   }
-  if (maxPace < sysLimits.pace_max_km.min || maxPace > sysLimits.pace_max_km.max) { 
-    showToast(`Max Pace must be between ${sysLimits.pace_max_km.min} and ${sysLimits.pace_max_km.max} min/km`, 'error'); 
+  if (maxPace < sysL.max_pace.min || maxPace > sysL.max_pace.max) { 
+    showToast(`Max Pace phải từ ${sysL.max_pace.min} đến ${sysL.max_pace.max} min/km`, 'error'); 
     return false; 
   }
-  if (minPace > maxPace) { showToast('Min Pace must be less than or equal to Max Pace', 'error'); return false; }
-
-  if (config.heart_rate_enabled === 'true') {
-    const maxHR = parseInt(config.max_heart_rate, 10);
-    if (maxHR < 120 || maxHR > 220) { showToast('Max Heart Rate must be between 120 and 220', 'error'); return false; }
-  }
+  if (minPace > maxPace) { showToast('Min Pace phải nhỏ hơn hoặc bằng Max Pace', 'error'); return false; }
 
   return true;
 }
@@ -531,17 +555,16 @@ function updateScheduleDisplay(status) {
 async function updateSchedule() {
   const enabled = document.getElementById('scheduleEnabled').checked;
   const time = document.getElementById('scheduleTime').value;
-  const countMin = document.getElementById('scheduleCountMin').value;
-  const countMax = document.getElementById('scheduleCountMax').value;
+  const countMin = parseInt(document.getElementById('scheduleCountMin').value);
+  const countMax = parseInt(document.getElementById('scheduleCountMax').value);
   
-  if (parseInt(countMin) > sysLimits.schedule_count_max || parseInt(countMax) > sysLimits.schedule_count_max) {
-    showToast(`Your account is limited to ${sysLimits.schedule_count_max} daily scheduled activities.`, 'warning');
-    document.getElementById('scheduleCountMax').value = Math.min(sysLimits.schedule_count_max, parseInt(countMax));
-    document.getElementById('scheduleCountMin').value = Math.min(sysLimits.schedule_count_max, parseInt(countMin));
+  if (countMax > sysLimits.schedule_count_max.max) {
+    showToast(`Your account is limited to ${sysLimits.schedule_count_max.max} daily scheduled activities.`, 'warning');
+    document.getElementById('scheduleCountMax').value = sysLimits.schedule_count_max.max;
     return;
   }
   
-  if (parseInt(countMin) > parseInt(countMax)) {
+  if (countMin > countMax) {
     showToast('Min Count must not exceed Max Count', 'error');
     return;
   }
@@ -758,10 +781,10 @@ function getOverrideConfig() {
     target_date: isCustomTime ? document.getElementById('cfgTargetDate').value : undefined,
     min_time: isCustomTime ? document.getElementById('cfgCustomMinTime').value : document.getElementById('cfgRandMinTime').value,
     max_time: isCustomTime ? document.getElementById('cfgCustomMaxTime').value : document.getElementById('cfgRandMaxTime').value,
-    work_start1: isCustomTime ? undefined : document.getElementById('cfgWorkStart1').value,
-    work_end1: isCustomTime ? undefined : document.getElementById('cfgWorkEnd1').value,
-    work_start2: isCustomTime ? undefined : document.getElementById('cfgWorkStart2').value,
-    work_end2: isCustomTime ? undefined : document.getElementById('cfgWorkEnd2').value,
+    work_start1: document.getElementById('cfgWorkStart1').value,
+    work_end1: document.getElementById('cfgWorkEnd1').value,
+    work_start2: document.getElementById('cfgWorkStart2').value,
+    work_end2: document.getElementById('cfgWorkEnd2').value,
     selected_districts,
     max_district_span: document.getElementById('cfgMaxSpan').value,
     district_key: 'random',

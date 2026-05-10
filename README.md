@@ -1,4 +1,4 @@
-# 🏃 StrAct Z v1.43.2
+# 🏃 StrAct Z v1.44.0
 
 **StrAct Z** (Strava Auto Activity Generator) is a robust, multi-tenant backend platform that automatically generates hyper-realistic GPS running, walking, and cycling activities and syncs them to Strava.
 
@@ -45,33 +45,34 @@ For detailed information, please refer to our documentation guides:
 4. Visit `http://localhost:3000`. If this is the first run, you will be redirected to the Setup Wizard to create your Admin account.
 
 ## 📋 Changelog
-50: 
-51: ### v1.43.2 (2026-05-10)
-52: - **Fix: Strava Sorting**: Resolved an issue where time filtering (after/before) caused results to be returned in chronological (oldest-first) order instead of reverse-chronological. Page 1 now always shows the newest activities.
-53: - **Fix: Filter Logic**: Corrected mapping for 1-month and 3-month range filters in the dashboard.
-54: 
-50: 
-51: ### v1.43.1 (2026-05-10)
-52: - **VIP UI Enhancement**: Applied the premium gold glow "Save" button effect across all configuration cards for VIP users.
-53: - **Consistency**: Converted secondary save actions to primary actions to leverage the dynamic VIP theme.
-54: 
-50: 
-51: ### v1.43.0 (2026-05-10)
-52: - **Map Persistence**: The activity map now saves and restores its exact zoom level and center coordinates across sessions.
-53: - **Reset to Default**: Added a global "Reset" feature to restore all configurations to system defaults while optionally preserving activity areas.
-54: - **Refresh Optimization**: Enhanced the refresh logic to perform a clean reload of both local and cloud data, bypassing caches.
-55: 
-50: 
-51: ### v1.42.0 (2026-05-10)
-52: - **Dynamic Pace Multipliers**: Introduced activity-type-based pace multipliers (Walk: x1.25, Run: x0.8, Ride: x0.5) to make randomized routes more realistic.
-53: - **UI Updates**: Enhanced tooltips and dynamic hints to reflect the new pace and distance scaling logic.
-54: 
-50: 
-51: ### v1.41.0 (2026-05-10)
-52: - **Overlap Protection**: Implemented a new core logic to prevent auto-generated activities from overlapping with existing ones.
-53: - **Safe Time Config**: Added `overlap_protection_minutes` (default 30 min) to ensure a safety buffer around activity start and end times.
-54: - **Smart Filtering**: The generation engine now fetches and analyzes both Strava cloud activities and local pending activities for the target date to identify blocked time slots.
-55: 
+
+### v1.44.0 (2026-05-10) - Config Overhaul
+- **Centralized Configuration**: All system limits and UI ranges are now managed in `src/config/limits.js`.
+- **Dynamic UI Hints**: Tooltips and input constraints (min/max) now update dynamically based on the user's role (Normal/VIP).
+- **Daily Upload Limit**: Added an enforced daily upload limit (2 for Normal, 5 for VIP).
+- **Cleanup**: Removed unused legacy configuration parameters.
+
+### v1.43.2 (2026-05-10)
+- **Fix: Strava Sorting**: Resolved an issue where time filtering (after/before) caused results to be returned in chronological (oldest-first) order instead of reverse-chronological. Page 1 now always shows the newest activities.
+- **Fix: Filter Logic**: Corrected mapping for 1-month and 3-month range filters in the dashboard.
+
+### v1.43.1 (2026-05-10)
+- **VIP UI Enhancement**: Applied the premium gold glow "Save" button effect across all configuration cards for VIP users.
+- **Consistency**: Converted secondary save actions to primary actions to leverage the dynamic VIP theme.
+
+### v1.43.0 (2026-05-10)
+- **Map Persistence**: The activity map now saves and restores its exact zoom level and center coordinates across sessions.
+- **Reset to Default**: Added a global "Reset" feature to restore all configurations to system defaults while optionally preserving activity areas.
+- **Refresh Optimization**: Enhanced the refresh logic to perform a clean reload of both local and cloud data, bypassing caches.
+
+### v1.42.0 (2026-05-10)
+- **Dynamic Pace Multipliers**: Introduced activity-type-based pace multipliers (Walk: x1.25, Run: x0.8, Ride: x0.5) to make randomized routes more realistic.
+- **UI Updates**: Enhanced tooltips and dynamic hints to reflect the new pace and distance scaling logic.
+
+### v1.41.0 (2026-05-10)
+- **Overlap Protection**: Implemented a new core logic to prevent auto-generated activities from overlapping with existing ones.
+- **Safe Time Config**: Added `overlap_protection_minutes` (default 30 min) to ensure a safety buffer around activity start and end times.
+- **Smart Filtering**: The generation engine now fetches and analyzes both Strava cloud activities and local pending activities for the target date to identify blocked time slots.
 
 ### v1.40.1 (2026-05-09)
 - **Map Interaction**: Added interactive tooltips that display district names on hover, styled to match the account role color.
@@ -165,7 +166,7 @@ The project uses high-quality administrative boundary data for Hanoi's 12 urban 
 - **Service Worker**: Integrated a service worker for basic offline asset caching and installability.
 
 ### v1.31.6 (2026-05-09)
-- **Maintenance**: Minor bug fixes and version alignment.
+- **Maintenance**: Minor bug fixes and "version": "1.44.0", alignment.
 
 ### v1.31.5 (2026-05-09)
 - **VIP GOLD Refinement**: Finalized the mysterious Gold-Black theme. Removed brown tones, enhanced contrast with bright yellow highlights, and added a VIP badge in the header.

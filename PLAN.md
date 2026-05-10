@@ -58,7 +58,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] nâng cấp theme bản đồ sang CartoDB Dark Matter và đổi màu biên giới (Gold cho VIP, Cyan cho Normal)
 + [x] cập nhật biên giới các quận trong Activity Areas Map khi hover chuột qua sẽ hiện tên quận đó
 + [x] cập nhật hint của Activity Areas (Map) về tỷ lệ random và xuống dòng
-+ [ ] review lại file config limit, loại bỏ tham số cũ ko sử dụng, update tham số dùng chung, tỉ lệ giá trị chuẩn
++ [x] review lại file config limit, loại bỏ tham số cũ ko sử dụng, update tham số dùng chung, tỉ lệ giá trị chuẩn
 + [x] activity map khi save lưu cả vị trí zoom và scale hiện tại
 + [x] thêm nút reset to default cạnh nút refresh -> cập nhật tất cả value về mặc định (theo file config), riêng map không xóa point mà chỉ reset tọa độ và scale về mặc định
 + [x] khi nhấn refresh sẽ load lại data cloud, bỏ qua cache, map bà các tab load lại data từ save

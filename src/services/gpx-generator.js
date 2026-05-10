@@ -244,7 +244,7 @@ async function generateActivity(config = {}) {
     const targetDateObj = new Date(`${targetDateStr}T00:00:00.000+07:00`);
     
     // Blocked intervals from existing activities + safe time
-    const safeMs = (parseInt(config.overlap_protection_minutes || limits.overlap_protection_minutes || '30')) * 60000;
+    const safeMs = (parseInt(config.overlap_protection_minutes || limits.overlap_minutes || '30')) * 60000;
     const blockedRanges = (config.existingActivities || []).map(a => {
       // Strava uses start_date (ISO), local DB uses route_start_time (ISO)
       const start = new Date(a.start_date || a.route_start_time).getTime();

@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 2: 
-3: This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.43.2). Follow these guidelines strictly.
+3: This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.44.0). Follow these guidelines strictly.
 4: 
 5: ## 🎨 VIP GOLD Theme
 6: - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -68,11 +68,13 @@
 68: 
 69: ## 🛠️ Developer Rules
 
-### v1.43.2 (2026-05-10)
-- **Fix: Strava Sorting**: Resolved an issue where time filtering caused results to be returned in oldest-first order.
-- **Fix: Filter Logic**: Corrected dashboard range filter mapping.
-70: 
-71: ### 1. Versioning
+### v1.44.0 (2026-05-10) - Config Overhaul
+- **Centralized Limits**: All system constraints are defined in `src/config/limits.js`.
+- **Role-based Ranges**: Config items have `min_range` and `max_range` for `normal` and `vip` roles.
+- **Dynamic UI**: Frontend tooltips and input constraints are derived from the backend limits API.
+- **Daily Upload Limit**: Enforced at 2 (Normal) / 5 (VIP) activities per day on Strava.
+
+### 1. Versioning
 72: - ALWAYS update the version string in the following 3 locations:
 73:   1. `public/index.html` (Header `small` tag).
 74:   2. `package.json` (`version` field).
