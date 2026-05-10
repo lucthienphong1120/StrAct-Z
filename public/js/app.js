@@ -141,7 +141,7 @@ function applyLimitsToUI() {
   }
   const tipDailyLimit = document.getElementById('tipDailyLimit');
   if (tipDailyLimit) {
-    tipDailyLimit.setAttribute('data-tooltip', `Số lượng hoạt động tối đa được phép upload lên Strava mỗi ngày.\nKiểu: int\nMặc định: 2\nPhạm vi: Normal: ${sysLimits.daily_upload_limit.min_range.normal}, VIP: ${sysLimits.daily_upload_limit.min_range.vip}`);
+    tipDailyLimit.setAttribute('data-tooltip', `Số lượng upload tối đa lên Strava mỗi ngày.\nKiểu: int\nMặc định: 2\nPhạm vi: normal: ${sysLimits.daily_upload_limit.min_range.normal}, vip: ${sysLimits.daily_upload_limit.min_range.vip}`);
   }
 
   // Route Config
@@ -150,7 +150,7 @@ function applyLimitsToUI() {
     maxSpan.min = sysLimits.max_district_span.min;
     maxSpan.max = sysLimits.max_district_span.max;
     const tipMaxSpan = document.getElementById('tipMaxSpan');
-    if (tipMaxSpan) tipMaxSpan.setAttribute('data-tooltip', `Số lượng quận tối đa một lộ trình có thể đi qua.\nKiểu: int\nMặc định: 1\nPhạm vi: Cho phép từ ${sysLimits.max_district_span.min} đến ${sysLimits.max_district_span.max}`);
+    if (tipMaxSpan) tipMaxSpan.setAttribute('data-tooltip', `Số lượng quận tối đa một lộ trình có thể đi qua.\nKiểu: int\nMặc định: 1\nPhạm vi: normal: ${sysLimits.max_district_span.min}-${sysLimits.max_district_span.max}, vip: 1-3`);
   }
 
   const overlap = document.getElementById('cfgOverlapProtection');
@@ -158,7 +158,7 @@ function applyLimitsToUI() {
     overlap.min = sysLimits.overlap_protection_minutes.min;
     overlap.max = sysLimits.overlap_protection_minutes.max;
     const tipSafeTime = document.getElementById('tipSafeTime');
-    if (tipSafeTime) tipSafeTime.setAttribute('data-tooltip', `Thời gian đệm tối thiểu giữa các hoạt động để tránh trùng lặp.\nKiểu: int (phút)\nMặc định: 30\nPhạm vi: Cho phép từ ${sysLimits.overlap_protection_minutes.min} đến ${sysLimits.overlap_protection_minutes.max} phút`);
+    if (tipSafeTime) tipSafeTime.setAttribute('data-tooltip', `Thời gian đệm tối thiểu giữa các hoạt động để tránh trùng lặp.\nKiểu: int\nMặc định: 30\nPhạm vi: ${sysLimits.overlap_protection_minutes.min} - ${sysLimits.overlap_protection_minutes.max}`);
   }
 
   const minDist = document.getElementById('cfgMinDist');
@@ -167,13 +167,13 @@ function applyLimitsToUI() {
     minDist.min = sysLimits.min_distance_km.min;
     minDist.max = sysLimits.min_distance_km.max;
     const tipMinDist = document.getElementById('tipMinDist');
-    if (tipMinDist) tipMinDist.setAttribute('data-tooltip', `Khoảng cách tối thiểu của hoạt động.\nKiểu: float\nMặc định: 0.5\nPhạm vi: Cho phép từ ${sysLimits.min_distance_km.min} đến ${sysLimits.min_distance_km.max} km`);
+    if (tipMinDist) tipMinDist.setAttribute('data-tooltip', `Khoảng cách tối thiểu của hoạt động.\nKiểu: float\nMặc định: 0.5\nPhạm vi: ${sysLimits.min_distance_km.min} - ${sysLimits.min_distance_km.max}`);
   }
   if (maxDist) {
     maxDist.min = sysLimits.max_distance_km.min;
     maxDist.max = sysLimits.max_distance_km.max;
     const tipMaxDist = document.getElementById('tipMaxDist');
-    if (tipMaxDist) tipMaxDist.setAttribute('data-tooltip', `Khoảng cách tối đa của hoạt động.\nKiểu: float\nMặc định: 8.0\nPhạm vi: Cho phép từ ${sysLimits.max_distance_km.min} đến ${sysLimits.max_distance_km.max} km`);
+    if (tipMaxDist) tipMaxDist.setAttribute('data-tooltip', `Khoảng cách tối đa của hoạt động.\nKiểu: float\nMặc định: 8.0\nPhạm vi: ${sysLimits.max_distance_km.min} - ${sysLimits.max_distance_km.max}`);
   }
 
   // Target Date Constraints
@@ -186,6 +186,8 @@ function applyLimitsToUI() {
     
     targetDateInput.min = minDate.toLocaleDateString('en-CA');
     targetDateInput.max = today.toLocaleDateString('en-CA');
+    const tipTargetDate = document.getElementById('tipTargetDate');
+    if (tipTargetDate) tipTargetDate.setAttribute('data-tooltip', `Tạo hoạt động cho một ngày trong quá khứ.\nKiểu: date\nMặc định: Hôm nay\nPhạm vi: normal: 7 ngày, vip: 30 ngày`);
   }
 
   // Schedule
@@ -199,7 +201,7 @@ function applyLimitsToUI() {
     countMax.min = sysLimits.schedule_count_max.min;
     countMax.max = sysLimits.schedule_count_max.max;
     const tipScheduleMax = document.getElementById('tipScheduleMax');
-    if (tipScheduleMax) tipScheduleMax.setAttribute('data-tooltip', `Số lượng hoạt động tối đa tạo tự động mỗi ngày.\nKiểu: int\nMặc định: 2\nPhạm vi: Giới hạn của bạn là ${sysLimits.schedule_count_max.max}`);
+    if (tipScheduleMax) tipScheduleMax.setAttribute('data-tooltip', `Số lượng hoạt động tối đa tạo tự động mỗi ngày.\nKiểu: int\nMặc định: 2\nPhạm vi: normal: 2, vip: 3`);
   }
 
   // Activity Settings
@@ -228,14 +230,14 @@ function updateDynamicTooltips() {
   if (!sysLimits) return;
   
   const tooltipMap = {
-    'cfgMinDist': `Khoảng cách tối thiểu của hoạt động.\nKiểu: float\nMặc định: 0.5\nPhạm vi: Cho phép từ ${sysLimits.min_distance_km.min} đến ${sysLimits.min_distance_km.max} km`,
-    'cfgMaxDist': `Khoảng cách tối đa của hoạt động.\nKiểu: float\nMặc định: 8.0\nPhạm vi: Cho phép từ ${sysLimits.max_distance_km.min} đến ${sysLimits.max_distance_km.max} km`,
-    'cfgMinPace': `Tốc độ nhanh nhất cho phép (min/km).\n(Giá trị sẽ thay đổi theo hệ số của loại hoạt động)\nKiểu: float\nMặc định: 8.0\nPhạm vi: ${sysLimits.min_pace.min} - ${sysLimits.min_pace.max}`,
-    'cfgMaxPace': `Tốc độ chậm nhất cho phép (min/km).\n(Giá trị sẽ thay đổi theo hệ số của loại hoạt động)\nKiểu: float\nMặc định: 12.0\nPhạm vi: ${sysLimits.max_pace.min} - ${sysLimits.max_pace.max}`,
-    'cfgMaxSpan': `Số lượng quận tối đa một lộ trình có thể đi qua.\nKiểu: int\nMặc định: 1\nPhạm vi: ${sysLimits.max_district_span.min} - ${sysLimits.max_district_span.max}`,
-    'scheduleCountMax': `Số lượng hoạt động tối đa tạo tự động mỗi ngày.\nKiểu: int\nMặc định: 2\nPhạm vi: Giới hạn của bạn là ${sysLimits.schedule_count_max.max}`,
-    'cfgUserAge': `Tuổi người dùng để tính Nhịp tim tối đa.\n(MHR = 220 - Tuổi)\nKiểu: int\nMặc định: 25\nPhạm vi: ${sysLimits.user_age.min} - ${sysLimits.user_age.max}`,
-    'cfgOverlapProtection': `Thời gian đệm tối thiểu giữa các hoạt động để tránh trùng lặp.\nKiểu: int (phút)\nMặc định: 30\nPhạm vi: ${sysLimits.overlap_protection_minutes.min} - ${sysLimits.overlap_protection_minutes.max} phút`
+    'cfgMinDist': `Khoảng cách tối thiểu của hoạt động.\nKiểu: float\nMặc định: 0.5\nPhạm vi: 0.1 - 4.0`,
+    'cfgMaxDist': `Khoảng cách tối đa của hoạt động.\nKiểu: float\nMặc định: 8.0\nPhạm vi: 2.0 - 15.0`,
+    'cfgMinPace': `Tốc độ nhanh nhất cho phép.\n(Giá trị thay đổi theo loại hoạt động)\nKiểu: float\nMặc định: 8.0\nPhạm vi: 6.0 - 12.0`,
+    'cfgMaxPace': `Tốc độ chậm nhất cho phép.\n(Giá trị thay đổi theo loại hoạt động)\nKiểu: float\nMặc định: 12.0\nPhạm vi: 10.0 - 15.0`,
+    'cfgMaxSpan': `Số lượng quận tối đa một lộ trình có thể đi qua.\nKiểu: int\nMặc định: 1\nPhạm vi: normal: 1-2, vip: 1-3`,
+    'scheduleCountMax': `Số lượng hoạt động tối đa tạo tự động mỗi ngày.\nKiểu: int\nMặc định: 2\nPhạm vi: normal: 2, vip: 3`,
+    'cfgUserAge': `Tuổi người dùng để tính nhịp tim tối đa.\n(MHR = 220 - Tuổi)\nKiểu: int\nMặc định: 25\nPhạm vi: 18 - 90`,
+    'cfgOverlapProtection': `Thời gian đệm tối thiểu giữa các hoạt động để tránh trùng lặp.\nKiểu: int\nMặc định: 30\nPhạm vi: 10 - 120`
   };
 
   for (const [id, text] of Object.entries(tooltipMap)) {
@@ -664,7 +666,7 @@ async function loadActivities() {
             ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
             ${a.upload_status === 'generated' ? 
               `<button class="btn btn-sm btn-danger" style="padding:4px 8px;" title="Delete locally" onclick="deleteActivity(${a.id}, false)">🗑️</button>` : 
-              `<span class="tooltip-icon tooltip-left" data-tooltip="Uploaded activities must be deleted on Strava.com">?</span>`
+              `<span class="tooltip-icon tooltip-left" data-tooltip="Hoạt động đã upload phải được xóa trực tiếp trên Strava.com">?</span>`
             }
           </div>
         </div>`;
