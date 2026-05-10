@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.40.1). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.41.0). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -12,7 +12,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Repository**: The `StrAct-Z` workspace is a public Git repository.
   - `.gitignore` is used to exclude secrets (`.env`), data (`data/`), and database files.
 - **Update Process**:
-  - After completing every feature or update, **COMMIT** and **PUSH** to the Git repo.
+  - After completing every feature or update, **COMMIT** and **PUSH** to the Git repo. (Lưu ý: Luôn nhớ thực hiện việc này để đồng bộ hóa mã nguồn).
   - Ensure versioning is bumped correctly (see Developer Rules).
 - **Production Deployment**:
   - Code is deployed to the production server via `git pull` in the SSH terminal.
@@ -58,7 +58,12 @@ Base distance is randomized from config, then scaled by sport (see `limits.js`):
 - **Logic Weights**: Still use circular proximity for backend efficiency (`haversineDistance` check against district centers).
 - **Weights**:
   - Inside Home circle: `+2.0` (full), `+1.2` (center), `+0.5` (overlap).
-  - Inside Work circle: `+1.2` (full), `+0.8` (center), `+0.4` (overlap).
+  - Inside Work circle: `1.2` (full), `0.8` (center), `0.4` (overlap).
+
+### 5. Overlap Protection
+- **Safe Time**: Default `30 minutes`.
+- **Logic**: Random activity generation must NOT overlap with existing activities (Strava Cloud + Local DB).
+- **Calculation**: Blocked intervals = `[Start - SafeTime, End + SafeTime]`. Selected random time must fall outside these intervals.
 
 ## 🛠️ Developer Rules
 

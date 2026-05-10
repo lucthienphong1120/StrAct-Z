@@ -8,6 +8,7 @@ module.exports = {
     max_district_span: 2,
     schedule_count_max: 2,
     daily_upload_limit: 2,
+    overlap_protection_minutes: 30,
 
     distance_km: { min: 0.2, max: 4.0, default_min: 0.5, default_max: 8.0 },
     max_distance_km_limit: 15.0, // Absolute max for validation
@@ -41,6 +42,7 @@ module.exports = {
     max_district_span: 3,
     schedule_count_max: 3,
     daily_upload_limit: 5, // Higher limit for VIP
+    overlap_protection_minutes: 30,
 
     distance_km: { min: 0.1, max: 5.0, default_min: 0.5, default_max: 10.0 },
     max_distance_km_limit: 25.0, // VIP can go further

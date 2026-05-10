@@ -374,6 +374,10 @@ async function loadConfig() {
     // Initial HR state
     toggleHRInputs();
 
+    if (document.getElementById('cfgOverlapProtection')) {
+      document.getElementById('cfgOverlapProtection').value = config.overlap_protection_minutes || '30';
+    }
+
     // Render Map Areas
     if (config.activity_areas) {
       renderCircles(config.activity_areas);
@@ -475,6 +479,7 @@ async function saveConfig() {
     user_age: document.getElementById('cfgUserAge').value,
     sim_weather: document.getElementById('cfgSimWeather')?.checked ? 'true' : 'false',
     sim_redlights: document.getElementById('cfgSimRedLights')?.checked ? 'true' : 'false',
+    overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || '30',
   };
 
   if (!validateInputs(config)) return;
@@ -760,6 +765,7 @@ function getOverrideConfig() {
     heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
     user_age: document.getElementById('cfgUserAge').value,
     max_heart_rate: document.getElementById('cfgMaxHR').value,
+    overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value,
   };
 
   if (!validateTimeBounds(overrideConfig.min_time, overrideConfig.max_time, overrideConfig.target_date, isCustomTime)) {

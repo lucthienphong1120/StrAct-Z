@@ -132,11 +132,23 @@ router.post('/generate', async (req, res) => {
     const config = await db.getAllConfig(req.user.id);
     const ov = req.body || {};
 
+    const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
+    const localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
+    let stravaActivities = [];
+    if (await stravaApi.isAuthenticated(req.user.id)) {
+      try {
+        const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
+        stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after);
+        stravaActivities = stravaActivities.filter(a => a.start_date.startsWith(targetDate));
+      } catch (e) { console.warn('Strava fetch failed for overlap check'); }
+    }
+
     const activity = await generateActivity({
       districtKey: ov.district_key || config.district_key,
       selected_districts: ov.selected_districts || config.selected_districts,
       max_district_span: ov.max_district_span || config.max_district_span,
-      targetDate: ov.target_date,
+      targetDate: targetDate,
+      existingActivities: [...localActivities, ...stravaActivities],
       minTime: ov.min_time || config.min_time,
       maxTime: ov.max_time || config.max_time,
       workStart1: ov.work_start1 || config.work_start1,
@@ -154,6 +166,7 @@ router.post('/generate', async (req, res) => {
       useOSRM: (ov.use_osrm || config.use_osrm) !== 'false',
       simWeather: (ov.sim_weather || config.sim_weather) !== 'false',
       simRedLights: (ov.sim_redlights || config.sim_redlights) !== 'false',
+      overlap_protection_minutes: ov.overlap_protection_minutes || config.overlap_protection_minutes,
       userRole: req.user.role || 'normal',
     });
 
@@ -195,11 +208,23 @@ router.post('/generate-and-upload', async (req, res) => {
     const config = await db.getAllConfig(req.user.id);
     const ov = req.body || {};
 
+    const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
+    const localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
+    let stravaActivities = [];
+    if (await stravaApi.isAuthenticated(req.user.id)) {
+      try {
+        const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
+        stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after);
+        stravaActivities = stravaActivities.filter(a => a.start_date.startsWith(targetDate));
+      } catch (e) { console.warn('Strava fetch failed for overlap check'); }
+    }
+
     const activity = await generateActivity({
       districtKey: ov.district_key || config.district_key,
       selected_districts: ov.selected_districts || config.selected_districts,
       max_district_span: ov.max_district_span || config.max_district_span,
-      targetDate: ov.target_date,
+      targetDate: targetDate,
+      existingActivities: [...localActivities, ...stravaActivities],
       minTime: ov.min_time || config.min_time,
       maxTime: ov.max_time || config.max_time,
       workStart1: ov.work_start1 || config.work_start1,
@@ -217,6 +242,7 @@ router.post('/generate-and-upload', async (req, res) => {
       useOSRM: (ov.use_osrm || config.use_osrm) !== 'false',
       simWeather: (ov.sim_weather || config.sim_weather) !== 'false',
       simRedLights: (ov.sim_redlights || config.sim_redlights) !== 'false',
+      overlap_protection_minutes: ov.overlap_protection_minutes || config.overlap_protection_minutes,
       userRole: req.user.role || 'normal',
     });
 

@@ -41,6 +41,7 @@ const DEFAULT_CONFIG = {
   schedule_count_min: '1',
   schedule_count_max: '2',
   activity_areas: '[]',
+  overlap_protection_minutes: '30',
 };
 
 async function getDb() {
@@ -278,6 +279,13 @@ async function getActivities(accountId, limit = 50) {
   return await db.all(`SELECT * FROM activities WHERE account_id = ? AND deleted_at IS NULL ORDER BY id DESC LIMIT ?`, [accountId, limit]);
 }
 
+async function getActivitiesByDate(accountId, dateStr) {
+  const db = await getDb();
+  // route_start_time is stored as ISO string, e.g., '2026-05-10T12:00:00.000Z'
+  const datePattern = dateStr + '%';
+  return await db.all(`SELECT * FROM activities WHERE account_id = ? AND route_start_time LIKE ? AND deleted_at IS NULL`, [accountId, datePattern]);
+}
+
 async function deleteActivity(accountId, id, hard = false) {
   const db = await getDb();
   if (hard) {
@@ -395,7 +403,7 @@ module.exports = {
   getDb,
   getConfig, setConfig, getAllConfig,
   saveTokens, getTokens, deleteTokens,
-  saveActivity, updateActivity, getActivities,
+  saveActivity, updateActivity, getActivities, getActivitiesByDate,
   getActivityStats, deleteActivity,
   getUserByUsername, createAccount, getAccountCount, getAllAccounts, updateAccountPassword,
   activateVip, checkBruteForce, getAccountRole,

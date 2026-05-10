@@ -241,20 +241,48 @@ async function generateActivity(config = {}) {
     const workStart2 = parseTimeMs(config.workStart2, 13.5 * 3600000);
     const workEnd2 = parseTimeMs(config.workEnd2, 17.5 * 3600000);
 
+    const targetDateObj = new Date(`${targetDateStr}T00:00:00.000+07:00`);
+    
+    // Blocked intervals from existing activities + safe time
+    const safeMs = (parseInt(config.overlap_protection_minutes || limits.overlap_protection_minutes || '30')) * 60000;
+    const blockedRanges = (config.existingActivities || []).map(a => {
+      // Strava uses start_date (ISO), local DB uses route_start_time (ISO)
+      const start = new Date(a.start_date || a.route_start_time).getTime();
+      // Strava uses duration (seconds), local DB uses duration_min (minutes)
+      const durationMs = (a.elapsed_time || (a.duration_min * 60)) * 1000;
+      const dayStart = targetDateObj.getTime();
+      return {
+        start: start - dayStart - safeMs,
+        end: start - dayStart + durationMs + safeMs
+      };
+    });
+
+    const isOverlap = (ms) => {
+      for (const range of blockedRanges) {
+        if (ms >= range.start && ms <= range.end) return true;
+      }
+      return false;
+    };
+
     const isValidTime = (ms) => {
       if (ms > workStart1 && ms < workEnd1) return false;
       if (ms > workStart2 && ms < workEnd2) return false;
+      if (isOverlap(ms)) return false;
       return true;
     };
 
-    const targetDateObj = new Date(`${targetDateStr}T00:00:00.000+07:00`);
     const nowOffsetMs = new Date().getTime() - targetDateObj.getTime();
     
     // Find all valid time intervals within [minMs, maxMs] and up to nowOffsetMs (if today)
     const effectiveMaxMs = Math.min(maxMs, nowOffsetMs > 0 ? nowOffsetMs : maxMs);
     
     const intervals = [];
-    const checkPoints = [minMs, workStart1, workEnd1, workStart2, workEnd2, effectiveMaxMs].sort((a, b) => a - b);
+    const checkPoints = [minMs, workStart1, workEnd1, workStart2, workEnd2, effectiveMaxMs];
+    blockedRanges.forEach(r => {
+      if (r.start > minMs && r.start < effectiveMaxMs) checkPoints.push(r.start);
+      if (r.end > minMs && r.end < effectiveMaxMs) checkPoints.push(r.end);
+    });
+    checkPoints.sort((a, b) => a - b);
     
     for (let i = 0; i < checkPoints.length - 1; i++) {
       const start = checkPoints[i];
