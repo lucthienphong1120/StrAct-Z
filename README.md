@@ -243,58 +243,57 @@ The project uses high-quality administrative boundary data for Hanoi's 12 urban 
 - 📝 **Rule Enforcement:** Standardized versioning and UI/UX rules.
 
 ### v1.24.0
-+- 🧭 **UI Navigation:** Pagination buttons (Prev/Next) now automatically dim and disable when you reach the first or last page of your activity history.
-+- ℹ️ **Tooltip Updates:** Refined tooltips for Weather and Red Lights to accurately describe HR behavior (heat stress and pause decay).
-+
-+
-+
-+### v1.23.0
-+- 🎂 **Age-based MHR:** Added "User Age" field. Max Heart Rate (MHR) is now automatically calculated using the standard formula `220 - Age`.
-+- 🔒 **Read-only MHR:** MHR field is now read-only and updates instantly when Age changes.
-+- ✅ **Intensity Verification:** Verified HR intensity zones for all activity types (Walk 50-60%, Ride 60-70%, Run 70-85%).
-+
-+
-+### v1.22.0
-+- ❤️ **Smart Heart Rate Logic:** Simplified HR settings by removing "Min HR". HR ranges are now automatically calculated based on your **Max Heart Rate (MHR)** and activity type:
-+  - **Walk:** 50% - 60% MHR
-+  - **Ride:** 60% - 70% MHR
-+  - **Run:** 70% - 85% MHR
-+- ℹ️ **HR Tooltips:** Added formula `MHR = 220 - Age` and intensity zone info to tooltips.
-+- 🛠️ **Bug Fixes:** Unified internal HR calculation logic.
-+
-+
-+### v1.20.0
-+- ⚖️ **Activity Type Multipliers:** Introduced automatic distance scaling based on the sport type:
-+  - **Walk:** 0.7x target distance.
-+  - **Run:** 1.0x target distance.
-+  - **Ride:** 1.5x target distance.
-+- 🐛 **Logic Fix:** Resolved an issue where activities were generated with excessive distances (30km+) regardless of user settings.
-+- 📊 **Activity Insights Prep:** Starting migration of insights to use cloud data instead of local history.
-+
-+
-+### v1.19.0
-+- ⚖️ **Refined Weighting Logic:** Transitioned from distance-decay to a precise additive boost system based on circle coverage.
-+  - **Base Weight:** 1.0 for all enabled districts.
-+  - **Home (Orange) Boosts:** +2.5 (Fully Inside), +2.0 (Mostly Inside), +1.0 (Partially Inside).
-+  - **Work (Blue) Boosts:** +1.5 (Fully Inside), +1.0 (Mostly Inside), +0.5 (Partially Inside).
-+- 📍 **UI Simplification:** Replaced the "General Area" marker with a focused Home/Work system.
-+- ❔ **Map Tooltips:** Added a detailed hint explaining the weighting math to the Map card.
-+
-+
-+### v1.18.0
-+- 📍 **Activity Areas Map:** Integrated a Leaflet-based map to visually configure activity zones. Drag and resize circles to define your preferred generation areas.
-+- ⚖️ **Weighted District Selection:** The generation engine now uses your configured Map Areas to prioritize nearby districts, making random routes more localized.
-+- 📊 **Activity Insights Chart:** Added a dynamic bar chart using Chart.js to visualize your activity distance over the last 14 days.
-+- ⚡ **Strava API Caching:** Implemented an in-memory caching layer for Strava activity lists (5-minute TTL) to optimize performance and respect API rate limits.
-+
-+
-+### v1.17.0
-+- 👥 **Multi-User Registration:** Opened up registration for all users. The "First-Time Setup" lock has been removed to allow a true multi-tenant experience.
-+- 🎖️ **User Roles (VIP vs Normal):** Introduced role-based restrictions. Default users are `normal`, with limits on district span (max 2) and daily scheduled activities (max 2). `vip` users can extend these limits.
-+- 🛡️ **Backend Role Enforcement:** Added server-side validation to prevent non-VIP users from exceeding their quota via API.
-+- ❔ **UI Tooltips:** Added interactive `(?)` icons next to all configuration fields. Hovering reveals detailed information about field purpose, units, and min/max ranges.
-+- 🔄 **Improved Dashboard Refresh:** The refresh button now reloads all statistics, configurations, schedules, and activity lists simultaneously.
-+
+- 🧭 **UI Navigation:** Pagination buttons (Prev/Next) now automatically dim and disable when you reach the first or last page of your activity history.
+- ℹ️ **Tooltip Updates:** Refined tooltips for Weather and Red Lights to accurately describe HR behavior (heat stress and pause decay).
+
+
+
+### v1.23.0
+- 🎂 **Age-based MHR:** Added "User Age" field. Max Heart Rate (MHR) is now automatically calculated using the standard formula `220 - Age`.
+- 🔒 **Read-only MHR:** MHR field is now read-only and updates instantly when Age changes.
+- ✅ **Intensity Verification:** Verified HR intensity zones for all activity types (Walk 50-60%, Ride 60-70%, Run 70-85%).
+
+
+### v1.22.0
+- ❤️ **Smart Heart Rate Logic:** Simplified HR settings by removing "Min HR". HR ranges are now automatically calculated based on your **Max Heart Rate (MHR)** and activity type:
+  - **Walk:** 50% - 60% MHR
+  - **Ride:** 60% - 70% MHR
+  - **Run:** 70% - 85% MHR
+- ℹ️ **HR Tooltips:** Added formula `MHR = 220 - Age` and intensity zone info to tooltips.
+- 🛠️ **Bug Fixes:** Unified internal HR calculation logic.
+
+
+### v1.20.0
+- ⚖️ **Activity Type Multipliers:** Introduced automatic distance scaling based on the sport type:
+  - **Walk:** 0.7x target distance.
+  - **Run:** 1.0x target distance.
+  - **Ride:** 1.5x target distance.
+- 🐛 **Logic Fix:** Resolved an issue where activities were generated with excessive distances (30km+) regardless of user settings.
+- 📊 **Activity Insights Prep:** Starting migration of insights to use cloud data instead of local history.
+
+
+### v1.19.0
+- ⚖️ **Refined Weighting Logic:** Transitioned from distance-decay to a precise additive boost system based on circle coverage.
+  - **Base Weight:** 1.0 for all enabled districts.
+  - **Home (Orange) Boosts:** +2.5 (Fully Inside), +2.0 (Mostly Inside), +1.0 (Partially Inside).
+  - **Work (Blue) Boosts:** +1.5 (Fully Inside), +1.0 (Mostly Inside), +0.5 (Partially Inside).
+- 📍 **UI Simplification:** Replaced the "General Area" marker with a focused Home/Work system.
+- ❔ **Map Tooltips:** Added a detailed hint explaining the weighting math to the Map card.
+
+
+### v1.18.0
+- 📍 **Activity Areas Map:** Integrated a Leaflet-based map to visually configure activity zones. Drag and resize circles to define your preferred generation areas.
+- ⚖️ **Weighted District Selection:** The generation engine now uses your configured Map Areas to prioritize nearby districts, making random routes more localized.
+- 📊 **Activity Insights Chart:** Added a dynamic bar chart using Chart.js to visualize your activity distance over the last 14 days.
+- ⚡ **Strava API Caching:** Implemented an in-memory caching layer for Strava activity lists (5-minute TTL) to optimize performance and respect API rate limits.
+
+
+### v1.17.0
+- 👥 **Multi-User Registration:** Opened up registration for all users. The "First-Time Setup" lock has been removed to allow a true multi-tenant experience.
+- 🎖️ **User Roles (VIP vs Normal):** Introduced role-based restrictions. Default users are `normal`, with limits on district span (max 2) and daily scheduled activities (max 2). `vip` users can extend these limits.
+- 🛡️ **Backend Role Enforcement:** Added server-side validation to prevent non-VIP users from exceeding their quota via API.
+- ❔ **UI Tooltips:** Added interactive `(?)` icons next to all configuration fields. Hovering reveals detailed information about field purpose, units, and min/max ranges.
+- 🔄 **Improved Dashboard Refresh:** The refresh button now reloads all statistics, configurations, schedules, and activity lists simultaneously.
 
 ### v1.16.0
 - 🔔 **Unified Toast Notifications:** Fully redesigned toast system with colored borders, slide-in animation, per-type auto-dismiss durations (error stays longer), and manual dismiss button. Applied consistently across all UI actions.
@@ -318,3 +317,26 @@ The project uses high-quality administrative boundary data for Hanoi's 12 urban 
 
 ---
 *Disclaimer: This project is intended for educational purposes and testing API integrations. Please adhere to Strava's API terms of service.*
+
+## Google Fit API Integration Guide
+
+To enable Google Fit sync, follow these steps to obtain your credentials:
+
+1.  **Create Google Cloud Project**: Go to [Google Cloud Console](https://console.cloud.google.com/), create a new project.
+2.  **Enable Fitness API**: Search for "Fitness API" and click **Enable**.
+3. **Configure OAuth Consent Screen**:
+ * Go to **APIs & Services > OAuth consent screen**.
+ * Create app, choose **External**.
+ * Go to **Data access**, Add Scopes: `fitness.activity.write, fitness.body.write, fitness.location.write`.
+4. **Create Credentials**:
+ * Go to **APIs & Services > Credentials**.
+ * Click **+ Create Credentials > OAuth client ID**.
+ * Application Type: **Web application**.
+ * Authorized redirect URIs: `http://localhost:3000/api/auth/google/callback`.
+5. **Update .env**: Copy the Client ID and Secret into your .env file.
+
+`env
+GOOGLE_CLIENT_ID=your_id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your_secret
+GOOGLE_REDIRECT_URI=http://localhost:3000/api/auth/google/callback
+`
