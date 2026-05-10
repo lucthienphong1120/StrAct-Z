@@ -63,4 +63,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] thêm nút reset to default cạnh nút refresh -> cập nhật tất cả value về mặc định (theo file config), riêng map không xóa point mà chỉ reset tọa độ và scale về mặc định
 + [x] khi nhấn refresh sẽ load lại data cloud, bỏ qua cache, map bà các tab load lại data từ save
 + [ ] check lại HANOI_DISTRICTS trong route_engine đã đúng chuẩn dữ liệu thật chưa (lon,lat,...) theo geojson data
-+ [ ] 
++ [ ] tách nhỏ các file theo chức năng (js, css, ...) để phục vụ AI analysis dễ dàng hơn

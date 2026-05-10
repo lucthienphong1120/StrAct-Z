@@ -134,47 +134,27 @@ async function fetchLimits() {
 function applyLimitsToUI() {
   if (!sysLimits) return;
 
-  // Daily Upload Limit
+  // Sync Input ranges
+  const syncRange = (id, key) => {
+    const el = document.getElementById(id);
+    if (el && sysLimits[key]) {
+      el.min = sysLimits[key].min;
+      el.max = sysLimits[key].max;
+    }
+  };
+
+  syncRange('cfgMaxSpan', 'max_district_span');
+  syncRange('cfgOverlapProtection', 'overlap_protection_minutes');
+  syncRange('cfgMinDist', 'min_distance_km');
+  syncRange('cfgMaxDist', 'max_distance_km');
+  syncRange('scheduleCountMin', 'schedule_count_min');
+  syncRange('scheduleCountMax', 'schedule_count_max');
+  syncRange('cfgUserAge', 'user_age');
+  syncRange('cfgMinPace', 'min_pace');
+  syncRange('cfgMaxPace', 'max_pace');
+
   const dailyLimit = document.getElementById('cfgDailyLimit');
-  if (dailyLimit) {
-    dailyLimit.value = sysLimits.daily_upload_limit.max;
-  }
-  const tipDailyLimit = document.getElementById('tipDailyLimit');
-  if (tipDailyLimit) {
-    tipDailyLimit.setAttribute('data-tooltip', `Số lượng upload tối đa lên Strava mỗi ngày.\nKiểu: int\nMặc định: 2\nPhạm vi: normal: ${sysLimits.daily_upload_limit.min_range.normal}, vip: ${sysLimits.daily_upload_limit.min_range.vip}`);
-  }
-
-  // Route Config
-  const maxSpan = document.getElementById('cfgMaxSpan');
-  if (maxSpan) {
-    maxSpan.min = sysLimits.max_district_span.min;
-    maxSpan.max = sysLimits.max_district_span.max;
-    const tipMaxSpan = document.getElementById('tipMaxSpan');
-    if (tipMaxSpan) tipMaxSpan.setAttribute('data-tooltip', `Số lượng quận tối đa một lộ trình có thể đi qua.\nKiểu: int\nMặc định: 1\nPhạm vi: normal: ${sysLimits.max_district_span.min}-${sysLimits.max_district_span.max}, vip: 1-3`);
-  }
-
-  const overlap = document.getElementById('cfgOverlapProtection');
-  if (overlap) {
-    overlap.min = sysLimits.overlap_protection_minutes.min;
-    overlap.max = sysLimits.overlap_protection_minutes.max;
-    const tipSafeTime = document.getElementById('tipSafeTime');
-    if (tipSafeTime) tipSafeTime.setAttribute('data-tooltip', `Thời gian đệm tối thiểu giữa các hoạt động để tránh trùng lặp.\nKiểu: int\nMặc định: 30\nPhạm vi: ${sysLimits.overlap_protection_minutes.min} - ${sysLimits.overlap_protection_minutes.max}`);
-  }
-
-  const minDist = document.getElementById('cfgMinDist');
-  const maxDist = document.getElementById('cfgMaxDist');
-  if (minDist) {
-    minDist.min = sysLimits.min_distance_km.min;
-    minDist.max = sysLimits.min_distance_km.max;
-    const tipMinDist = document.getElementById('tipMinDist');
-    if (tipMinDist) tipMinDist.setAttribute('data-tooltip', `Khoảng cách tối thiểu của hoạt động.\nKiểu: float\nMặc định: 0.5\nPhạm vi: ${sysLimits.min_distance_km.min} - ${sysLimits.min_distance_km.max}`);
-  }
-  if (maxDist) {
-    maxDist.min = sysLimits.max_distance_km.min;
-    maxDist.max = sysLimits.max_distance_km.max;
-    const tipMaxDist = document.getElementById('tipMaxDist');
-    if (tipMaxDist) tipMaxDist.setAttribute('data-tooltip', `Khoảng cách tối đa của hoạt động.\nKiểu: float\nMặc định: 8.0\nPhạm vi: ${sysLimits.max_distance_km.min} - ${sysLimits.max_distance_km.max}`);
-  }
+  if (dailyLimit) dailyLimit.value = sysLimits.daily_upload_limit.max;
 
   // Target Date Constraints
   const targetDateInput = document.getElementById('cfgTargetDate');
@@ -183,76 +163,87 @@ function applyLimitsToUI() {
     const maxDaysAgo = sysLimits.target_date.max;
     const minDate = new Date();
     minDate.setDate(today.getDate() - maxDaysAgo);
-    
     targetDateInput.min = minDate.toLocaleDateString('en-CA');
     targetDateInput.max = today.toLocaleDateString('en-CA');
-    const tipTargetDate = document.getElementById('tipTargetDate');
-    if (tipTargetDate) tipTargetDate.setAttribute('data-tooltip', `Tạo hoạt động cho một ngày trong quá khứ.\nKiểu: date\nMặc định: Hôm nay\nPhạm vi: normal: 7 ngày, vip: 30 ngày`);
   }
 
-  // Schedule
-  const countMin = document.getElementById('scheduleCountMin');
-  const countMax = document.getElementById('scheduleCountMax');
-  if (countMin) {
-    countMin.min = sysLimits.schedule_count_min.min;
-    countMin.max = sysLimits.schedule_count_min.max;
-  }
-  if (countMax) {
-    countMax.min = sysLimits.schedule_count_max.min;
-    countMax.max = sysLimits.schedule_count_max.max;
-    const tipScheduleMax = document.getElementById('tipScheduleMax');
-    if (tipScheduleMax) tipScheduleMax.setAttribute('data-tooltip', `Số lượng hoạt động tối đa tạo tự động mỗi ngày.\nKiểu: int\nMặc định: 2\nPhạm vi: normal: 2, vip: 3`);
-  }
-
-  // Activity Settings
-  const userAge = document.getElementById('cfgUserAge');
-  if (userAge) {
-    userAge.min = sysLimits.user_age.min;
-    userAge.max = sysLimits.user_age.max;
-  }
-
-  const minPace = document.getElementById('cfgMinPace');
-  const maxPace = document.getElementById('cfgMaxPace');
-  if (minPace) {
-    minPace.min = sysLimits.min_pace.min;
-    minPace.max = sysLimits.min_pace.max;
-  }
-  if (maxPace) {
-    maxPace.min = sysLimits.max_pace.min;
-    maxPace.max = sysLimits.max_pace.max;
-  }
-
-  // Dynamic Tooltips
+  // Build Dynamic Tooltips from Metadata
   updateDynamicTooltips();
 }
 
 function updateDynamicTooltips() {
   if (!sysLimits) return;
-  
-  const tooltipMap = {
-    'cfgMinDist': `Khoảng cách tối thiểu của hoạt động.\nKiểu: float\nMặc định: 0.5\nPhạm vi: 0.1 - 4.0`,
-    'cfgMaxDist': `Khoảng cách tối đa của hoạt động.\nKiểu: float\nMặc định: 8.0\nPhạm vi: 2.0 - 15.0`,
-    'cfgMinPace': `Tốc độ nhanh nhất cho phép.\n(Giá trị thay đổi theo loại hoạt động)\nKiểu: float\nMặc định: 8.0\nPhạm vi: 6.0 - 12.0`,
-    'cfgMaxPace': `Tốc độ chậm nhất cho phép.\n(Giá trị thay đổi theo loại hoạt động)\nKiểu: float\nMặc định: 12.0\nPhạm vi: 10.0 - 15.0`,
-    'cfgMaxSpan': `Số lượng quận tối đa một lộ trình có thể đi qua.\nKiểu: int\nMặc định: 1\nPhạm vi: normal: 1-2, vip: 1-3`,
-    'scheduleCountMax': `Số lượng hoạt động tối đa tạo tự động mỗi ngày.\nKiểu: int\nMặc định: 2\nPhạm vi: normal: 2, vip: 3`,
-    'cfgUserAge': `Tuổi người dùng để tính nhịp tim tối đa.\n(MHR = 220 - Tuổi)\nKiểu: int\nMặc định: 25\nPhạm vi: 18 - 90`,
-    'cfgOverlapProtection': `Thời gian đệm tối thiểu giữa các hoạt động để tránh trùng lặp.\nKiểu: int\nMặc định: 30\nPhạm vi: 10 - 120`
+
+  const tipMapping = {
+    daily_upload_limit: 'tipDailyLimit',
+    allowed_districts: 'tipDistricts',
+    max_district_span: 'tipMaxSpan',
+    overlap_protection_minutes: 'tipSafeTime',
+    use_osrm: 'tipOsrm',
+    random_time_bounds: 'tipRandTime',
+    avoid_workhours: 'tipAvoidWork',
+    target_date: 'tipTargetDate',
+    custom_time_enabled: 'tipCustomTime',
+    min_distance_km: 'tipMinDist',
+    max_distance_km: 'tipMaxDist',
+    activity_type: 'tipActivityType',
+    heart_rate_enabled: 'tipHeartRate',
+    user_age: 'tipUserAge',
+    min_pace: 'tipMinPace',
+    max_pace: 'tipMaxPace',
+    sim_weather: 'tipSimWeather',
+    sim_redlights: 'tipSimRedLights',
+    schedule_time: 'tipScheduleTime',
+    schedule_count_max: 'tipScheduleMax'
   };
 
-  for (const [id, text] of Object.entries(tooltipMap)) {
-    const input = document.getElementById(id);
-    if (!input) continue;
-    
-    // Find associated tooltip icon
-    const group = input.closest('.form-group');
-    if (group) {
-      const icon = group.querySelector('.tooltip-icon');
-      if (icon) {
-        icon.setAttribute('data-tooltip', text);
-      }
-    }
+  for (const [key, tipId] of Object.entries(tipMapping)) {
+    const cfg = sysLimits[key];
+    const tipEl = document.getElementById(tipId);
+    if (!cfg || !tipEl) continue;
+
+    const tooltipText = buildTooltipText(cfg);
+    tipEl.setAttribute('data-tooltip', tooltipText);
   }
+}
+
+function buildTooltipText(cfg) {
+  if (!cfg.label) return '';
+  
+  const lines = [cfg.label];
+  if (cfg.desc_extra) lines.push(`(${cfg.desc_extra})`);
+  lines.push(`Kiểu: ${cfg.type}`);
+  
+  let defVal = cfg.default_label || cfg.default;
+  if (typeof defVal === 'object') {
+    if (defVal.start && defVal.end) defVal = `${defVal.start} - ${defVal.end}`;
+    else if (defVal.start1) defVal = `${defVal.start1}-${defVal.end1} & ${defVal.start2}-${defVal.end2}`;
+    else defVal = JSON.stringify(defVal);
+  }
+  
+  lines.push(`Mặc định: ${defVal}${cfg.unit ? ' ' + cfg.unit : ''}`);
+  
+  const rangeStr = buildRangeString(cfg);
+  if (rangeStr) lines.push(`Phạm vi: ${rangeStr}`);
+  
+  return lines.join('\n');
+}
+
+function buildRangeString(cfg) {
+  const min = cfg.full_min || cfg.full_min_range;
+  const max = cfg.full_max || cfg.full_max_range;
+  const isVarying = (v) => v && typeof v === 'object' && ('normal' in v || 'vip' in v);
+
+  if (isVarying(min) || isVarying(max)) {
+    const getVal = (v, r) => (v && typeof v === 'object' ? v[r] : v) ?? 0;
+    const nRange = `${getVal(min, 'normal')}-${getVal(max, 'normal')}`;
+    const vRange = `${getVal(min, 'vip')}-${getVal(max, 'vip')}`;
+    return `normal: ${nRange}${cfg.unit ? ' ' + cfg.unit : ''}, vip: ${vRange}${cfg.unit ? ' ' + cfg.unit : ''}`;
+  } else if (min !== undefined && max !== undefined) {
+    if (min === 0 && max === 0) return null;
+    return `${min} - ${max}${cfg.unit ? ' ' + cfg.unit : ''}`;
+  }
+  return null;
 }
 
 async function loadDashboard(forceRefresh = false) {
