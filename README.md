@@ -333,6 +333,7 @@ To enable Google Fit sync, follow these steps to obtain your credentials:
  * Click **+ Create Credentials > OAuth client ID**.
  * Application Type: **Web application**.
  * Authorized redirect URIs: `http://localhost:3000/api/auth/google/callback`.
+ * **Important**: You must submit **Publish** app for verification on **Audience** before the "Connect with Google" button will work for other users. Until verified, only the developer (you) can connect their account at **Test users**.
 5. **Update .env**: Copy the Client ID and Secret into your .env file.
 
 `env
