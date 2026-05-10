@@ -147,26 +147,16 @@ const LIMITS = {
   // ─── Activity Settings ────────────────────────────────────────────────────
   activity_type: {
     label: 'Loại hoạt động GPX sẽ được tạo.',
-    desc_extra: 'Tỉ lệ mặc định: 60% Chạy, 30% Đi bộ, 10% Đạp xe',
+    desc_extra: 'Hệ số Dist/Pace: Walk 0.7x/1.25x, Run 1x/0.8x, Ride 1.5x/0.5x',
     type: 'array',
     default: 'Random',
-    default_label: 'Ngẫu nhiên (Tự động)',
+    default_label: 'Ngẫu nhiên (60% Chạy, 30% Đi bộ, 10% Đạp xe)',
     choices: ['Random', 'Run', 'Walk', 'Ride'],
     weights: {
       Random: { Run: 0.6, Walk: 0.3, Ride: 0.1 },
       Run: { Run: 1.0, Walk: 0.0, Ride: 0.0 },
       Walk: { Run: 0.0, Walk: 1.0, Ride: 0.0 },
       Ride: { Run: 0.0, Walk: 0.0, Ride: 1.0 }
-    }
-  },
-  sport_coefficients: {
-    label: 'Hệ số vận động theo loại hình (Read-only).',
-    type: 'object',
-    readonly: true,
-    values: {
-      Run: { distance: 1.0, pace: 1.0, hr: 1.0, steps: 1250 },
-      Walk: { distance: 0.8, pace: 1.4, hr: 0.7, steps: 1400 },
-      Ride: { distance: 3.0, pace: 0.4, hr: 0.8, steps: 0 }
     }
   },
   heart_rate_enabled: {

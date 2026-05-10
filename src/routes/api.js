@@ -63,18 +63,18 @@ router.get('/system-limits', (req, res) => {
 
 // ─── Google Fit Auth ────────────────────────────────────────────────────────
 
-router.get('/google-fit/connect', (req, res) => {
+router.get('/auth/google', (req, res) => {
   const protocol = req.headers['x-forwarded-proto'] || req.protocol;
   const host = req.get('host');
-  const redirectUri = `${protocol}://${host}/api/google-fit/callback`;
+  const redirectUri = `${protocol}://${host}/api/auth/google/callback`;
   res.redirect(googleFit.getAuthUrl(redirectUri));
 });
 
-router.get('/google-fit/callback', async (req, res) => {
+router.get('/auth/google/callback', async (req, res) => {
   try {
     const protocol = req.headers['x-forwarded-proto'] || req.protocol;
     const host = req.get('host');
-    const redirectUri = `${protocol}://${host}/api/google-fit/callback`;
+    const redirectUri = `${protocol}://${host}/api/auth/google/callback`;
     
     const { code } = req.query;
     if (!code) throw new Error('No code provided');
@@ -87,12 +87,11 @@ router.get('/google-fit/callback', async (req, res) => {
     });
     res.send('<script>window.opener.postMessage("google_fit_connected", "*"); window.close();</script>');
   } catch (err) {
-    console.error('[Google Fit Callback Error]', err);
     res.status(500).send(`Auth Error: ${err.message}`);
   }
 });
 
-router.delete('/google-fit/disconnect', async (req, res) => {
+router.delete('/auth/google', async (req, res) => {
   await db.deleteExternalTokens(req.user.id, 'google_fit');
   res.json({ success: true });
 });
