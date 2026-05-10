@@ -194,6 +194,7 @@ function updateDynamicTooltips() {
     sim_weather: 'tipSimWeather',
     sim_redlights: 'tipSimRedLights',
     schedule_time: 'tipScheduleTime',
+    schedule_count_min: 'tipScheduleMin',
     schedule_count_max: 'tipScheduleMax'
   };
 

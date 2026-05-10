@@ -41,6 +41,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.45.0 (2026-05-10)
+- **Architecture**: Implemented a "Single Source of Truth" for configuration.
+- **Dynamic Hints**: Tooltips and input constraints are now generated dynamically from `limits.js` metadata.
+- **Admin Control**: Parameters can be updated in `limits.js` and reflected globally across UI and backend.
+
 ### v1.44.0 (2026-05-10)
 - **Config Overhaul**: Centralized all system and UI limits into `src/config/limits.js`.
 - **Dynamic UI**: Constraints and tooltips now update automatically based on user role (Normal vs VIP).
