@@ -209,6 +209,7 @@ async function loadConfig() {
     document.getElementById('cfgHeartRate').checked = config.heart_rate_enabled === 'true';
     document.getElementById('cfgUserAge').value = config.user_age || '25';
     updateMHR(); 
+    updateActivityTypeHint();
     
     if (document.getElementById('cfgSimWeather')) {
       document.getElementById('cfgSimWeather').checked = config.sim_weather !== 'false';
@@ -579,12 +580,13 @@ window.validateInputs = validateInputs;
 
 // Google Fit Handlers
 function connectGoogleFit() {
-  const win = window.open('/api/auth/google', 'GoogleFitAuth', 'width=600,height=700');
+  // Use direct window.open to avoid CORS issues with Google Auth
+  window.open('/api/google-fit/connect', 'GoogleFitAuth', 'width=600,height=700');
 }
 
 async function disconnectGoogleFit() {
   if (confirm('Are you sure you want to disconnect Google Fit?')) {
-    await api('/auth/google', 'DELETE');
+    await api('/google-fit/disconnect', 'DELETE');
     showToast('Google Fit disconnected', 'info');
     
     // Immediate UI feedback
@@ -599,6 +601,32 @@ async function disconnectGoogleFit() {
   }
 }
 
+function updateActivityTypeHint() {
+  if (!window.sysLimits) return;
+  const type = document.getElementById('cfgActivityType').value;
+  const coeffs = window.sysLimits.sport_coefficients?.values || {};
+  const tip = document.getElementById('tipActivityType');
+  const hrTip = document.getElementById('tipHeartRateZones');
+  
+  if (!tip) return;
+
+  let hintText = '';
+  if (type === 'Random') {
+    hintText = 'Hệ số sẽ được áp dụng ngẫu nhiên theo tỉ lệ 60/30/10.';
+  } else {
+    const c = coeffs[type];
+    if (c) {
+      hintText = `Hệ số hiện tại (${type}): Dist ${c.distance}x, Pace ${c.pace}x, HR ${c.hr}x, Steps ${c.steps}/km.`;
+    }
+  }
+  
+  tip.setAttribute('data-tooltip', `${window.sysLimits.activity_type.label}\n${hintText}`);
+  if (hrTip) hrTip.setAttribute('data-tooltip', `Hệ số HR hiện tại: ${type === 'Random' ? 'Tự động' : coeffs[type]?.hr + 'x'}`);
+}
+
+// Add listener for activity type change
+document.getElementById('cfgActivityType')?.addEventListener('change', updateActivityTypeHint);
+
 window.addEventListener('message', (event) => {
   if (event.data === 'google_fit_connected') {
     showToast('Google Fit connected successfully!', 'success');
@@ -608,3 +636,4 @@ window.addEventListener('message', (event) => {
 
 window.connectGoogleFit = connectGoogleFit;
 window.disconnectGoogleFit = disconnectGoogleFit;
+window.updateActivityTypeHint = updateActivityTypeHint;

@@ -18,7 +18,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] mọi update config, button sửa đổi, validate, check quyền, vip max range,... đều phải có notify
 + [x] toàn bộ config đều phải có hint (?) button hover hiện giải thích thông tin (ý nghĩa, loại giá trị, đơn vị, phạm vi min/max)
 + [x] review, cân nhắc vị trí có thể dùng Caching layer (optimize API calls)
-+ [ ] tích hợp đẩy data về các luồng công cụ Health Hub như Google Fit, Health connect, Samsung Health, Apple Health
++ [x] tích hợp đẩy data về các luồng công cụ Health Hub như Google Fit, Health connect, Samsung Health, Apple Health
 + [x] tích hợp bổ sung cho các công cụ luyện tập khác như adidas running, nike run club, runkeeper (optional, not tested)
 + [ ] restrict linked tài khoản stract z với tối đa 1 tài khoản strava và 1 với mỗi hệ thống tích hợp 3rd (nếu có)
 + [x] review và sửa lại min, max, range các option + validate (min/max/range)
@@ -66,3 +66,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] tách nhỏ các file theo chức năng (js, css, ...) để phục vụ AI analysis dễ dàng hơn
 + [x] xử lý validate khi input áp dụng toàn bộ config trong file base config limit (type, min, max, range, ...) -> toast thông báo khi nhập sai/ngoài phạm vi cho phép, tối ưu về mặt giao diện và logic xử lý khi nhập sai
 + [x] check lại logic Auto Schedule min/max đang đặt từ 1-2 hoạt động/ngày nhưng sao thấy toàn random ra 2
++ [x] update lại hint của Heart Rate Zones (Target), tạo readonly config tương ứng để show về tỉ lệ hệ số distance và pace từ Activity Type -> đồng thời move min/max Distance (km) xuống gần
