@@ -34,17 +34,17 @@ async function executeJob(accountId) {
     const role = await db.getAccountRole(accountId);
     const limits = systemLimits[role] || systemLimits.normal;
 
-    if (stats.todayCount >= limits.daily_upload_limit) {
-      console.log(`[Scheduler] Limit reached for account ${accountId} (${limits.daily_upload_limit} activities/day).`);
+    if (stats.todayCount >= limits.daily_upload_limit.max) {
+      console.log(`[Scheduler] Limit reached for account ${accountId} (${limits.daily_upload_limit.max} activities/day).`);
       return { success: false, message: 'VIP_REQUIRED' };
     }
 
     // Get configuration
     const config = await db.getAllConfig(accountId);
-    const minCount = parseInt(config.schedule_count_min) || 1;
-    const maxCount = parseInt(config.schedule_count_max) || 1;
+    const minCount = config.schedule_count_min !== undefined ? parseInt(config.schedule_count_min) : 1;
+    const maxCount = config.schedule_count_max !== undefined ? parseInt(config.schedule_count_max) : 1;
     let taskCount = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
-    if (taskCount > limits.schedule_count_max) taskCount = limits.schedule_count_max; // Dynamic safety cap
+    if (taskCount > limits.schedule_count_max.max) taskCount = limits.schedule_count_max.max; // Dynamic safety cap
 
     console.log(`[Scheduler] Account ${accountId} will generate ${taskCount} activities...`);
     
@@ -54,7 +54,7 @@ async function executeJob(accountId) {
     for (let i = 0; i < taskCount; i++) {
       // Check daily limit inside loop
       const loopStats = await db.getActivityStats(accountId);
-      if (loopStats.todayCount >= limits.daily_upload_limit) {
+      if (loopStats.todayCount >= limits.daily_upload_limit.max) {
         console.log(`[Scheduler] Limit reached for account ${accountId}.`);
         if (i === 0) return { success: false, message: 'VIP_REQUIRED' };
         break; // Stop generating more if limit reached

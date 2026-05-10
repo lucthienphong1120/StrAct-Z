@@ -410,8 +410,8 @@ router.post('/scheduler', async (req, res) => {
   const role = req.user.role || 'normal';
   const limits = systemLimits[role] || systemLimits.normal;
 
-  if (parseInt(countMin) > limits.schedule_count_max || parseInt(countMax) > limits.schedule_count_max) {
-    return res.status(403).json({ error: `Max ${limits.schedule_count_max} scheduled activities allowed for your account.` });
+  if (parseInt(countMin) > limits.schedule_count_max.max || parseInt(countMax) > limits.schedule_count_max.max) {
+    return res.status(403).json({ error: `Max ${limits.schedule_count_max.max} scheduled activities allowed for your account.` });
   }
   await scheduler.updateSchedule(req.user.id, enabled, time, countMin, countMax);
   res.json(await scheduler.getStatus(req.user.id));

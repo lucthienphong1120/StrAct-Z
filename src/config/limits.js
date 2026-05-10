@@ -105,7 +105,7 @@ const LIMITS = {
     type: 'int',
     default: 1,
     min: 0,
-    max: 1
+    max: 2
   },
   schedule_count_max: {
     label: 'Số lượng hoạt động tối đa tạo tự động mỗi ngày.',

@@ -29,8 +29,14 @@ async function updateSchedule() {
   const countMin = parseInt(document.getElementById('scheduleCountMin').value);
   const countMax = parseInt(document.getElementById('scheduleCountMax').value);
   
+  if (countMin > window.sysLimits.schedule_count_min.max) {
+    showToast(`Số lượng tối thiểu không được vượt quá ${window.sysLimits.schedule_count_min.max}.`, 'warning');
+    document.getElementById('scheduleCountMin').value = window.sysLimits.schedule_count_min.max;
+    return;
+  }
+  
   if (countMax > window.sysLimits.schedule_count_max.max) {
-    showToast(`Your account is limited to ${window.sysLimits.schedule_count_max.max} daily scheduled activities.`, 'warning');
+    showToast(`Tài khoản của bạn giới hạn tối đa ${window.sysLimits.schedule_count_max.max} hoạt động tự động.`, 'warning');
     document.getElementById('scheduleCountMax').value = window.sysLimits.schedule_count_max.max;
     return;
   }
