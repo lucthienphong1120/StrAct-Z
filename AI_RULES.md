@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.47.2). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.47.3). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -41,12 +41,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
-### v1.47.2 (2026-05-10)
-- **Cleanup**: Removed legacy GeoJSON files and temporary scratch scripts. 
-- **Refactor**: Eliminated unused hardcoded constants in API routes.
-- **Documentation**: Sourced and verified administrative data from the OSM-backed DVHCVN project.
+### v1.47.3 (2026-05-10)
+- **District Registry Update**: Refined the suburban district list by removing Ứng Hòa, Thạch Thất, Mê Linh, and Sóc Sơn, and adding Huyện Đan Phượng.
+- **Geographic Precision**: Added specific centroid and radius for Đan Phượng.
 
-### v1.47.1 (2026-05-10)
+### v1.47.2 (2026-05-10)
 
 ### v1.45.1 (2026-05-10)
 
