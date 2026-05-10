@@ -46,10 +46,11 @@ For detailed information, please refer to our documentation guides:
 
 ## 📋 Changelog
 
-### v1.44.0 (2026-05-10) - Config Overhaul
-- **Centralized Configuration**: All system limits and UI ranges are now managed in `src/config/limits.js`.
-- **Dynamic UI Hints**: Tooltips and input constraints (min/max) now update dynamically based on the user's role (Normal/VIP).
-- **Daily Upload Limit**: Added an enforced daily upload limit (2 for Normal, 5 for VIP).
+### v1.44.0 (2026-05-10)
+- **Major Overhaul: Configuration System**: Centralized all system and UI limits into `src/config/limits.js`.
+- **Dynamic UI**: Tooltips and input constraints (min/max) now update automatically based on user role (Normal vs VIP).
+- **New Parameters**: Added work hours avoidance, weather simulation, red lights simulation, and user age-based MHR calculation.
+- **Upload Limits**: Implemented daily upload limits (2 for Normal, 5 for VIP).
 - **Cleanup**: Removed unused legacy configuration parameters.
 
 ### v1.43.2 (2026-05-10)
@@ -114,7 +115,6 @@ For detailed information, please refer to our documentation guides:
 
 ### v1.37.2 (2026-05-09)
 - **UI Consistency**: Updated the tooltip in the activity history list to match the global "hint" style (blue circle with '?').
-
 
 ### v1.37.1 (2026-05-09)
 - **Refinement**: Further reduced Home location weights to **+2.0 / +1.2 / +0.5** as requested.

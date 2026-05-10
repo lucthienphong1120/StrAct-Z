@@ -149,12 +149,16 @@ function applyLimitsToUI() {
   if (maxSpan) {
     maxSpan.min = sysLimits.max_district_span.min;
     maxSpan.max = sysLimits.max_district_span.max;
+    const tipMaxSpan = document.getElementById('tipMaxSpan');
+    if (tipMaxSpan) tipMaxSpan.setAttribute('data-tooltip', `Max districts a route can cross. Allowed: ${sysLimits.max_district_span.min}-${sysLimits.max_district_span.max}`);
   }
 
   const overlap = document.getElementById('cfgOverlapProtection');
   if (overlap) {
     overlap.min = sysLimits.overlap_protection_minutes.min;
     overlap.max = sysLimits.overlap_protection_minutes.max;
+    const tipSafeTime = document.getElementById('tipSafeTime');
+    if (tipSafeTime) tipSafeTime.setAttribute('data-tooltip', `Min time buffer between activities. Allowed: ${sysLimits.overlap_protection_minutes.min}-${sysLimits.overlap_protection_minutes.max} min`);
   }
 
   const minDist = document.getElementById('cfgMinDist');
@@ -162,10 +166,26 @@ function applyLimitsToUI() {
   if (minDist) {
     minDist.min = sysLimits.min_distance_km.min;
     minDist.max = sysLimits.min_distance_km.max;
+    const tipMinDist = document.getElementById('tipMinDist');
+    if (tipMinDist) tipMinDist.setAttribute('data-tooltip', `Minimum distance for activity. Allowed: ${sysLimits.min_distance_km.min}-${sysLimits.min_distance_km.max} km`);
   }
   if (maxDist) {
     maxDist.min = sysLimits.max_distance_km.min;
     maxDist.max = sysLimits.max_distance_km.max;
+    const tipMaxDist = document.getElementById('tipMaxDist');
+    if (tipMaxDist) tipMaxDist.setAttribute('data-tooltip', `Maximum distance for activity. Allowed: ${sysLimits.max_distance_km.min}-${sysLimits.max_distance_km.max} km`);
+  }
+
+  // Target Date Constraints
+  const targetDateInput = document.getElementById('cfgTargetDate');
+  if (targetDateInput) {
+    const today = new Date();
+    const maxDaysAgo = sysLimits.target_date.max;
+    const minDate = new Date();
+    minDate.setDate(today.getDate() - maxDaysAgo);
+    
+    targetDateInput.min = minDate.toLocaleDateString('en-CA');
+    targetDateInput.max = today.toLocaleDateString('en-CA');
   }
 
   // Schedule
@@ -178,6 +198,8 @@ function applyLimitsToUI() {
   if (countMax) {
     countMax.min = sysLimits.schedule_count_max.min;
     countMax.max = sysLimits.schedule_count_max.max;
+    const tipScheduleMax = document.getElementById('tipScheduleMax');
+    if (tipScheduleMax) tipScheduleMax.setAttribute('data-tooltip', `Max daily scheduled activities. Your limit: ${sysLimits.schedule_count_max.max}`);
   }
 
   // Activity Settings

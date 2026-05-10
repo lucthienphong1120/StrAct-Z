@@ -9,7 +9,7 @@ const LIMITS = {
     type: 'int',
     default: 2,
     min_range: { normal: 2, vip: 5 },
-    max_range: { normal: 2, vip: 10 }
+    max_range: { normal: 2, vip: 5 }
   },
 
   // ─── Route Configuration ──────────────────────────────────────────────────

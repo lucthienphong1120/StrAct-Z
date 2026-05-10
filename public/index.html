@@ -143,13 +143,13 @@
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Max Districts per Route <span class="tooltip-icon"
+                  <label class="form-label">Max Districts per Route <span class="tooltip-icon" id="tipMaxSpan"
                       data-tooltip="Max districts a route can cross. Normal: 2, VIP: 3">?</span></label>
                   <input type="number" id="cfgMaxSpan" class="form-input" value="1" min="1" max="3"
                     onchange="checkMaxSpan()">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Safe Time (min) <span class="tooltip-icon tooltip-left"
+                  <label class="form-label">Safe Time (min) <span class="tooltip-icon tooltip-left" id="tipSafeTime"
                       data-tooltip="Minimum time buffer between activities to avoid overlapping (default 30m)">?</span></label>
                   <input type="number" id="cfgOverlapProtection" class="form-input" value="30" min="0" max="1440">
                 </div>
@@ -238,12 +238,12 @@
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Min Distance (km) <span class="tooltip-icon tooltip-right"
+                  <label class="form-label">Min Distance (km) <span class="tooltip-icon tooltip-right" id="tipMinDist"
                       data-tooltip="Minimum distance for generated activity (0.2 - 4.0)">?</span></label>
                   <input type="number" step="0.1" id="cfgMinDist" class="form-input" value="0.5" min="0.2" max="4.0">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Max Distance (km) <span class="tooltip-icon tooltip-left"
+                  <label class="form-label">Max Distance (km) <span class="tooltip-icon tooltip-left" id="tipMaxDist"
                       data-tooltip="Maximum distance for generated activity (1.0 - 15.0)">?</span></label>
                   <input type="number" step="0.1" id="cfgMaxDist" class="form-input" value="8.0" min="1.0" max="15.0">
                 </div>
@@ -362,7 +362,7 @@
                     onchange="updateSchedule()">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Max Count <span class="tooltip-icon tooltip-left"
+                  <label class="form-label">Max Count <span class="tooltip-icon tooltip-left" id="tipScheduleMax"
                       data-tooltip="Max number of activities. Normal: 2, VIP: 3">?</span></label>
                   <input type="number" id="scheduleCountMax" class="form-input" value="2" min="1" max="3"
                     onchange="updateSchedule()">
