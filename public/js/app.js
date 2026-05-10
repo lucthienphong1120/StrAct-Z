@@ -1117,7 +1117,7 @@ function updateLockUI() {
 async function renderDistrictBorders() {
   if (!map) return;
   try {
-    const res = await fetch('/geo/hanoi_urban_districts.geojson');
+    const res = await fetch('/geo/hanoi_full_districts.geojson');
     if (!res.ok) throw new Error('Could not load districts GeoJSON');
     const geojson = await res.json();
     
