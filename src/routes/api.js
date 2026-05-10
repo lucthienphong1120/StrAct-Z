@@ -8,7 +8,7 @@ const path = require('path');
 const fs = require('fs');
 const db = require('../db/database');
 const scheduler = require('../services/scheduler');
-const { generateActivity, HANOI_DISTRICTS } = require('../services/gpx-generator');
+const { generateActivity } = require('../services/gpx-generator');
 const stravaApi = require('../services/strava-api');
 const systemLimits = require('../config/limits');
 

@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.47.1). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.47.2). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -41,11 +41,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
-### v1.47.1 (2026-05-10)
-- **Map Data Upgrade**: Replaced the partial urban GeoJSON with a full Hanoi administrative dataset (`hanoi_full_districts.geojson`).
-- **Full Highlighting**: All 30 administrative units in Hanoi now have proper boundary highlighting on the map.
+### v1.47.2 (2026-05-10)
+- **Cleanup**: Removed legacy GeoJSON files and temporary scratch scripts. 
+- **Refactor**: Eliminated unused hardcoded constants in API routes.
+- **Documentation**: Sourced and verified administrative data from the OSM-backed DVHCVN project.
 
-### v1.47.0 (2026-05-10)
+### v1.47.1 (2026-05-10)
 
 ### v1.45.1 (2026-05-10)
 
