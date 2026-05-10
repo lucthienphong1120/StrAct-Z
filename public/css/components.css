@@ -76,6 +76,7 @@
   transition: var(--transition);
 }
 .form-input:focus, .form-select:focus { outline: none; border-color: var(--strava-orange); box-shadow: 0 0 0 3px var(--strava-orange-glow); }
+.form-input.invalid, .form-select.invalid { border-color: var(--accent-red) !important; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important; }
 
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 

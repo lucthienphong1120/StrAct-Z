@@ -59,6 +59,8 @@ function applyLimitsToUI() {
   setZone('hrZoneWalk', hrZones.Walk);
   setZone('hrZoneRide', hrZones.Ride);
   setZone('hrZoneRun', hrZones.Run);
+  
+  attachRealTimeValidation();
 }
 
 function updateDynamicTooltips() {
@@ -263,42 +265,136 @@ function validateTimeBounds(minTimeStr, maxTimeStr, targetDateStr, isCustomTime)
   return true;
 }
 
-function validateInputs(config) {
+function validateInputs(config, isRealTime = false) {
   const sysL = window.sysLimits;
   if (!sysL) return true;
 
-  if (parseInt(config.max_district_span, 10) > sysL.max_district_span.max) {
-    showToast(`Tối đa ${sysL.max_district_span.max} quận cho tài khoản của bạn.`, 'warning');
-    document.getElementById('cfgMaxSpan').value = sysL.max_district_span.max;
-    return false;
-  }
-  
-  const minDist = parseFloat(config.min_distance_km);
-  const maxDist = parseFloat(config.max_distance_km);
-  
-  if (minDist < sysL.min_distance_km.min || minDist > sysL.min_distance_km.max) { 
-    showToast(`Min Distance phải từ ${sysL.min_distance_km.min} đến ${sysL.min_distance_km.max} km`, 'error'); 
-    return false; 
-  }
-  if (maxDist < sysL.max_distance_km.min || maxDist > sysL.max_distance_km.max) { 
-    showToast(`Max Distance phải từ ${sysL.max_distance_km.min} đến ${sysL.max_distance_km.max} km`, 'error'); 
-    return false; 
-  }
-  if (minDist >= maxDist) { showToast('Min Distance phải nhỏ hơn Max Distance', 'error'); return false; }
-  
-  const minPace = parseFloat(config.min_pace);
-  const maxPace = parseFloat(config.max_pace);
-  if (minPace < sysL.min_pace.min || minPace > sysL.min_pace.max) { 
-    showToast(`Min Pace phải từ ${sysL.min_pace.min} đến ${sysL.min_pace.max} min/km`, 'error'); 
-    return false; 
-  }
-  if (maxPace < sysL.max_pace.min || maxPace > sysL.max_pace.max) { 
-    showToast(`Max Pace phải từ ${sysL.max_pace.min} đến ${sysL.max_pace.max} min/km`, 'error'); 
-    return false; 
-  }
-  if (minPace > maxPace) { showToast('Min Pace phải nhỏ hơn hoặc bằng Max Pace', 'error'); return false; }
+  // Key mapping from config object to DOM element IDs
+  const idMap = {
+    max_district_span: 'cfgMaxSpan',
+    min_distance_km: 'cfgMinDist',
+    max_distance_km: 'cfgMaxDist',
+    min_pace: 'cfgMinPace',
+    max_pace: 'cfgMaxPace',
+    user_age: 'cfgUserAge',
+    overlap_protection_minutes: 'cfgOverlapProtection'
+  };
 
-  return true;
+  const keyMap = {
+    max_district_span: 'max_district_span',
+    min_distance_km: 'min_distance_km',
+    max_distance_km: 'max_distance_km',
+    min_pace: 'min_pace',
+    max_pace: 'max_pace',
+    user_age: 'user_age',
+    overlap_protection_minutes: 'overlap_protection_minutes',
+    selected_districts: 'allowed_districts'
+  };
+
+  let isValid = true;
+
+  for (const [cfgKey, sysKey] of Object.entries(keyMap)) {
+    const rule = sysL[sysKey];
+    const el = document.getElementById(idMap[cfgKey]);
+    if (!rule) continue;
+
+    const value = config[cfgKey];
+    const label = rule.label || sysKey;
+
+    // Clear previous invalid state
+    if (el) el.classList.remove('invalid');
+
+    // 1. Type specific parsing
+    let parsedVal = value;
+    if (rule.type === 'int') parsedVal = parseInt(value, 10);
+    else if (rule.type === 'float') parsedVal = parseFloat(value);
+    else if (rule.type === 'array') parsedVal = value ? value.split(',') : [];
+
+    // 2. Range Validation
+    let error = null;
+    if (rule.min !== undefined) {
+      if (rule.type === 'int' || rule.type === 'float') {
+        if (parsedVal < rule.min) error = `${label} phải từ ${rule.min} đến ${rule.max}${rule.unit ? ' ' + rule.unit : ''}`;
+      } else if (rule.type === 'array') {
+        if (parsedVal.length < rule.min) error = `Vui lòng chọn ít nhất ${rule.min} ${label}`;
+      }
+    }
+
+    if (!error && rule.max !== undefined) {
+      if (rule.type === 'int' || rule.type === 'float') {
+        if (parsedVal > rule.max) error = `${label} không được vượt quá ${rule.max}${rule.unit ? ' ' + rule.unit : ''}`;
+      } else if (rule.type === 'array') {
+        if (parsedVal.length > rule.max) error = `Bạn chỉ được chọn tối đa ${rule.max} ${label} cho tài khoản hiện tại.`;
+      }
+    }
+
+    if (error) {
+      if (el) el.classList.add('invalid');
+      if (!isRealTime) {
+        showToast(error, rule.type === 'array' ? 'warning' : 'error');
+        return false;
+      }
+      isValid = false;
+    }
+  }
+
+  // Cross-field validation (Distance)
+  const minDistEl = document.getElementById('cfgMinDist');
+  const maxDistEl = document.getElementById('cfgMaxDist');
+  if (parseFloat(config.min_distance_km) >= parseFloat(config.max_distance_km)) {
+    if (minDistEl) minDistEl.classList.add('invalid');
+    if (maxDistEl) maxDistEl.classList.add('invalid');
+    if (!isRealTime) {
+      showToast('Min Distance phải nhỏ hơn Max Distance', 'error');
+      return false;
+    }
+    isValid = false;
+  }
+
+  // Cross-field validation (Pace)
+  const minPaceEl = document.getElementById('cfgMinPace');
+  const maxPaceEl = document.getElementById('cfgMaxPace');
+  if (parseFloat(config.min_pace) > parseFloat(config.max_pace)) {
+    if (minPaceEl) minPaceEl.classList.add('invalid');
+    if (maxPaceEl) maxPaceEl.classList.add('invalid');
+    if (!isRealTime) {
+      showToast('Min Pace phải nhỏ hơn hoặc bằng Max Pace', 'error');
+      return false;
+    }
+    isValid = false;
+  }
+
+  return isValid;
+}
+
+function attachRealTimeValidation() {
+  const inputs = [
+    'cfgMaxSpan', 'cfgOverlapProtection', 'cfgMinDist', 'cfgMaxDist', 
+    'cfgMinPace', 'cfgMaxPace', 'cfgUserAge'
+  ];
+
+  inputs.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const validate = () => {
+      const config = {
+        max_district_span: document.getElementById('cfgMaxSpan').value,
+        overlap_protection_minutes: document.getElementById('cfgOverlapProtection').value,
+        min_distance_km: document.getElementById('cfgMinDist').value,
+        max_distance_km: document.getElementById('cfgMaxDist').value,
+        min_pace: document.getElementById('cfgMinPace').value,
+        max_pace: document.getElementById('cfgMaxPace').value,
+        user_age: document.getElementById('cfgUserAge').value,
+        selected_districts: Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value).join(',')
+      };
+      validateInputs(config, true);
+    };
+
+    el.addEventListener('input', validate);
+    el.addEventListener('change', validate);
+    el.addEventListener('blur', validate);
+  });
 }
 
 async function saveConfig() {

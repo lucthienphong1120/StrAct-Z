@@ -28,26 +28,18 @@ router.get('/config', async (req, res) => {
 
 // System limits endpoint moved below to avoid duplication
 
+const { validateConfig } = require('../utils/validation');
+
 router.post('/config', async (req, res) => {
   const updates = req.body;
   const role = req.user.role || 'normal';
-  const limits = systemLimits[role] || systemLimits.normal;
   
-  // Enforce limits from config file
-  const sysL = systemLimits.getLimits(role);
-
-  if (updates.max_district_span && parseInt(updates.max_district_span) > sysL.max_district_span.max) {
-    return res.status(403).json({ error: `Max ${sysL.max_district_span.max} districts allowed for your account.` });
+  const validation = validateConfig(updates, role);
+  if (!validation.success) {
+    return res.status(400).json({ error: validation.error });
   }
 
-  if (updates.min_distance_km && (parseFloat(updates.min_distance_km) < sysL.min_distance_km.min || parseFloat(updates.min_distance_km) > sysL.min_distance_km.max)) {
-     return res.status(400).json({ error: `Min distance must be between ${sysL.min_distance_km.min} and ${sysL.min_distance_km.max} km` });
-  }
-  if (updates.max_distance_km && (parseFloat(updates.max_distance_km) < sysL.max_distance_km.min || parseFloat(updates.max_distance_km) > sysL.max_distance_km.max)) {
-     return res.status(400).json({ error: `Max distance must be between ${sysL.max_distance_km.min} and ${sysL.max_distance_km.max} km` });
-  }
-
-  for (const [key, value] of Object.entries(updates)) {
+  for (const [key, value] of Object.entries(validation.sanitized)) {
     await db.setConfig(req.user.id, key, value);
   }
   res.json({ success: true, config: await db.getAllConfig(req.user.id) });
@@ -406,14 +398,29 @@ router.delete('/activities/:id', async (req, res) => {
 router.get('/scheduler', async (req, res) => res.json(await scheduler.getStatus(req.user.id)));
 
 router.post('/scheduler', async (req, res) => {
-  const { enabled, time, countMin, countMax } = req.body;
+  const updates = req.body;
   const role = req.user.role || 'normal';
-  const limits = systemLimits[role] || systemLimits.normal;
 
-  if (parseInt(countMin) > limits.schedule_count_max.max || parseInt(countMax) > limits.schedule_count_max.max) {
-    return res.status(403).json({ error: `Max ${limits.schedule_count_max.max} scheduled activities allowed for your account.` });
+  const validation = validateConfig({
+    schedule_enabled: updates.enabled,
+    schedule_time: updates.time,
+    schedule_count_min: updates.countMin,
+    schedule_count_max: updates.countMax
+  }, role);
+
+  if (!validation.success) {
+    return res.status(400).json({ error: validation.error });
   }
-  await scheduler.updateSchedule(req.user.id, enabled, time, countMin, countMax);
+
+  const s = validation.sanitized;
+  await scheduler.updateSchedule(
+    req.user.id, 
+    s.schedule_enabled === 'true', 
+    s.schedule_time, 
+    parseInt(s.schedule_count_min), 
+    parseInt(s.schedule_count_max)
+  );
+  
   res.json(await scheduler.getStatus(req.user.id));
 });
 
