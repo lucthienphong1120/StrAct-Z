@@ -134,8 +134,8 @@
             <div class="card-body">
               <div class="form-row">
                 <div class="form-group" style="grid-column: 1 / -1;">
-                  <label class="form-label">Allowed Districts (Hanoi) <span class="tooltip-icon"
-                      data-tooltip="Select districts where your activities are allowed to be generated">?</span></label>
+                  <label class="form-label">Allowed Districts (Hanoi) <span class="tooltip-icon" id="tipDistricts"
+                      data-tooltip="Các quận được phép tạo lộ trình.&#10;Kiểu: Danh sách (array)&#10;Mặc định: 10 quận nội thành&#10;Phạm vi: Normal: 4-10, VIP: 2-12">?</span></label>
                   <div id="cfgDistricts" style="display:flex; flex-wrap:wrap; gap:10px;">
                     <!-- Checkboxes will be populated by JS -->
                   </div>
@@ -144,13 +144,13 @@
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Max Districts per Route <span class="tooltip-icon" id="tipMaxSpan"
-                      data-tooltip="Max districts a route can cross. Normal: 2, VIP: 3">?</span></label>
+                      data-tooltip="Số lượng quận tối đa một lộ trình có thể đi qua.&#10;Kiểu: Số nguyên (int)&#10;Mặc định: 1&#10;Phạm vi: Normal: 1-2, VIP: 1-3">?</span></label>
                   <input type="number" id="cfgMaxSpan" class="form-input" value="1" min="1" max="3"
                     onchange="checkMaxSpan()">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Safe Time (min) <span class="tooltip-icon tooltip-left" id="tipSafeTime"
-                      data-tooltip="Minimum time buffer between activities to avoid overlapping (default 30m)">?</span></label>
+                      data-tooltip="Thời gian đệm tối thiểu giữa các hoạt động để tránh trùng lặp.&#10;Kiểu: Số nguyên (phút)&#10;Mặc định: 30&#10;Phạm vi: 10 - 120">?</span></label>
                   <input type="number" id="cfgOverlapProtection" class="form-input" value="30" min="0" max="1440">
                 </div>
                 <div class="form-group" style="display:flex;align-items:center;">
@@ -158,7 +158,7 @@
                     <input type="checkbox" id="cfgOsrm" checked>
                     <div class="toggle-track"></div>
                     <span class="toggle-label">Use OSRM <span class="tooltip-icon"
-                        data-tooltip="Routes follow real streets via OSRM.&#10;Disable for fallback straight-line paths.">?</span></span>
+                        data-tooltip="Lộ trình đi theo đường thực tế qua OSRM.&#10;(Tắt để dùng đường chim bay fallback)&#10;Kiểu: Boolean&#10;Mặc định: Bật">?</span></span>
                   </label>
                 </div>
               </div>
@@ -182,7 +182,7 @@
                       <label class="form-label"
                         style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">&#x1F552; Random Time
                         Bounds <span class="tooltip-icon"
-                          data-tooltip="Activity start time will be randomized within this range">?</span></label>
+                          data-tooltip="Thời gian bắt đầu hoạt động sẽ được chọn ngẫu nhiên trong khoảng này.&#10;Kiểu: Thời gian (HH:mm)&#10;Mặc định: 04:30 - 21:30">?</span></label>
                       <div style="display:flex;gap:5px;align-items:center;">
                         <input type="time" id="cfgRandMinTime" class="form-input" value="04:30"
                           style="padding:4px 8px;font-size:0.85rem;">
@@ -197,7 +197,7 @@
                       <label class="form-label"
                         style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">&#x1F6AB; Avoid
                         Workhours <span class="tooltip-icon"
-                          data-tooltip="Generated activities will not fall into these 2 time windows">?</span></label>
+                          data-tooltip="Hoạt động ngẫu nhiên sẽ không nằm trong 2 khung giờ này.&#10;Kiểu: Thời gian (HH:mm)&#10;Mặc định: 08:00-11:30 & 13:30-17:30">?</span></label>
                       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
                         <div style="display:flex;gap:5px;align-items:center;">
                           <input type="time" id="cfgWorkStart1" class="form-input" value="08:00"
@@ -221,13 +221,11 @@
 
                 <div id="timeCustomInputs" class="form-row" style="margin-top:10px; opacity:0.4; pointer-events:none;">
                   <div class="form-group">
-                    <label class="form-label">Target Date <span class="tooltip-icon tooltip-right"
-                        data-tooltip="Generate an activity for a specific date in the past">?</span></label>
+                        data-tooltip="Tạo hoạt động cho một ngày cụ thể trong quá khứ.&#10;Kiểu: Ngày (date)&#10;Mặc định: Hôm nay&#10;Phạm vi: Normal: 7 ngày, VIP: 30 ngày">?</span></label>
                     <input type="date" id="cfgTargetDate" class="form-input">
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Time Range <span class="tooltip-icon tooltip-left"
-                        data-tooltip="Limits the start time for the target date">?</span></label>
+                        data-tooltip="Giới hạn thời gian bắt đầu cho ngày mục tiêu.&#10;Kiểu: Thời gian (HH:mm)&#10;Mặc định: 04:30 - 21:30">?</span></label>
                     <div style="display:flex;gap:10px;">
                       <input type="time" id="cfgCustomMinTime" class="form-input" value="04:30">
                       <span style="align-self:center;">-</span>
@@ -239,12 +237,12 @@
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Min Distance (km) <span class="tooltip-icon tooltip-right" id="tipMinDist"
-                      data-tooltip="Minimum distance for generated activity (0.2 - 4.0)">?</span></label>
+                      data-tooltip="Khoảng cách tối thiểu của hoạt động.&#10;Kiểu: Số thực (km)&#10;Mặc định: 0.5&#10;Phạm vi: 0.1 - 4.0">?</span></label>
                   <input type="number" step="0.1" id="cfgMinDist" class="form-input" value="0.5" min="0.2" max="4.0">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Max Distance (km) <span class="tooltip-icon tooltip-left" id="tipMaxDist"
-                      data-tooltip="Maximum distance for generated activity (1.0 - 15.0)">?</span></label>
+                      data-tooltip="Khoảng cách tối đa của hoạt động.&#10;Kiểu: Số thực (km)&#10;Mặc định: 8.0&#10;Phạm vi: 2.0 - 15.0">?</span></label>
                   <input type="number" step="0.1" id="cfgMaxDist" class="form-input" value="8.0" min="1.0" max="15.0">
                 </div>
               </div>
@@ -261,7 +259,7 @@
               <div class="form-row" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border);">
                 <div class="form-group">
                   <label class="form-label">Daily Upload Limit <span class="tooltip-icon tooltip-right"
-                      id="tipDailyLimit" data-tooltip="Max activities allowed to upload to Strava daily.">?</span></label>
+                      id="tipDailyLimit" data-tooltip="Số lượng hoạt động tối đa được phép upload lên Strava mỗi ngày.&#10;Kiểu: Số nguyên (int)&#10;Mặc định: 2&#10;Phạm vi: Normal: 2, VIP: 5">?</span></label>
                   <input type="text" id="cfgDailyLimit" class="form-input" readonly
                     style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
                 </div>
@@ -269,7 +267,7 @@
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Activity Type <span class="tooltip-icon tooltip-right"
-                      data-tooltip="Type of sport for the GPX file.&#10;Multipliers (Dist / Pace):&#10;• Walk: 0.7x / 1.25x&#10;• Run: 1.0x / 0.8x&#10;• Ride: 1.5x / 0.5x">?</span></label>
+                      data-tooltip="Loại hoạt động GPX sẽ được tạo.&#10;(Hệ số Dist/Pace: Walk 0.7x/1.25x, Run 1x/0.8x, Ride 1.5x/0.5x)&#10;Kiểu: Danh sách (dropdown)&#10;Mặc định: Ngẫu nhiên (60% Chạy, 30% Đi bộ, 10% Đạp xe)">?</span></label>
                   <select id="cfgActivityType" class="form-select" onchange="updateActivityTypeHint()">
                     <option value="Random">Random</option>
                     <option value="Run">Run</option>
@@ -284,20 +282,20 @@
                     <input type="checkbox" id="cfgHeartRate" checked>
                     <div class="toggle-track"></div>
                     <span class="toggle-label">Heart Rate Data <span class="tooltip-icon tooltip-left"
-                        data-tooltip="Simulate HR stream in GPX.&#10;MHR = 220 - Age.&#10;• Walk: 50-60% MHR&#10;• Ride: 60-70% MHR&#10;• Run: 70-85% MHR">?</span></span>
+                        data-tooltip="Mô phỏng dữ liệu nhịp tim trong file GPX.&#10;(Dựa trên MHR: Walk 50-60%, Ride 60-70%, Run 70-85%)&#10;Kiểu: Boolean&#10;Mặc định: Bật">?</span></span>
                   </label>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">User Age <span class="tooltip-icon tooltip-right"
-                      data-tooltip="Used to calculate Max Heart Rate: 220 - Age. Default: 25.">?</span></label>
+                      data-tooltip="Dùng để tính Nhịp tim tối đa (MHR = 220 - Tuổi).&#10;Kiểu: Số nguyên (tuổi)&#10;Mặc định: 25&#10;Phạm vi: 18 - 90">?</span></label>
                   <input type="number" id="cfgUserAge" class="form-input" value="25" min="10" max="100"
                     oninput="updateMHR()">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Max Heart Rate (MHR) <span class="tooltip-icon tooltip-left"
-                      data-tooltip="Estimated Maximum Heart Rate (220 - Age). Used for intensity zones.">?</span></label>
+                      data-tooltip="Nhịp tim tối đa ước tính (220 - Tuổi).&#10;Kiểu: Số nguyên (readonly)&#10;Mặc định: 195">?</span></label>
                   <input type="number" id="cfgMaxHR" class="form-input" value="195" readonly
                     style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
                 </div>
@@ -305,12 +303,12 @@
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Min Pace (min/km) <span class="tooltip-icon tooltip-right"
-                      data-tooltip="Fastest pace for the activity (6.0 - 12.0). Values are scaled by activity type multipliers.">?</span></label>
+                      data-tooltip="Tốc độ nhanh nhất cho phép (min/km).&#10;(Giá trị sẽ thay đổi theo hệ số của loại hoạt động)&#10;Kiểu: Số thực (float)&#10;Mặc định: 8.0&#10;Phạm vi: 6.0 - 12.0">?</span></label>
                   <input type="number" step="0.1" id="cfgMinPace" class="form-input" value="8.0" min="6.0" max="12.0">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Max Pace (min/km) <span class="tooltip-icon tooltip-left"
-                      data-tooltip="Slowest pace for the activity (6.0 - 12.0). Values are scaled by activity type multipliers.">?</span></label>
+                      data-tooltip="Tốc độ chậm nhất cho phép (min/km).&#10;(Giá trị sẽ thay đổi theo hệ số của loại hoạt động)&#10;Kiểu: Số thực (float)&#10;Mặc định: 12.0&#10;Phạm vi: 10.0 - 15.0">?</span></label>
                   <input type="number" step="0.1" id="cfgMaxPace" class="form-input" value="12.0" min="10.0" max="15.0">
                 </div>
               </div>
@@ -320,7 +318,7 @@
                     <input type="checkbox" id="cfgSimWeather" checked>
                     <div class="toggle-track"></div>
                     <span class="toggle-label" style="font-size: 0.85rem;">🌤️ Weather Sim <span class="tooltip-icon tooltip-right"
-                        data-tooltip="30% chance for hot weather (+3~8 BPM). Activities between 11AM-4PM get additional +2~5 BPM heat stress.">?</span></span>
+                        data-tooltip="Giả lập tác động của thời tiết (nóng sẽ tăng nhịp tim).&#10;(Tỉ lệ 30% gặp trời nóng, khung giờ 11h-16h stress hơn)&#10;Kiểu: Boolean&#10;Mặc định: Bật">?</span></span>
                   </label>
                 </div>
                 <div class="form-group" style="display:flex;align-items:center;">
@@ -328,7 +326,7 @@
                     <input type="checkbox" id="cfgSimRedLights" checked>
                     <div class="toggle-track"></div>
                     <span class="toggle-label" style="font-size: 0.85rem;">🚦 Red Lights <span class="tooltip-icon tooltip-left"
-                        data-tooltip="Simulate traffic lights (1.5% chance per point). GPS pauses for 15-60s, naturally decaying HR towards resting rate.">?</span></span>
+                        data-tooltip="Giả lập dừng đèn đỏ (tạm dừng GPS và giảm nhịp tim).&#10;(Xác suất 1.5% mỗi điểm, dừng 15-60s)&#10;Kiểu: Boolean&#10;Mặc định: Bật">?</span></span>
                   </label>
                 </div>
               </div>
@@ -357,13 +355,13 @@
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Min Count <span class="tooltip-icon tooltip-right"
-                      data-tooltip="Min number of activities to generate daily">?</span></label>
+                      data-tooltip="Số lượng hoạt động tối thiểu tạo tự động mỗi ngày.&#10;Kiểu: Số nguyên (int)&#10;Mặc định: 1">?</span></label>
                   <input type="number" id="scheduleCountMin" class="form-input" value="1" min="1" max="3"
                     onchange="updateSchedule()">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Max Count <span class="tooltip-icon tooltip-left" id="tipScheduleMax"
-                      data-tooltip="Max number of activities. Normal: 2, VIP: 3">?</span></label>
+                      data-tooltip="Số lượng hoạt động tối đa tạo tự động mỗi ngày.&#10;Kiểu: Số nguyên (int)&#10;Mặc định: 2&#10;Phạm vi: Normal: 2, VIP: 3">?</span></label>
                   <input type="number" id="scheduleCountMax" class="form-input" value="2" min="1" max="3"
                     onchange="updateSchedule()">
                 </div>
@@ -381,7 +379,7 @@
           <div class="card">
             <div class="card-header">
               <div class="card-title">📍 Activity Areas (Map) <span class="tooltip-icon tooltip-left"
-                  data-tooltip="Base random ratio percentage is 1:1 with each enabled district in allow list.&#10;• Home: +2.0 / +1.2 / +0.5&#10;• Work: +1.2 / +0.8 / +0.4&#10;Districts covered get the boost.">?</span>
+                  data-tooltip="Ưu tiên tạo hoạt động quanh khu vực Nhà/Công ty.&#10;(Trọng số tăng xác suất chọn quận lân cận)&#10;Kiểu: Bản đồ tương tác">?</span>
               </div>
               <div style="display:flex; gap:5px;">
                 <button id="btnLockMap" class="btn btn-sm btn-secondary" onclick="toggleMapLock()">🔒 Map Locked</button>
