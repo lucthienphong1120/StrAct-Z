@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.47.5). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.47.6). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -40,6 +40,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.47.6 (2026-05-10)
+- **Fix: Auto Schedule Logic**: Resolved an issue where random activity counts (e.g., 1-2 or 0-2) often defaulted to the maximum.
+- **Improved Persistence**: Fixed a bug that prevented saving `0` as a valid activity count.
+- **Default Refinement**: Standardized fallback values for scheduler min/max activities to match system defaults.
 
 ### v1.47.3 (2026-05-10)
 - **District Registry Update**: Refined the suburban district list by removing Ứng Hòa, Thạch Thất, Mê Linh, and Sóc Sơn, and adding Huyện Đan Phượng.

@@ -42,7 +42,7 @@ async function executeJob(accountId) {
     // Get configuration
     const config = await db.getAllConfig(accountId);
     const minCount = config.schedule_count_min !== undefined ? parseInt(config.schedule_count_min) : 1;
-    const maxCount = config.schedule_count_max !== undefined ? parseInt(config.schedule_count_max) : 1;
+    const maxCount = config.schedule_count_max !== undefined ? parseInt(config.schedule_count_max) : 2;
     let taskCount = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
     if (taskCount > limits.schedule_count_max.max) taskCount = limits.schedule_count_max.max; // Dynamic safety cap
 
@@ -219,8 +219,8 @@ async function getStatus(accountId) {
     enabled: config.schedule_enabled === 'true',
     cronExpression: config.schedule_cron || '0 6 * * *',
     scheduleTime: config.schedule_time || '06:00',
-    scheduleCountMin: parseInt(config.schedule_count_min) || 1,
-    scheduleCountMax: parseInt(config.schedule_count_max) || 1,
+    scheduleCountMin: parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : 1,
+    scheduleCountMax: parseInt(config.schedule_count_max) >= 0 ? parseInt(config.schedule_count_max) : 2,
     isRunning: isRunning.get(accountId) || false,
     taskActive: scheduledTasks.has(accountId),
   };
@@ -240,8 +240,8 @@ async function updateSchedule(accountId, enabled, time, countMin, countMax) {
     await db.setConfig(accountId, 'schedule_cron', cronExpression);
   }
   
-  if (countMin) await db.setConfig(accountId, 'schedule_count_min', countMin);
-  if (countMax) await db.setConfig(accountId, 'schedule_count_max', countMax);
+  if (countMin !== undefined && countMin !== null) await db.setConfig(accountId, 'schedule_count_min', countMin);
+  if (countMax !== undefined && countMax !== null) await db.setConfig(accountId, 'schedule_count_max', countMax);
 
   if (enabled) {
     await startScheduler(accountId);
