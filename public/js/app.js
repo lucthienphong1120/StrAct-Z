@@ -169,6 +169,16 @@ function applyLimitsToUI() {
 
   // Build Dynamic Tooltips from Metadata
   updateDynamicTooltips();
+
+  // Populate HR Zones Display (using 'normal' values as requested)
+  const hrZones = sysLimits.heart_rate_zones.normal;
+  const setZone = (id, zone) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = `${Math.round(zone.min * 100)}-${Math.round(zone.max * 100)}%`;
+  };
+  setZone('hrZoneWalk', hrZones.Walk);
+  setZone('hrZoneRide', hrZones.Ride);
+  setZone('hrZoneRun', hrZones.Run);
 }
 
 function updateDynamicTooltips() {
@@ -195,7 +205,8 @@ function updateDynamicTooltips() {
     sim_redlights: 'tipSimRedLights',
     schedule_time: 'tipScheduleTime',
     schedule_count_min: 'tipScheduleMin',
-    schedule_count_max: 'tipScheduleMax'
+    schedule_count_max: 'tipScheduleMax',
+    heart_rate_zones: 'tipHeartRateZones'
   };
 
   for (const [key, tipId] of Object.entries(tipMapping)) {
@@ -231,8 +242,8 @@ function buildTooltipText(cfg) {
 }
 
 function buildRangeString(cfg) {
-  const min = cfg.full_min || cfg.full_min_range;
-  const max = cfg.full_max || cfg.full_max_range;
+  const min = cfg.full_min !== undefined ? cfg.full_min : cfg.full_min_range;
+  const max = cfg.full_max !== undefined ? cfg.full_max : cfg.full_max_range;
   const isVarying = (v) => v && typeof v === 'object' && ('normal' in v || 'vip' in v);
 
   if (isVarying(min) || isVarying(max)) {
@@ -241,7 +252,8 @@ function buildRangeString(cfg) {
     const vRange = `${getVal(min, 'vip')}-${getVal(max, 'vip')}`;
     return `normal: ${nRange}${cfg.unit ? ' ' + cfg.unit : ''}, vip: ${vRange}${cfg.unit ? ' ' + cfg.unit : ''}`;
   } else if (min !== undefined && max !== undefined) {
-    if (min === 0 && max === 0) return null;
+    // If it's a fixed value (min === max), just show that value
+    if (min === max) return `${min}${cfg.unit ? ' ' + cfg.unit : ''}`;
     return `${min} - ${max}${cfg.unit ? ' ' + cfg.unit : ''}`;
   }
   return null;

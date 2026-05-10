@@ -57,9 +57,9 @@ const LIMITS = {
   avoid_workhours: {
     label: 'Khung giờ không tạo hoạt động ngẫu nhiên.',
     type: 'time',
-    default: { 
-      start1: '08:00', end1: '11:30', 
-      start2: '13:30', end2: '17:30' 
+    default: {
+      start1: '08:00', end1: '11:30',
+      start2: '13:30', end2: '17:30'
     }
   },
   target_date: {
@@ -96,7 +96,7 @@ const LIMITS = {
   schedule_time: {
     label: 'Thời điểm hệ thống tự động chạy hàng ngày.',
     type: 'time',
-    default: '06:00'
+    default: '22:00'
   },
   schedule_count_min: {
     label: 'Số lượng hoạt động tối thiểu tạo tự động mỗi ngày.',
@@ -169,7 +169,7 @@ const LIMITS = {
     type: 'int',
     default: 25,
     min: 18,
-    max: 90
+    max: 80
   },
   heart_rate_zones: {
     label: 'Vùng nhịp tim mô phỏng.',
@@ -225,11 +225,11 @@ function getLimits(role = 'normal') {
   for (const key in LIMITS) {
     const item = LIMITS[key];
     if (item.type) {
-      const min_val = (item.min && typeof item.min === 'object' ? item.min[role] : item.min) || 
-                  (item.min_range ? item.min_range[role] : 0);
-      const max_val = (item.max && typeof item.max === 'object' ? item.max[role] : item.max) || 
-                  (item.max_range ? item.max_range[role] : 0);
-      
+      const min_val = (item.min && typeof item.min === 'object' ? item.min[role] : item.min) ||
+        (item.min_range ? item.min_range[role] : 0);
+      const max_val = (item.max && typeof item.max === 'object' ? item.max[role] : item.max) ||
+        (item.max_range ? item.max_range[role] : 0);
+
       result[key] = {
         ...item,
         min: min_val,
@@ -244,11 +244,11 @@ function getLimits(role = 'normal') {
       result[key] = item;
     }
   }
-  
+
   // Legacy compatibility
   result.hr_zones = LIMITS.heart_rate_zones[role];
   result.activity_type_weights = LIMITS.activity_type.weights.Random;
-  
+
   // Dynamic value extraction for legacy code
   const getVal = (item, role) => {
     if (!item) return undefined;

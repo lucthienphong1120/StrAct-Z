@@ -64,3 +64,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] khi nhấn refresh sẽ load lại data cloud, bỏ qua cache, map bà các tab load lại data từ save
 + [ ] check lại HANOI_DISTRICTS trong route_engine đã đúng chuẩn dữ liệu thật chưa (lon,lat,...) theo geojson data
 + [ ] tách nhỏ các file theo chức năng (js, css, ...) để phục vụ AI analysis dễ dàng hơn
++ [ ] xử lý validate khi input áp dụng toàn bộ config trong file base config limit (type, min, max, range, ...)

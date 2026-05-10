@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.45.0). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.45.1). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -41,10 +41,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.45.1 (2026-05-10)
+- **UI Enhancement**: Added readonly Heart Rate Zones display to the dashboard.
+- **Bug Fix**: Corrected dynamic tooltip range logic to handle values of 0 correctly.
+
 ### v1.45.0 (2026-05-10)
-- **Architecture**: Implemented a "Single Source of Truth" for configuration.
-- **Dynamic Hints**: Tooltips and input constraints are now generated dynamically from `limits.js` metadata.
-- **Admin Control**: Parameters can be updated in `limits.js` and reflected globally across UI and backend.
 
 ### v1.44.0 (2026-05-10)
 - **Config Overhaul**: Centralized all system and UI limits into `src/config/limits.js`.
