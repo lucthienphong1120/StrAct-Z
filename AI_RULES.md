@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 2: 
-3: This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.43.0). Follow these guidelines strictly.
+3: This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.43.1). Follow these guidelines strictly.
 4: 
 5: ## 🎨 VIP GOLD Theme
 6: - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -59,38 +59,38 @@
 59: - **Weights**:
 60:   - Inside Home circle: `+2.0` (full), `+1.2` (center), `+0.5` (overlap).
 61:   - Inside Work circle: `1.2` (full), `0.8` (center), `0.4` (overlap).
-- **Map Persistence**: Center (lat/lng) and Zoom level are saved alongside activity areas to maintain the same view across sessions.
-62: 
-63: ### 5. Overlap Protection
-64: - **Safe Time**: Default `30 minutes`.
-65: - **Logic**: Random activity generation must NOT overlap with existing activities (Strava Cloud + Local DB).
-66: - **Calculation**: Blocked intervals = `[Start - SafeTime, End + SafeTime]`. Selected random time must fall outside these intervals.
-67: 
-68: ## 🛠️ Developer Rules
-69: 
-70: ### 1. Versioning
-71: - ALWAYS update the version string in the following 3 locations:
-72:   1. `public/index.html` (Header `small` tag).
-73:   2. `package.json` (`version` field).
-74:   3. `README.md` (Header and Changelog).
-75: - Use Semantic Versioning (e.g., `v1.25.0`).
-76: 
-77: ### 2. UI/UX Standards
-78: - **Design**: Premium, dark-themed, glassmorphism.
-79: - **Toasts**: Use `showToast(msg, type)` for all feedback.
-80: - **Tooltips**: All configuration labels should have a `?` icon with a descriptive `data-tooltip`.
-81: - **Navigation**: Prev/Next buttons must be dimmed (`opacity: 0.4`) and `disabled` at boundaries.
-82: 
-83: ### 3. Code Integrity
-84: - Preserve existing comments and architecture.
-85: - Use `api()` wrapper in `app.js` for all fetch calls.
-86: - Keep `route-engine.js` as the source of truth for simulation math.
-87: - All validation ranges and VIP limits must be defined in `src/config/limits.js`.
-88: 
-89: ## 📂 File Map
-90: - `public/js/app.js`: Main frontend controller.
-91: - `src/services/gpx-generator.js`: Activity orchestrator.
-92: - `src/services/route-engine.js`: The "brain" (Math, Physics, OSRM).
-93: - `src/config/limits.js`: System limits, validation ranges, and VIP features.
-94: - `src/routes/api.js`: API endpoints.
-95: - `db/database.js`: Persistence layer.
+62: - **Map Persistence**: Center (lat/lng) and Zoom level are saved alongside activity areas to maintain the same view across sessions.
+63: 
+64: ### 5. Overlap Protection
+65: - **Safe Time**: Default `30 minutes`.
+66: - **Logic**: Random activity generation must NOT overlap with existing activities (Strava Cloud + Local DB).
+67: - **Calculation**: Blocked intervals = `[Start - SafeTime, End + SafeTime]`. Selected random time must fall outside these intervals.
+68: 
+69: ## 🛠️ Developer Rules
+70: 
+71: ### 1. Versioning
+72: - ALWAYS update the version string in the following 3 locations:
+73:   1. `public/index.html` (Header `small` tag).
+74:   2. `package.json` (`version` field).
+75:   3. `README.md` (Header and Changelog).
+76: - Use Semantic Versioning (e.g., `v1.25.0`).
+77: 
+78: ### 2. UI/UX Standards
+79: - **Design**: Premium, dark-themed, glassmorphism.
+80: - **Toasts**: Use `showToast(msg, type)` for all feedback.
+81: - **Tooltips**: All configuration labels should have a `?` icon with a descriptive `data-tooltip`.
+82: - **Navigation**: Prev/Next buttons must be dimmed (`opacity: 0.4`) and `disabled` at boundaries.
+83: 
+84: ### 3. Code Integrity
+85: - Preserve existing comments and architecture.
+86: - Use `api()` wrapper in `app.js` for all fetch calls.
+87: - Keep `route-engine.js` as the source of truth for simulation math.
+88: - All validation ranges and VIP limits must be defined in `src/config/limits.js`.
+89: 
+90: ## 📂 File Map
+91: - `public/js/app.js`: Main frontend controller.
+92: - `src/services/gpx-generator.js`: Activity orchestrator.
+93: - `src/services/route-engine.js`: The "brain" (Math, Physics, OSRM).
+94: - `src/config/limits.js`: System limits, validation ranges, and VIP features.
+95: - `src/routes/api.js`: API endpoints.
+96: - `db/database.js`: Persistence layer.
