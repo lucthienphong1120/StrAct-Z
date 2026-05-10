@@ -7,18 +7,18 @@ const https = require('https');
 
 // ─── Hanoi Inner Districts ────────────────────────────────────────────────────
 const HANOI_DISTRICTS = {
-  hoan_kiem:    { name: 'Hoàn Kiếm',    lat: 21.0285, lng: 105.8542, radiusKm: 1.2 },
-  hai_ba_trung: { name: 'Hai Bà Trưng', lat: 21.0069, lng: 105.8591, radiusKm: 2.0 },
-  hoang_mai:    { name: 'Hoàng Mai',    lat: 20.9725, lng: 105.8629, radiusKm: 2.8 },
-  dong_da:      { name: 'Đống Đa',      lat: 21.0245, lng: 105.8412, radiusKm: 1.8 },
-  ba_dinh:      { name: 'Ba Đình',      lat: 21.0342, lng: 105.8412, radiusKm: 1.5 },
-  thanh_xuan:   { name: 'Thanh Xuân',   lat: 20.9951, lng: 105.8130, radiusKm: 1.8 },
-  cau_giay:     { name: 'Cầu Giấy',     lat: 21.0312, lng: 105.7886, radiusKm: 2.0 },
-  tay_ho:       { name: 'Tây Hồ',       lat: 21.0614, lng: 105.8317, radiusKm: 2.2 },
-  long_bien:    { name: 'Long Biên',    lat: 21.0425, lng: 105.8943, radiusKm: 2.5 },
-  ha_dong:      { name: 'Hà Đông',      lat: 20.9632, lng: 105.7725, radiusKm: 2.8 },
-  bac_tu_liem:  { name: 'Bắc Từ Liêm',  lat: 21.0658, lng: 105.7505, radiusKm: 2.5 },
-  nam_tu_liem:  { name: 'Nam Từ Liêm',  lat: 21.0125, lng: 105.7600, radiusKm: 2.2 },
+  hoan_kiem:    { name: 'Hoàn Kiếm',    lat: 21.0300, lng: 105.8551, radiusKm: 1.2 },
+  hai_ba_trung: { name: 'Hai Bà Trưng', lat: 21.0064, lng: 105.8624, radiusKm: 2.0 },
+  hoang_mai:    { name: 'Hoàng Mai',    lat: 20.9749, lng: 105.8579, radiusKm: 2.8 },
+  dong_da:      { name: 'Đống Đa',      lat: 21.0148, lng: 105.8207, radiusKm: 1.8 },
+  ba_dinh:      { name: 'Ba Đình',      lat: 21.0349, lng: 105.8293, radiusKm: 1.5 },
+  thanh_xuan:   { name: 'Thanh Xuân',   lat: 20.9945, lng: 105.8171, radiusKm: 1.8 },
+  cau_giay:     { name: 'Cầu Giấy',     lat: 21.0300, lng: 105.7912, radiusKm: 2.0 },
+  tay_ho:       { name: 'Tây Hồ',       lat: 21.0685, lng: 105.8211, radiusKm: 2.2 },
+  long_bien:    { name: 'Long Biên',    lat: 21.0383, lng: 105.8875, radiusKm: 2.5 },
+  ha_dong:      { name: 'Hà Đông',      lat: 20.9700, lng: 105.7700, radiusKm: 2.8 },
+  bac_tu_liem:  { name: 'Bắc Từ Liêm',  lat: 21.0728, lng: 105.7618, radiusKm: 2.5 },
+  nam_tu_liem:  { name: 'Nam Từ Liêm',  lat: 21.0181, lng: 105.7627, radiusKm: 2.2 },
 };
 
 const EARTH_RADIUS = 6371000;
