@@ -3,6 +3,8 @@
  * This file defines all system constraints, UI ranges, and default values.
  */
 
+const { getDefaultKeys } = require('./districts');
+
 const LIMITS = {
   // ─── Hidden / System ──────────────────────────────────────────────────────
   daily_upload_limit: {
@@ -17,9 +19,9 @@ const LIMITS = {
   allowed_districts: {
     label: 'Các quận được phép tạo lộ trình.',
     type: 'array',
-    // Default: Enable all except nam_tu_liem, bac_tu_liem
-    default: ['hoan_kiem', 'ba_dinh', 'hai_ba_trung', 'dong_da', 'tay_ho', 'cau_giay', 'thanh_xuan', 'ha_dong', 'long_bien', 'hoang_mai'],
-    default_label: '10 quận nội thành',
+    // Default: Dynamically resolved from districts registry
+    default: getDefaultKeys(),
+    default_label: 'Các quận nội thành mặc định',
     min: { normal: 4, vip: 2 },
     max: { normal: 10, vip: 12 }
   },

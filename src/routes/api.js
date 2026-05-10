@@ -12,13 +12,12 @@ const { generateActivity, HANOI_DISTRICTS } = require('../services/gpx-generator
 const stravaApi = require('../services/strava-api');
 const systemLimits = require('../config/limits');
 
+const { DISTRICTS } = require('../config/districts');
+
 // ─── Districts ──────────────────────────────────────────────────────────────
 
 router.get('/districts', (req, res) => {
-  const list = Object.entries(HANOI_DISTRICTS).map(([key, d]) => ({
-    key, name: d.name, lat: d.lat, lng: d.lng, radiusKm: d.radiusKm,
-  }));
-  res.json(list);
+  res.json(DISTRICTS);
 });
 
 // ─── Configuration ──────────────────────────────────────────────────────────

@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.45.2). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.46.0). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -41,10 +41,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.46.0 (2026-05-10)
+- **Architecture**: Implemented a centralized **District Registry** (`src/config/districts.js`) as the single source of truth for all geographic data.
+- **Dynamic UI**: Refactored the frontend to fetch districts from the API, enabling instant UI updates when districts are added/modified.
+- **Maintainability**: Removed hardcoded district lists from `app.js`, `route-engine.js`, and `limits.js`.
+
 ### v1.45.2 (2026-05-10)
-- **Engine Optimization**: Synchronized `HANOI_DISTRICTS` coordinates in `route-engine.js` with the geometric centroids derived from `hanoi_urban_districts.geojson`.
-- **Data Integrity**: Corrected centroid for Đống Đa and others for better routing accuracy.
-- **Note**: Identified that `ha_dong` is missing from the provided GeoJSON (replaced by `soc_son`), used standard coordinates as fallback.
 
 ### v1.45.1 (2026-05-10)
 

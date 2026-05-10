@@ -261,9 +261,9 @@ function buildRangeString(cfg) {
 
 async function loadDashboard(forceRefresh = false) {
   await fetchLimits();
+  await loadDistricts();
   await Promise.all([
     loadStats(),
-    loadDistricts(),
     loadConfig(),
     loadSchedule(),
     loadActivities(),
@@ -272,15 +272,6 @@ async function loadDashboard(forceRefresh = false) {
   ]);
   initMap();
   resetMapView();
-}
-
-async function loadDistricts() {
-  try {
-    const districts = await api('/districts');
-    const select = document.getElementById('cfgDistrict');
-    if (!select) return;
-    select.innerHTML = districts.map(d => `<option value="${d.key}">${d.name}</option>`).join('');
-  } catch (err) { console.error('Districts error:', err); }
 }
 
 async function loadStats() {
@@ -343,20 +334,15 @@ async function loadStats() {
   } catch (err) { console.error('Stats error:', err); }
 }
 
-const HANOI_DISTRICTS = [
-  { key: 'hoan_kiem', name: 'Hoàn Kiếm' },
-  { key: 'hai_ba_trung', name: 'Hai Bà Trưng' },
-  { key: 'hoang_mai', name: 'Hoàng Mai' },
-  { key: 'dong_da', name: 'Đống Đa' },
-  { key: 'ba_dinh', name: 'Ba Đình' },
-  { key: 'thanh_xuan', name: 'Thanh Xuân' },
-  { key: 'cau_giay', name: 'Cầu Giấy' },
-  { key: 'tay_ho', name: 'Tây Hồ' },
-  { key: 'long_bien', name: 'Long Biên' },
-  { key: 'ha_dong', name: 'Hà Đông' },
-  { key: 'bac_tu_liem', name: 'Bắc Từ Liêm', defaultOff: true },
-  { key: 'nam_tu_liem', name: 'Nam Từ Liêm', defaultOff: true }
-];
+let sysDistricts = [];
+
+async function loadDistricts() {
+  try {
+    sysDistricts = await api('/districts');
+  } catch (err) {
+    console.error('Failed to load districts:', err);
+  }
+}
 
 async function loadConfig() {
   try {
@@ -371,12 +357,14 @@ async function loadConfig() {
       container.style.gridTemplateColumns = 'repeat(3, 1fr)';
       container.style.gap = '10px';
       
-      HANOI_DISTRICTS.forEach(d => {
+      sysDistricts.forEach(d => {
         let isChecked = '';
         if (config.selected_districts !== undefined) {
           isChecked = selectedKeys.includes(d.key) ? 'checked' : '';
         } else {
-          isChecked = d.defaultOff ? '' : 'checked';
+          // If no saved config, use the 'default' group flag from the registry
+          const isDefault = d.groups && d.groups.includes('default');
+          isChecked = isDefault ? 'checked' : '';
         }
         
         container.innerHTML += `
@@ -645,10 +633,10 @@ async function loadActivities() {
       let districtTags = '';
       if (a.district_keys) {
          const keys = a.district_keys.split(',');
-         districtTags = keys.map(k => {
-           const name = HANOI_DISTRICTS.find(d => d.key === k)?.name || k;
-           return `<span class="status-badge" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); padding: 2px 6px;">📍 ${name}</span>`;
-         }).join('');
+          districtTags = keys.map(k => {
+            const name = sysDistricts.find(d => d.key === k)?.name || k;
+            return `<span class="status-badge" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); padding: 2px 6px;">📍 ${name}</span>`;
+          }).join('');
       }
 
       const statusClass = a.upload_status;
