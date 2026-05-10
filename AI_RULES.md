@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.46.0). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.46.1). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -41,12 +41,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
-### v1.46.0 (2026-05-10)
-- **Architecture**: Implemented a centralized **District Registry** (`src/config/districts.js`) as the single source of truth for all geographic data.
-- **Dynamic UI**: Refactored the frontend to fetch districts from the API, enabling instant UI updates when districts are added/modified.
-- **Maintainability**: Removed hardcoded district lists from `app.js`, `route-engine.js`, and `limits.js`.
+### v1.46.1 (2026-05-10)
+- **Map Interaction**: Implemented dynamic map highlighting. Borders of districts now automatically update (highlight/dim) when toggled in the configuration panel.
+- **Validation Update**: Adjusted `allowed_districts` ranges to normal: 4-10 and vip: 2-15 as requested.
+- **Data Note**: Maintained standard coordinates for Hà Đông as it remains missing from the provided GeoJSON file.
 
-### v1.45.2 (2026-05-10)
+### v1.46.0 (2026-05-10)
 
 ### v1.45.1 (2026-05-10)
 

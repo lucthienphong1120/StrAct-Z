@@ -362,19 +362,32 @@ async function loadConfig() {
         if (config.selected_districts !== undefined) {
           isChecked = selectedKeys.includes(d.key) ? 'checked' : '';
         } else {
-          // If no saved config, use the 'default' group flag from the registry
           const isDefault = d.groups && d.groups.includes('default');
           isChecked = isDefault ? 'checked' : '';
         }
         
-        container.innerHTML += `
-          <label class="toggle" style="font-size:0.8rem; margin-bottom:5px;">
-            <input type="checkbox" class="district-cb" value="${d.key}" ${isChecked}>
-            <div class="toggle-track" style="transform:scale(0.8)"></div>
-            <span>${d.name}</span>
-          </label>
+        const label = document.createElement('label');
+        label.className = 'toggle';
+        label.style.fontSize = '0.8rem';
+        label.style.marginBottom = '5px';
+        label.innerHTML = `
+          <input type="checkbox" class="district-cb" value="${d.key}" ${isChecked}>
+          <div class="toggle-track" style="transform:scale(0.8)"></div>
+          <span>${d.name}</span>
         `;
+        
+        // Add change listener for dynamic map updates
+        const cb = label.querySelector('input');
+        cb.addEventListener('change', () => {
+          updateSelectedDistrictKeys();
+          updateDistrictHighlights();
+        });
+        
+        container.appendChild(label);
       });
+      
+      // Initial state sync
+      updateSelectedDistrictKeys();
     }
 
     const maxSpanInput = document.getElementById('cfgMaxSpan');
@@ -1033,6 +1046,12 @@ document.addEventListener('DOMContentLoaded', () => {
 // ─── Map & Activity Areas ─────────────────────────────────
 
 let map = null;
+let selectedDistrictKeys = [];
+let districtGeoJsonLayer = null;
+
+function updateSelectedDistrictKeys() {
+  selectedDistrictKeys = Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value);
+}
 let activityCircles = [];
 let isMapLocked = true;
 let savedMapState = { lat: 21.0285, lng: 105.8542, zoom: 12 };
@@ -1098,23 +1117,14 @@ function updateLockUI() {
 async function renderDistrictBorders() {
   if (!map) return;
   try {
-    // Load GeoJSON for urban districts (extracted administrative polygons)
     const res = await fetch('/geo/hanoi_urban_districts.geojson');
     if (!res.ok) throw new Error('Could not load districts GeoJSON');
     const geojson = await res.json();
     
-    // Choose color based on user role (Gold for VIP, Cyan for Normal)
-    const borderColor = (typeof userRole !== 'undefined' && userRole === 'vip') ? '#fbbf24' : '#22d3ee';
+    if (districtGeoJsonLayer) map.removeLayer(districtGeoJsonLayer);
     
-    L.geoJSON(geojson, {
-      style: {
-        color: borderColor,    // High contrast color
-        weight: 1.5,           // Thinner but cleaner border
-        opacity: 0.8,          // Clear boundary
-        fillColor: borderColor,
-        fillOpacity: 0.04,     // Reduced by half for better internal visibility
-        interactive: true      // Enable interaction for tooltips
-      },
+    districtGeoJsonLayer = L.geoJSON(geojson, {
+      style: feature => getDistrictStyle(feature),
       onEachFeature: (feature, layer) => {
         if (feature.properties && feature.properties.name) {
           layer.bindTooltip(feature.properties.name, {
@@ -1128,6 +1138,30 @@ async function renderDistrictBorders() {
     }).addTo(map);
   } catch (err) {
     console.error('Failed to render district borders:', err);
+  }
+}
+
+function getDistrictStyle(feature) {
+  const borderColor = (typeof userRole !== 'undefined' && userRole === 'vip') ? '#fbbf24' : '#22d3ee';
+  
+  // Match GeoJSON name to registry key
+  const name = feature.properties.name;
+  const district = sysDistricts.find(d => name.includes(d.name));
+  const isSelected = district && selectedDistrictKeys.includes(district.key);
+  
+  return {
+    color: borderColor,
+    weight: isSelected ? 2 : 0.8,
+    opacity: isSelected ? 0.9 : 0.2,
+    fillColor: borderColor,
+    fillOpacity: isSelected ? 0.08 : 0.01,
+    interactive: true
+  };
+}
+
+function updateDistrictHighlights() {
+  if (districtGeoJsonLayer) {
+    districtGeoJsonLayer.setStyle(feature => getDistrictStyle(feature));
   }
 }
 

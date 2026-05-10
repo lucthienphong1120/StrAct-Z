@@ -23,7 +23,7 @@ const LIMITS = {
     default: getDefaultKeys(),
     default_label: 'Các quận nội thành mặc định',
     min: { normal: 4, vip: 2 },
-    max: { normal: 10, vip: 12 }
+    max: { normal: 10, vip: 15 }
   },
   max_district_span: {
     label: 'Số lượng quận tối đa một lộ trình có thể đi qua.',
