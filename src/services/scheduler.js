@@ -6,6 +6,7 @@ const cron = require('node-cron');
 const db = require('../db/database');
 const { generateActivity } = require('./gpx-generator');
 const stravaApi = require('./strava-api');
+const googleFit = require('./google-fit');
 const systemLimits = require('../config/limits');
 
 const scheduledTasks = new Map(); // accountId -> cronTask
@@ -127,6 +128,20 @@ async function executeJob(accountId) {
           ...activity,
           stravaActivityId: finalStatus.activity_id,
         };
+        
+        // Optional Google Fit Sync
+        if (config.sync_google_fit === 'true') {
+          try {
+            console.log(`[Scheduler] Syncing to Google Fit...`);
+            const fullActivity = (await db.getActivities(accountId, 1))[0];
+            await googleFit.uploadActivity(accountId, {
+              ...fullActivity,
+              activity_type: config.activity_type
+            });
+          } catch (gfErr) {
+            console.error('[Scheduler] Google Fit sync failed:', gfErr);
+          }
+        }
         
         // Brief delay between uploads if multiple
         if (i < taskCount - 1) {

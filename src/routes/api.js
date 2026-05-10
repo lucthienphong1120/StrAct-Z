@@ -10,6 +10,7 @@ const db = require('../db/database');
 const scheduler = require('../services/scheduler');
 const { generateActivity } = require('../services/gpx-generator');
 const stravaApi = require('../services/strava-api');
+const googleFit = require('../services/google-fit');
 const systemLimits = require('../config/limits');
 
 const { DISTRICTS } = require('../config/districts');
@@ -60,12 +61,41 @@ router.get('/system-limits', (req, res) => {
   res.json(systemLimits.getLimits(role));
 });
 
+// ─── Google Fit Auth ────────────────────────────────────────────────────────
+
+router.get('/auth/google', (req, res) => {
+  res.redirect(googleFit.getAuthUrl());
+});
+
+router.get('/auth/google/callback', async (req, res) => {
+  try {
+    const { code } = req.query;
+    if (!code) throw new Error('No code provided');
+    const tokens = await googleFit.exchangeCode(code);
+    await db.saveExternalTokens(req.user.id, 'google_fit', {
+      access_token: tokens.access_token,
+      refresh_token: tokens.refresh_token,
+      expires_at: Math.floor(Date.now() / 1000) + tokens.expires_in,
+      scope: tokens.scope
+    });
+    res.send('<script>window.opener.postMessage("google_fit_connected", "*"); window.close();</script>');
+  } catch (err) {
+    res.status(500).send(`Auth Error: ${err.message}`);
+  }
+});
+
+router.delete('/auth/google', async (req, res) => {
+  await db.deleteExternalTokens(req.user.id, 'google_fit');
+  res.json({ success: true });
+});
+
 // ─── Stats ──────────────────────────────────────────────────────────────────
 
 router.get('/stats', async (req, res) => {
   const stats = await db.getActivityStats(req.user.id);
   const scheduleStatus = await scheduler.getStatus(req.user.id);
   const tokens = await db.getTokens(req.user.id);
+  const gfTokens = await db.getExternalTokens(req.user.id, 'google_fit');
   res.json({
     ...stats,
     role: req.user.role,
@@ -73,6 +103,7 @@ router.get('/stats', async (req, res) => {
     authenticated: !!(tokens && tokens.access_token),
     athleteName: tokens?.athlete_name || null,
     athleteAvatar: tokens?.athlete_avatar || null,
+    googleFitConnected: !!(gfTokens && gfTokens.access_token),
   });
 });
 
@@ -295,6 +326,19 @@ router.post('/generate-and-upload', async (req, res) => {
       upload_status: 'uploaded',
     });
 
+    // Optional Google Fit Sync
+    let googleFitSynced = false;
+    if (config.sync_google_fit === 'true') {
+      try {
+        const fullActivity = (await db.getActivities(req.user.id, 1))[0];
+        const gfResult = await googleFit.uploadActivity(req.user.id, {
+          ...fullActivity,
+          activity_type: ov.activity_type || config.activity_type
+        });
+        googleFitSynced = gfResult.success;
+      } catch (e) { console.error('Google Fit Sync failed:', e); }
+    }
+
     res.json({
       success: true,
       activity: {
@@ -302,6 +346,7 @@ router.post('/generate-and-upload', async (req, res) => {
         activityName: activity.activityName,
         distanceKm: activity.distanceKm,
         stravaActivityId: finalStatus.activity_id,
+        googleFitSynced
       },
     });
   } catch (err) {

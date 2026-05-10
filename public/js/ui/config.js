@@ -219,6 +219,10 @@ async function loadConfig() {
     
     toggleHRInputs();
 
+    if (document.getElementById('cfgSyncGoogleFit')) {
+      document.getElementById('cfgSyncGoogleFit').checked = config.sync_google_fit === 'true';
+    }
+
     if (document.getElementById('cfgOverlapProtection')) {
       document.getElementById('cfgOverlapProtection').value = config.overlap_protection_minutes || '30';
     }
@@ -424,6 +428,7 @@ async function saveConfig() {
     user_age: document.getElementById('cfgUserAge').value,
     sim_weather: document.getElementById('cfgSimWeather')?.checked ? 'true' : 'false',
     sim_redlights: document.getElementById('cfgSimRedLights')?.checked ? 'true' : 'false',
+    sync_google_fit: document.getElementById('cfgSyncGoogleFit')?.checked ? 'true' : 'false',
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || '30',
   };
 
@@ -571,3 +576,26 @@ window.buildTooltipText = buildTooltipText;
 window.buildRangeString = buildRangeString;
 window.validateTimeBounds = validateTimeBounds;
 window.validateInputs = validateInputs;
+
+// Google Fit Handlers
+function connectGoogleFit() {
+  const win = window.open('/api/auth/google', 'GoogleFitAuth', 'width=600,height=700');
+}
+
+async function disconnectGoogleFit() {
+  if (confirm('Are you sure you want to disconnect Google Fit?')) {
+    await api('/auth/google', 'DELETE');
+    showToast('Google Fit disconnected', 'info');
+    loadStats(); // refresh UI
+  }
+}
+
+window.addEventListener('message', (event) => {
+  if (event.data === 'google_fit_connected') {
+    showToast('Google Fit connected successfully!', 'success');
+    loadStats(); // refresh UI
+  }
+});
+
+window.connectGoogleFit = connectGoogleFit;
+window.disconnectGoogleFit = disconnectGoogleFit;

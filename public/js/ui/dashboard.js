@@ -39,6 +39,19 @@ async function loadStats() {
     document.getElementById('statDistance').textContent = stats.totalDistanceKm;
     document.getElementById('statDuration').textContent = stats.totalDurationMin;
 
+    // Google Fit connection state
+    const gfDisc = document.getElementById('gfDisconnected');
+    const gfConn = document.getElementById('gfConnected');
+    if (gfDisc && gfConn) {
+      if (stats.googleFitConnected) {
+        gfDisc.style.display = 'none';
+        gfConn.style.display = 'block';
+      } else {
+        gfDisc.style.display = 'block';
+        gfConn.style.display = 'none';
+      }
+    }
+
     const vipArea = document.getElementById('vipActivationArea');
     if (vipArea) {
       if (window.userRole === 'vip') {

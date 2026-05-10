@@ -33,6 +33,7 @@ const DEFAULT_CONFIG = {
   max_pace: '12.0',
   sim_weather: 'true',
   sim_redlights: 'true',
+  sync_google_fit: 'false',
   schedule_enabled: 'false',
   schedule_time: '22:00',
   schedule_count_min: '1',
@@ -71,6 +72,15 @@ async function getDb() {
       athlete_name TEXT,
       athlete_avatar TEXT,
       scope TEXT
+    );
+    CREATE TABLE IF NOT EXISTS external_tokens (
+      account_id INTEGER,
+      provider TEXT,
+      access_token TEXT,
+      refresh_token TEXT,
+      expires_at INTEGER,
+      scope TEXT,
+      PRIMARY KEY (account_id, provider)
     );
     CREATE TABLE IF NOT EXISTS activities (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -404,10 +414,42 @@ async function checkBruteForce(accountId) {
   return row.c >= 5; // Max 5 fails per hour
 }
 
+async function saveExternalTokens(accountId, provider, tokens) {
+  const db = await getDb();
+  const encryptedAccess = encryption.encrypt(tokens.access_token);
+  const encryptedRefresh = tokens.refresh_token ? encryption.encrypt(tokens.refresh_token) : null;
+  
+  await db.run(
+    'INSERT OR REPLACE INTO external_tokens (account_id, provider, access_token, refresh_token, expires_at, scope) VALUES (?, ?, ?, ?, ?, ?)',
+    [accountId, provider, encryptedAccess, encryptedRefresh, tokens.expires_at, tokens.scope]
+  );
+  return true;
+}
+
+async function getExternalTokens(accountId, provider) {
+  const db = await getDb();
+  const row = await db.get('SELECT * FROM external_tokens WHERE account_id = ? AND provider = ?', [accountId, provider]);
+  if (!row) return null;
+  
+  return {
+    access_token: encryption.decrypt(row.access_token),
+    refresh_token: row.refresh_token ? encryption.decrypt(row.refresh_token) : null,
+    expires_at: row.expires_at,
+    scope: row.scope,
+  };
+}
+
+async function deleteExternalTokens(accountId, provider) {
+  const db = await getDb();
+  await db.run('DELETE FROM external_tokens WHERE account_id = ? AND provider = ?', [accountId, provider]);
+  return true;
+}
+
 module.exports = {
   getDb,
   getConfig, setConfig, getAllConfig,
   saveTokens, getTokens, deleteTokens,
+  saveExternalTokens, getExternalTokens, deleteExternalTokens,
   saveActivity, updateActivity, getActivities, getActivitiesByDate,
   getActivityStats, deleteActivity,
   getUserByUsername, createAccount, getAccountCount, getAllAccounts, updateAccountPassword,
