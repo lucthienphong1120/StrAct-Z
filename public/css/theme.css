@@ -1,0 +1,149 @@
+/* ═══════════════════════════════════════════════════════════
+   StrAct Z - Theme & Variables
+   ═══════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #111827;
+  --bg-card: #1a1f35;
+  --bg-card-hover: #222845;
+  --bg-input: #151b2e;
+  --border: #2a3150;
+  --border-focus: #fc4c02;
+  --text-primary: #f0f2f8;
+  --text-secondary: #8892b0;
+  --text-muted: #5a6480;
+  --strava-orange: #fc4c02;
+  --strava-orange-dark: #d43d00;
+  --strava-orange-glow: rgba(252, 76, 2, 0.3);
+  --vip-gold: #f59e0b;
+  --vip-gold-dark: #d97706;
+  --vip-gold-glow: rgba(245, 158, 11, 0.3);
+  --accent-green: #10b981;
+  --accent-blue: #3b82f6;
+  --accent-purple: #8b5cf6;
+  --accent-red: #ef4444;
+  --accent-yellow: #f59e0b;
+  --gradient-primary: linear-gradient(135deg, #fc4c02 0%, #ff6b35 50%, #ff8f5e 100%);
+  --gradient-vip: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%);
+  --gradient-dark: linear-gradient(135deg, #0a0e1a 0%, #111827 100%);
+  --gradient-card: linear-gradient(145deg, rgba(26, 31, 53, 0.9), rgba(17, 24, 39, 0.9));
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 30px rgba(252, 76, 2, 0.15);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --map-highlight: #22d3ee;
+}
+
+.is-vip {
+  --strava-orange: #f59e0b;
+  --strava-orange-dark: #d97706;
+  --strava-orange-glow: rgba(245, 158, 11, 0.4);
+  --gradient-primary: linear-gradient(135deg, #000000 0%, #1e293b 40%, #a16207 75%, #fbbf24 100%);
+  --bg-primary: #020617;
+  --bg-secondary: #0f172a;
+  --bg-card: #1e293b;
+  --bg-card-hover: #334155;
+  --border: #475569;
+  --border-focus: #fbbf24;
+  --shadow-glow: 0 0 45px rgba(245, 158, 11, 0.35);
+  --text-primary: #f0f2f8;
+  --text-secondary: #8892b0;
+  --map-highlight: #fbbf24;
+}
+
+/* Theme Preview Override for VIP */
+body.theme-preview-normal.is-vip {
+  --strava-orange: #fc4c02;
+  --strava-orange-dark: #d43d00;
+  --strava-orange-glow: rgba(252, 76, 2, 0.3);
+  --gradient-primary: linear-gradient(135deg, #fc4c02 0%, #ff6b35 50%, #ff8f5e 100%);
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #111827;
+  --bg-card: #1a1f35;
+  --bg-card-hover: #222845;
+  --border: #2a3150;
+  --border-focus: #fc4c02;
+  --shadow-glow: 0 0 30px rgba(255, 255, 255, 0.08);
+}
+
+body.theme-preview-normal.is-vip .logo,
+body.theme-preview-normal.is-vip .stat-value {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+body.theme-preview-normal.is-vip .stat-label {
+  color: var(--text-secondary);
+}
+
+body.theme-preview-normal.is-vip .card {
+  border-color: var(--border);
+}
+
+body.theme-preview-normal.is-vip .btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.is-vip .logo {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+}
+
+.is-vip .stat-value {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.is-vip .stat-label {
+  color: #fbbf24;
+}
+
+.is-vip .stat-label small {
+  color: var(--text-muted) !important;
+  -webkit-text-fill-color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.is-vip .card {
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.is-vip .stat-card:hover, .is-vip .card:hover {
+  border-color: #fbbf24 !important;
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.45), inset 0 0 15px rgba(245, 158, 11, 0.1);
+  transform: none;
+}
+
+body.theme-preview-normal.is-vip .stat-card:hover, 
+body.theme-preview-normal.is-vip .card:hover {
+  border-color: var(--strava-orange) !important;
+  box-shadow: var(--shadow-glow) !important;
+  transform: translateY(-2px);
+}
+
+.is-vip .btn-primary {
+  background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%);
+  color: #000;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.5), 0 0 10px rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.is-vip .btn-primary:hover:not(:disabled) {
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.7), 0 0 10px rgba(245, 158, 11, 0.4);
+  transform: translateY(-1px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.4);
+}
