@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.15). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.16). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -40,6 +40,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.16 (2026-05-11)
+- **Advanced UI Layout**: Reorganized Activity Settings with dedicated multiplier tables for Distance and Pace, mimicking the HR Zones format.
+- **Improved Hierarchy**: Grouped Min/Max inputs into single rows for better vertical density.
+- **Consistency Fix**: Reverted labels to uppercase (WALK, RUN, RIDE) for better visibility across all reference tables.
 
 ### v1.50.15 (2026-05-11)
 - **UI Refinement**: Reorganized Activity Settings by moving Distance inputs near Activity Type and adding a readonly multipliers reference.
