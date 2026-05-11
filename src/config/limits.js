@@ -125,7 +125,7 @@ const LIMITS = {
   // ─── Activity Areas (Map) ─────────────────────────────────────────────────
   map_locked: {
     label: 'Khóa vị trí bản đồ.',
-    desc_extra: 'Tác dụng: Khóa/Mở khóa khả năng di chuyển và phóng to bản đồ để tránh thay đổi vị trí vô tình.',
+    desc_extra: 'Tác dụng: Khóa di chuyển và phóng to bản đồ bằng chuột để tránh vô tình thay đổi vị trí.',
     type: 'bool',
     default: true
   },
