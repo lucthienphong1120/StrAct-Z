@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.12</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.13</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -449,13 +449,14 @@
                 <div id="gfUserInfo">
                   <!-- Dynamic content -->
                 </div>
-                <div id="gfStats" style="margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border);">
-                  <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:0.8rem; color:var(--text-secondary);">Today's Steps:</span>
-                    <span style="font-weight:700; color:var(--accent-blue);" id="gfTodaySteps">0</span>
+                <div id="gfStats" style="margin-bottom: 18px; padding: 14px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                    <span style="font-size:0.8rem; color:var(--text-muted); font-weight: 500;">Today's Steps:</span>
+                    <span style="font-size:1.1rem; font-weight:800; color:var(--accent-blue); letter-spacing: 0.5px;" id="gfTodaySteps">0</span>
                   </div>
-                  <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:0.7rem; color:var(--text-muted);" id="gfLastSync">Last sync: --:--</span>
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.7rem; color:var(--text-muted); opacity: 0.7;" id="gfLastSync">Last sync: --:--</span>
+                    <span style="font-size:0.65rem; color:var(--accent-blue); opacity: 0.8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Live Sync</span>
                   </div>
                 </div>
                 <button onclick="disconnectGoogleFit()" class="btn btn-block btn-outline-danger btn-sm">Disconnect Google Fit</button>
