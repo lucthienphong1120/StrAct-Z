@@ -78,7 +78,32 @@ router.get('/auth/google/callback', async (req, res) => {
       expires_at: Math.floor(Date.now() / 1000) + tokens.expires_in,
       scope: tokens.scope
     });
-    res.send('<script>window.opener.postMessage("google_fit_connected", "*"); window.close();</script>');
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Google Fit Connected</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #0f172a; color: white; text-align: center; }
+          .icon { font-size: 48px; margin-bottom: 20px; }
+          .btn { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin-top: 20px; }
+        </style>
+      </head>
+      <body>
+        <div class="icon">✅</div>
+        <h2>Google Fit Connected!</h2>
+        <p>You can close this window now.</p>
+        <button class="btn" onclick="window.close()">Close Window</button>
+        <script>
+          if (window.opener) {
+            window.opener.postMessage("google_fit_connected", "*");
+          }
+          // Auto-close after 2 seconds
+          setTimeout(() => { window.close(); }, 2000);
+        </script>
+      </body>
+      </html>
+    `);
   } catch (err) {
     res.status(500).send(`Auth Error: ${err.message}`);
   }

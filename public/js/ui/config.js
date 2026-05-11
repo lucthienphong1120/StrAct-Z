@@ -591,6 +591,7 @@ async function disconnectGoogleFit() {
 }
 
 window.addEventListener('message', (event) => {
+  console.log('[Auth] Received message:', event.data);
   if (event.data === 'google_fit_connected') {
     showToast('Google Fit connected successfully!', 'success');
     loadStats(); // refresh UI
