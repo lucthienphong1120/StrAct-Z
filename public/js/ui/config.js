@@ -584,7 +584,7 @@ function connectGoogleFit() {
 
 async function disconnectGoogleFit() {
   if (confirm('Are you sure you want to disconnect Google Fit?')) {
-    await api('/auth/google', 'DELETE');
+    await api('/auth/google', { method: 'DELETE' });
     showToast('Google Fit disconnected', 'info');
     loadStats(); // refresh UI
   }

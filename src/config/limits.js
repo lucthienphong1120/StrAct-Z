@@ -214,6 +214,11 @@ const LIMITS = {
     desc_extra: 'Xác suất 1.5% mỗi điểm, dừng 15-60s',
     type: 'bool',
     default: true
+  },
+  sync_google_fit: {
+    label: 'Tự động đồng bộ sang Google Fit.',
+    type: 'bool',
+    default: false
   }
 };
 
