@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.12). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.13). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -40,6 +40,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.13 (2026-05-11)
+- **AI Rule Update**: Updated versioning rules to exclude `README.md`'s first line from automatic version bumps.
+- **Documentation Policy**: Standardized `README.md` as a feature/setup guide rather than a strict version tracker.
 
 ### v1.50.12 (2026-05-11)
 - **Google Fit UI Polish**: Integrated the official Google Fit logo and refined the status display text for a more premium look.
@@ -130,7 +134,8 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   1. `AI_RULES.md` (top header)
   2. `package.json`
   3. `index.html` (header small tag)
-  4. `README.md` (header and changelog)
+- **CRITICAL**: Do NOT update the version number at the first line of `README.md`.
+- **README.md Usage**: This file is primarily for feature descriptions, setup instructions, and user guides. Only add to its `Changelog` for major feature changes.
 - Format: `v1.x.y` (e.g., `v1.44.0`).
 
 ### 2. Project Structure

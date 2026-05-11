@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.12</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.13</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -463,8 +463,11 @@
               </div>
               <div id="gfConnected" style="display:none;">
                 <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-                  <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
-                    style="width:40px; height:40px; object-fit:contain;" alt="Google Fit">
+                  <div
+                    style="width:40px; height:40px; background:rgba(66,133,244,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#4285F4; font-size:1.2rem;">
+                    <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
+                      style="width:32px; height:32px; object-fit:contain;" alt="Google Fit">
+                  </div>
                   <div>
                     <div style="font-weight:600; font-size:0.9rem; color:var(--text-primary);">Connected</div>
                     <div style="font-size:0.75rem; color:var(--text-muted);" id="gfStatusText">Fetching data...</div>
