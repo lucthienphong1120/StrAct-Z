@@ -153,17 +153,17 @@ const LIMITS = {
   activity_areas: {
     label: 'Khu vực hoạt động (Map).',
     type: 'map',
-    desc_extra: 'Tác dụng: Xác định các điểm ưu tiên (Nhà/Công ty) để hệ thống tạo lộ trình xung quanh đó. Trọng số giúp tăng xác suất chọn các quận lân cận khu vực này.',
-    example: 'Ví dụ: Nhà (Home) trọng số 2.5x giúp tăng xác suất tạo lộ trình quanh khu vực đó lên gấp đôi.',
+    desc_extra: 'Tác dụng: Ưu tiên tạo hoạt động quanh khu vực Nhà/Công ty. Trọng số giúp tăng xác suất chọn các quận lân cận khu vực này.',
+    example: 'Ví dụ: Nhà (Home) trọng số +2.0 giúp tăng xác suất tạo lộ trình quanh khu vực đó lên đáng kể.',
     normal: {
-      Home: '1.0x',
-      Work: '1.0x',
+      'Home Boost': '+2.0 / +1.5 / +1.0',
+      'Work Boost': '+1.2 / +0.8 / +0.4',
       'Max Points': '1',
       'Max Radius': '3000m'
     },
     vip: {
-      Home: '2.5x',
-      Work: '2.0x',
+      'Home Boost': '+2.0 / +1.5 / +1.0',
+      'Work Boost': '+1.2 / +0.8 / +0.4',
       'Max Points': '2',
       'Max Radius': '4000m'
     }

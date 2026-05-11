@@ -23,6 +23,7 @@ function toggleMapLock() {
   window.isMapLocked = !window.isMapLocked;
   applyMapLock();
   updateLockUI();
+  updateMapStatsUI();
 }
 
 function applyMapLock() {
@@ -127,6 +128,7 @@ function renderCircles(areasData) {
       createCircleLayer(area.lat, area.lng, area.radius, area.type);
     });
   } catch (e) { console.error('Error rendering circles:', e); }
+  updateMapStatsUI();
 }
 
 function createCircleLayer(lat, lng, radius, type) {
@@ -174,8 +176,8 @@ function addActivityCircle(type) {
   const count = window.activityCircles.filter(c => c.type === type).length;
   if (count >= 1) return showToast(`Only 1 ${type} area allowed`, 'warning');
 
-  const center = window.map.getCenter();
   createCircleLayer(center.lat, center.lng, 2000, type);
+  updateMapStatsUI();
   showToast(`Added ${type} area`, 'info');
 }
 
@@ -200,6 +202,7 @@ function removeCircle(index) {
       type: c.type
     }));
     renderCircles(currentData);
+    updateMapStatsUI();
   }
 }
 
@@ -237,6 +240,36 @@ async function saveActivityAreas() {
 
 function updateSelectedDistrictKeys() {
   window.selectedDistrictKeys = Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value);
+}
+
+function updateMapStatsUI() {
+  const sysL = window.sysLimits;
+  if (!sysL) return;
+
+  const infoMapLocked = document.getElementById('infoMapLocked');
+  if (infoMapLocked) {
+    infoMapLocked.textContent = window.isMapLocked ? 'LOCKED' : 'UNLOCKED';
+    infoMapLocked.style.color = window.isMapLocked ? '#f87171' : '#4ade80';
+  }
+
+  const homeCount = window.activityCircles.filter(c => c.type === 'home').length;
+  const infoHomeCount = document.getElementById('infoHomeCount');
+  if (infoHomeCount) {
+    infoHomeCount.textContent = `${homeCount}/${sysL.home_count.max}`;
+    infoHomeCount.style.color = homeCount >= sysL.home_count.max ? '#fb923c' : 'var(--text-primary)';
+  }
+
+  const workCount = window.activityCircles.filter(c => c.type === 'work').length;
+  const infoWorkCount = document.getElementById('infoWorkCount');
+  if (infoWorkCount) {
+    infoWorkCount.textContent = `${workCount}/${sysL.work_count.max}`;
+    infoWorkCount.style.color = workCount >= sysL.work_count.max ? '#60a5fa' : 'var(--text-primary)';
+  }
+
+  const infoScaleRadius = document.getElementById('infoScaleRadius');
+  if (infoScaleRadius) {
+    infoScaleRadius.textContent = `${sysL.scale_radius.max}m`;
+  }
 }
 
 // Export to window

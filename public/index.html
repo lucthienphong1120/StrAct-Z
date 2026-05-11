@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.26</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.27</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -458,11 +458,60 @@
                 <button class="btn btn-sm btn-primary" onclick="saveActivityAreas()">💾 Save</button>
               </div>
             </div>
-            <div class="card-body" style="padding: 0;">
-              <div id="activityMap"
-                style="height: 350px; width: 100%; border-bottom-left-radius: var(--radius-lg); border-bottom-right-radius: var(--radius-lg);">
+            <div class="card-body" style="padding: 15px 0 0 0;">
+              <!-- Map Config Info -->
+              <div style="padding: 0 15px 15px 15px;">
+                <div
+                  style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border); margin-bottom: 12px;">
+                  <div style="text-align:center;">
+                    <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">MAP LOCKED</div>
+                    <div id="infoMapLocked" style="color:var(--text-primary); font-size: 0.85rem; font-weight: 500;">-</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">HOME POINTS</div>
+                    <div id="infoHomeCount" style="color:var(--text-primary); font-size: 0.85rem; font-weight: 500;">-</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">WORK POINTS</div>
+                    <div id="infoWorkCount" style="color:var(--text-primary); font-size: 0.85rem; font-weight: 500;">-</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">RADIUS SCALE</div>
+                    <div id="infoScaleRadius" style="color:var(--text-primary); font-size: 0.85rem; font-weight: 500;">-</div>
+                  </div>
+                </div>
+
+                <table
+                  style="width:100%; border-collapse: collapse; font-size: 0.75rem; color: rgba(255,255,255,0.6); background:rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 4px; overflow: hidden;">
+                  <thead>
+                    <tr style="background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--border);">
+                      <th style="text-align:left; padding: 6px 10px; font-weight: 500; color: var(--text-secondary);">Trọng số
+                        tác dụng</th>
+                      <th style="text-align:center; font-weight: 500;">Fully</th>
+                      <th style="text-align:center; font-weight: 500;">Mostly</th>
+                      <th style="text-align:center; font-weight: 500;">Partially</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                      <td style="padding: 6px 10px; color: #fb923c;">🏠 Home (Orange)</td>
+                      <td style="text-align:center; padding: 6px;">+2.0</td>
+                      <td style="text-align:center; padding: 6px;">+1.5</td>
+                      <td style="text-align:center; padding: 6px;">+1.0</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 6px 10px; color: #60a5fa;">💼 Work (Blue)</td>
+                      <td style="text-align:center; padding: 6px;">+1.2</td>
+                      <td style="text-align:center; padding: 6px;">+0.8</td>
+                      <td style="text-align:center; padding: 6px;">+0.4</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <div style="padding: 10px; font-size: 0.75rem; color: var(--text-muted);">
+
+              <div id="activityMap" style="height: 350px; width: 100%; border-top: 1px solid var(--border);">
+              </div>
+              <div style="padding: 10px; font-size: 0.75rem; color: var(--text-muted); background: rgba(0,0,0,0.2);">
                 Drag 🏠 <b>Home (Orange)</b> and 💼 <b>Work (Blue)</b> markers to set locations.
                 Click on a marker to adjust its radius (2000m - 4000m).
                 Districts near these areas will be prioritized during generation.

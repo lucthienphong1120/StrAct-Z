@@ -60,6 +60,19 @@ function applyLimitsToUI() {
   setZone('hrZoneRide', hrZones.Ride);
   setZone('hrZoneRun', hrZones.Run);
   
+  // Populate Map Info Display
+  const infoMapLocked = document.getElementById('infoMapLocked');
+  if (infoMapLocked) infoMapLocked.textContent = sysL.map_locked.default === 'true' ? 'LOCKED' : 'UNLOCKED';
+  
+  const infoHomeCount = document.getElementById('infoHomeCount');
+  if (infoHomeCount) infoHomeCount.textContent = `MAX: ${sysL.home_count.max}`;
+  
+  const infoWorkCount = document.getElementById('infoWorkCount');
+  if (infoWorkCount) infoWorkCount.textContent = `MAX: ${sysL.work_count.max}`;
+  
+  const infoScaleRadius = document.getElementById('infoScaleRadius');
+  if (infoScaleRadius) infoScaleRadius.textContent = `${sysL.scale_radius.max}m`;
+
   attachRealTimeValidation();
 }
 
