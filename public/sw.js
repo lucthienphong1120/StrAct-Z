@@ -1,4 +1,4 @@
-const CACHE_NAME = 'stract-z-v1.50.21';
+const CACHE_NAME = 'stract-z-v1.50.22';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',

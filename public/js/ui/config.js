@@ -143,9 +143,12 @@ function buildRangeString(cfg) {
 
   if (isVarying(min) || isVarying(max)) {
     const getVal = (v, r) => (v && typeof v === 'object' ? v[r] : v) ?? 0;
-    const nRange = `${getVal(min, 'normal')}-${getVal(max, 'normal')}`;
-    const vRange = `${getVal(min, 'vip')}-${getVal(max, 'vip')}`;
-    return `normal: ${nRange}${cfg.unit ? ' ' + cfg.unit : ''}, vip: ${vRange}${cfg.unit ? ' ' + cfg.unit : ''}`;
+    const format = (r) => {
+      const mn = getVal(min, r);
+      const mx = getVal(max, r);
+      return mn === mx ? mn : `${mn}-${mx}`;
+    };
+    return `normal: ${format('normal')}${cfg.unit ? ' ' + cfg.unit : ''}, vip: ${format('vip')}${cfg.unit ? ' ' + cfg.unit : ''}`;
   } else if (min !== undefined && max !== undefined) {
     if (min === max) return `${min}${cfg.unit ? ' ' + cfg.unit : ''}`;
     return `${min} - ${max}${cfg.unit ? ' ' + cfg.unit : ''}`;
