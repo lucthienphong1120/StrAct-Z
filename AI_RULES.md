@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.11). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.12). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -40,6 +40,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.12 (2026-05-11)
+- **Google Fit UI Polish**: Integrated the official Google Fit logo and refined the status display text for a more premium look.
+- **Visual Branding**: Updated both connection and connected states to use consistent Google Fit branding.
+- **Maintenance**: Updated Service Worker cache version.
 
 ### v1.50.11 (2026-05-11)
 - **Fix Scheduler Bug**: Resolved an issue where "Min Count" would reset from 0 to 1 after a page reload due to incorrect falsy value handling in the UI.
