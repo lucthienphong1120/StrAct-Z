@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.29). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.30). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -40,6 +40,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.30 (2026-05-11)
+- **Capitalization Fixes**: Standardized all tooltips and UI labels to Sentence Case.
+- **Inheritance Fix**: Added `text-transform: none` to `.tooltip-icon` to prevent tooltips from inheriting uppercase styling from parent containers.
+- **Localized Labels**: Updated Map Info grid labels to Vietnamese sentence case ('Khóa bản đồ', 'Điểm Nhà', etc.).
+- **Consistent Roles**: Standardized role names to capitalized 'Normal' and 'VIP' in tooltips.
 
 ### v1.50.29 (2026-05-11)
 - **Map Info Structure**: Separated map stats into a 2-row grid for better readability.

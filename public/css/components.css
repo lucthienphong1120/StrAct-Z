@@ -311,6 +311,7 @@
   margin-left: 6px;
   position: relative;
   vertical-align: middle;
+  text-transform: none;
 }
 
 .tooltip-icon:hover {

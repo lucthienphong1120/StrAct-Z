@@ -8,7 +8,7 @@ const { getDefaultKeys } = require('./districts');
 const LIMITS = {
   // ─── Hidden / System ──────────────────────────────────────────────────────
   daily_upload_limit: {
-    label: 'Daily Upload Limit (Giới hạn tải lên).',
+    label: 'Giới hạn tải lên (Daily Limit).',
     type: 'int',
     desc_extra: 'Tác dụng: Giới hạn số lượng hoạt động tải lên Strava mỗi ngày.',
     default: 2,
@@ -82,7 +82,7 @@ const LIMITS = {
     unit: 'km'
   },
   dist_multipliers: {
-    label: 'Distance Multipliers.',
+    label: 'Hệ số khoảng cách (Distance Multipliers).',
     type: 'map',
     desc_extra: 'Tác dụng: Điều chỉnh độ dài lộ trình thực tế so với cài đặt.',
     example: 'Ví dụ: Ride 1.5x có nghĩa là cùng một lộ trình, đạp xe sẽ đi xa hơn 50%.'
@@ -135,7 +135,7 @@ const LIMITS = {
     type: 'int',
     default: 0,
     min: 0,
-    max: { normal: 1, vip: 2 }
+    max: 1
   },
   work_count: {
     label: 'Giới hạn điểm Công ty.',
@@ -163,7 +163,7 @@ const LIMITS = {
 
   // ─── Activity Settings ────────────────────────────────────────────────────
   activity_type: {
-    label: 'Activity Type (Loại hoạt động).',
+    label: 'Loại hoạt động (Activity Type).',
     desc_extra: 'Tác dụng: Áp dụng hệ số nhân Dist/Pace riêng biệt cho từng loại.',
     type: 'array',
     default: 'Random',
@@ -177,13 +177,13 @@ const LIMITS = {
     }
   },
   heart_rate_enabled: {
-    label: 'Heart Rate Data (Dữ liệu nhịp tim).',
+    label: 'Dữ liệu nhịp tim (Heart Rate).',
     desc_extra: 'Tác dụng: Mô phỏng nhịp tim dựa trên MHR và loại hoạt động.',
     type: 'bool',
     default: true
   },
   user_age: {
-    label: 'User Age (Tuổi người dùng).',
+    label: 'Tuổi người dùng (User Age).',
     desc_extra: 'Tác dụng: Dùng để tính Nhịp tim tối đa (MHR = 220 - Tuổi).',
     type: 'int',
     default: 25,
@@ -191,7 +191,7 @@ const LIMITS = {
     max: 90
   },
   heart_rate_zones: {
-    label: 'Heart Rate Zones.',
+    label: 'Vùng nhịp tim (Heart Rate Zones).',
     type: 'map',
     desc_extra: 'Tác dụng: Xác định giới hạn vùng nhịp tim dựa trên MHR theo từng loại hoạt động.',
     example: 'Ví dụ: một người 30 tuổi có MHR khoảng 190 bpm, khi đi bộ sẽ có nhịp tim từ 95-114 bpm (vùng Khởi động).',
@@ -223,19 +223,19 @@ const LIMITS = {
     max: 15.0
   },
   pace_multipliers: {
-    label: 'Pace Multipliers.',
+    label: 'Hệ số tốc độ (Pace Multipliers).',
     type: 'map',
     desc_extra: 'Tác dụng: Điều chỉnh tốc độ chạy thực tế so với Pace cài đặt.',
     example: 'Ví dụ: Run 0.8x có nghĩa là chạy sẽ nhanh hơn 20% so với Pace cơ bản.'
   },
   sim_weather: {
-    label: 'Weather Sim (Giả lập thời tiết).',
+    label: 'Giả lập thời tiết (Weather Sim).',
     desc_extra: 'Tác dụng: Tăng Nhịp tim (HR) thêm 5-15 bpm. Điều kiện: Ngẫu nhiên 30% hoặc khung giờ 11h-16h',
     type: 'bool',
     default: true
   },
   sim_redlights: {
-    label: 'Red Lights (Giả lập đèn đỏ).',
+    label: 'Giả lập đèn đỏ (Red Lights).',
     desc_extra: 'Tác dụng: Tăng Elapsed Time, Giảm Avg Pace, Giảm HR. Xác suất: 1.5% mỗi điểm, dừng 15-60s',
     type: 'bool',
     default: true
