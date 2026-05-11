@@ -266,7 +266,8 @@
 
               <div class="form-row">
                 <div class="form-group" style="grid-column: 1 / -1;">
-                  <label class="form-label">Activity Type <span class="tooltip-icon tooltip-right" id="tipActivityType">?</span></label>
+                  <label class="form-label">Activity Type <span class="tooltip-icon tooltip-right"
+                      id="tipActivityType">?</span></label>
                   <select id="cfgActivityType" class="form-select" onchange="updateActivityTypeHint()">
                     <option value="Random">Random</option>
                     <option value="Run">Run</option>
@@ -279,11 +280,13 @@
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Min Distance (km) <span class="tooltip-icon tooltip-right" id="tipMinDist">?</span></label>
+                  <label class="form-label">Min Distance (km) <span class="tooltip-icon tooltip-right"
+                      id="tipMinDist">?</span></label>
                   <input type="number" step="0.1" id="cfgMinDist" class="form-input" value="0.5" min="0.2" max="4.0">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Max Distance (km) <span class="tooltip-icon tooltip-left" id="tipMaxDist">?</span></label>
+                  <label class="form-label">Max Distance (km) <span class="tooltip-icon tooltip-left"
+                      id="tipMaxDist">?</span></label>
                   <input type="number" step="0.1" id="cfgMaxDist" class="form-input" value="8.0" min="1.0" max="15.0">
                 </div>
               </div>
@@ -291,7 +294,8 @@
               <!-- Distance Multipliers -->
               <div class="form-row" style="margin-bottom: 15px;">
                 <div class="form-group" style="grid-column: 1 / -1;">
-                  <label class="form-label">Distance Multipliers <span class="tooltip-icon tooltip-right" id="tipDistMultipliers">?</span></label>
+                  <label class="form-label">Distance Multipliers <span class="tooltip-icon tooltip-right"
+                      id="tipDistMultipliers">?</span></label>
                   <div
                     style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
                     <div style="text-align:center;">
@@ -312,12 +316,14 @@
 
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">User Age <span class="tooltip-icon tooltip-right" id="tipUserAge">?</span></label>
+                  <label class="form-label">User Age <span class="tooltip-icon tooltip-right"
+                      id="tipUserAge">?</span></label>
                   <input type="number" id="cfgUserAge" class="form-input" value="25" min="18" max="80"
                     oninput="updateMHR()">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Max Heart Rate (MHR) <span class="tooltip-icon tooltip-left" id="tipMaxHR">?</span></label>
+                  <label class="form-label">Max Heart Rate (MHR) <span class="tooltip-icon tooltip-left"
+                      id="tipMaxHR">?</span></label>
                   <input type="number" id="cfgMaxHR" class="form-input" value="195" readonly
                     style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
                 </div>
@@ -325,7 +331,8 @@
                   <label class="toggle">
                     <input type="checkbox" id="cfgHeartRate" checked>
                     <div class="toggle-track"></div>
-                    <span class="toggle-label">Heart Rate Data <span class="tooltip-icon tooltip-left" id="tipHeartRate">?</span></span>
+                    <span class="toggle-label">Heart Rate Data <span class="tooltip-icon tooltip-left"
+                        id="tipHeartRate">?</span></span>
                   </label>
                 </div>
               </div>
@@ -352,11 +359,13 @@
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Min Pace (min/km) <span class="tooltip-icon tooltip-right" id="tipMinPace">?</span></label>
+                  <label class="form-label">Min Pace (min/km) <span class="tooltip-icon tooltip-right"
+                      id="tipMinPace">?</span></label>
                   <input type="number" step="0.1" id="cfgMinPace" class="form-input" value="8.0" min="6.0" max="12.0">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Max Pace (min/km) <span class="tooltip-icon tooltip-left" id="tipMaxPace">?</span></label>
+                  <label class="form-label">Max Pace (min/km) <span class="tooltip-icon tooltip-left"
+                      id="tipMaxPace">?</span></label>
                   <input type="number" step="0.1" id="cfgMaxPace" class="form-input" value="12.0" min="10.0" max="15.0">
                 </div>
               </div>
@@ -364,7 +373,8 @@
               <!-- Pace Multipliers -->
               <div class="form-row" style="margin-bottom: 15px;">
                 <div class="form-group" style="grid-column: 1 / -1;">
-                  <label class="form-label">Pace Multipliers <span class="tooltip-icon tooltip-right" id="tipPaceMultipliers">?</span></label>
+                  <label class="form-label">Pace Multipliers <span class="tooltip-icon tooltip-right"
+                      id="tipPaceMultipliers">?</span></label>
                   <div
                     style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
                     <div style="text-align:center;">
@@ -448,7 +458,8 @@
           <!-- Activity Areas Card -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">📍 Activity Areas (Map) <span id="tipActivityAreas" class="tooltip-icon tooltip-left">?</span>
+              <div class="card-title">📍 Activity Areas (Map) <span id="tipActivityAreas"
+                  class="tooltip-icon tooltip-left">?</span>
               </div>
               <div style="display:flex; gap:5px;">
                 <button id="btnLockMap" class="btn btn-sm btn-secondary" onclick="toggleMapLock()">🔒 Map
@@ -473,7 +484,8 @@
                       MAP LOCKED <span id="tipMapLocked" class="tooltip-icon"
                         style="font-size:0.55rem; padding:1px 4px;">?</span>
                     </div>
-                    <div id="infoMapLocked" style="color:var(--text-primary); font-size: 0.85rem; font-weight: 500; margin-top:2px;">
+                    <div id="infoMapLocked"
+                      style="color:var(--text-primary); font-size: 0.85rem; font-weight: 500; margin-top:2px;">
                       -</div>
                   </div>
                   <div style="text-align:left;">
@@ -482,7 +494,8 @@
                       HOME POINTS <span id="tipHomePoints" class="tooltip-icon"
                         style="font-size:0.55rem; padding:1px 4px;">?</span>
                     </div>
-                    <div id="infoHomeCount" style="color:var(--text-primary); font-size: 0.85rem; font-weight: 500; margin-top:2px;">
+                    <div id="infoHomeCount"
+                      style="color:var(--text-primary); font-size: 0.85rem; font-weight: 500; margin-top:2px;">
                       -</div>
                   </div>
                   <div style="text-align:left;">
@@ -491,7 +504,8 @@
                       WORK POINTS <span id="tipWorkPoints" class="tooltip-icon"
                         style="font-size:0.55rem; padding:1px 4px;">?</span>
                     </div>
-                    <div id="infoWorkCount" style="color:var(--text-primary); font-size: 0.85rem; font-weight: 500; margin-top:2px;">
+                    <div id="infoWorkCount"
+                      style="color:var(--text-primary); font-size: 0.85rem; font-weight: 500; margin-top:2px;">
                       -</div>
                   </div>
                   <div style="text-align:left;">
@@ -513,7 +527,8 @@
                   style="width:100%; border-collapse: collapse; font-size: 0.75rem; color: rgba(255,255,255,0.6); background:rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 4px; overflow: hidden;">
                   <thead>
                     <tr style="background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--border);">
-                      <th style="text-align:left; padding: 6px 10px; font-weight: 500; color: var(--text-secondary);">Mức độ bao
+                      <th style="text-align:left; padding: 6px 10px; font-weight: 500; color: var(--text-secondary);">
+                        Mức độ bao
                         phủ</th>
                       <th style="text-align:center; font-weight: 500;">Fully</th>
                       <th style="text-align:center; font-weight: 500;">Mostly</th>
@@ -541,7 +556,7 @@
               </div>
               <div style="padding: 10px; font-size: 0.75rem; color: var(--text-muted); background: rgba(0,0,0,0.2);">
                 Drag 🏠 <b>Home (Orange)</b> and 💼 <b>Work (Blue)</b> markers to set locations.
-                Click on a marker to adjust its radius (2000m - 4000m).
+                Click on a marker to adjust its radius.
                 Districts near these areas will be prioritized during generation.
               </div>
             </div>
@@ -634,10 +649,11 @@
         <div class="card full-width">
           <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="card-title" style="flex:1;">📋 Local Generated History <span class="tooltip-icon tooltip-right"
-                data-tooltip="🟢 UPLOADED: Đã tạo và tải lên Strava thành công.&#10;🟡 GENERATED: Đã tạo cục bộ, chưa tải lên Strava.&#10;🔴 DELETED: Đã tạo nhưng đã xóa ở Local (trước khi upload).&#10;⚪ REMOVED: Đã upload nhưng sau đó bị xóa trên Strava Cloud.">?</span></div>
+                data-tooltip="🟢 UPLOADED: Đã tạo và tải lên Strava thành công.&#10;🟡 GENERATED: Đã tạo cục bộ, chưa tải lên Strava.&#10;🔴 DELETED: Đã tạo nhưng đã xóa ở Local (trước khi upload).&#10;⚪ REMOVED: Đã upload nhưng sau đó bị xóa trên Strava Cloud.">?</span>
+            </div>
             <div style="display:flex; gap:10px; align-items:center;">
-              <select id="historyFilterRange" class="form-select" style="padding:4px 8px; font-size:0.8rem; width:120px;"
-                onchange="onHistoryFilterChange()">
+              <select id="historyFilterRange" class="form-select"
+                style="padding:4px 8px; font-size:0.8rem; width:120px;" onchange="onHistoryFilterChange()">
                 <option value="3_days">Last 3 Days</option>
                 <option value="5_days">Last 5 Days</option>
                 <option value="7_days" selected>Last 7 Days</option>
@@ -666,7 +682,8 @@
         <div class="card full-width">
           <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="card-title" style="flex:1;">☁️ Strava Cloud Activities <span class="tooltip-icon tooltip-right"
-                data-tooltip="🏃 RUN: Hoạt động Chạy bộ&#10;🚶 WALK: Hoạt động Đi bộ&#10;🚴 RIDE: Hoạt động Đạp xe&#10;(Dữ liệu đồng bộ trực tiếp từ Strava Cloud)">?</span></div>
+                data-tooltip="🏃 RUN: Hoạt động Chạy bộ&#10;🚶 WALK: Hoạt động Đi bộ&#10;🚴 RIDE: Hoạt động Đạp xe&#10;(Dữ liệu đồng bộ trực tiếp từ Strava Cloud)">?</span>
+            </div>
 
             <div style="display:flex; gap:10px; align-items:center;">
               <select id="stravaFilterRange" class="form-select" style="padding:4px 8px; font-size:0.8rem; width:120px;"
