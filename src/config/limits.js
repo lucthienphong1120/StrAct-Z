@@ -183,7 +183,7 @@ const LIMITS = {
     label: 'Heart Rate Zones.',
     type: 'map',
     desc_extra: 'Tác dụng: Xác định giới hạn vùng nhịp tim dựa trên MHR theo từng loại hoạt động.',
-    example: 'Ví dụ: Walk 50-60%, Ride 60-70%, Run 70-85%',
+    example: 'Ví dụ: một người 30 tuổi có MHR khoảng 190 bpm, khi đi bộ sẽ có nhịp tim từ 95-114 bpm (vùng Khởi động).',
     normal: {
       Walk: { min: 0.50, max: 0.60 },
       Ride: { min: 0.60, max: 0.70 },
