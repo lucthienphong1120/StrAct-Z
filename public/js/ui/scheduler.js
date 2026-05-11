@@ -7,8 +7,8 @@ async function loadSchedule() {
     const status = await api('/scheduler');
     document.getElementById('scheduleEnabled').checked = status.enabled;
     document.getElementById('scheduleTime').value = status.scheduleTime || '06:00';
-    document.getElementById('scheduleCountMin').value = status.scheduleCountMin || 1;
-    document.getElementById('scheduleCountMax').value = status.scheduleCountMax || 1;
+    document.getElementById('scheduleCountMin').value = (status.scheduleCountMin !== undefined && status.scheduleCountMin !== null) ? status.scheduleCountMin : 1;
+    document.getElementById('scheduleCountMax').value = (status.scheduleCountMax !== undefined && status.scheduleCountMax !== null) ? status.scheduleCountMax : 1;
     updateScheduleDisplay(status);
   } catch (err) { console.error('Schedule error:', err); }
 }
