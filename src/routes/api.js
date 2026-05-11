@@ -110,7 +110,7 @@ router.get('/auth/google/callback', async (req, res) => {
 });
 
 router.delete('/auth/google', async (req, res) => {
-  await db.deleteExternalTokens(req.user.id, 'google_fit');
+  await googleFit.disconnect(req.user.id);
   res.json({ success: true });
 });
 

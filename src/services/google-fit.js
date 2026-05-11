@@ -251,10 +251,28 @@ async function getTodayStats(userId) {
   };
 }
 
+async function disconnect(userId) {
+  try {
+    const tokens = await db.getExternalTokens(userId, 'google_fit');
+    if (tokens && (tokens.access_token || tokens.refresh_token)) {
+      const token = tokens.refresh_token || tokens.access_token;
+      await fetch(`https://oauth2.googleapis.com/revoke?token=${token}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      });
+    }
+  } catch (err) {
+    console.error('[Google Fit] Revoke failed:', err.message);
+  } finally {
+    await db.deleteExternalTokens(userId, 'google_fit');
+  }
+}
+
 module.exports = {
   getAuthUrl,
   exchangeCode,
   refreshTokens,
   uploadActivity,
-  getTodayStats
+  getTodayStats,
+  disconnect
 };

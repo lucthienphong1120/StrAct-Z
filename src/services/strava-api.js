@@ -339,8 +339,17 @@ async function disconnect(accountId) {
   try {
     const tokens = await db.getTokens(accountId);
     if (tokens && tokens.access_token) {
+      // Refresh token first to ensure deauthorize call works
+      let accessToken;
+      try {
+        accessToken = await refreshToken(accountId);
+      } catch (e) {
+        // If refresh fails, try with current access token as last resort
+        accessToken = tokens.access_token;
+      }
+
       const postData = new URLSearchParams({
-        access_token: tokens.access_token,
+        access_token: accessToken,
       }).toString();
 
       const options = {
@@ -353,10 +362,15 @@ async function disconnect(accountId) {
         },
       };
 
-      await makeRequest(options, postData).catch(() => {});
+      console.log(`[Strava] Deauthorizing account ${accountId}...`);
+      await makeRequest(options, postData);
     }
+  } catch (err) {
+    console.error('[Strava] Deauthorize failed:', err.body || err.message);
+    // Even if deauthorize fails, we still proceed to delete from local DB
   } finally {
     await db.deleteTokens(accountId);
+    clearActivityCache(accountId);
   }
 }
 
