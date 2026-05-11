@@ -171,6 +171,7 @@ const LIMITS = {
     type: 'bool',
     default: true
   },
+  user_age: {
     label: 'User Age (Tuổi người dùng).',
     desc_extra: 'Tác dụng: Dùng để tính Nhịp tim tối đa (MHR = 220 - Tuổi).',
     type: 'int',
