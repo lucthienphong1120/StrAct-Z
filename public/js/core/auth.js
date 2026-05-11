@@ -45,8 +45,7 @@ function renderAccountInfo(athlete) {
         <div style="font-size:0.8rem;color:var(--text-muted);">ID: ${athlete?.id || 'N/A'}</div>
       </div>
     </div>
-    <button class="btn btn-danger btn-sm btn-block" onclick="disconnect()">Disconnect Strava</button>
-    <button class="btn btn-outline-danger btn-sm btn-block" style="margin-top:10px;" onclick="systemLogout()">Logout System</button>
+    <button class="btn btn-block btn-outline-danger btn-sm" onclick="disconnect()">Disconnect Strava</button>
   `;
 }
 
