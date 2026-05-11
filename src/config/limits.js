@@ -174,10 +174,9 @@ const LIMITS = {
     max: 90
   },
   heart_rate_zones: {
-    label: 'Heart Rate Zones (Target).',
+    label: 'Heart Rate Zones.',
     type: 'map',
-    desc_extra: 'Tác dụng: Xác định giới hạn Min/Max Nhịp tim dựa trên MHR',
-    default_label: 'Walk 50-60%, Ride 60-70%, Run 70-85%',
+    desc_extra: 'Tác dụng: Xác định giới hạn vùng nhịp tim dựa trên MHR theo từng loại hoạt động.',
     normal: {
       Walk: { min: 0.50, max: 0.60 },
       Ride: { min: 0.60, max: 0.70 },
@@ -206,13 +205,13 @@ const LIMITS = {
     max: 15.0
   },
   sim_weather: {
-    label: '🌤️ Weather Sim (Giả lập thời tiết).',
+    label: 'Weather Sim (Giả lập thời tiết).',
     desc_extra: 'Tác dụng: Tăng Nhịp tim (HR) thêm 5-15 bpm. Điều kiện: Ngẫu nhiên 30% hoặc khung giờ 11h-16h',
     type: 'bool',
     default: true
   },
   sim_redlights: {
-    label: '🚦 Red Lights (Giả lập đèn đỏ).',
+    label: 'Red Lights (Giả lập đèn đỏ).',
     desc_extra: 'Tác dụng: Tăng Elapsed Time, Giảm Avg Pace, Giảm HR. Xác suất: 1.5% mỗi điểm, dừng 15-60s',
     type: 'bool',
     default: true
