@@ -95,11 +95,23 @@ router.get('/auth/google/callback', async (req, res) => {
         <p>You can close this window now.</p>
         <button class="btn" onclick="window.close()">Close Window</button>
         <script>
+          // Try to refresh opener
           if (window.opener) {
-            window.opener.postMessage("google_fit_connected", "*");
+            try {
+              window.opener.location.reload();
+              window.opener.postMessage('google_fit_connected', '*');
+            } catch (e) {
+              console.error('Failed to notify opener:', e);
+            }
           }
-          // Auto-close after 2 seconds
-          setTimeout(() => { window.close(); }, 2000);
+          
+          // If this isn't a popup, redirect the current window
+          if (!window.opener || window.opener === window) {
+            window.location.href = '/?success=google_fit_connected';
+          } else {
+            // Auto-close popup after a short delay
+            setTimeout(() => { window.close(); }, 1000);
+          }
         </script>
       </body>
       </html>

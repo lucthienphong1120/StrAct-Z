@@ -29,6 +29,10 @@ function checkUrlParams() {
     showToast('Successfully connected to Strava!', 'success');
     history.replaceState(null, '', '/');
   }
+  if (params.get('success') === 'google_fit_connected') {
+    showToast('Successfully connected to Google Fit!', 'success');
+    history.replaceState(null, '', '/');
+  }
   if (params.get('error')) {
     showToast('Error: ' + params.get('error'), 'error');
     history.replaceState(null, '', '/');

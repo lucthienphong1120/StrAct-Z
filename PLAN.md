@@ -20,7 +20,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] review, cân nhắc vị trí có thể dùng Caching layer (optimize API calls)
 + [x] tích hợp đẩy data về các luồng công cụ Health Hub như Google Fit, Health connect, Samsung Health, Apple Health
 + [x] tích hợp bổ sung cho các công cụ luyện tập khác như adidas running, nike run club, runkeeper (optional, not tested)
-+ [ ] restrict linked tài khoản stract z với tối đa 1 tài khoản strava và 1 với mỗi hệ thống tích hợp 3rd (nếu có)
 + [x] review và sửa lại min, max, range các option + validate (min/max/range)
 + [x] update logic random heart rate trọng số theo hoạt động
 + [x] update logic trọng số vị trí
