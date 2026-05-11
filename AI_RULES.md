@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.24). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.25). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -40,6 +40,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.25 (2026-05-11)
+- **UI Documentation**: Added informational tooltips to History and Cloud Activities headers to explain status mapping and activity types.
+- **Enhanced Transparency**: Clear definitions for UPLOADED, GENERATED, DELETED, and REMOVED states now visible via UI hints.
 
 ### v1.50.24 (2026-05-11)
 - **Status Logic Optimization**: Simplified history status to a single badge system (Uploaded, Generated, Deleted, Removed).

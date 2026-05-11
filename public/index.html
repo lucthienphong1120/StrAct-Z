@@ -557,7 +557,8 @@
         <!-- Activity History (Local) -->
         <div class="card full-width">
           <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
-            <div class="card-title" style="flex:1;">📋 Local Generated History</div>
+            <div class="card-title" style="flex:1;">📋 Local Generated History <span class="tooltip-icon tooltip-right"
+                data-tooltip="🟢 UPLOADED: Đã tạo và tải lên Strava thành công.&#10;🟡 GENERATED: Đã tạo cục bộ, chưa tải lên Strava.&#10;🔴 DELETED: Đã tạo nhưng đã xóa ở Local (trước khi upload).&#10;⚪ REMOVED: Đã upload nhưng sau đó bị xóa trên Strava Cloud.">?</span></div>
             <div style="display:flex; gap:10px; align-items:center;">
               <select id="historyFilterRange" class="form-select" style="padding:4px 8px; font-size:0.8rem; width:120px;"
                 onchange="onHistoryFilterChange()">
@@ -588,7 +589,8 @@
         <!-- Strava Cloud Activities -->
         <div class="card full-width">
           <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
-            <div class="card-title" style="flex:1;">☁️ Strava Cloud Activities</div>
+            <div class="card-title" style="flex:1;">☁️ Strava Cloud Activities <span class="tooltip-icon tooltip-right"
+                data-tooltip="🏃 RUN: Hoạt động Chạy bộ&#10;🚶 WALK: Hoạt động Đi bộ&#10;🚴 RIDE: Hoạt động Đạp xe&#10;(Dữ liệu đồng bộ trực tiếp từ Strava Cloud)">?</span></div>
 
             <div style="display:flex; gap:10px; align-items:center;">
               <select id="stravaFilterRange" class="form-select" style="padding:4px 8px; font-size:0.8rem; width:120px;"

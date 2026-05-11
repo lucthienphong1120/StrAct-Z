@@ -74,4 +74,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] fix lỗi Min Count của schedule khi đặt thành 0 nhưng reload lại trang lại bị về 1
 + [x] cập nhật AI Rule không cần update version ở dòng 1 file readme, chỉ cần bổ sung changelog nếu thay đổi tính năng lớn, file readme chủ yếu mô tả tính năng và hướng dẫn setup, hướng dẫn sử dụng
 + [x] cập nhật Local Generated History bổ sung time filter tương tự Strava Cloud Activities, check chéo mapping những uploaded activities (4 trạng thái duy nhất) -> để lưu trữ log
++ [ ] check lý do bất đồng bộ dữ liệu hoạt động giữa Local Generated History và Strava Cloud Activities
 
