@@ -8,8 +8,9 @@ const { getDefaultKeys } = require('./districts');
 const LIMITS = {
   // ─── Hidden / System ──────────────────────────────────────────────────────
   daily_upload_limit: {
-    label: 'Số lượng upload tối đa lên Strava mỗi ngày.',
+    label: 'Daily Upload Limit (Giới hạn tải lên).',
     type: 'int',
+    desc_extra: 'Tác dụng: Giới hạn số lượng hoạt động tải lên Strava mỗi ngày.',
     default: 2,
     min_range: { normal: 2, vip: 5 },
     max_range: { normal: 2, vip: 5 }
