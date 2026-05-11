@@ -95,22 +95,25 @@ router.get('/auth/google/callback', async (req, res) => {
         <p>You can close this window now.</p>
         <button class="btn" onclick="window.close()">Close Window</button>
         <script>
-          // Try to refresh opener
+          // Notify other windows/tabs via BroadcastChannel (Most reliable)
+          try {
+            const bc = new BroadcastChannel('stract_z_auth');
+            bc.postMessage('google_fit_connected');
+          } catch (e) { console.error('BC Error:', e); }
+
+          // Legacy notification via opener postMessage
           if (window.opener) {
             try {
-              window.opener.location.reload();
               window.opener.postMessage('google_fit_connected', '*');
-            } catch (e) {
-              console.error('Failed to notify opener:', e);
-            }
+            } catch (e) { console.error('Opener Error:', e); }
           }
           
-          // If this isn't a popup, redirect the current window
-          if (!window.opener || window.opener === window) {
-            window.location.href = '/?success=google_fit_connected';
+          // If this is a popup, just close it after notifying
+          if (window.opener && window.opener !== window) {
+            setTimeout(() => { window.close(); }, 1500);
           } else {
-            // Auto-close popup after a short delay
-            setTimeout(() => { window.close(); }, 1000);
+            // If it's NOT a popup (direct navigation), redirect to home
+            setTimeout(() => { window.location.href = '/?success=google_fit_connected'; }, 1500);
           }
         </script>
       </body>

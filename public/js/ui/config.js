@@ -619,16 +619,21 @@ async function refreshGoogleFitStats() {
   }
 }
 
-window.addEventListener('message', async (event) => {
-  console.log('[Auth] Received message:', event.data);
+// Reliable cross-window communication for Auth
+const authChannel = new BroadcastChannel('stract_z_auth');
+authChannel.onmessage = (event) => {
+  console.log('[AuthChannel] Received:', event.data);
   if (event.data === 'google_fit_connected') {
     showToast('Google Fit connected successfully!', 'success');
-    // Force a full dashboard reload to ensure all states are fresh
-    if (window.loadDashboard) {
-      await window.loadDashboard(true);
-    } else {
-      location.reload();
-    }
+    setTimeout(() => location.reload(), 1000);
+  }
+};
+
+window.addEventListener('message', async (event) => {
+  console.log('[Auth] Received postMessage:', event.data);
+  if (event.data === 'google_fit_connected') {
+    showToast('Google Fit connected successfully!', 'success');
+    setTimeout(() => location.reload(), 1000);
   }
 });
 

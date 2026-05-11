@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.7). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.8). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -40,6 +40,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.8 (2026-05-11)
+- **Reliable Parent Reload**: Implemented `BroadcastChannel` API for high-reliability cross-window notifications. This ensures the main dashboard reloads even if the popup window reference is lost or isolated.
+- **Popup Flow Fix**: Prevented the dashboard from accidentally loading inside the OAuth popup window.
 
 ### v1.50.7 (2026-05-11)
 - **Auto-Refresh Fix**: Improved Google Fit OAuth flow to explicitly reload the parent window upon completion, ensuring the dashboard updates immediately.
