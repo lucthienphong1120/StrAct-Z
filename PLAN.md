@@ -72,4 +72,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] sử dụng cache layer cho số liệu từ Google Fit sync, bỏ nút refresh cạnh đó mà sử dụng chung nút refresh ở trên, tất cả dữ liệu sẽ load lại khi user nhấn nút refresh hoặc reset hoặc Ctrl+Shift+R hoặc F5, hoặc khi truy cập trang dashboard lần đầu (áp dụng tương tự cho data lấy về từ strava cloud và cả 2 tab: History và Insights)
 + [x] bỏ nút logout system khỏi menu Strava Account (đã có nút logout ở header cạnh tên user rồi), đổi format nút disconnect strava giống nút disconnect google fit
 + [ ] fix lỗi Min Count của schedule khi đặt thành 0 nhưng reload lại trang lại bị về 1
++ [ ] cập nhật AI Rule không cần update version ở dòng 1 file readme, chỉ cần bổ sung changelog nếu thay đổi tính năng lớn, file readme chủ yếu mô tả tính năng và hướng dẫn setup, hướng dẫn sử dụng
 

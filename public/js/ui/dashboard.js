@@ -51,7 +51,6 @@ async function loadStats(forceRefresh = false) {
       if (stats.googleFitConnected) {
         gfDisc.style.display = 'none';
         gfConn.style.display = 'block';
-        renderGoogleFitUser(stats.googleFitUser);
         if (window.refreshGoogleFitStats) {
           window.refreshGoogleFitStats(forceRefresh);
         }
@@ -95,26 +94,6 @@ async function loadStats(forceRefresh = false) {
       }
     }
   } catch (err) { console.error('Stats error:', err); }
-}
-
-function renderGoogleFitUser(user) {
-  const container = document.getElementById('gfUserInfo');
-  if (!container) return;
-  
-  // Refined avatar/logo fallback
-  const avatarHtml = user?.picture 
-    ? `<img src="${user.picture}" style="width:48px;height:48px;border-radius:50%;border:2px solid #4285F4;object-fit:cover;box-shadow:0 0 10px rgba(66,133,244,0.2);" alt="avatar">` 
-    : `<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg, rgba(66,133,244,0.2), rgba(66,133,244,0.05));border:1px solid rgba(66,133,244,0.3);display:flex;align-items:center;justify-content:center;color:#4285F4;font-size:1.4rem;box-shadow:inset 0 0 10px rgba(66,133,244,0.1);">📉</div>`;
-  
-  container.innerHTML = `
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-      ${avatarHtml}
-      <div>
-        <div style="font-weight:600; color:var(--text-primary); font-size:1.05rem; letter-spacing:-0.01em;">${user?.name || 'Google Fit User'}</div>
-        <div style="font-size:0.8rem;color:var(--text-muted); font-weight:400;">${user?.email || 'Connected & Syncing'}</div>
-      </div>
-    </div>
-  `;
 }
 
 async function loadDistricts() {

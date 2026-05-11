@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.13). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.0). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -41,14 +41,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
-### v1.50.13 (2026-05-11)
-- **Premium UI Polish**: Refined the Google Fit card aesthetics with better gradients, shadows, and spacing to match the Strava account card's premium feel.
-- **Improved Hierarchy**: Adjusted typography and colors for better readability and visual balance in the account settings area.
-
-### v1.50.12 (2026-05-11)
-- **Redesigned Google Fit Card**: Updated the Google Fit connection UI to include user avatar and profile info (name/email), mirroring the Strava account layout.
-- **Enhanced OAuth**: Google login now fetches and stores user profile information.
-- **Cleaned UI**: Removed redundant status text from the Google Fit card.
+### v1.51.0 (2026-05-11)
+- **Account UI Redesign**: Redesigned the Google Fit Account card to match the Strava Account card's premium look.
+- **Google Fit Profiles**: Now fetches and displays the Google user's name and avatar upon connection.
+- **Dynamic Rendering**: Migrated Google Fit account info to dynamic rendering in `auth.js` for better state management.
+- **Database Expansion**: Added user profile columns to the `external_tokens` table.
 
 ### v1.50.11 (2026-05-11)
 - **Fix Scheduler Bug**: Resolved an issue where "Min Count" would reset from 0 to 1 after a page reload due to incorrect falsy value handling in the UI.

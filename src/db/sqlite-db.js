@@ -80,8 +80,13 @@ async function getDb() {
       refresh_token TEXT,
       expires_at INTEGER,
       scope TEXT,
+      provider_user_name TEXT,
+      provider_user_avatar TEXT,
       PRIMARY KEY (account_id, provider)
     );
+
+    -- Migration for existing databases
+    PRAGMA table_info(external_tokens);
     CREATE TABLE IF NOT EXISTS activities (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       created_at TEXT,
@@ -126,6 +131,18 @@ async function getDb() {
       created_at TEXT
     );
   `);
+
+  // Migration for external_tokens
+  try {
+    await dbInstance.exec(`
+      ALTER TABLE external_tokens ADD COLUMN provider_user_name TEXT;
+    `);
+  } catch (e) { /* Column probably exists */ }
+  try {
+    await dbInstance.exec(`
+      ALTER TABLE external_tokens ADD COLUMN provider_user_avatar TEXT;
+    `);
+  } catch (e) { /* Column probably exists */ }
   
   // Migrate from JSON if SQLite config is empty
   const configCount = await dbInstance.get('SELECT COUNT(*) as c FROM config');
@@ -416,14 +433,19 @@ async function checkBruteForce(accountId) {
 
 async function saveExternalTokens(accountId, provider, tokens) {
   const db = await getDb();
-  const encryptedAccess = encryption.encrypt(tokens.access_token);
-  const encryptedRefresh = tokens.refresh_token ? encryption.encrypt(tokens.refresh_token) : null;
-  
   await db.run(
-    'INSERT OR REPLACE INTO external_tokens (account_id, provider, access_token, refresh_token, expires_at, scope) VALUES (?, ?, ?, ?, ?, ?)',
-    [accountId, provider, encryptedAccess, encryptedRefresh, tokens.expires_at, tokens.scope]
+    'INSERT OR REPLACE INTO external_tokens (account_id, provider, access_token, refresh_token, expires_at, scope, provider_user_name, provider_user_avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    [
+      accountId,
+      provider,
+      encryption.encrypt(tokens.access_token),
+      tokens.refresh_token ? encryption.encrypt(tokens.refresh_token) : null,
+      tokens.expires_at || (Math.floor(Date.now() / 1000) + (tokens.expires_in || 3600)),
+      tokens.scope,
+      tokens.provider_user_name || null,
+      tokens.provider_user_avatar || null
+    ]
   );
-  return true;
 }
 
 async function getExternalTokens(accountId, provider) {
@@ -436,6 +458,8 @@ async function getExternalTokens(accountId, provider) {
     refresh_token: row.refresh_token ? encryption.decrypt(row.refresh_token) : null,
     expires_at: row.expires_at,
     scope: row.scope,
+    provider_user_name: row.provider_user_name,
+    provider_user_avatar: row.provider_user_avatar
   };
 }
 

@@ -58,19 +58,26 @@ async function exchangeCode(code) {
     throw new Error(err.error_description || 'Failed to exchange Google code');
   }
 
-  const tokens = await response.json();
+  const data = await response.json();
   
-  // Fetch user info
-  const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-    headers: { 'Authorization': `Bearer ${tokens.access_token}` }
-  });
-  
-  let userInfo = {};
-  if (userRes.ok) {
-    userInfo = await userRes.json();
+  // Fetch user profile info
+  try {
+    const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { 'Authorization': `Bearer ${data.access_token}` }
+    });
+    if (userRes.ok) {
+      const userInfo = await userRes.json();
+      return {
+        ...data,
+        provider_user_name: userInfo.name,
+        provider_user_avatar: userInfo.picture
+      };
+    }
+  } catch (e) {
+    console.warn('[Google Fit] Failed to fetch user info:', e.message);
   }
 
-  return { tokens, userInfo };
+  return data;
 }
 
 /**
