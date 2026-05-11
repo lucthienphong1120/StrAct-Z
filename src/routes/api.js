@@ -114,6 +114,15 @@ router.delete('/auth/google', async (req, res) => {
   res.json({ success: true });
 });
 
+router.get('/google-fit/stats', async (req, res) => {
+  try {
+    const stats = await googleFit.getTodayStats(req.user.id);
+    res.json(stats);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ─── Stats ──────────────────────────────────────────────────────────────────
 
 router.get('/stats', async (req, res) => {

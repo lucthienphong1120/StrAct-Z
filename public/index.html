@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.2</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.3</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -450,7 +450,17 @@
                   <div style="width:40px; height:40px; background:rgba(66,133,244,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#4285F4; font-size:1.2rem;">📉</div>
                   <div>
                     <div style="font-weight:600; font-size:0.9rem; color:var(--text-primary);">Google Fit Connected</div>
-                    <div style="font-size:0.75rem; color:var(--accent-green);">Status: Active & Syncing</div>
+                    <div style="font-size:0.75rem; color:var(--text-muted);" id="gfStatusText">Fetching data...</div>
+                  </div>
+                </div>
+                <div id="gfStats" style="margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border);">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.8rem; color:var(--text-secondary);">Today's Steps:</span>
+                    <span style="font-weight:700; color:var(--accent-blue);" id="gfTodaySteps">0</span>
+                  </div>
+                  <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.7rem; color:var(--text-muted);" id="gfLastSync">Last sync: --:--</span>
+                    <button onclick="refreshGoogleFitStats()" class="btn btn-sm btn-secondary" style="padding: 2px 8px; font-size:0.7rem;">🔄 Refresh</button>
                   </div>
                 </div>
                 <button onclick="disconnectGoogleFit()" class="btn btn-block btn-outline-danger btn-sm">Disconnect Google Fit</button>

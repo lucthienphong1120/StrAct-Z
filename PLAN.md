@@ -70,5 +70,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] test và debug lỗi tích hợp google fit (console log), thông báo khi connect/disconnect,...
 + [ ] update config Time Range trong custom time (gfx only) default thành 00:00 (tức random time), nếu user đặt vào 00:00 cũng sẽ hiểu là random time trong ngày, chỉ cần Target Date là được
 + [ ] check fix lại safe time, thời gian random ra sát nhau
-+ [ ] chức năng disconnect strava bị lỗi
-+ [x] chức năng disconnect google fit bị lỗi
+

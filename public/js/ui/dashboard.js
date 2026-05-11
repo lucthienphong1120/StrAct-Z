@@ -46,6 +46,7 @@ async function loadStats() {
       if (stats.googleFitConnected) {
         gfDisc.style.display = 'none';
         gfConn.style.display = 'block';
+        if (window.refreshGoogleFitStats) window.refreshGoogleFitStats();
       } else {
         gfDisc.style.display = 'block';
         gfConn.style.display = 'none';

@@ -590,13 +590,48 @@ async function disconnectGoogleFit() {
   }
 }
 
-window.addEventListener('message', (event) => {
+async function refreshGoogleFitStats() {
+  const statusText = document.getElementById('gfStatusText');
+  const stepsEl = document.getElementById('gfTodaySteps');
+  const syncEl = document.getElementById('gfLastSync');
+  
+  if (statusText) statusText.textContent = 'Refreshing...';
+  
+  try {
+    const data = await api('/google-fit/stats');
+    if (data.error) throw new Error(data.error);
+    
+    if (stepsEl) stepsEl.textContent = data.steps.toLocaleString();
+    if (syncEl) {
+      const time = new Date(data.lastUpdate).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+      syncEl.textContent = `Last sync: ${time}`;
+    }
+    if (statusText) {
+      statusText.textContent = 'Status: Active & Syncing';
+      statusText.style.color = 'var(--accent-green)';
+    }
+  } catch (err) {
+    console.error('Google Fit stats error:', err);
+    if (statusText) {
+      statusText.textContent = 'Status: Sync Error';
+      statusText.style.color = 'var(--accent-red)';
+    }
+  }
+}
+
+window.addEventListener('message', async (event) => {
   console.log('[Auth] Received message:', event.data);
   if (event.data === 'google_fit_connected') {
     showToast('Google Fit connected successfully!', 'success');
-    loadStats(); // refresh UI
+    // Force a full dashboard reload to ensure all states are fresh
+    if (window.loadDashboard) {
+      await window.loadDashboard(true);
+    } else {
+      location.reload();
+    }
   }
 });
 
 window.connectGoogleFit = connectGoogleFit;
 window.disconnectGoogleFit = disconnectGoogleFit;
+window.refreshGoogleFitStats = refreshGoogleFitStats;

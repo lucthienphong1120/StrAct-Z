@@ -201,9 +201,60 @@ async function uploadActivity(userId, activity) {
   return { success: true };
 }
 
+async function getTodayStats(userId) {
+  let tokens = await db.getExternalTokens(userId, 'google_fit');
+  if (!tokens) throw new Error('Not connected to Google Fit');
+
+  if (tokens.expires_at < (Date.now() / 1000) + 60) {
+    tokens = await refreshTokens(userId);
+  }
+
+  const now = new Date();
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const endTime = now.getTime();
+
+  const aggregateBody = {
+    aggregateBy: [{
+      dataTypeName: 'com.google.step_count.delta',
+      dataSourceId: 'derived:com.google.step_count.delta:com.google.android.gms:estimated_steps'
+    }],
+    bucketByTime: { durationMillis: 86400000 },
+    startTimeMillis: startOfDay,
+    endTimeMillis: endTime
+  };
+
+  const response = await fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${tokens.access_token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(aggregateBody)
+  });
+
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.message || 'Failed to fetch Google Fit stats');
+  }
+
+  const data = await response.json();
+  let totalSteps = 0;
+  
+  if (data.bucket && data.bucket[0] && data.bucket[0].dataset && data.bucket[0].dataset[0].point) {
+    const points = data.bucket[0].dataset[0].point;
+    totalSteps = points.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
+  }
+
+  return {
+    steps: totalSteps,
+    lastUpdate: new Date().toISOString()
+  };
+}
+
 module.exports = {
   getAuthUrl,
   exchangeCode,
   refreshTokens,
-  uploadActivity
+  uploadActivity,
+  getTodayStats
 };
