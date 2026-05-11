@@ -124,26 +124,30 @@ const LIMITS = {
 
   // ─── Activity Areas (Map) ─────────────────────────────────────────────────
   map_locked: {
-    label: 'Khóa vị trí bản đồ hiện tại.',
+    label: 'Khóa vị trí bản đồ.',
+    desc_extra: 'Tác dụng: Khóa/Mở khóa khả năng di chuyển và phóng to bản đồ để tránh thay đổi vị trí vô tình.',
     type: 'bool',
     default: true
   },
   home_count: {
-    label: 'Số lượng điểm Nhà.',
+    label: 'Giới hạn điểm Nhà.',
+    desc_extra: 'Tác dụng: Số lượng điểm Nhà tối đa bạn có thể đặt trên bản đồ.',
     type: 'int',
     default: 0,
     min: 0,
     max: { normal: 1, vip: 2 }
   },
   work_count: {
-    label: 'Số lượng điểm Công ty.',
+    label: 'Giới hạn điểm Công ty.',
+    desc_extra: 'Tác dụng: Số lượng điểm Công ty tối đa bạn có thể đặt trên bản đồ.',
     type: 'int',
     default: 0,
     min: 1,
     max: { normal: 1, vip: 2 }
   },
   scale_radius: {
-    label: 'Bán kính khu vực ưu tiên.',
+    label: 'Giới hạn bán kính vùng ưu tiên.',
+    desc_extra: 'Tác dụng: Khoảng cách tối đa mà một vùng Nhà/Công ty có thể bao phủ.',
     type: 'int',
     default: 2000,
     min: 2000,
@@ -151,9 +155,9 @@ const LIMITS = {
     unit: 'm'
   },
   activity_areas: {
-    label: 'Khu vực hoạt động (Map).',
+    label: 'Ưu tiên khu vực hoạt động.',
     type: 'map',
-    desc_extra: 'Tác dụng: Ưu tiên tạo lộ trình tại các quận quanh khu vực Nhà/Công ty. Tỉ lệ chọn các quận mặc định là 1:1, các quận nằm trong vùng phủ sóng của Nhà/Công ty sẽ được cộng thêm trọng số boost tương ứng.',
+    desc_extra: 'Tác dụng: Tỉ lệ chọn các quận mặc định là 1:1, các quận nằm trong vùng phủ sóng của Nhà/Công ty sẽ được cộng thêm trọng số boost tương ứng.',
     example: 'Ví dụ: Quận Hoàn Kiếm nằm \'Fully Inside\' vùng Nhà sẽ có trọng số 1.0 (mặc định) + 2.0 (boost) = 3.0 (tỉ lệ chọn cao gấp 3 lần các quận khác).'
   },
 

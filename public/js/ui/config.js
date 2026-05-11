@@ -104,7 +104,11 @@ function updateDynamicTooltips() {
     heart_rate_zones: 'tipHeartRateZones',
     dist_multipliers: 'tipDistMultipliers',
     pace_multipliers: 'tipPaceMultipliers',
-    activity_areas: 'tipActivityAreas'
+    activity_areas: 'tipActivityAreas',
+    map_locked: 'tipMapLocked',
+    home_count: 'tipHomePoints',
+    work_count: 'tipWorkPoints',
+    scale_radius: 'tipScaleRadius'
   };
 
   for (const [key, tipId] of Object.entries(tipMapping)) {
