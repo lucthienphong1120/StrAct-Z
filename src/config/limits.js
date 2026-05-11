@@ -146,8 +146,8 @@ const LIMITS = {
 
   // ─── Activity Settings ────────────────────────────────────────────────────
   activity_type: {
-    label: 'Loại hoạt động GPX sẽ được tạo.',
-    desc_extra: 'Hệ số Dist/Pace: Walk 0.7x/1.25x, Run 1x/0.8x, Ride 1.5x/0.5x',
+    label: 'Activity Type (Loại hoạt động).',
+    desc_extra: 'Tác dụng: Áp dụng hệ số nhân Dist/Pace riêng biệt cho từng loại.',
     type: 'array',
     default: 'Random',
     default_label: 'Random (60% Run, 30% Walk, 10% Ride)',
@@ -174,8 +174,9 @@ const LIMITS = {
     max: 90
   },
   heart_rate_zones: {
-    label: 'Vùng nhịp tim mô phỏng.',
+    label: 'Heart Rate Zones (Target).',
     type: 'map',
+    desc_extra: 'Tác dụng: Xác định giới hạn Min/Max Nhịp tim dựa trên MHR',
     default_label: 'Walk 50-60%, Ride 60-70%, Run 70-85%',
     normal: {
       Walk: { min: 0.50, max: 0.60 },
@@ -205,14 +206,14 @@ const LIMITS = {
     max: 15.0
   },
   sim_weather: {
-    label: 'Giả lập tác động của thời tiết.',
-    desc_extra: 'Tỉ lệ 30% gặp trời nóng, khung giờ 11h-16h stress hơn',
+    label: '🌤️ Weather Sim (Giả lập thời tiết).',
+    desc_extra: 'Tác dụng: Tăng Nhịp tim (HR) thêm 5-15 bpm. Điều kiện: Ngẫu nhiên 30% hoặc khung giờ 11h-16h',
     type: 'bool',
     default: true
   },
   sim_redlights: {
-    label: 'Giả lập dừng đèn đỏ.',
-    desc_extra: 'Xác suất 1.5% mỗi điểm, dừng 15-60s',
+    label: '🚦 Red Lights (Giả lập đèn đỏ).',
+    desc_extra: 'Tác dụng: Tăng Elapsed Time, Giảm Avg Pace, Giảm HR. Xác suất: 1.5% mỗi điểm, dừng 15-60s',
     type: 'bool',
     default: true
   },

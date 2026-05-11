@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.17). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.18). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -40,6 +40,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.18 (2026-05-11)
+- **Metadata Synchronization**: Updated simulation and activity metadata in `limits.js` to ensure tooltips correctly reflect detailed effects on metrics (HR, Pace, Time).
+- **Tooltips Polish**: Fixed a bug where manual UI tooltips were overwritten by the dynamic configuration loader.
 
 ### v1.50.17 (2026-05-11)
 - **Advanced UI Polish**: Finalized Activity Settings layout with Min/Max Distance on the same row and Activity Type full-width.
