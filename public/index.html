@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.16</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.17</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -266,7 +266,7 @@
               </div>
 
               <div class="form-row">
-                <div class="form-group">
+                <div class="form-group" style="grid-column: 1 / -1;">
                   <label class="form-label">Activity Type <span class="tooltip-icon tooltip-right" id="tipActivityType"
                       data-tooltip="Loại hoạt động GPX sẽ được tạo.&#10;Kiểu: array&#10;Mặc định: Ngẫu nhiên (60% Chạy, 30% Đi bộ, 10% Đạp xe)">?</span></label>
                   <select id="cfgActivityType" class="form-select" onchange="updateActivityTypeHint()">
@@ -278,6 +278,8 @@
                   <div id="activityTypeHint" style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">🎲 60%
                     Run, 30% Walk, 10% Ride</div>
                 </div>
+              </div>
+              <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Min Distance (km) <span class="tooltip-icon tooltip-right" id="tipMinDist"
                       data-tooltip="Khoảng cách tối thiểu của hoạt động.&#10;Kiểu: float&#10;Mặc định: 0.5&#10;Phạm vi: 0.1 - 4.0">?</span></label>
@@ -293,17 +295,19 @@
               <!-- Distance Multipliers -->
               <div class="form-row" style="margin-bottom: 15px;">
                 <div class="form-group" style="grid-column: 1 / -1;">
+                  <label class="form-label">Distance Multipliers <span class="tooltip-icon tooltip-right"
+                    data-tooltip="Hệ số nhân quãng đường dựa trên loại hoạt động.&#10;Tác dụng: Điều chỉnh độ dài lộ trình thực tế so với cài đặt.&#10;Ví dụ: Ride 1.5x có nghĩa là cùng một lộ trình, đạp xe sẽ đi xa hơn 50%.">?</span></label>
                   <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
                     <div style="text-align:center;">
-                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">walk</div>
+                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">WALK</div>
                       <div style="color:var(--text-primary); font-size: 0.9rem;">0.7x</div>
                     </div>
                     <div style="text-align:center;">
-                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">ride</div>
+                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">RIDE</div>
                       <div style="color:var(--text-primary); font-size: 0.9rem;">1.5x</div>
                     </div>
                     <div style="text-align:center;">
-                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">run</div>
+                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">RUN</div>
                       <div style="color:var(--text-primary); font-size: 0.9rem;">1.0x</div>
                     </div>
                   </div>
@@ -336,19 +340,19 @@
                 <div class="form-group" style="grid-column: 1 / -1;">
                   <label class="form-label">Heart Rate Zones (Target) <span class="tooltip-icon tooltip-right"
                       id="tipHeartRateZones"
-                      data-tooltip="Vùng nhịp tim mô phỏng.&#10;Kiểu: map&#10;Mặc định: Walk 50-60%, Ride 60-70%, Run 70-85%">?</span></label>
+                      data-tooltip="Vùng nhịp tim mô phỏng.&#10;Tác dụng: Xác định giới hạn Min/Max Nhịp tim dựa trên MHR.&#10;Kiểu: map&#10;Mặc định: Walk 50-60%, Ride 60-70%, Run 70-85%">?</span></label>
                   <div id="cfgHRZonesDisplay"
                     style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
                     <div style="text-align:center;">
-                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">walk</div>
+                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">WALK</div>
                       <div id="hrZoneWalk" style="color:var(--text-primary); font-size: 0.9rem;">--</div>
                     </div>
                     <div style="text-align:center;">
-                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">ride</div>
+                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">RIDE</div>
                       <div id="hrZoneRide" style="color:var(--text-primary); font-size: 0.9rem;">--</div>
                     </div>
                     <div style="text-align:center;">
-                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">run</div>
+                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">RUN</div>
                       <div id="hrZoneRun" style="color:var(--text-primary); font-size: 0.9rem;">--</div>
                     </div>
                   </div>
@@ -370,17 +374,19 @@
               <!-- Pace Multipliers -->
               <div class="form-row" style="margin-bottom: 15px;">
                 <div class="form-group" style="grid-column: 1 / -1;">
+                  <label class="form-label">Pace Multipliers <span class="tooltip-icon tooltip-right"
+                    data-tooltip="Hệ số nhân tốc độ dựa trên loại hoạt động.&#10;Tác dụng: Điều chỉnh tốc độ chạy thực tế so với Pace cài đặt.&#10;Ví dụ: Run 0.8x có nghĩa là chạy sẽ nhanh hơn 20% so với Pace cơ bản.">?</span></label>
                   <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
                     <div style="text-align:center;">
-                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">walk</div>
+                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">WALK</div>
                       <div style="color:var(--text-primary); font-size: 0.9rem;">1.25x</div>
                     </div>
                     <div style="text-align:center;">
-                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">ride</div>
+                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">RIDE</div>
                       <div style="color:var(--text-primary); font-size: 0.9rem;">0.5x</div>
                     </div>
                     <div style="text-align:center;">
-                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">run</div>
+                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">RUN</div>
                       <div style="color:var(--text-primary); font-size: 0.9rem;">0.8x</div>
                     </div>
                   </div>
@@ -393,7 +399,7 @@
                     <div class="toggle-track"></div>
                     <span class="toggle-label" style="font-size: 0.85rem;">🌤️ Weather Sim <span
                         class="tooltip-icon tooltip-right" id="tipSimWeather"
-                        data-tooltip="Giả lập tác động của thời tiết (nóng sẽ tăng nhịp tim).&#10;(Tỉ lệ 30% gặp trời nóng, khung giờ 11h-16h stress hơn)&#10;Kiểu: bool&#10;Mặc định: Bật">?</span></span>
+                        data-tooltip="Giả lập tác động của thời tiết nóng.&#10;Tác dụng: Tăng Nhịp tim (HR) thêm 5-15 bpm.&#10;Điều kiện: Ngẫu nhiên 30% hoặc khung giờ 11h-16h.">?</span></span>
                   </label>
                 </div>
                 <div class="form-group" style="display:flex;align-items:center;">
@@ -402,7 +408,7 @@
                     <div class="toggle-track"></div>
                     <span class="toggle-label" style="font-size: 0.85rem;">🚦 Red Lights <span
                         class="tooltip-icon tooltip-left" id="tipSimRedLights"
-                        data-tooltip="Giả lập dừng đèn đỏ (tạm dừng GPS và giảm nhịp tim).&#10;(Xác suất 1.5% mỗi điểm, dừng 15-60s)&#10;Kiểu: bool&#10;Mặc định: Bật">?</span></span>
+                        data-tooltip="Giả lập dừng chờ đèn đỏ.&#10;Tác dụng: Tăng Elapsed Time, Giảm Avg Pace, Giảm Nhịp tim (về mức nghỉ).&#10;Xác suất: 1.5% mỗi điểm tọa độ.">?</span></span>
                   </label>
                 </div>
               </div>
