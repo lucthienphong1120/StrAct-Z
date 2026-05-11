@@ -58,7 +58,19 @@ async function exchangeCode(code) {
     throw new Error(err.error_description || 'Failed to exchange Google code');
   }
 
-  return await response.json();
+  const tokens = await response.json();
+  
+  // Fetch user info
+  const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+    headers: { 'Authorization': `Bearer ${tokens.access_token}` }
+  });
+  
+  let userInfo = {};
+  if (userRes.ok) {
+    userInfo = await userRes.json();
+  }
+
+  return { tokens, userInfo };
 }
 
 /**

@@ -591,12 +591,8 @@ async function disconnectGoogleFit() {
 }
 
 async function refreshGoogleFitStats(forceRefresh = false) {
-  const statusText = document.getElementById('gfStatusText');
   const stepsEl = document.getElementById('gfTodaySteps');
   const syncEl = document.getElementById('gfLastSync');
-  
-  if (!statusText) return;
-  if (forceRefresh) statusText.textContent = 'Refreshing...';
   
   try {
     const refreshQuery = forceRefresh ? '?refresh=true' : '';
@@ -608,16 +604,9 @@ async function refreshGoogleFitStats(forceRefresh = false) {
       const time = new Date(data.lastUpdate).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
       syncEl.textContent = `Last sync: ${time}`;
     }
-    if (statusText) {
-      statusText.textContent = 'Status: Active & Syncing';
-      statusText.style.color = 'var(--accent-green)';
-    }
   } catch (err) {
     console.error('Google Fit stats error:', err);
-    if (statusText) {
-      statusText.textContent = 'Status: Sync Error';
-      statusText.style.color = 'var(--accent-red)';
-    }
+    if (stepsEl) stepsEl.textContent = '---';
   }
 }
 

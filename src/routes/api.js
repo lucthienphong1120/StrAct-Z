@@ -74,12 +74,12 @@ router.get('/auth/google/callback', async (req, res) => {
   try {
     const { code } = req.query;
     if (!code) throw new Error('No code provided');
-    const tokens = await googleFit.exchangeCode(code);
+    const { tokens, userInfo } = await googleFit.exchangeCode(code);
     await db.saveExternalTokens(req.user.id, 'google_fit', {
       access_token: tokens.access_token,
       refresh_token: tokens.refresh_token,
       expires_at: Math.floor(Date.now() / 1000) + tokens.expires_in,
-      scope: tokens.scope
+      extra_data: JSON.stringify(userInfo)
     });
     res.send(`
       <!DOCTYPE html>
@@ -157,6 +157,7 @@ router.get('/stats', async (req, res) => {
     athleteName: tokens?.athlete_name || null,
     athleteAvatar: tokens?.athlete_avatar || null,
     googleFitConnected: !!(gfTokens && gfTokens.access_token),
+    googleFitUser: gfTokens?.extra_data ? JSON.parse(gfTokens.extra_data) : null,
   });
 });
 

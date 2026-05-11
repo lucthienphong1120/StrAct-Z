@@ -51,6 +51,7 @@ async function loadStats(forceRefresh = false) {
       if (stats.googleFitConnected) {
         gfDisc.style.display = 'none';
         gfConn.style.display = 'block';
+        renderGoogleFitUser(stats.googleFitUser);
         if (window.refreshGoogleFitStats) {
           window.refreshGoogleFitStats(forceRefresh);
         }
@@ -94,6 +95,24 @@ async function loadStats(forceRefresh = false) {
       }
     }
   } catch (err) { console.error('Stats error:', err); }
+}
+
+function renderGoogleFitUser(user) {
+  const container = document.getElementById('gfUserInfo');
+  if (!container) return;
+  
+  const avatar = user?.picture ? `<img src="${user.picture}" style="width:48px;height:48px;border-radius:50%;border:2px solid #4285F4;" alt="avatar">` 
+                : `<div style="width:48px;height:48px;border-radius:50%;background:rgba(66,133,244,0.1);display:flex;align-items:center;justify-content:center;color:#4285F4;font-size:1.2rem;">📉</div>`;
+  
+  container.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      ${avatar}
+      <div>
+        <div style="font-weight:600; color:var(--text-primary);">${user?.name || 'Google Fit User'}</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);">${user?.email || 'Connected & Syncing'}</div>
+      </div>
+    </div>
+  `;
 }
 
 async function loadDistricts() {

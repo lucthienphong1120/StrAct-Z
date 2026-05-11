@@ -68,7 +68,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] update lại hint của Heart Rate Zones (Target), tạo readonly config tương ứng để show về tỉ lệ hệ số distance và pace từ Activity Type -> đồng thời move min/max Distance (km) xuống gần
 + [x] test và debug lỗi tích hợp google fit (console log), thông báo khi connect/disconnect,...
 + [ ] update config Time Range trong custom time (gfx only) default thành 00:00 (tức random time), nếu user đặt vào 00:00 cũng sẽ hiểu là random time trong ngày, chỉ cần Target Date là được
-+ [ ] check fix lại safe time, thời gian random ra sát nhau
++ [ ] check fix lại logic safe time, thời gian random ra sát nhau -> cái này chỉ thêm 1 thời gian để tránh cùng với Avoid Workhours 
 + [x] sử dụng cache layer cho số liệu từ Google Fit sync, bỏ nút refresh cạnh đó mà sử dụng chung nút refresh ở trên, tất cả dữ liệu sẽ load lại khi user nhấn nút refresh hoặc reset hoặc Ctrl+Shift+R hoặc F5, hoặc khi truy cập trang dashboard lần đầu (áp dụng tương tự cho data lấy về từ strava cloud và cả 2 tab: History và Insights)
 + [x] bỏ nút logout system khỏi menu Strava Account (đã có nút logout ở header cạnh tên user rồi), đổi format nút disconnect strava giống nút disconnect google fit
 + [ ] fix lỗi Min Count của schedule khi đặt thành 0 nhưng reload lại trang lại bị về 1

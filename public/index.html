@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.11</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.12</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -446,12 +446,8 @@
                 </button>
               </div>
               <div id="gfConnected" style="display:none;">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-                  <div style="width:40px; height:40px; background:rgba(66,133,244,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#4285F4; font-size:1.2rem;">📉</div>
-                  <div>
-                    <div style="font-weight:600; font-size:0.9rem; color:var(--text-primary);">Google Fit Connected</div>
-                    <div style="font-size:0.75rem; color:var(--text-muted);" id="gfStatusText">Fetching data...</div>
-                  </div>
+                <div id="gfUserInfo">
+                  <!-- Dynamic content -->
                 </div>
                 <div id="gfStats" style="margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border);">
                   <div style="display:flex; justify-content:space-between; align-items:center;">
