@@ -80,6 +80,12 @@ const LIMITS = {
     max: { normal: 2.0, vip: 4.0 },
     unit: 'km'
   },
+  dist_multipliers: {
+    label: 'Distance Multipliers.',
+    type: 'map',
+    desc_extra: 'Tác dụng: Điều chỉnh độ dài lộ trình thực tế so với cài đặt.',
+    example: 'Ví dụ: Ride 1.5x có nghĩa là cùng một lộ trình, đạp xe sẽ đi xa hơn 50%.'
+  },
   max_distance_km: {
     label: 'Khoảng cách tối đa của hoạt động.',
     type: 'float',
@@ -160,14 +166,13 @@ const LIMITS = {
     }
   },
   heart_rate_enabled: {
-    label: 'Mô phỏng dữ liệu nhịp tim trong file GPX.',
-    desc_extra: 'Dựa trên MHR: Walk 50-60%, Ride 60-70%, Run 70-85%',
+    label: 'Heart Rate Data (Dữ liệu nhịp tim).',
+    desc_extra: 'Tác dụng: Mô phỏng nhịp tim dựa trên MHR và loại hoạt động.',
     type: 'bool',
     default: true
   },
-  user_age: {
-    label: 'Tuổi người dùng để tính nhịp tim tối đa.',
-    desc_extra: 'MHR = 220 - Tuổi',
+    label: 'User Age (Tuổi người dùng).',
+    desc_extra: 'Tác dụng: Dùng để tính Nhịp tim tối đa (MHR = 220 - Tuổi).',
     type: 'int',
     default: 25,
     min: 18,
@@ -177,6 +182,7 @@ const LIMITS = {
     label: 'Heart Rate Zones.',
     type: 'map',
     desc_extra: 'Tác dụng: Xác định giới hạn vùng nhịp tim dựa trên MHR theo từng loại hoạt động.',
+    example: 'Ví dụ: Walk 50-60%, Ride 60-70%, Run 70-85%',
     normal: {
       Walk: { min: 0.50, max: 0.60 },
       Ride: { min: 0.60, max: 0.70 },
@@ -203,6 +209,12 @@ const LIMITS = {
     default: 12.0,
     min: 10.0,
     max: 15.0
+  },
+  pace_multipliers: {
+    label: 'Pace Multipliers.',
+    type: 'map',
+    desc_extra: 'Tác dụng: Điều chỉnh tốc độ chạy thực tế so với Pace cài đặt.',
+    example: 'Ví dụ: Run 0.8x có nghĩa là chạy sẽ nhanh hơn 20% so với Pace cơ bản.'
   },
   sim_weather: {
     label: 'Weather Sim (Giả lập thời tiết).',

@@ -88,7 +88,9 @@ function updateDynamicTooltips() {
     schedule_time: 'tipScheduleTime',
     schedule_count_min: 'tipScheduleMin',
     schedule_count_max: 'tipScheduleMax',
-    heart_rate_zones: 'tipHeartRateZones'
+    heart_rate_zones: 'tipHeartRateZones',
+    dist_multipliers: 'tipDistMultipliers',
+    pace_multipliers: 'tipPaceMultipliers'
   };
 
   for (const [key, tipId] of Object.entries(tipMapping)) {
@@ -104,8 +106,19 @@ function updateDynamicTooltips() {
 function buildTooltipText(cfg) {
   if (!cfg.label) return '';
   
+  if (cfg.type === 'map') {
+    const lines = [cfg.label];
+    if (cfg.desc_extra) lines.push(cfg.desc_extra);
+    if (cfg.example) lines.push(cfg.example);
+    return lines.join('\n');
+  }
+
   const lines = [cfg.label];
-  if (cfg.desc_extra) lines.push(`(${cfg.desc_extra})`);
+  if (cfg.desc_extra) {
+    if (cfg.desc_extra.startsWith('Tác dụng:')) lines.push(cfg.desc_extra);
+    else lines.push(`(${cfg.desc_extra})`);
+  }
+  
   lines.push(`Kiểu: ${cfg.type}`);
   
   let defVal = cfg.default_label || cfg.default;

@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.18</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.19</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -258,8 +258,7 @@
                 style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border);">
                 <div class="form-group">
                   <label class="form-label">Daily Upload Limit <span class="tooltip-icon tooltip-left"
-                      id="tipDailyLimit"
-                      data-tooltip="Số lượng upload tối đa lên Strava mỗi ngày.&#10;Kiểu: int&#10;Mặc định: 2&#10;Phạm vi: normal: 2, vip: 5">?</span></label>
+                      id="tipDailyLimit">?</span></label>
                   <input type="text" id="cfgDailyLimit" class="form-input" readonly
                     style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
                 </div>
@@ -267,8 +266,7 @@
 
               <div class="form-row">
                 <div class="form-group" style="grid-column: 1 / -1;">
-                  <label class="form-label">Activity Type <span class="tooltip-icon tooltip-right" id="tipActivityType"
-                      data-tooltip="Loại hoạt động GPX sẽ được tạo.&#10;Kiểu: array&#10;Mặc định: Ngẫu nhiên (60% Chạy, 30% Đi bộ, 10% Đạp xe)">?</span></label>
+                  <label class="form-label">Activity Type <span class="tooltip-icon tooltip-right" id="tipActivityType">?</span></label>
                   <select id="cfgActivityType" class="form-select" onchange="updateActivityTypeHint()">
                     <option value="Random">Random</option>
                     <option value="Run">Run</option>
@@ -281,13 +279,11 @@
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Min Distance (km) <span class="tooltip-icon tooltip-right" id="tipMinDist"
-                      data-tooltip="Khoảng cách tối thiểu của hoạt động.&#10;Kiểu: float&#10;Mặc định: 0.5&#10;Phạm vi: 0.1 - 4.0">?</span></label>
+                  <label class="form-label">Min Distance (km) <span class="tooltip-icon tooltip-right" id="tipMinDist">?</span></label>
                   <input type="number" step="0.1" id="cfgMinDist" class="form-input" value="0.5" min="0.2" max="4.0">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Max Distance (km) <span class="tooltip-icon tooltip-left" id="tipMaxDist"
-                      data-tooltip="Khoảng cách tối đa của hoạt động.&#10;Kiểu: float&#10;Mặc định: 8.0&#10;Phạm vi: 2.0 - 15.0">?</span></label>
+                  <label class="form-label">Max Distance (km) <span class="tooltip-icon tooltip-left" id="tipMaxDist">?</span></label>
                   <input type="number" step="0.1" id="cfgMaxDist" class="form-input" value="8.0" min="1.0" max="15.0">
                 </div>
               </div>
@@ -295,8 +291,7 @@
               <!-- Distance Multipliers -->
               <div class="form-row" style="margin-bottom: 15px;">
                 <div class="form-group" style="grid-column: 1 / -1;">
-                  <label class="form-label">Distance Multipliers <span class="tooltip-icon tooltip-right"
-                      data-tooltip="Hệ số nhân quãng đường dựa trên loại hoạt động.&#10;Tác dụng: Điều chỉnh độ dài lộ trình thực tế so với cài đặt.&#10;Ví dụ: Ride 1.5x có nghĩa là cùng một lộ trình, đạp xe sẽ đi xa hơn 50%.">?</span></label>
+                  <label class="form-label">Distance Multipliers <span class="tooltip-icon tooltip-right" id="tipDistMultipliers">?</span></label>
                   <div
                     style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
                     <div style="text-align:center;">
@@ -317,14 +312,12 @@
 
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">User Age <span class="tooltip-icon tooltip-right"
-                      data-tooltip="Tuổi người dùng để tính nhịp tim tối đa.&#10;(MHR = 220 - Tuổi)&#10;Kiểu: int&#10;Mặc định: 25&#10;Phạm vi: 18 - 80">?</span></label>
+                  <label class="form-label">User Age <span class="tooltip-icon tooltip-right" id="tipUserAge">?</span></label>
                   <input type="number" id="cfgUserAge" class="form-input" value="25" min="18" max="80"
                     oninput="updateMHR()">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Max Heart Rate (MHR) <span class="tooltip-icon tooltip-left"
-                      data-tooltip="Nhịp tim tối đa ước tính.&#10;(MHR = 220 - Tuổi)&#10;Kiểu: int&#10;Mặc định: 195">?</span></label>
+                  <label class="form-label">Max Heart Rate (MHR) <span class="tooltip-icon tooltip-left" id="tipMaxHR">?</span></label>
                   <input type="number" id="cfgMaxHR" class="form-input" value="195" readonly
                     style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
                 </div>
@@ -332,16 +325,14 @@
                   <label class="toggle">
                     <input type="checkbox" id="cfgHeartRate" checked>
                     <div class="toggle-track"></div>
-                    <span class="toggle-label">Heart Rate Data <span class="tooltip-icon tooltip-left" id="tipHeartRate"
-                        data-tooltip="Mô phỏng dữ liệu nhịp tim trong file GPX.&#10;Kiểu: bool&#10;Mặc định: Bật">?</span></span>
+                    <span class="toggle-label">Heart Rate Data <span class="tooltip-icon tooltip-left" id="tipHeartRate">?</span></span>
                   </label>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group" style="grid-column: 1 / -1;">
-                  <label class="form-label">Heart Rate Zones (Target) <span class="tooltip-icon tooltip-right"
-                      id="tipHeartRateZones"
-                      data-tooltip="Vùng nhịp tim mô phỏng.&#10;Tác dụng: Xác định giới hạn vùng nhịp tim dựa trên MHR theo từng loại hoạt động.">?</span></label>
+                  <label class="form-label">Heart Rate Zones <span class="tooltip-icon tooltip-right"
+                      id="tipHeartRateZones">?</span></label>
                   <div id="cfgHRZonesDisplay"
                     style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
                     <div style="text-align:center;">
@@ -361,13 +352,11 @@
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Min Pace (min/km) <span class="tooltip-icon tooltip-right" id="tipMinPace"
-                      data-tooltip="Tốc độ nhanh nhất cho phép.&#10;(Giá trị thay đổi theo loại hoạt động)&#10;Kiểu: float&#10;Mặc định: 8.0&#10;Phạm vi: 6.0 - 12.0">?</span></label>
+                  <label class="form-label">Min Pace (min/km) <span class="tooltip-icon tooltip-right" id="tipMinPace">?</span></label>
                   <input type="number" step="0.1" id="cfgMinPace" class="form-input" value="8.0" min="6.0" max="12.0">
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Max Pace (min/km) <span class="tooltip-icon tooltip-left" id="tipMaxPace"
-                      data-tooltip="Tốc độ chậm nhất cho phép.&#10;(Giá trị thay đổi theo loại hoạt động)&#10;Kiểu: float&#10;Mặc định: 12.0&#10;Phạm vi: 10.0 - 15.0">?</span></label>
+                  <label class="form-label">Max Pace (min/km) <span class="tooltip-icon tooltip-left" id="tipMaxPace">?</span></label>
                   <input type="number" step="0.1" id="cfgMaxPace" class="form-input" value="12.0" min="10.0" max="15.0">
                 </div>
               </div>
@@ -375,8 +364,7 @@
               <!-- Pace Multipliers -->
               <div class="form-row" style="margin-bottom: 15px;">
                 <div class="form-group" style="grid-column: 1 / -1;">
-                  <label class="form-label">Pace Multipliers <span class="tooltip-icon tooltip-right"
-                      data-tooltip="Hệ số nhân tốc độ dựa trên loại hoạt động.&#10;Tác dụng: Điều chỉnh tốc độ chạy thực tế so với Pace cài đặt.&#10;Ví dụ: Run 0.8x có nghĩa là chạy sẽ nhanh hơn 20% so với Pace cơ bản.">?</span></label>
+                  <label class="form-label">Pace Multipliers <span class="tooltip-icon tooltip-right" id="tipPaceMultipliers">?</span></label>
                   <div
                     style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
                     <div style="text-align:center;">
@@ -400,8 +388,7 @@
                     <input type="checkbox" id="cfgSimWeather" checked>
                     <div class="toggle-track"></div>
                     <span class="toggle-label" style="font-size: 0.85rem;">🌤️ Weather Sim <span
-                        class="tooltip-icon tooltip-right" id="tipSimWeather"
-                        data-tooltip="Giả lập tác động của thời tiết nóng.&#10;Tác dụng: Tăng Nhịp tim (HR) thêm 5-15 bpm.&#10;Điều kiện: Ngẫu nhiên 30% hoặc khung giờ 11h-16h.">?</span></span>
+                        class="tooltip-icon tooltip-right" id="tipSimWeather">?</span></span>
                   </label>
                 </div>
                 <div class="form-group" style="display:flex;align-items:center;">
@@ -409,8 +396,7 @@
                     <input type="checkbox" id="cfgSimRedLights" checked>
                     <div class="toggle-track"></div>
                     <span class="toggle-label" style="font-size: 0.85rem;">🚦 Red Lights <span
-                        class="tooltip-icon tooltip-left" id="tipSimRedLights"
-                        data-tooltip="Giả lập dừng chờ đèn đỏ.&#10;Tác dụng: Tăng Elapsed Time, Giảm Avg Pace, Giảm Nhịp tim (về mức nghỉ).&#10;Xác suất: 1.5% mỗi điểm tọa độ.">?</span></span>
+                        class="tooltip-icon tooltip-left" id="tipSimRedLights">?</span></span>
                   </label>
                 </div>
               </div>
