@@ -123,21 +123,18 @@ router.post('/disconnect', authenticateToken, async (req, res) => {
 router.get('/status', authenticateToken, async (req, res) => {
   try {
     const tokens = await db.getTokens(req.user.id);
-    const gfTokens = await db.getExternalTokens(req.user.id, 'google_fit');
-
-    res.json({
-      authenticated: !!(tokens && tokens.access_token),
-      athlete: tokens ? {
-        id: tokens.athlete_id,
-        name: tokens.athlete_name,
-        avatar: tokens.athlete_avatar,
-      } : null,
-      googleFitConnected: !!(gfTokens && gfTokens.access_token),
-      googleFitUser: gfTokens ? {
-        name: gfTokens.provider_user_name,
-        avatar: gfTokens.provider_user_avatar
-      } : null
-    });
+    if (tokens && tokens.access_token) {
+      res.json({
+        authenticated: true,
+        athlete: {
+          id: tokens.athlete_id,
+          name: tokens.athlete_name,
+          avatar: tokens.athlete_avatar,
+        }
+      });
+    } else {
+      res.json({ authenticated: false });
+    }
   } catch (err) {
     res.json({ authenticated: false, error: err.message });
   }

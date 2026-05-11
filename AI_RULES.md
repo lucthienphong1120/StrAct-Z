@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.0). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.11). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -40,12 +40,6 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
-
-### v1.51.0 (2026-05-11)
-- **Account UI Redesign**: Redesigned the Google Fit Account card to match the Strava Account card's premium look.
-- **Google Fit Profiles**: Now fetches and displays the Google user's name and avatar upon connection.
-- **Dynamic Rendering**: Migrated Google Fit account info to dynamic rendering in `auth.js` for better state management.
-- **Database Expansion**: Added user profile columns to the `external_tokens` table.
 
 ### v1.50.11 (2026-05-11)
 - **Fix Scheduler Bug**: Resolved an issue where "Min Count" would reset from 0 to 1 after a page reload due to incorrect falsy value handling in the UI.
