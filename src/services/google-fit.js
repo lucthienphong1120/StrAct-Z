@@ -13,8 +13,11 @@ const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3000/a
  */
 function getAuthUrl() {
   const scopes = [
+    'https://www.googleapis.com/auth/fitness.activity.read',
     'https://www.googleapis.com/auth/fitness.activity.write',
+    'https://www.googleapis.com/auth/fitness.body.read',
     'https://www.googleapis.com/auth/fitness.body.write',
+    'https://www.googleapis.com/auth/fitness.location.read',
     'https://www.googleapis.com/auth/fitness.location.write',
     'profile',
     'email'
@@ -215,8 +218,7 @@ async function getTodayStats(userId) {
 
   const aggregateBody = {
     aggregateBy: [{
-      dataTypeName: 'com.google.step_count.delta',
-      dataSourceId: 'derived:com.google.step_count.delta:com.google.android.gms:estimated_steps'
+      dataTypeName: 'com.google.step_count.delta'
     }],
     bucketByTime: { durationMillis: 86400000 },
     startTimeMillis: startOfDay,
