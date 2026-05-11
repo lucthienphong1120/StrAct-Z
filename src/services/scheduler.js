@@ -47,10 +47,23 @@ async function executeJob(accountId) {
     let taskCount = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
     if (taskCount > limits.schedule_count_max.max) taskCount = limits.schedule_count_max.max; // Dynamic safety cap
 
+    // Get existing activities for today to avoid overlaps
+    const targetDate = new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
+    const localActivities = await db.getActivitiesByDate(accountId, targetDate);
+    let stravaActivities = [];
+    if (await stravaApi.isAuthenticated(accountId)) {
+      try {
+        const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
+        stravaActivities = await stravaApi.getActivities(accountId, 1, 50, after);
+        stravaActivities = stravaActivities.filter(a => a.start_date.startsWith(targetDate));
+      } catch (e) { console.warn(`[Scheduler] Strava fetch failed for account ${accountId}`); }
+    }
+    
+    let existingActivities = [...localActivities, ...stravaActivities];
+
     console.log(`[Scheduler] Account ${accountId} will generate ${taskCount} activities...`);
     
     let successCount = 0;
-    let lastActivity = null;
 
     for (let i = 0; i < taskCount; i++) {
       // Check daily limit inside loop
@@ -58,7 +71,7 @@ async function executeJob(accountId) {
       if (loopStats.todayCount >= limits.daily_upload_limit.max) {
         console.log(`[Scheduler] Limit reached for account ${accountId}.`);
         if (i === 0) return { success: false, message: 'VIP_REQUIRED' };
-        break; // Stop generating more if limit reached
+        break; 
       }
 
       // Generate activity (async - uses OSRM)
@@ -67,12 +80,15 @@ async function executeJob(accountId) {
         districtKey: config.district_key,
         selected_districts: config.selected_districts,
         max_district_span: config.max_district_span,
+        targetDate: targetDate,
+        existingActivities: existingActivities,
         minTime: config.min_time,
         maxTime: config.max_time,
         workStart1: config.work_start1,
         workEnd1: config.work_end1,
         workStart2: config.work_start2,
         workEnd2: config.work_end2,
+        overlap_protection_minutes: config.overlap_protection_minutes,
         minDistanceKm: parseFloat(config.min_distance_km),
         maxDistanceKm: parseFloat(config.max_distance_km),
         minPace: parseFloat(config.min_pace),
@@ -84,10 +100,16 @@ async function executeJob(accountId) {
         useOSRM: config.use_osrm !== 'false',
         simWeather: config.sim_weather !== 'false',
         simRedLights: config.sim_redlights !== 'false',
-        userRole: role, // Pass user role for internal weights
+        userRole: role,
       });
 
-      console.log(`[Scheduler] Generated: ${activity.activityName} - ${activity.distanceKm}km in ${activity.durationMin}min`);
+      console.log(`[Scheduler] Generated: ${activity.activityName} at ${activity.startTime.toLocaleTimeString()} - ${activity.distanceKm}km`);
+      
+      // Add to existingActivities for next iteration check
+      existingActivities.push({
+        start_date: activity.startTime.toISOString(),
+        duration_min: activity.durationMin
+      });
 
       // Save to database
       const activityId = await db.saveActivity(accountId, {

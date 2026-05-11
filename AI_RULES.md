@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.13). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.14). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -40,6 +40,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.14 (2026-05-11)
+- **Fix Safe Time Logic**: Improved activity overlap prevention by accounting for the estimated duration of new activities during time randomization.
+- **Scheduler Update**: Fixed a bug where auto-generated activities in the same job could overlap because they weren't aware of each other's schedules.
+- **Improved Validation**: Standardized time selection to avoid working hours and existing activities more robustly.
 
 ### v1.50.13 (2026-05-11)
 - **AI Rule Update**: Updated versioning rules to exclude `README.md`'s first line from automatic version bumps.

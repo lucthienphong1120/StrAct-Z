@@ -245,10 +245,10 @@ async function generateActivity(config = {}) {
     
     // Blocked intervals from existing activities + safe time
     const safeMs = (parseInt(config.overlap_protection_minutes || limits.overlap_minutes || '30')) * 60000;
+    const estimatedDurationMs = (avgPace * distanceKm) * 60000;
+
     const blockedRanges = (config.existingActivities || []).map(a => {
-      // Strava uses start_date (ISO), local DB uses route_start_time (ISO)
       const start = new Date(a.start_date || a.route_start_time).getTime();
-      // Strava uses duration (seconds), local DB uses duration_min (minutes)
       const durationMs = (a.elapsed_time || (a.duration_min * 60)) * 1000;
       const dayStart = targetDateObj.getTime();
       return {
@@ -258,15 +258,24 @@ async function generateActivity(config = {}) {
     });
 
     const isOverlap = (ms) => {
+      const msEnd = ms + estimatedDurationMs;
       for (const range of blockedRanges) {
-        if (ms >= range.start && ms <= range.end) return true;
+        // Check if the proposed interval [ms, msEnd] overlaps with [range.start, range.end]
+        if (ms <= range.end && msEnd >= range.start) return true;
       }
       return false;
     };
 
     const isValidTime = (ms) => {
-      if (ms > workStart1 && ms < workEnd1) return false;
-      if (ms > workStart2 && ms < workEnd2) return false;
+      const msEnd = ms + estimatedDurationMs;
+      // Also avoid working hours for the ENTIRE duration
+      const isWorkOverlap = (s, e) => {
+        if (s < workEnd1 && e > workStart1) return true;
+        if (s < workEnd2 && e > workStart2) return true;
+        return false;
+      };
+
+      if (isWorkOverlap(ms, msEnd)) return false;
       if (isOverlap(ms)) return false;
       return true;
     };
@@ -281,6 +290,8 @@ async function generateActivity(config = {}) {
     blockedRanges.forEach(r => {
       if (r.start > minMs && r.start < effectiveMaxMs) checkPoints.push(r.start);
       if (r.end > minMs && r.end < effectiveMaxMs) checkPoints.push(r.end);
+      // Also add points shifted by new duration to find boundaries
+      if (r.start - estimatedDurationMs > minMs && r.start - estimatedDurationMs < effectiveMaxMs) checkPoints.push(r.start - estimatedDurationMs);
     });
     checkPoints.sort((a, b) => a - b);
     
@@ -288,6 +299,7 @@ async function generateActivity(config = {}) {
       const start = checkPoints[i];
       const end = checkPoints[i+1];
       if (start >= end) continue;
+      // Check middle point for validity
       if (start >= minMs && end <= effectiveMaxMs && isValidTime((start + end) / 2)) {
         intervals.push({ start, end, duration: end - start });
       }
@@ -308,8 +320,8 @@ async function generateActivity(config = {}) {
       }
       targetTime = new Date(targetDateObj.getTime() + selectedOffset);
     } else {
-      // Fallback if no valid interval found (e.g. they picked exactly a working hour slot that is also in the past)
-      targetTime = new Date();
+      // Fallback: If no valid interval, try to pick "Now" but at least 1 min apart if possible
+      targetTime = new Date(Date.now() + Math.floor(Math.random() * 10) * 60000);
     }
     
     activityStartTime = targetTime;
