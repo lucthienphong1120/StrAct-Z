@@ -142,6 +142,12 @@ const LIMITS = {
     min: 1,
     max: { normal: 1, vip: 2 }
   },
+  activity_areas: {
+    label: 'Activity Areas (Map).',
+    type: 'map',
+    desc_extra: 'Tác dụng: Xác định khu vực trung tâm (Nhà/Công ty) để ưu tiên tạo hoạt động.',
+    example: 'Ví dụ: Kéo icon 🏠 về quận Hoàn Kiếm sẽ tăng tỷ lệ chọn các cung đường tại đây và các quận giáp ranh.'
+  },
   scale_radius: {
     label: 'Bán kính khu vực ưu tiên.',
     type: 'int',

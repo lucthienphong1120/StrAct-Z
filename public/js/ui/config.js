@@ -90,7 +90,8 @@ function updateDynamicTooltips() {
     schedule_count_max: 'tipScheduleMax',
     heart_rate_zones: 'tipHeartRateZones',
     dist_multipliers: 'tipDistMultipliers',
-    pace_multipliers: 'tipPaceMultipliers'
+    pace_multipliers: 'tipPaceMultipliers',
+    activity_areas: 'tipActivityAreas'
   };
 
   for (const [key, tipId] of Object.entries(tipMapping)) {
