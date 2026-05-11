@@ -353,7 +353,13 @@ To enable Google Fit sync, follow these steps to obtain your credentials:
 3. **Configure OAuth Consent Screen**:
  * Go to **APIs & Services > OAuth consent screen**.
  * Create app, choose **External**.
- * Go to **Data access**, Add Scopes: `fitness.activity.write, fitness.body.write, fitness.location.write`.
+ * Go to **Data access**, Add Scopes:
+   - `fitness.activity.read`
+   - `fitness.body.read`
+   - `fitness.location.read`
+   - `fitness.activity.write`
+   - `fitness.body.write`
+   - `fitness.location.write`
 4. **Create Credentials**:
  * Go to **APIs & Services > Credentials**.
  * Click **+ Create Credentials > OAuth client ID**.
