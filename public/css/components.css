@@ -116,14 +116,23 @@
 .activity-meta { font-size: 0.8rem; color: var(--text-secondary); text-align: right; }
 
 .status-badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 3px 10px; border-radius: 20px;
-  font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  border: 1px solid transparent;
 }
-.status-badge.uploaded { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
-.status-badge.generated { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
-.status-badge.failed { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
-.status-badge.pending { background: rgba(245, 158, 11, 0.15); color: var(--accent-yellow); }
+.status-badge.uploaded { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border-color: rgba(16, 185, 129, 0.3); }
+.status-badge.not-uploaded { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); border-color: rgba(59, 130, 246, 0.3); }
+.status-badge.generated { background: rgba(245, 158, 11, 0.15); color: var(--accent-yellow); border-color: rgba(245, 158, 11, 0.3); }
+.status-badge.deleted { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); border-color: rgba(239, 68, 68, 0.3); }
+.status-badge.removed { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border-color: var(--border); }
 
 /* ─── Quick Actions ───────────────────────────────────── */
 .quick-actions {

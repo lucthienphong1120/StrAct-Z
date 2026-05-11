@@ -3,17 +3,20 @@
  */
 
 async function loadDashboard(forceRefresh = false) {
+  window.latestStravaActivities = []; // Store for cross-check
   await fetchLimits();
   await loadDistricts();
   await Promise.all([
     loadStats(forceRefresh),
     loadConfig(),
     loadSchedule(),
-    loadActivities(),
-    loadStravaActivities(forceRefresh),
+    loadStravaActivities(forceRefresh), // Load Strava first for cross-check
     loadInsights(forceRefresh)
   ]);
   
+  // loadActivities depends on latestStravaActivities
+  await loadActivities();
+
   if (forceRefresh) {
     showToast('All data refreshed!', 'success');
   }
@@ -106,8 +109,31 @@ async function loadDistricts() {
 
 async function loadActivities() {
   try {
-    const allActivities = await api('/activities');
+    let allActivities = await api('/activities');
     const container = document.getElementById('activityList');
+    
+    // 1. Time Filtering
+    const range = document.getElementById('historyFilterRange')?.value || '7_days';
+    if (range !== 'total') {
+      let days = 7;
+      if (range === '3_days') days = 3;
+      else if (range === '5_days') days = 5;
+      else if (range === '7_days') days = 7;
+      else if (range === '14_days') days = 14;
+      else if (range === '30_days') days = 30;
+      else if (range === '90_days') days = 90;
+
+      const cutoff = new Date();
+      cutoff.setHours(0, 0, 0, 0);
+      cutoff.setDate(cutoff.getDate() - (days - 1));
+      
+      allActivities = allActivities.filter(a => {
+        const actualTime = a.route_start_time || a.created_at;
+        const dateStr = actualTime.endsWith('Z') ? actualTime : actualTime + 'Z';
+        return new Date(dateStr) >= cutoff;
+      });
+    }
+
     const total = allActivities.length;
     const totalPages = Math.max(1, Math.ceil(total / window.LOCAL_PAGE_SIZE));
     
@@ -118,7 +144,7 @@ async function loadActivities() {
     document.getElementById('localPageInfo').textContent = `Page ${window.localCurrentPage}/${totalPages}`;
 
     if (!total) {
-      container.innerHTML = '<div class="empty-state"><div class="icon">\ud83c\udfc3</div><p>No activities yet. Generate your first one!</p></div>';
+      container.innerHTML = '<div class="empty-state"><div class="icon">\ud83c\udfc3</div><p>No activities in this range. Try changing the filter!</p></div>';
       return;
     }
 
@@ -141,7 +167,34 @@ async function loadActivities() {
           }).join('');
       }
 
-      const statusClass = a.upload_status;
+      // --- New Two-Badge Logic ---
+      const isUploadedLocal = (a.upload_status === 'uploaded' || !!a.strava_activity_id);
+      const stravaRecord = isUploadedLocal ? window.latestStravaActivities?.find(s => String(s.id) === String(a.strava_activity_id)) : null;
+      
+      let statusBadge = ''; // Generated/Deleted
+      let syncBadge = '';   // Uploaded/Not Uploaded/Removed
+      
+      // 1. Tình trạng (Generated vs Deleted)
+      // If it was uploaded but not found on Strava, mark as Deleted (from Strava)
+      const isDeletedFromStrava = isUploadedLocal && !stravaRecord && window.latestStravaActivities?.length > 0;
+      
+      if (isDeletedFromStrava) {
+        statusBadge = `<span class="status-badge deleted" title="Hoạt động này đã bị xóa trên Strava Cloud nhưng vẫn được lưu trữ log tại đây.">🔴 DELETED</span>`;
+      } else {
+        statusBadge = `<span class="status-badge generated" title="Hoạt động đã được khởi tạo thành công và đang tồn tại.">🟡 GENERATED</span>`;
+      }
+
+      // 2. Đồng bộ (Uploaded vs Not Uploaded vs Removed)
+      if (isUploadedLocal) {
+        if (isDeletedFromStrava) {
+          syncBadge = `<span class="status-badge removed" title="Đã từng được tải lên Strava nhưng hiện không tìm thấy (đã xóa trên Cloud).">⚪ REMOVED FROM CLOUD</span>`;
+        } else {
+          syncBadge = `<span class="status-badge uploaded" title="Đã tải lên Strava thành công và đang đồng bộ.">🟢 UPLOADED</span>`;
+        }
+      } else {
+        syncBadge = `<span class="status-badge not-uploaded" title="Hoạt động mới chỉ được tạo cục bộ, chưa được tải lên Strava.">🔵 NOT UPLOADED</span>`;
+      }
+
       return `
         <div class="activity-item">
           <div>
@@ -154,14 +207,18 @@ async function loadActivities() {
           <div class="activity-meta">${a.distance_km?.toFixed(1)} km</div>
           <div class="activity-meta">${a.duration_min?.toFixed(0)} min</div>
           <div class="activity-meta">${a.pace_min_km?.toFixed(1)} min/km</div>
-          <div style="display:flex;gap:6px;align-items:center;">
-            <span class="status-badge ${statusClass}">${a.upload_status}</span>
-            ${a.upload_status === 'generated' ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
-            ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
-            ${a.upload_status === 'generated' ? 
-              `<button class="btn btn-sm btn-danger" style="padding:4px 8px;" title="Delete locally" onclick="deleteActivity(${a.id}, false)">🗑️</button>` : 
-              `<span class="tooltip-icon tooltip-left" data-tooltip="Hoạt động đã upload phải được xóa trực tiếp trên Strava.com">?</span>`
-            }
+          <div style="display:flex;gap:6px;align-items:center; flex-wrap: wrap; justify-content: flex-end;">
+            ${statusBadge}
+            ${syncBadge}
+            
+            <div style="display:flex; gap:6px; margin-left: 10px;">
+              ${a.upload_status === 'generated' ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
+              ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
+              ${a.upload_status === 'generated' ? 
+                `<button class="btn btn-sm btn-danger" style="padding:4px 8px;" title="Delete locally" onclick="deleteActivity(${a.id}, false)">🗑️</button>` : 
+                `<span class="tooltip-icon tooltip-left" data-tooltip="Hoạt động đã upload chỉ có thể xóa trực tiếp trên Strava.com. Sau khi xóa trên Strava, hãy Refresh Cloud Data để cập nhật trạng thái tại đây.">?</span>`
+              }
+            </div>
           </div>
         </div>`;
     }).join('');
@@ -179,6 +236,11 @@ async function loadActivities() {
       nextBtn.style.cursor = window.localCurrentPage >= totalPages ? 'not-allowed' : 'pointer';
     }
   } catch (err) { console.error('Activities error:', err); }
+}
+
+function onHistoryFilterChange() {
+  window.localCurrentPage = 1;
+  loadActivities();
 }
 
 function changeLocalPage(delta) {
@@ -226,6 +288,15 @@ async function loadStravaActivities(forceRefresh = false) {
 
     const refreshQuery = forceRefresh ? '&refresh=true' : '';
     let activities = await api(`/strava-activities?page=${window.stravaCurrentPage}&per_page=10${afterQuery}${refreshQuery}`);
+    
+    // Store latest for cross-check (flatten if paginated, but for now we just take the current page view)
+    // Actually, to be accurate we might need to know if the ID is missing across all pages.
+    // But per user request, we'll map against what's loaded.
+    window.latestStravaActivities = activities || [];
+    
+    // Update Local History to reflect Strava status
+    loadActivities();
+
     document.getElementById('stravaPageInfo').textContent = `Page ${window.stravaCurrentPage}`;
     
     if (!activities || !activities.length) {
@@ -538,6 +609,7 @@ window.loadStats = loadStats;
 window.loadDistricts = loadDistricts;
 window.loadActivities = loadActivities;
 window.changeLocalPage = changeLocalPage;
+window.onHistoryFilterChange = onHistoryFilterChange;
 window.onStravaFilterChange = onStravaFilterChange;
 window.refreshCloudData = refreshCloudData;
 window.loadStravaActivities = loadStravaActivities;

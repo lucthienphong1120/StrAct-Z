@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.22</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.23</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -559,6 +559,16 @@
           <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="card-title" style="flex:1;">📋 Local Generated History</div>
             <div style="display:flex; gap:10px; align-items:center;">
+              <select id="historyFilterRange" class="form-select" style="padding:4px 8px; font-size:0.8rem; width:120px;"
+                onchange="onHistoryFilterChange()">
+                <option value="3_days">Last 3 Days</option>
+                <option value="5_days">Last 5 Days</option>
+                <option value="7_days" selected>Last 7 Days</option>
+                <option value="14_days">Last 14 Days</option>
+                <option value="30_days">Last 1 Month</option>
+                <option value="90_days">Last 3 Months</option>
+                <option value="total">Total History</option>
+              </select>
               <span id="historyCount" style="font-size:0.8rem;color:var(--text-muted)"></span>
               <button class="btn btn-sm btn-secondary" onclick="changeLocalPage(-1)">◀ Prev</button>
               <span id="localPageInfo" style="font-size:0.8rem;color:var(--text-muted)">Page 1</span>
