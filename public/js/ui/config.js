@@ -111,6 +111,15 @@ function buildTooltipText(cfg) {
     const lines = [cfg.label];
     if (cfg.desc_extra) lines.push(cfg.desc_extra);
     if (cfg.example) lines.push(cfg.example);
+
+    const role = window.sysLimits?._role || 'normal';
+    const mapping = cfg[role];
+    if (mapping) {
+      lines.push('');
+      for (const [key, val] of Object.entries(mapping)) {
+        lines.push(`• ${key}: ${val}`);
+      }
+    }
     return lines.join('\n');
   }
 

@@ -42,8 +42,9 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 ## 🛠️ Developer Rules
 
 ### v1.50.26 (2026-05-11)
-- **Standardized Map Tooltip**: Migrated `Activity Areas (Map)` tooltip to the centralized metadata-driven system in `limits.js`.
-- **Unified Education Format**: Updated Map hint to follow the "Tác dụng" and "Ví dụ" format for consistency with other core settings.
+- **Map Activity Documentation**: Enhanced Activity Areas Map hint with weight and limit details (Home/Work points, Radius).
+- **Dynamic Tooltips**: Integrated Activity Areas metadata into the unified dynamic tooltip system in `config.js`.
+- **Role-Based Scaling**: Updated limits for map markers (Normal: 1, VIP: 2) and radius (Normal: 3km, VIP: 4km) to reflect premium features.
 
 ### v1.50.25 (2026-05-11)
 - **UI Documentation**: Added informational tooltips to History and Cloud Activities headers to explain status mapping and activity types.

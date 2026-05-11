@@ -133,7 +133,7 @@ const LIMITS = {
     type: 'int',
     default: 0,
     min: 0,
-    max: 1
+    max: { normal: 1, vip: 2 }
   },
   work_count: {
     label: 'Số lượng điểm Công ty.',
@@ -142,19 +142,31 @@ const LIMITS = {
     min: 1,
     max: { normal: 1, vip: 2 }
   },
-  activity_areas: {
-    label: 'Activity Areas (Map).',
-    type: 'map',
-    desc_extra: 'Tác dụng: Xác định khu vực trung tâm (Nhà/Công ty) để ưu tiên tạo hoạt động.',
-    example: 'Ví dụ: Kéo icon 🏠 về quận Hoàn Kiếm sẽ tăng tỷ lệ chọn các cung đường tại đây và các quận giáp ranh.'
-  },
   scale_radius: {
     label: 'Bán kính khu vực ưu tiên.',
     type: 'int',
     default: 2000,
     min: 2000,
-    max: 4000,
+    max: { normal: 3000, vip: 4000 },
     unit: 'm'
+  },
+  activity_areas: {
+    label: 'Khu vực hoạt động (Map).',
+    type: 'map',
+    desc_extra: 'Tác dụng: Xác định các điểm ưu tiên (Nhà/Công ty) để hệ thống tạo lộ trình xung quanh đó. Trọng số giúp tăng xác suất chọn các quận lân cận khu vực này.',
+    example: 'Ví dụ: Nhà (Home) trọng số 2.5x giúp tăng xác suất tạo lộ trình quanh khu vực đó lên gấp đôi.',
+    normal: {
+      Home: '1.0x',
+      Work: '1.0x',
+      'Max Points': '1',
+      'Max Radius': '3000m'
+    },
+    vip: {
+      Home: '2.5x',
+      Work: '2.0x',
+      'Max Points': '2',
+      'Max Radius': '4000m'
+    }
   },
 
   // ─── Activity Settings ────────────────────────────────────────────────────
