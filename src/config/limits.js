@@ -150,7 +150,7 @@ const LIMITS = {
     desc_extra: 'Hệ số Dist/Pace: Walk 0.7x/1.25x, Run 1x/0.8x, Ride 1.5x/0.5x',
     type: 'array',
     default: 'Random',
-    default_label: 'Ngẫu nhiên (60% Chạy, 30% Đi bộ, 10% Đạp xe)',
+    default_label: 'Random (60% Run, 30% Walk, 10% Ride)',
     choices: ['Random', 'Run', 'Walk', 'Ride'],
     weights: {
       Random: { Run: 0.6, Walk: 0.3, Ride: 0.1 },
@@ -171,11 +171,12 @@ const LIMITS = {
     type: 'int',
     default: 25,
     min: 18,
-    max: 80
+    max: 90
   },
   heart_rate_zones: {
     label: 'Vùng nhịp tim mô phỏng.',
     type: 'map',
+    default_label: 'Walk 50-60%, Ride 60-70%, Run 70-85%',
     normal: {
       Walk: { min: 0.50, max: 0.60 },
       Ride: { min: 0.60, max: 0.70 },
