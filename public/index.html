@@ -112,12 +112,10 @@
         <button id="btnGenerateUpload" class="btn btn-primary pulse" onclick="generateAndUpload()">
           🚀 Generate & Upload to Strava
         </button>
-        <button class="btn btn-secondary"
-          onclick="loadDashboard(true)">
+        <button class="btn btn-secondary" onclick="loadDashboard(true)">
           🔄 Refresh
         </button>
-        <button class="btn btn-outline-danger"
-          onclick="resetToDefault()">
+        <button class="btn btn-outline-danger" onclick="resetToDefault()">
           🗑️ Reset
         </button>
       </div>
@@ -268,9 +266,11 @@
               <button class="btn btn-sm btn-primary" onclick="saveConfig()">💾 Save</button>
             </div>
             <div class="card-body">
-              <div class="form-row" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border);">
+              <div class="form-row"
+                style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border);">
                 <div class="form-group">
-                  <label class="form-label">Daily Upload Limit <span class="tooltip-icon tooltip-left" id="tipDailyLimit"
+                  <label class="form-label">Daily Upload Limit <span class="tooltip-icon tooltip-left"
+                      id="tipDailyLimit"
                       data-tooltip="Số lượng upload tối đa lên Strava mỗi ngày.&#10;Kiểu: int&#10;Mặc định: 2&#10;Phạm vi: normal: 2, vip: 5">?</span></label>
                   <input type="text" id="cfgDailyLimit" class="form-input" readonly
                     style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
@@ -314,12 +314,23 @@
               </div>
               <div class="form-row">
                 <div class="form-group" style="grid-column: 1 / -1;">
-                  <label class="form-label">Heart Rate Zones (Target) <span class="tooltip-icon tooltip-right" id="tipHeartRateZones"
+                  <label class="form-label">Heart Rate Zones (Target) <span class="tooltip-icon tooltip-right"
+                      id="tipHeartRateZones"
                       data-tooltip="Vùng nhịp tim mô phỏng.&#10;Kiểu: map&#10;Mặc định: Walk 50-60%, Ride 60-70%, Run 70-85%">?</span></label>
-                  <div id="cfgHRZonesDisplay" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
-                    <div style="text-align:center;"><div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">Walk</div><div id="hrZoneWalk" style="font-weight:bold; color:var(--text-primary);">--</div></div>
-                    <div style="text-align:center;"><div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">Ride</div><div id="hrZoneRide" style="font-weight:bold; color:var(--text-primary);">--</div></div>
-                    <div style="text-align:center;"><div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">Run</div><div id="hrZoneRun" style="font-weight:bold; color:var(--text-primary);">--</div></div>
+                  <div id="cfgHRZonesDisplay"
+                    style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
+                    <div style="text-align:center;">
+                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">Walk</div>
+                      <div id="hrZoneWalk" style="font-weight:bold; color:var(--text-primary);">--</div>
+                    </div>
+                    <div style="text-align:center;">
+                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">Ride</div>
+                      <div id="hrZoneRide" style="font-weight:bold; color:var(--text-primary);">--</div>
+                    </div>
+                    <div style="text-align:center;">
+                      <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">Run</div>
+                      <div id="hrZoneRun" style="font-weight:bold; color:var(--text-primary);">--</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -340,7 +351,8 @@
                   <label class="toggle" style="margin-bottom: 5px;">
                     <input type="checkbox" id="cfgSimWeather" checked>
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size: 0.85rem;">🌤️ Weather Sim <span class="tooltip-icon tooltip-right" id="tipSimWeather"
+                    <span class="toggle-label" style="font-size: 0.85rem;">🌤️ Weather Sim <span
+                        class="tooltip-icon tooltip-right" id="tipSimWeather"
                         data-tooltip="Giả lập tác động của thời tiết (nóng sẽ tăng nhịp tim).&#10;(Tỉ lệ 30% gặp trời nóng, khung giờ 11h-16h stress hơn)&#10;Kiểu: bool&#10;Mặc định: Bật">?</span></span>
                   </label>
                 </div>
@@ -348,7 +360,8 @@
                   <label class="toggle" style="margin-bottom: 5px;">
                     <input type="checkbox" id="cfgSimRedLights" checked>
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size: 0.85rem;">🚦 Red Lights <span class="tooltip-icon tooltip-left" id="tipSimRedLights"
+                    <span class="toggle-label" style="font-size: 0.85rem;">🚦 Red Lights <span
+                        class="tooltip-icon tooltip-left" id="tipSimRedLights"
                         data-tooltip="Giả lập dừng đèn đỏ (tạm dừng GPS và giảm nhịp tim).&#10;(Xác suất 1.5% mỗi điểm, dừng 15-60s)&#10;Kiểu: bool&#10;Mặc định: Bật">?</span></span>
                   </label>
                 </div>
@@ -405,7 +418,8 @@
                   data-tooltip="Ưu tiên tạo hoạt động quanh khu vực Nhà/Công ty.&#10;(Trọng số tăng xác suất chọn quận lân cận)&#10;Kiểu: map">?</span>
               </div>
               <div style="display:flex; gap:5px;">
-                <button id="btnLockMap" class="btn btn-sm btn-secondary" onclick="toggleMapLock()">🔒 Map Locked</button>
+                <button id="btnLockMap" class="btn btn-sm btn-secondary" onclick="toggleMapLock()">🔒 Map
+                  Locked</button>
                 <button class="btn btn-sm btn-secondary" onclick="addActivityCircle('home')">🏠 Home</button>
                 <button class="btn btn-sm btn-secondary" onclick="addActivityCircle('work')">💼 Work</button>
                 <button class="btn btn-sm btn-primary" onclick="saveActivityAreas()">💾 Save</button>
@@ -439,21 +453,25 @@
             </div>
             <div class="card-body" id="googleFitInfo">
               <div id="gfDisconnected">
-                <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">Đồng bộ dữ liệu hoạt động và số bước chân sang Google Fit.</p>
+                <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">Đồng bộ dữ liệu hoạt động
+                  và số bước chân sang Google Fit.</p>
                 <button onclick="connectGoogleFit()" class="btn btn-block btn-secondary" style="gap:10px;">
-                  <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png" style="width:18px; height:18px; object-fit:contain;" alt="">
+                  <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
+                    style="width:18px; height:18px; object-fit:contain;" alt="">
                   Connect Google Fit
                 </button>
               </div>
               <div id="gfConnected" style="display:none;">
                 <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-                  <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png" style="width:40px; height:40px; object-fit:contain;" alt="Google Fit">
+                  <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
+                    style="width:40px; height:40px; object-fit:contain;" alt="Google Fit">
                   <div>
                     <div style="font-weight:600; font-size:0.9rem; color:var(--text-primary);">Connected</div>
-                    <div style="font-size:0.75rem; color:var(--text-muted);" id="gfStatusText">Status: Active & Syncing</div>
+                    <div style="font-size:0.75rem; color:var(--text-muted);" id="gfStatusText">Fetching data...</div>
                   </div>
                 </div>
-                <div id="gfStats" style="margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border);">
+                <div id="gfStats"
+                  style="margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border);">
                   <div style="display:flex; justify-content:space-between; align-items:center;">
                     <span style="font-size:0.8rem; color:var(--text-secondary);">Today's Steps:</span>
                     <span style="font-weight:700; color:var(--accent-blue);" id="gfTodaySteps">0</span>
@@ -462,7 +480,8 @@
                     <span style="font-size:0.7rem; color:var(--text-muted);" id="gfLastSync">Last sync: --:--</span>
                   </div>
                 </div>
-                <button onclick="disconnectGoogleFit()" class="btn btn-block btn-outline-danger btn-sm">Disconnect Google Fit</button>
+                <button onclick="disconnectGoogleFit()" class="btn btn-block btn-outline-danger btn-sm">Disconnect
+                  Google Fit</button>
               </div>
             </div>
           </div>
