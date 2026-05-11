@@ -1,6 +1,6 @@
 # 🧠 AI Coding Rules & Project Context - StrAct Z
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.27). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.28). Follow these guidelines strictly.
 
 ## 🎨 VIP GOLD Theme
 - VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
@@ -40,6 +40,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.28 (2026-05-11)
+- **Map Hint Refinement**: Updated Activity Areas tooltip to explain the 1:1 base ratio and additive boost system.
+- **UI Optimization**: Removed redundant limit lists from the Map tooltip as they are now prominently displayed in the stats grid and boost table.
+- **Educational Context**: Improved examples in hints to clearly demonstrate the mathematical priority calculation for districts.
 
 ### v1.50.27 (2026-05-11)
 - **Map Activity UI Overhaul**: Added a dedicated stats grid and boost table to the Activity Areas card.

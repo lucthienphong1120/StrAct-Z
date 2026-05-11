@@ -153,20 +153,8 @@ const LIMITS = {
   activity_areas: {
     label: 'Khu vực hoạt động (Map).',
     type: 'map',
-    desc_extra: 'Tác dụng: Ưu tiên tạo hoạt động quanh khu vực Nhà/Công ty. Trọng số giúp tăng xác suất chọn các quận lân cận khu vực này.',
-    example: 'Ví dụ: Nhà (Home) trọng số +2.0 giúp tăng xác suất tạo lộ trình quanh khu vực đó lên đáng kể.',
-    normal: {
-      'Home Boost': '+2.0 / +1.5 / +1.0',
-      'Work Boost': '+1.2 / +0.8 / +0.4',
-      'Max Points': '1',
-      'Max Radius': '3000m'
-    },
-    vip: {
-      'Home Boost': '+2.0 / +1.5 / +1.0',
-      'Work Boost': '+1.2 / +0.8 / +0.4',
-      'Max Points': '2',
-      'Max Radius': '4000m'
-    }
+    desc_extra: 'Tác dụng: Ưu tiên tạo lộ trình tại các quận quanh khu vực Nhà/Công ty. Tỉ lệ chọn các quận mặc định là 1:1, các quận nằm trong vùng phủ sóng của Nhà/Công ty sẽ được cộng thêm trọng số boost tương ứng.',
+    example: 'Ví dụ: Quận Hoàn Kiếm nằm \'Fully Inside\' vùng Nhà sẽ có trọng số 1.0 (mặc định) + 2.0 (boost) = 3.0 (tỉ lệ chọn cao gấp 3 lần các quận khác).'
   },
 
   // ─── Activity Settings ────────────────────────────────────────────────────
