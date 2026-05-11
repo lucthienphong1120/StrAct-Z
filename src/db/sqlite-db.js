@@ -291,14 +291,15 @@ async function updateActivity(accountId, id, data) {
 
 async function getActivities(accountId, limit = 50) {
   const db = await getDb();
-  return await db.all(`SELECT * FROM activities WHERE account_id = ? AND deleted_at IS NULL ORDER BY id DESC LIMIT ?`, [accountId, limit]);
+  // Include deleted activities for logging
+  return await db.all(`SELECT * FROM activities WHERE account_id = ? ORDER BY id DESC LIMIT ?`, [accountId, limit]);
 }
 
 async function getActivitiesByDate(accountId, dateStr) {
   const db = await getDb();
   // route_start_time is stored as ISO string, e.g., '2026-05-10T12:00:00.000Z'
   const datePattern = dateStr + '%';
-  return await db.all(`SELECT * FROM activities WHERE account_id = ? AND route_start_time LIKE ? AND deleted_at IS NULL`, [accountId, datePattern]);
+  return await db.all(`SELECT * FROM activities WHERE account_id = ? AND route_start_time LIKE ?`, [accountId, datePattern]);
 }
 
 async function deleteActivity(accountId, id, hard = false) {

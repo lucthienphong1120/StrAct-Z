@@ -167,32 +167,26 @@ async function loadActivities() {
           }).join('');
       }
 
-      // --- New Two-Badge Logic ---
+      // --- New Single-Badge Logic ---
       const isUploadedLocal = (a.upload_status === 'uploaded' || !!a.strava_activity_id);
       const stravaRecord = isUploadedLocal ? window.latestStravaActivities?.find(s => String(s.id) === String(a.strava_activity_id)) : null;
       
-      let statusBadge = ''; // Generated/Deleted
-      let syncBadge = '';   // Uploaded/Not Uploaded/Removed
+      let badge = '';
       
-      // 1. Tình trạng (Generated vs Deleted)
-      // If it was uploaded but not found on Strava, mark as Deleted (from Strava)
-      const isDeletedFromStrava = isUploadedLocal && !stravaRecord && window.latestStravaActivities?.length > 0;
-      
-      if (isDeletedFromStrava) {
-        statusBadge = `<span class="status-badge deleted" title="Hoạt động này đã bị xóa trên Strava Cloud nhưng vẫn được lưu trữ log tại đây.">🔴 DELETED</span>`;
-      } else {
-        statusBadge = `<span class="status-badge generated" title="Hoạt động đã được khởi tạo thành công và đang tồn tại.">🟡 GENERATED</span>`;
-      }
-
-      // 2. Đồng bộ (Uploaded vs Not Uploaded vs Removed)
       if (isUploadedLocal) {
-        if (isDeletedFromStrava) {
-          syncBadge = `<span class="status-badge removed" title="Đã từng được tải lên Strava nhưng hiện không tìm thấy (đã xóa trên Cloud).">⚪ REMOVED FROM CLOUD</span>`;
+        // If we have cloud data loaded, check if it's still there
+        const cloudDataAvailable = window.latestStravaActivities?.length > 0;
+        if (cloudDataAvailable && !stravaRecord) {
+          badge = `<span class="status-badge removed" title="Đã tạo local và upload lên cloud, sau đó xóa ở cloud">⚪ REMOVED</span>`;
         } else {
-          syncBadge = `<span class="status-badge uploaded" title="Đã tải lên Strava thành công và đang đồng bộ.">🟢 UPLOADED</span>`;
+          badge = `<span class="status-badge uploaded" title="Đã tạo local và upload lên cloud">🟢 UPLOADED</span>`;
         }
       } else {
-        syncBadge = `<span class="status-badge not-uploaded" title="Hoạt động mới chỉ được tạo cục bộ, chưa được tải lên Strava.">🔵 NOT UPLOADED</span>`;
+        if (a.deleted_at || a.upload_status === 'deleted') {
+          badge = `<span class="status-badge deleted" title="Đã tạo local và chưa upload, sau đó xóa ở local">🔴 DELETED</span>`;
+        } else {
+          badge = `<span class="status-badge generated" title="Đã tạo local và chưa upload">🟡 GENERATED</span>`;
+        }
       }
 
       return `
@@ -208,13 +202,12 @@ async function loadActivities() {
           <div class="activity-meta">${a.duration_min?.toFixed(0)} min</div>
           <div class="activity-meta">${a.pace_min_km?.toFixed(1)} min/km</div>
           <div style="display:flex;gap:6px;align-items:center; flex-wrap: wrap; justify-content: flex-end;">
-            ${statusBadge}
-            ${syncBadge}
+            ${badge}
             
             <div style="display:flex; gap:6px; margin-left: 10px;">
-              ${a.upload_status === 'generated' ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
+              ${(a.upload_status === 'generated' && !a.deleted_at) ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
               ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
-              ${a.upload_status === 'generated' ? 
+              ${(a.upload_status === 'generated' && !a.deleted_at) ? 
                 `<button class="btn btn-sm btn-danger" style="padding:4px 8px;" title="Delete locally" onclick="deleteActivity(${a.id}, false)">🗑️</button>` : 
                 `<span class="tooltip-icon tooltip-left" data-tooltip="Hoạt động đã upload chỉ có thể xóa trực tiếp trên Strava.com. Sau khi xóa trên Strava, hãy Refresh Cloud Data để cập nhật trạng thái tại đây.">?</span>`
               }

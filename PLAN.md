@@ -73,5 +73,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] bỏ nút logout system khỏi menu Strava Account (đã có nút logout ở header cạnh tên user rồi), đổi format nút disconnect strava giống nút disconnect google fit
 + [x] fix lỗi Min Count của schedule khi đặt thành 0 nhưng reload lại trang lại bị về 1
 + [x] cập nhật AI Rule không cần update version ở dòng 1 file readme, chỉ cần bổ sung changelog nếu thay đổi tính năng lớn, file readme chủ yếu mô tả tính năng và hướng dẫn setup, hướng dẫn sử dụng
-+ [ ] cập nhật Local Generated History bổ sung time filter tương tự Strava Cloud Activities, check chéo mapping những uploaded activities (giữa 2 tab Local Generated History và Strava Cloud Activities) nếu không có thì đổi trạng thái là đã xóa (các hoạt động đã upload chỉ có thể xóa từ strava, còn generate but not upload thì xóa trực tiếp trong db nên cần check và so sánh lại những cái đã xóa trên cloud thì vẫn hiện nhưng đánh dấu trạng thái đã xóa từ strava cloud -> để lưu trữ log, còn những hoạt động tạo mà xóa luôn trên local db thì cứ để nó xóa, không cần update hay gì cả)
++ [x] cập nhật Local Generated History bổ sung time filter tương tự Strava Cloud Activities, check chéo mapping những uploaded activities (4 trạng thái duy nhất) -> để lưu trữ log
 
