@@ -1,9 +1,19 @@
-const CACHE_NAME = 'stract-z-v1.32.0';
+const CACHE_NAME = 'stract-z-v1.50.4';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
-  '/css/style.css',
+  '/login.html',
+  '/register.html',
+  '/css/theme.css',
+  '/css/layout.css',
+  '/css/components.css',
   '/js/app.js',
+  '/js/core/api.js',
+  '/js/core/auth.js',
+  '/js/ui/dashboard.js',
+  '/js/ui/config.js',
+  '/js/ui/map.js',
+  '/js/ui/scheduler.js',
   '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
