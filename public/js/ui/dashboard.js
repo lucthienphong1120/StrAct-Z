@@ -6,18 +6,23 @@ async function loadDashboard(forceRefresh = false) {
   await fetchLimits();
   await loadDistricts();
   await Promise.all([
-    loadStats(),
+    loadStats(forceRefresh),
     loadConfig(),
     loadSchedule(),
     loadActivities(),
     loadStravaActivities(forceRefresh),
     loadInsights(forceRefresh)
   ]);
+  
+  if (forceRefresh) {
+    showToast('All data refreshed!', 'success');
+  }
+  
   initMap();
   resetMapView();
 }
 
-async function loadStats() {
+async function loadStats(forceRefresh = false) {
   try {
     const stats = await api('/stats');
     window.userRole = stats.role || 'normal';
@@ -46,7 +51,9 @@ async function loadStats() {
       if (stats.googleFitConnected) {
         gfDisc.style.display = 'none';
         gfConn.style.display = 'block';
-        if (window.refreshGoogleFitStats) window.refreshGoogleFitStats();
+        if (window.refreshGoogleFitStats) {
+          window.refreshGoogleFitStats(forceRefresh);
+        }
       } else {
         gfDisc.style.display = 'block';
         gfConn.style.display = 'none';

@@ -417,7 +417,8 @@ async function getActivities(accountId, page = 1, perPage = 30, after = null, fo
 module.exports = {
   getAuthUrl,
   exchangeCode,
-  refreshToken,
+  getActivities,
+  clearActivityCache,
   uploadActivity,
   checkUploadStatus,
   waitForUpload,

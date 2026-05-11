@@ -590,15 +590,17 @@ async function disconnectGoogleFit() {
   }
 }
 
-async function refreshGoogleFitStats() {
+async function refreshGoogleFitStats(forceRefresh = false) {
   const statusText = document.getElementById('gfStatusText');
   const stepsEl = document.getElementById('gfTodaySteps');
   const syncEl = document.getElementById('gfLastSync');
   
-  if (statusText) statusText.textContent = 'Refreshing...';
+  if (!statusText) return;
+  if (forceRefresh) statusText.textContent = 'Refreshing...';
   
   try {
-    const data = await api('/google-fit/stats');
+    const refreshQuery = forceRefresh ? '?refresh=true' : '';
+    const data = await api(`/google-fit/stats${refreshQuery}`);
     if (data.error) throw new Error(data.error);
     
     if (stepsEl) stepsEl.textContent = data.steps.toLocaleString();

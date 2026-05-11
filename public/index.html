@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.8</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.9</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -113,7 +113,7 @@
           🚀 Generate & Upload to Strava
         </button>
         <button class="btn btn-secondary"
-          onclick="loadDashboard(true).then(() => showToast('All data refreshed', 'success'))">
+          onclick="loadDashboard(true)">
           🔄 Refresh
         </button>
         <button class="btn btn-outline-danger"
@@ -460,7 +460,6 @@
                   </div>
                   <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
                     <span style="font-size:0.7rem; color:var(--text-muted);" id="gfLastSync">Last sync: --:--</span>
-                    <button onclick="refreshGoogleFitStats()" class="btn btn-sm btn-secondary" style="padding: 2px 8px; font-size:0.7rem;">🔄 Refresh</button>
                   </div>
                 </div>
                 <button onclick="disconnectGoogleFit()" class="btn btn-block btn-outline-danger btn-sm">Disconnect Google Fit</button>

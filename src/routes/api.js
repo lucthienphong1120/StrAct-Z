@@ -49,6 +49,9 @@ router.post('/config', async (req, res) => {
 router.post('/config/reset', async (req, res) => {
   try {
     await db.resetConfig(req.user.id);
+    await db.clearActivities(req.user.id);
+    stravaApi.clearActivityCache(req.user.id);
+    googleFit.clearCache(req.user.id);
     res.json({ success: true, message: 'Configuration reset to defaults (Map areas preserved)' });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -131,7 +134,8 @@ router.delete('/auth/google', async (req, res) => {
 
 router.get('/google-fit/stats', async (req, res) => {
   try {
-    const stats = await googleFit.getTodayStats(req.user.id);
+    const refresh = req.query.refresh === 'true';
+    const stats = await googleFit.getTodayStats(req.user.id, refresh);
     res.json(stats);
   } catch (err) {
     res.status(500).json({ error: err.message });

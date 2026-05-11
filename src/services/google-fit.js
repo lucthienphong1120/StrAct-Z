@@ -204,7 +204,18 @@ async function uploadActivity(userId, activity) {
   return { success: true };
 }
 
-async function getTodayStats(userId) {
+// ─── Caching Layer ──────────────────────────────────────────────────────────
+const statsCache = new Map(); // userId -> { data, expires }
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+
+async function getTodayStats(userId, forceRefresh = false) {
+  if (!forceRefresh) {
+    const cached = statsCache.get(userId);
+    if (cached && cached.expires > Date.now()) {
+      return cached.data;
+    }
+  }
+
   let tokens = await db.getExternalTokens(userId, 'google_fit');
   if (!tokens) throw new Error('Not connected to Google Fit');
 
@@ -247,10 +258,13 @@ async function getTodayStats(userId) {
     totalSteps = points.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
   }
 
-  return {
+  const result = {
     steps: totalSteps,
     lastUpdate: new Date().toISOString()
   };
+
+  statsCache.set(userId, { data: result, expires: Date.now() + CACHE_TTL_MS });
+  return result;
 }
 
 async function disconnect(userId) {
@@ -270,11 +284,16 @@ async function disconnect(userId) {
   }
 }
 
+function clearCache(userId) {
+  statsCache.delete(userId);
+}
+
 module.exports = {
   getAuthUrl,
   exchangeCode,
   refreshTokens,
   uploadActivity,
   getTodayStats,
+  clearCache,
   disconnect
 };
