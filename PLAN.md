@@ -79,4 +79,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] cấu hình cho phép schedule 2 khung giờ -> tùy chọn 1 khung giờ hoặc 2 khung giờ
 + [ ] sửa logic bao phủ của khu vực hoạt động thay vì Fully	Mostly	Partially chưa hợp lý vì mỗi quận sẽ có độ rộng khác nhau, và 1 vòng tròn có thể to bao phủ cả 1 quận hoặc 1 quận cũng có thể to bao phủ 1 vòng tròn -> tìm giải pháp hợp lý, có thể theo tỉ lệ diện tích, nhưng tôi vẫn muốn tỉ lệ các quận công bằng và hợp lý (không quan tâm quận to hay quận nhỏ), chia theo 3 vùng trọng số như hiện tại
 + [ ] fix lỗi lưu, you can select up to 0 type of activity
++ [ ] responsive cho mobile
++ [ ] check logic luồng đồng bộ sang fit như nào (realtime hoặc upload previous được giống strava)
++ [ ] 
 
