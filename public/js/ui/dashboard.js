@@ -354,12 +354,11 @@ function changeStravaPage(delta) {
 }
 
 async function loadInsights(forceRefresh = false) {
-  const rangeVal = document.getElementById('insightsTimeRange').value || 14;
-  const days = rangeVal === 'today' ? 1 : parseInt(rangeVal);
+  const range = document.getElementById('insightsTimeRange').value || 14;
   try {
     const refreshQuery = forceRefresh ? '&refresh=true' : '';
-    const activities = await api(`/insights?days=${days}${refreshQuery}`);
-    updateActivityChart(activities, days);
+    const activities = await api(`/insights?days=${range}${refreshQuery}`);
+    updateActivityChart(activities, parseInt(range));
   } catch (err) {
     console.error('Insights error:', err);
   }
