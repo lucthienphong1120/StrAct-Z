@@ -610,23 +610,25 @@ router.post('/google-fit/clear-queue', async (req, res) => {
   try {
     const now = new Date();
     const hanoiDateStr = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+    const userId = req.user.id;
+    
+    // Find all activities for today
+    const activities = await db.getActivitiesByDate(userId, hanoiDateStr);
+    const toClear = activities.filter(a => a.upload_status === 'uploaded' || a.upload_status === 'pending');
 
-    // Find all uploaded activities for today
-    const activities = await db.getActivitiesByDate(req.user.id, hanoiDateStr);
-    const uploadedToday = activities.filter(a => a.upload_status === 'uploaded');
+    console.log(`[API] Clearing ${toClear.length} activities from queue for ${hanoiDateStr}`);
 
-    console.log(`[API] Clearing ${uploadedToday.length} activities from queue for ${hanoiDateStr}`);
-
-    for (const activity of uploadedToday) {
+    for (const activity of toClear) {
       try {
         await googleFit.deleteActivity(req.user.id, activity);
       } catch (gfErr) {
         console.error(`[Google Fit] Clear failed for activity ${activity.id}:`, gfErr);
       }
+      // Set to 'deleted' locally so they stop appearing in expectedSyncedSteps
       await db.deleteActivity(req.user.id, activity.id, true);
     }
 
-    res.json({ success: true, count: uploadedToday.length });
+    res.json({ success: true, count: toClear.length });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

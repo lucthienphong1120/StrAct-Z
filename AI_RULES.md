@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.75)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.76)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.75). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.76). Follow these guidelines strictly.
 
 ## 🛠️ Stability & Pre-Execution Rules (CRITICAL)
 - **Zero-Assumption Policy**: Never assume the name of middleware (e.g., `authMiddleware`), helper functions, or DB methods. **ALWAYS** read the first 50-100 lines of the target file to identify established patterns and variable names.
