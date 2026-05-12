@@ -246,10 +246,11 @@ const LIMITS = {
     default: false
   },
   google_fit_steps_info: {
-    label: 'Cơ chế tính toán bước chân Today.',
-    desc_extra: 'Tác dụng: Giải thích cách Google Fit tổng hợp dữ liệu từ nhiều nguồn khác nhau (Device và StrAct Z Sync).',
-    type: 'info',
-    default: 'Số bước chân Today bao gồm dữ liệu từ cảm biến thiết bị gốc (Device/General) và dữ liệu được đồng bộ từ StrAct Z (Sync). Google Fit sẽ tự động xử lý và gộp các luồng này vào dữ liệu chính sau một khoảng thời gian ngắn.'
+    label: 'Dữ liệu tính toán bước chân từ Google Fit. Google cần thời gian để gộp dữ liệu Sync vào Device. Khi hoàn tất, số tại Sync sẽ chuyển dần sang Device.',
+    desc_extra: 'Tác dụng: Tổng hợp dữ liệu từ nhiều nguồn (Cảm biến điện thoại, Đồng hồ thông minh, hoặc các ứng dụng bên thứ 3) cùng với dữ liệu đồng bộ từ StrAct Z.',
+    type: 'int',
+    default: 0,
+    unit: 'bước'
   }
 };
 
