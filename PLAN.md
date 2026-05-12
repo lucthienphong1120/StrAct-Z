@@ -87,4 +87,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] check logic luồng đồng bộ sang fit như nào (realtime hoặc upload previous được giống strava)
 + [x] hướng dẫn cách bỏ vip của 1 tài khoản
 + [x] update README.md thành các file riêng lẻ trong folder docs (phần setup, hướng dẫn use, kiến trúc...) - đồng thời cập nhật AI Rules, giảm phụ thuộc file README (nội dung bây h sẽ reference tới docs)
-+ [ ] trace và debug thực tế vấn đề đồng bộ bước chân fit khi tạo hoạt động
++ [x] trace và debug thực tế vấn đề đồng bộ bước chân fit khi tạo hoạt động (do sai tên field)

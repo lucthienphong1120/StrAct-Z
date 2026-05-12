@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="/css/theme.css">
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -28,7 +29,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.52</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.53</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -605,13 +606,16 @@
                     <span style="font-weight:700; color:var(--accent-blue); font-size:1.1rem;" id="gfTodaySteps">0</span>
                   </div>
                   <div id="gfBreakdown" style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--border); display:none;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-                      <span style="font-size:0.7rem; color:var(--text-muted);">&#x1F4F1; Device/General:</span>
-                      <span style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;" id="gfOfficialSteps">0</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                      <span style="font-size:0.75rem; color:var(--text-muted);" title="Số bước chân gốc từ điện thoại/đồng hồ (đã được Google xác nhận)">📱 Device/General <i class="fas fa-info-circle" style="font-size:0.8em;"></i>:</span>
+                      <span style="font-size:0.8rem; color:var(--text-secondary); font-weight:500;" id="gfOfficialSteps">0</span>
                     </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                      <span style="font-size:0.7rem; color:var(--text-muted);">&#x2728; StrAct Z Sync:</span>
-                      <span style="font-size:0.75rem; color:var(--accent-blue); font-weight:500;" id="gfSyncedSteps">0</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                      <span style="font-size:0.75rem; color:var(--text-muted);" title="Số bước chân do StrAct Z đẩy lên, đang chờ Google Fit xử lý gộp">✨ StrAct Z Sync <i class="fas fa-info-circle" style="font-size:0.8em;"></i>:</span>
+                      <span style="font-size:0.8rem; color:var(--accent-blue); font-weight:500;" id="gfSyncedSteps">0</span>
+                    </div>
+                    <div style="font-size:0.7rem; color:var(--text-muted); opacity:0.6; font-style:italic; line-height:1.4; border-top: 1px solid rgba(255,255,255,0.05); padding-top:8px;">
+                      * Google cần thời gian để gộp dữ liệu Sync vào Device. Khi gộp xong, số tại Sync sẽ chuyển sang Device.
                     </div>
                   </div>
                   <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
