@@ -366,6 +366,9 @@ async function getTodayStats(userId, forceRefresh = false) {
     lastSync: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
     timestamp: now.getTime(),
     debug: {
+      queryDate: hanoiDateStr,
+      localActCount: localActs.length,
+      localActIds: localActs.map(a => a.id),
       manualCount: manualStreams.length,
       manualStreams,
       googleTotal,
