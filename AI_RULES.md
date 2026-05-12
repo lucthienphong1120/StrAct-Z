@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.35)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.36)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.35). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.36). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -41,6 +41,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.36 (2026-05-12)
+- **Google Fit Manual Sync**: Enhanced the manual "Upload" route to support Google Fit synchronization. Now, uploading a previously generated activity also pushes it to Google Fit if enabled.
+- **Sync Consistency**: Unified the Google Fit sync logic across Auto-Scheduler, Generate & Upload, and Manual Upload.
 
 ### v1.50.35 (2026-05-12)
 - **Manual Role Management**: Added documentation to `README.md` for manual account role downgrades (VIP to Normal) via Node.js CLI.

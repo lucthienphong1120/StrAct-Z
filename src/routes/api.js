@@ -430,7 +430,20 @@ router.post('/upload/:id', async (req, res) => {
       upload_status: 'uploaded',
     });
 
-    res.json({ success: true, stravaActivityId: finalStatus.activity_id });
+    // Optional Google Fit Sync for previous activity
+    const config = await db.getAllConfig(req.user.id);
+    let googleFitSynced = false;
+    if (config.sync_google_fit === 'true') {
+      try {
+        await googleFit.uploadActivity(req.user.id, {
+          ...activity,
+          activity_type: config.activity_type
+        });
+        googleFitSynced = true;
+      } catch (e) { console.error('Google Fit Sync failed for manual upload:', e); }
+    }
+
+    res.json({ success: true, stravaActivityId: finalStatus.activity_id, googleFitSynced });
   } catch (err) {
     console.error('Upload error:', err);
     if (req.params.id) {
