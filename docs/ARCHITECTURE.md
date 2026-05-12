@@ -31,3 +31,9 @@ The engine generates activities in two phases:
 - Uses `node-cron` to manage background tasks.
 - On server boot, it queries all active accounts and spawns independent cron jobs for any user with `schedule_enabled = 'true'`.
 - The jobs execute silently in the background, validating Strava limits (max 2 uploads per day) before generating and uploading routes.
+
+### 5. Google Fit Integration (`google-fit.js`)
+- **OAuth2 Protocol:** Uses standard Google OAuth2 flow to obtain and refresh tokens for the Fitness API.
+- **Data Source Management:** Automatically creates and updates a custom Data Source for each user to push "raw" activity data.
+- **Technical Detail:** The full stream identifier on Google Cloud is `raw:com.google.step_count.delta:me:StrActZ:stract-z-sync`. This naming convention ensures that StrAct Z data is professional, identifiable, and correctly aggregated within the Google Fit ecosystem.
+- **Dual-Stream Aggregation:** To provide immediate feedback, the system queries both the general Google Fit step stream and the specific `stract-z-sync` source, summing them to display real-time progress before Google's internal merging occurs.

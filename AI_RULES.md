@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.43)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.44)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.43). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.44). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -39,6 +39,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 ### 4. Map Persistence (v1.43.0+)
 - **Storage**: `map_lat`, `map_lng`, and `map_zoom` are saved in the `config` table.
 - **UI**: The map restores its last saved center and zoom level upon page load.
+
+### 5. Google Fit Synchronization (v1.50.43+)
+- **Stream Identity**: Uses a consistent `streamId` format: `raw:com.google.step_count.delta:me:StrActZ:stract-z-sync`. This is the unique identifier on Google Cloud.
+- **Sync Method**: Uses `PATCH` requests on `dataSources` with structured `startTimeNanos` and `endTimeNanos`.
+- **Steps Calculation**: Defaults to `distance_km * 1250` (or 1400 if activity type is 7).
+- **Dual-Stream Query**: To bypass Google's merge delay, the system aggregates both the general `com.google.step_count.delta` stream AND the specific `stract-z-sync` source for the daily total.
 ## 📂 Documentation Structure (v1.50.42+)
 - **Root README.md**: High-level overview and quick start.
 - **docs/ARCHITECTURE.md**: Technical design and engine details.

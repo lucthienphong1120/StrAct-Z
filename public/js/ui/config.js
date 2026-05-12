@@ -656,7 +656,7 @@ async function refreshGoogleFitStats(forceRefresh = false) {
     if (officialEl) officialEl.textContent = (data.officialSteps || 0).toLocaleString();
     if (syncedEl) syncedEl.textContent = (data.syncedSteps || 0).toLocaleString();
     if (breakdownEl) {
-      breakdownEl.style.display = (data.syncedSteps > 0) ? 'block' : 'none';
+      breakdownEl.style.display = 'block';
     }
 
     if (syncEl) {
