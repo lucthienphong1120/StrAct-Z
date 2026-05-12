@@ -292,8 +292,8 @@ async function getTodayStats(userId, forceRefresh = false) {
     allSources = listData.dataSource ? listData.dataSource.map(ds => ds.dataStreamId) : [];
   }
 
-  // 2. Discover our stream ID (be flexible with 'StrActZ' vs 'StrAct Z')
-  const manualStream = allSources.find(s => 
+  // 2. Discover all our manual streams (be flexible with 'StrActZ' vs 'StrAct Z')
+  const manualStreams = allSources.filter(s => 
     s.includes('com.google.step_count.delta') && 
     (s.includes('StrActZ') || s.includes('StrAct Z')) && 
     s.startsWith('raw:')
@@ -306,14 +306,16 @@ async function getTodayStats(userId, forceRefresh = false) {
     body: JSON.stringify(officialBody)
   });
 
-  const [officialRes, manualRes] = await Promise.all([
+  const manualPromises = manualStreams.map(streamId => 
+    fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${streamId}/datasets/${datasetId}`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${tokens.access_token}` }
+    })
+  );
+
+  const [officialRes, ...manualResponses] = await Promise.all([
     officialPromise,
-    manualStream 
-      ? fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${manualStream}/datasets/${datasetId}`, {
-          method: 'GET',
-          headers: { 'Authorization': `Bearer ${tokens.access_token}` }
-        })
-      : Promise.resolve({ ok: false, status: 404 })
+    ...manualPromises
   ]);
 
   let googleTotal = 0;
@@ -326,13 +328,12 @@ async function getTodayStats(userId, forceRefresh = false) {
     }
   }
 
-  if (manualRes.ok) {
-    const data = await manualRes.json();
-    if (data.point && data.point.length > 0) {
-      syncedSteps = data.point.reduce((sum, p) => {
-        const val = p.value && p.value[0] ? (p.value[0].intVal || Math.round(p.value[0].fpVal || 0)) : 0;
-        return sum + val;
-      }, 0);
+  for (const res of manualResponses) {
+    if (res.ok) {
+      const data = await res.json();
+      if (data.point) {
+        syncedSteps += data.point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
+      }
     }
   }
 
@@ -361,11 +362,10 @@ async function getTodayStats(userId, forceRefresh = false) {
     lastSync: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
     timestamp: now.getTime(),
     debug: {
-      manualOk: manualRes.ok,
-      manualStatus: manualRes.status,
+      manualCount: manualStreams.length,
+      manualStreams,
       googleTotal,
-      expectedSyncedSteps,
-      manualStream
+      expectedSyncedSteps
     }
   };
 
