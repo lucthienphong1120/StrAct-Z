@@ -645,6 +645,7 @@ async function refreshGoogleFitStats(forceRefresh = false) {
     const refreshQuery = forceRefresh ? '?refresh=true' : '';
     const data = await api(`/google-fit/stats${refreshQuery}`);
     if (data.error) throw new Error(data.error);
+    console.log('[Google Fit Debug]', data.debug);
     
     const stepsEl = document.getElementById('gfTodaySteps');
     const officialEl = document.getElementById('gfOfficialSteps');

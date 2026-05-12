@@ -111,8 +111,8 @@ async function uploadActivity(userId, activity) {
   const startTime = new Date(activity.route_start_time).getTime();
   const durationMs = activity.duration_min * 60 * 1000;
   const endTime = startTime + durationMs;
-  const nanoStart = startTime * 1000000;
-  const nanoEnd = endTime * 1000000;
+  const nanoStart = (BigInt(startTime) * 1000000n).toString();
+  const nanoEnd = (BigInt(endTime) * 1000000n).toString();
 
   // Map Activity Type
   // 8 = Running, 7 = Walking, 1 = Biking
@@ -250,7 +250,7 @@ async function getTodayStats(userId, forceRefresh = false) {
   }
 
   const now = new Date();
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() - (60 * 60 * 1000);
   const endTime = now.getTime();
 
   // Query 1: Official/General Steps
@@ -262,8 +262,8 @@ async function getTodayStats(userId, forceRefresh = false) {
   };
 
   // Query 2: Manual Sync Steps (Direct Dataset Query)
-  const nanoStart = startOfDay * 1000000;
-  const nanoEnd = endTime * 1000000;
+  const nanoStart = BigInt(startOfDay) * 1000000n;
+  const nanoEnd = BigInt(endTime) * 1000000n;
   const datasetId = `${nanoStart}-${nanoEnd}`;
   const manualStream = `derived:com.google.step_count.delta:me:StrActZ:stract-z-sync`;
 
@@ -289,10 +289,21 @@ async function getTodayStats(userId, forceRefresh = false) {
     }
   }
 
+  let debugInfo = {
+    datasetId,
+    manualStream,
+    manualOk: manualRes.ok,
+    manualStatus: manualRes.status
+  };
+
   if (manualRes.ok) {
     const data = await manualRes.json();
-    if (data.point) {
-      syncedSteps = data.point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
+    debugInfo.pointCount = data.point ? data.point.length : 0;
+    if (data.point && data.point.length > 0) {
+      syncedSteps = data.point.reduce((sum, p) => {
+        const val = p.value && p.value[0] ? (p.value[0].intVal || Math.round(p.value[0].fpVal || 0)) : 0;
+        return sum + val;
+      }, 0);
     }
   }
 
@@ -301,7 +312,8 @@ async function getTodayStats(userId, forceRefresh = false) {
     officialSteps,
     syncedSteps,
     lastSync: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-    timestamp: now.getTime()
+    timestamp: now.getTime(),
+    debug: debugInfo
   };
 
   statsCache.set(userId, { data: stats, expires: Date.now() + CACHE_TTL_MS });
