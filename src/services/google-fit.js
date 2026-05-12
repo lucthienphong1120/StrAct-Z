@@ -262,13 +262,13 @@ async function getTodayStats(userId, forceRefresh = false) {
   }
 
   const now = new Date();
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() - (60 * 60 * 1000);
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(); // Exact 00:00
   const endTime = now.getTime();
 
   // Query 1: Official/General Steps
   const officialBody = {
     aggregateBy: [{ dataTypeName: 'com.google.step_count.delta' }],
-    bucketByTime: { durationMillis: 86400000 },
+    bucketByTime: { durationMillis: (endTime - startOfDay) || 86400000 },
     startTimeMillis: startOfDay,
     endTimeMillis: endTime
   };
@@ -277,6 +277,7 @@ async function getTodayStats(userId, forceRefresh = false) {
   const nanoStart = BigInt(startOfDay) * 1000000n;
   const nanoEnd = BigInt(endTime) * 1000000n;
   const datasetId = `${nanoStart}-${nanoEnd}`;
+  
   // 1. Fetch all data sources to find our dynamic ID
   const listRes = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources`, {
     method: 'GET',
@@ -305,25 +306,18 @@ async function getTodayStats(userId, forceRefresh = false) {
     })
   ]);
 
-  let officialSteps = 0;
+  let googleTotal = 0;
   let syncedSteps = 0;
 
   if (officialRes.ok) {
     const data = await officialRes.json();
     if (data.bucket && data.bucket[0] && data.bucket[0].dataset && data.bucket[0].dataset[0].point) {
-      officialSteps = data.bucket[0].dataset[0].point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
+      googleTotal = data.bucket[0].dataset[0].point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
     }
   }
 
-  const debugInfo = {
-    manualOk: manualRes.ok,
-    manualStatus: manualRes.status,
-    pointCount: syncedSteps > 0 ? 1 : 0
-  };
-
   if (manualRes.ok) {
     const data = await manualRes.json();
-    debugInfo.pointCount = data.point ? data.point.length : 0;
     if (data.point && data.point.length > 0) {
       syncedSteps = data.point.reduce((sum, p) => {
         const val = p.value && p.value[0] ? (p.value[0].intVal || Math.round(p.value[0].fpVal || 0)) : 0;
@@ -332,13 +326,21 @@ async function getTodayStats(userId, forceRefresh = false) {
     }
   }
 
+  // Double-counting prevention logic:
+  // isolatedDeviceSteps = Total from Google (which might be merged) - Our manual steps
+  const isolatedDeviceSteps = Math.max(0, googleTotal - syncedSteps);
+
   const stats = {
-    steps: officialSteps + syncedSteps,
-    officialSteps,
+    steps: isolatedDeviceSteps + syncedSteps,
+    officialSteps: isolatedDeviceSteps,
     syncedSteps,
     lastSync: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
     timestamp: now.getTime(),
-    debug: debugInfo
+    debug: {
+      manualOk: manualRes.ok,
+      manualStatus: manualRes.status,
+      googleTotal
+    }
   };
 
   statsCache.set(userId, { data: stats, expires: Date.now() + CACHE_TTL_MS });
