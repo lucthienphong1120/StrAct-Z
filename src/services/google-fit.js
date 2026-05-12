@@ -130,7 +130,7 @@ async function uploadActivity(userId, activity) {
     startTimeMillis: startTime,
     endTimeMillis: endTime,
     activityType: activityType,
-    application: { name: 'StrAct Z', version: '1.50.0' }
+    application: { name: 'StrAct Z', version: '1.50.60', packageName: 'com.stractz.sync' }
   };
 
   await fetch(`https://www.googleapis.com/fitness/v1/users/me/sessions/${sessionId}`, {
@@ -188,7 +188,7 @@ async function uploadActivity(userId, activity) {
     // 1. Create or Get Data Source (POST)
     const dsBody = {
       type: 'raw',
-      application: { name: 'StrActZ' },
+      application: { name: 'StrAct Z', packageName: 'com.stractz.sync' },
       dataType: { 
         name: ds.type,
         field: [{ name: getFieldName(ds.type), format: ds.values[0].intVal !== undefined ? 'integer' : 'floatPoint' }]
@@ -262,7 +262,9 @@ async function getTodayStats(userId, forceRefresh = false) {
   }
 
   const now = new Date();
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(); // Exact 00:00
+  // Ensure we get 00:00:00 in Asia/Ho_Chi_Minh regardless of server timezone
+  const hanoiDateStr = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }); 
+  const startOfDay = new Date(`${hanoiDateStr}T00:00:00.000+07:00`).getTime();
   const endTime = now.getTime();
 
   // Query 1: Official/General Steps
