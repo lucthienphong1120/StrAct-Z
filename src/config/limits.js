@@ -246,7 +246,7 @@ const LIMITS = {
     default: false
   },
   google_fit_steps_info: {
-    label: 'Dữ liệu tính toán bước chân từ Google Fit. Google cần thời gian để gộp dữ liệu Sync vào Device. Khi hoàn tất, số tại Sync sẽ chuyển dần sang Device.',
+    label: 'Dữ liệu tính toán bước chân từ Google Fit.',
     desc_extra: 'Tác dụng: Tổng hợp dữ liệu từ nhiều nguồn (Cảm biến điện thoại, Đồng hồ thông minh, hoặc các ứng dụng bên thứ 3) cùng với dữ liệu đồng bộ từ StrAct Z.',
     type: 'int',
     default: 0,
