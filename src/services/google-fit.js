@@ -346,7 +346,7 @@ async function getTodayStats(userId, forceRefresh = false) {
   const isolatedDeviceSteps = Math.max(0, googleTotal - syncedSteps);
 
   const stats = {
-    steps: isolatedDeviceSteps + syncedSteps + queueSteps,
+    steps: isolatedDeviceSteps + syncedSteps,
     officialSteps: isolatedDeviceSteps,
     syncedSteps,
     queueSteps,
