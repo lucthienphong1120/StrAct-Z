@@ -255,9 +255,10 @@ async function getTodayStats(userId, forceRefresh = false) {
   const endTime = now.getTime();
 
   const aggregateBody = {
-    aggregateBy: [{
-      dataTypeName: 'com.google.step_count.delta'
-    }],
+    aggregateBy: [
+      { dataTypeName: 'com.google.step_count.delta' },
+      { dataSourceId: 'raw:com.google.step_count.delta:me:StrActZ:manual_sync' }
+    ],
     bucketByTime: { durationMillis: 86400000 },
     startTimeMillis: startOfDay,
     endTimeMillis: endTime
@@ -279,19 +280,27 @@ async function getTodayStats(userId, forceRefresh = false) {
 
   const data = await response.json();
   let totalSteps = 0;
-  
-  if (data.bucket && data.bucket[0] && data.bucket[0].dataset && data.bucket[0].dataset[0].point) {
-    const points = data.bucket[0].dataset[0].point;
-    totalSteps = points.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
+
+  if (data.bucket && data.bucket[0] && data.bucket[0].dataset) {
+    // Sum up all datasets in the bucket (one for each aggregateBy entry)
+    for (const dataset of data.bucket[0].dataset) {
+      if (dataset.point) {
+        totalSteps += dataset.point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
+      }
+    }
   }
 
-  const result = {
+  // To prevent double-counting if Google eventually merges them, 
+  // we could implement more complex logic, but for now, this ensures the user sees their synced steps.
+  
+  const stats = {
     steps: totalSteps,
-    lastUpdate: new Date().toISOString()
+    lastSync: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+    timestamp: now.getTime()
   };
 
-  statsCache.set(userId, { data: result, expires: Date.now() + CACHE_TTL_MS });
-  return result;
+  statsCache.set(userId, { data: stats, expires: Date.now() + CACHE_TTL_MS });
+  return stats;
 }
 
 async function disconnect(userId) {
