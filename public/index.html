@@ -29,7 +29,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.53</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.54</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -602,20 +602,20 @@
                 <div id="gfStats"
                   style="margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border);">
                   <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:0.8rem; color:var(--text-secondary);">Today's Steps:</span>
+                    <span style="font-size:0.8rem; color:var(--text-secondary);">Today's Steps <span class="tooltip-icon" data-tooltip="Tổng số bước chân bao gồm dữ liệu gốc (Device) và dữ liệu đang đồng bộ từ StrAct Z (Sync). Google sẽ tự động gộp dữ liệu này sau một thời gian.">i</span>:</span>
                     <span style="font-weight:700; color:var(--accent-blue); font-size:1.1rem;" id="gfTodaySteps">0</span>
                   </div>
                   <div id="gfBreakdown" style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--border); display:none;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                      <span style="font-size:0.75rem; color:var(--text-muted);" title="Số bước chân gốc từ điện thoại/đồng hồ (đã được Google xác nhận)">📱 Device/General <i class="fas fa-info-circle" style="font-size:0.8em;"></i>:</span>
+                      <span style="font-size:0.75rem; color:var(--text-muted);">📱 Device/General:</span>
                       <span style="font-size:0.8rem; color:var(--text-secondary); font-weight:500;" id="gfOfficialSteps">0</span>
                     </div>
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                      <span style="font-size:0.75rem; color:var(--text-muted);" title="Số bước chân do StrAct Z đẩy lên, đang chờ Google Fit xử lý gộp">✨ StrAct Z Sync <i class="fas fa-info-circle" style="font-size:0.8em;"></i>:</span>
+                      <span style="font-size:0.75rem; color:var(--text-muted);">✨ StrAct Z Sync:</span>
                       <span style="font-size:0.8rem; color:var(--accent-blue); font-weight:500;" id="gfSyncedSteps">0</span>
                     </div>
                     <div style="font-size:0.7rem; color:var(--text-muted); opacity:0.6; font-style:italic; line-height:1.4; border-top: 1px solid rgba(255,255,255,0.05); padding-top:8px;">
-                      * Google cần thời gian để gộp dữ liệu Sync vào Device. Khi gộp xong, số tại Sync sẽ chuyển sang Device.
+                      * Google cần thời gian để gộp dữ liệu Sync vào Device. Khi gộp xong, số tại Sync sẽ chuyển dần sang Device.
                     </div>
                   </div>
                   <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
