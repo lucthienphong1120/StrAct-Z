@@ -177,7 +177,7 @@ async function uploadActivity(userId, activity) {
   }
 
   for (const ds of dataSources) {
-    const streamId = `raw:${ds.type}:me:StrActZ:manual_sync`;
+    const streamId = `raw:${ds.type}:me:StrActZ:stract-z-sync`;
     
     // Create Data Source with more metadata
     await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources`, {
@@ -264,7 +264,7 @@ async function getTodayStats(userId, forceRefresh = false) {
 
   // Query 2: Manual Sync Steps (Specific source)
   const manualBody = {
-    aggregateBy: [{ dataSourceId: 'raw:com.google.step_count.delta:me:StrActZ:manual_sync' }],
+    aggregateBy: [{ dataSourceId: 'raw:com.google.step_count.delta:me:StrActZ:stract-z-sync' }],
     bucketByTime: { durationMillis: 86400000 },
     startTimeMillis: startOfDay,
     endTimeMillis: endTime

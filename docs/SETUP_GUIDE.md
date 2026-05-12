@@ -75,3 +75,33 @@ WantedBy=multi-user.target
 2. Because the database is empty, you will be redirected to the **Setup Wizard**.
 3. Create your Admin account by providing a username and secure password.
 4. You will be logged in automatically. Proceed to link your Strava account in the dashboard.
+
+## Google Fit API Integration Guide
+
+To enable Google Fit sync, follow these steps to obtain your credentials:
+
+1. **Create Google Cloud Project**: Go to [Google Cloud Console](https://console.cloud.google.com/), create a new project.
+2. **Enable Fitness API**: Search for "Fitness API" and click **Enable**.
+3. **Configure OAuth Consent Screen**:
+   - Go to **APIs & Services > OAuth consent screen**.
+   - Create app, choose **External**.
+   - Go to **Data access**, Add Scopes:
+     - `fitness.activity.read`
+     - `fitness.body.read`
+     - `fitness.location.read`
+     - `fitness.activity.write`
+     - `fitness.body.write`
+     - `fitness.location.write`
+4. **Create Credentials**:
+   - Go to **APIs & Services > Credentials**.
+   - Click **+ Create Credentials > OAuth client ID**.
+   - Application Type: **Web application**.
+   - Authorized redirect URIs: `http://localhost:3000/api/auth/google/callback`.
+   - **Important**: You must submit **Publish** app for verification on **Audience** before the "Connect with Google" button will work for other users. Until verified, only the developer (you) can connect their account at **Test users**.
+5. **Update .env**: Copy the Client ID and Secret into your .env file.
+
+```env
+GOOGLE_CLIENT_ID=your_id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your_secret
+GOOGLE_REDIRECT_URI=http://localhost:3000/api/auth/google/callback
+```

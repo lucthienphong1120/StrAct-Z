@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.42)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.43)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.42). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.43). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -39,6 +39,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 ### 4. Map Persistence (v1.43.0+)
 - **Storage**: `map_lat`, `map_lng`, and `map_zoom` are saved in the `config` table.
 - **UI**: The map restores its last saved center and zoom level upon page load.
+## 📂 Documentation Structure (v1.50.42+)
+- **Root README.md**: High-level overview and quick start.
+- **docs/ARCHITECTURE.md**: Technical design and engine details.
+- **docs/SETUP_GUIDE.md**: Environment setup and API integration (Strava/Google Fit).
+- **docs/USER_GUIDE.md**: Dashboard usage and troubleshooting.
+- **docs/CHANGELOG.md**: Detailed version history.
+- **AI_RULES.md**: Rules and context for AI coding assistants.
 
 ## 🛠️ Developer Rules
 
