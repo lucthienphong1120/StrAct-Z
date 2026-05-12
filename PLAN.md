@@ -70,6 +70,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] cấu hình fallback của theme mặc định các icon, tone màu xám, thay vì default màu cam của normal (tránh flash màu cam cho VIP user)
 + [x] update cho tôi logo với theme của fall back màu xám hoặc normal cũng gadient giống như vip, màu xám sẫm tối hơn (v1.50.32)
 + [x] theme của normal phần chữ title không dùng gadient, giá trị 4 card dùng màu cam, không đen, nút generate & upload và các nút save để như cũ (v1.50.33)
++ [x] fix lỗi logo VIP theme bị mất icon và sai màu chữ (v1.50.34)
 + [ ] update config Time Range trong custom time (gfx only) default thành 00:00 (tức random time), nếu user đặt vào 00:00 cũng sẽ hiểu là random time trong ngày, chỉ cần Target Date là được
 + [x] check fix lại logic safe time, thời gian random ra sát nhau -> cái này chỉ thêm 1 thời gian để tránh không random ra, logic giống với Avoid Workhours, không thay đổi logic tạo sinh
 + [x] sử dụng cache layer cho số liệu từ Google Fit sync, bỏ nút refresh cạnh đó mà sử dụng chung nút refresh ở trên, tất cả dữ liệu sẽ load lại khi user nhấn nút refresh hoặc reset hoặc Ctrl+Shift+R hoặc F5, hoặc khi truy cập trang dashboard lần đầu (áp dụng tương tự cho data lấy về từ strava cloud và cả 2 tab: History và Insights)

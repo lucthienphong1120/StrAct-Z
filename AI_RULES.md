@@ -42,6 +42,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.50.34 (2026-05-12)
+- **VIP Logo Fix**: Corrected issue where the VIP logo text appeared solid orange and the icon box was empty.
+- **Text Clipping Isolation**: Moved `background-clip: text` from the `.logo` container to the inner `span` for VIP users to prevent it from clipping the icon box and making inner text transparent.
+- **Variable Sync**: Updated `--gradient-premium` for VIP users to ensure the gold icon box matches the theme.
+
 ### v1.50.33 (2026-05-12)
 - **Normal Theme Refinement**: Removed text gradients from `.logo` (title) and `.stat-value` (stats) in Normal/Fallback themes, using solid colors instead for better readability.
 - **Button Gradient Restoration**: Restored the original bright orange/grey gradients for buttons (`--gradient-primary`) to maintain UI consistency.
