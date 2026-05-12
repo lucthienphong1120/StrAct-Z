@@ -177,28 +177,28 @@ async function uploadActivity(userId, activity) {
   }
 
   for (const ds of dataSources) {
-    const streamId = `derived:${ds.type}:me:StrActZ:stract-z-sync`;
+    // 1. Create or Update Data Source (PUT)
+    const streamId = `raw:${ds.type}:me:StrActZ:VirtualTracker:manual:stract-z-sync`;
     
-    // 1. Create or Get Data Source (POST)
     const dsBody = {
       dataStreamId: streamId,
       dataStreamName: 'StrAct Z Sync',
-      type: 'derived',
+      type: 'raw',
       application: { name: 'StrActZ' },
       dataType: { 
         name: ds.type,
         field: [{ name: ds.type.split('.').pop(), format: ds.values[0].intVal !== undefined ? 'integer' : 'floatPoint' }]
       },
-      device: { manufacturer: 'StrActZ', model: 'VirtualTracker', type: 'phone', uid: `user_${userId}` }
+      device: { manufacturer: 'StrActZ', model: 'VirtualTracker', type: 'phone', uid: 'manual' }
     };
 
-    const dsResponse = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources`, {
-      method: 'POST',
+    const dsResponse = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${streamId}`, {
+      method: 'PUT',
       headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
       body: JSON.stringify(dsBody)
     });
 
-    if (!dsResponse.ok && dsResponse.status !== 409) {
+    if (!dsResponse.ok) {
       const err = await dsResponse.json();
       console.error(`[Google Fit] Data source creation failed:`, err);
     }
@@ -268,7 +268,7 @@ async function getTodayStats(userId, forceRefresh = false) {
   const nanoStart = BigInt(startOfDay) * 1000000n;
   const nanoEnd = BigInt(endTime) * 1000000n;
   const datasetId = `${nanoStart}-${nanoEnd}`;
-  const manualStream = `derived:com.google.step_count.delta:me:StrActZ:stract-z-sync`;
+  const manualStream = `raw:com.google.step_count.delta:me:StrActZ:VirtualTracker:manual:stract-z-sync`;
 
   const [officialRes, manualRes, listRes] = await Promise.all([
     fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
