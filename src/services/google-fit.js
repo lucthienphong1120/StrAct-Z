@@ -261,13 +261,11 @@ async function getTodayStats(userId, forceRefresh = false) {
     endTimeMillis: endTime
   };
 
-  // Query 2: Manual Sync Steps (Specific source)
-  const manualBody = {
-    aggregateBy: [{ dataSourceId: 'raw:com.google.step_count.delta:me:StrActZ:stract-z-sync' }, { dataSourceId: 'derived:com.google.step_count.delta:me:StrActZ:stract-z-sync' }],
-    bucketByTime: { durationMillis: 86400000 },
-    startTimeMillis: startOfDay,
-    endTimeMillis: endTime
-  };
+  // Query 2: Manual Sync Steps (Direct Dataset Query)
+  const nanoStart = startOfDay * 1000000;
+  const nanoEnd = endTime * 1000000;
+  const datasetId = `${nanoStart}-${nanoEnd}`;
+  const manualStream = `derived:com.google.step_count.delta:me:StrActZ:stract-z-sync`;
 
   const [officialRes, manualRes] = await Promise.all([
     fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
@@ -275,10 +273,9 @@ async function getTodayStats(userId, forceRefresh = false) {
       headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
       body: JSON.stringify(officialBody)
     }),
-    fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(manualBody)
+    fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${manualStream}/datasets/${datasetId}`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${tokens.access_token}` }
     })
   ]);
 
@@ -294,8 +291,8 @@ async function getTodayStats(userId, forceRefresh = false) {
 
   if (manualRes.ok) {
     const data = await manualRes.json();
-    if (data.bucket && data.bucket[0] && data.bucket[0].dataset && data.bucket[0].dataset[0].point) {
-      syncedSteps = data.bucket[0].dataset[0].point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
+    if (data.point) {
+      syncedSteps = data.point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
     }
   }
 
