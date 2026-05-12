@@ -567,7 +567,11 @@ async function generateAndUpload() {
     
     const result = await api('/generate-and-upload', { method: 'POST', body: overrideConfig });
     if (result.success) {
-      showToast(`Uploaded to Strava! Activity: ${result.activity?.activityName || 'Done'}`, 'success');
+      let msg = `Uploaded to Strava! Activity: ${result.activity?.activityName || 'Done'}`;
+      if (result.activity?.googleFitSynced) {
+        msg += `\n✨ Google Fit: +${result.activity.googleFitSteps} steps synced!`;
+      }
+      showToast(msg, 'success');
     } else {
       if (result.message === 'VIP_REQUIRED') {
         showToast('Daily limit reached (2 activities/day). Contact Admin to upgrade.', 'warning');
@@ -589,7 +593,11 @@ async function uploadActivity(id) {
   try {
     const result = await api(`/upload/${id}`, { method: 'POST' });
     if (result.success) {
-      showToast('Uploaded successfully!', 'success');
+      let msg = 'Uploaded successfully!';
+      if (result.googleFitSynced) {
+        msg += `\n✨ Google Fit: +${result.googleFitSteps} steps synced!`;
+      }
+      showToast(msg, 'success');
     } else {
       showToast(result.error || 'Upload failed', 'error');
     }

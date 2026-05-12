@@ -227,7 +227,8 @@ async function uploadActivity(userId, activity) {
     }
   }
 
-  return { success: true };
+  const totalSteps = dataSources.find(ds => ds.type === 'com.google.step_count.delta')?.values[0].intVal || 0;
+  return { success: true, steps: totalSteps };
 }
 
 // ─── Caching Layer ──────────────────────────────────────────────────────────

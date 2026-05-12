@@ -381,6 +381,7 @@ router.post('/generate-and-upload', async (req, res) => {
 
     // Optional Google Fit Sync
     let googleFitSynced = false;
+    let googleFitSteps = 0;
     if (config.sync_google_fit === 'true') {
       try {
         const fullActivity = (await db.getActivities(req.user.id, 1))[0];
@@ -389,6 +390,7 @@ router.post('/generate-and-upload', async (req, res) => {
           activity_type: ov.activity_type || config.activity_type
         });
         googleFitSynced = gfResult.success;
+        googleFitSteps = gfResult.steps;
       } catch (e) { console.error('Google Fit Sync failed:', e); }
     }
 
@@ -399,7 +401,8 @@ router.post('/generate-and-upload', async (req, res) => {
         activityName: activity.activityName,
         distanceKm: activity.distanceKm,
         stravaActivityId: finalStatus.activity_id,
-        googleFitSynced
+        googleFitSynced,
+        googleFitSteps
       },
     });
   } catch (err) {
@@ -433,17 +436,19 @@ router.post('/upload/:id', async (req, res) => {
     // Optional Google Fit Sync for previous activity
     const config = await db.getAllConfig(req.user.id);
     let googleFitSynced = false;
+    let googleFitSteps = 0;
     if (config.sync_google_fit === 'true') {
       try {
-        await googleFit.uploadActivity(req.user.id, {
+        const gfResult = await googleFit.uploadActivity(req.user.id, {
           ...activity,
           activity_type: config.activity_type
         });
         googleFitSynced = true;
+        googleFitSteps = gfResult.steps;
       } catch (e) { console.error('Google Fit Sync failed for manual upload:', e); }
     }
 
-    res.json({ success: true, stravaActivityId: finalStatus.activity_id, googleFitSynced });
+    res.json({ success: true, stravaActivityId: finalStatus.activity_id, googleFitSynced, googleFitSteps });
   } catch (err) {
     console.error('Upload error:', err);
     if (req.params.id) {
