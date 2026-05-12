@@ -118,7 +118,8 @@ async function loadActivities() {
     const range = document.getElementById('historyFilterRange')?.value || '7_days';
     if (range !== 'total') {
       let days = 7;
-      if (range === '3_days') days = 3;
+      if (range === 'today') days = 1;
+      else if (range === '3_days') days = 3;
       else if (range === '5_days') days = 5;
       else if (range === '7_days') days = 7;
       else if (range === '14_days') days = 14;
@@ -269,7 +270,8 @@ async function loadStravaActivities(forceRefresh = false) {
     let afterQuery = '';
     if (range !== 'total') {
       let days = 7;
-      if (range === '3_days') days = 3;
+      if (range === 'today') days = 1;
+      else if (range === '3_days') days = 3;
       else if (range === '5_days') days = 5;
       else if (range === '7_days') days = 7;
       else if (range === '14_days') days = 14;
@@ -352,11 +354,12 @@ function changeStravaPage(delta) {
 }
 
 async function loadInsights(forceRefresh = false) {
-  const range = document.getElementById('insightsTimeRange').value || 14;
+  const rangeVal = document.getElementById('insightsTimeRange').value || 14;
+  const days = rangeVal === 'today' ? 1 : parseInt(rangeVal);
   try {
     const refreshQuery = forceRefresh ? '&refresh=true' : '';
-    const activities = await api(`/insights?days=${range}${refreshQuery}`);
-    updateActivityChart(activities, parseInt(range));
+    const activities = await api(`/insights?days=${days}${refreshQuery}`);
+    updateActivityChart(activities, days);
   } catch (err) {
     console.error('Insights error:', err);
   }
