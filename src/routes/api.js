@@ -606,7 +606,7 @@ router.post('/account/activate-vip', async (req, res) => {
 });
 
 // Clear All Queue for Today
-router.post('/google-fit/clear-queue', authMiddleware, async (req, res) => {
+router.post('/google-fit/clear-queue', async (req, res) => {
   try {
     const now = new Date();
     const hanoiDateStr = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
