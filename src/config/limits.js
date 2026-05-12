@@ -165,7 +165,7 @@ const LIMITS = {
   activity_type: {
     label: 'Loại hoạt động (Activity Type).',
     desc_extra: 'Tác dụng: Áp dụng hệ số nhân Dist/Pace riêng biệt cho từng loại.',
-    type: 'array',
+    type: 'string',
     default: 'Random',
     default_label: 'Random (60% Run, 30% Walk, 10% Ride)',
     choices: ['Random', 'Run', 'Walk', 'Ride'],
@@ -257,10 +257,10 @@ function getLimits(role = 'normal') {
   for (const key in LIMITS) {
     const item = LIMITS[key];
     if (item.type) {
-      const min_val = (item.min && typeof item.min === 'object' ? item.min[role] : item.min) ||
-        (item.min_range ? item.min_range[role] : 0);
-      const max_val = (item.max && typeof item.max === 'object' ? item.max[role] : item.max) ||
-        (item.max_range ? item.max_range[role] : 0);
+      const min_val = (item.min && typeof item.min === 'object' ? item.min[role] : item.min) ??
+        (item.min_range ? item.min_range[role] : undefined);
+      const max_val = (item.max && typeof item.max === 'object' ? item.max[role] : item.max) ??
+        (item.max_range ? item.max_range[role] : undefined);
 
       result[key] = {
         ...item,
