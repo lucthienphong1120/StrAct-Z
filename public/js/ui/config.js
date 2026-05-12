@@ -108,7 +108,8 @@ function updateDynamicTooltips() {
     map_locked: 'tipMapLocked',
     home_count: 'tipHomePoints',
     work_count: 'tipWorkPoints',
-    scale_radius: 'tipScaleRadius'
+    scale_radius: 'tipScaleRadius',
+    google_fit_steps_info: 'tipGfSteps'
   };
 
   for (const [key, tipId] of Object.entries(tipMapping)) {
