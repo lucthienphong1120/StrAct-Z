@@ -88,3 +88,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] hướng dẫn cách bỏ vip của 1 tài khoản
 + [x] update README.md thành các file riêng lẻ trong folder docs (phần setup, hướng dẫn use, kiến trúc...) - đồng thời cập nhật AI Rules, giảm phụ thuộc file README (nội dung bây h sẽ reference tới docs)
 + [x] trace và debug thực tế vấn đề đồng bộ bước chân fit khi tạo hoạt động (do sai tên field)
++ [ ] sau khi đã chốt và debug xong issue đồng bộ gg fit chuẩn thì thêm label (counted số bước chân ở event trong Local Generated History) -> cạnh label của quận

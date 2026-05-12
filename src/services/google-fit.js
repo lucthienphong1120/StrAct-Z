@@ -292,20 +292,28 @@ async function getTodayStats(userId, forceRefresh = false) {
     allSources = listData.dataSource ? listData.dataSource.map(ds => ds.dataStreamId) : [];
   }
 
-  // 2. Discover our stream ID
-  const manualStream = allSources.find(s => s.includes('com.google.step_count.delta') && s.includes('StrActZ') && s.startsWith('raw:')) || 'raw:com.google.step_count.delta:me:StrActZ:VirtualTracker:manual:stract-z-sync';
+  // 2. Discover our stream ID (be flexible with 'StrActZ' vs 'StrAct Z')
+  const manualStream = allSources.find(s => 
+    s.includes('com.google.step_count.delta') && 
+    (s.includes('StrActZ') || s.includes('StrAct Z')) && 
+    s.startsWith('raw:')
+  );
 
   // 3. Query both official and manual data
+  const officialPromise = fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(officialBody)
+  });
+
   const [officialRes, manualRes] = await Promise.all([
-    fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(officialBody)
-    }),
-    fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${manualStream}/datasets/${datasetId}`, {
-      method: 'GET',
-      headers: { 'Authorization': `Bearer ${tokens.access_token}` }
-    })
+    officialPromise,
+    manualStream 
+      ? fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${manualStream}/datasets/${datasetId}`, {
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${tokens.access_token}` }
+        })
+      : Promise.resolve({ ok: false, status: 404 })
   ]);
 
   let googleTotal = 0;
