@@ -252,6 +252,7 @@ function onStravaFilterChange() {
 async function refreshCloudData() {
   showToast('Refreshing cloud data...', 'info');
   await Promise.all([
+    loadStats(true),
     loadStravaActivities(true),
     loadInsights(true)
   ]);

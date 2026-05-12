@@ -142,7 +142,7 @@ async function uploadActivity(userId, activity) {
     body: JSON.stringify(sessionBody)
   });
 
-  // 2. Insert DataSets (Distance, Speed, Steps, Heart Rate)
+  // 2. Insert DataSets (Distance, Speed, Steps, Calories, Heart Rate)
   const dataSources = [
     {
       type: 'com.google.distance.delta',
@@ -158,8 +158,23 @@ async function uploadActivity(userId, activity) {
       type: 'com.google.step_count.delta',
       dataType: 'com.google.step_count.delta',
       values: [{ intVal: Math.round(activity.distance_km * (activityType === 7 ? 1400 : 1250)) }] // estimated steps
+    },
+    {
+      type: 'com.google.calories.expended',
+      dataType: 'com.google.calories.expended',
+      values: [{ fpVal: activity.distance_km * (activityType === 1 ? 25 : 65) }] // rough estimate kcal
     }
   ];
+
+  // Optional Heart Rate
+  if (activity.heart_rate_enabled === 'true' || activity.avg_hr) {
+    const avgHr = activity.avg_hr || 140;
+    dataSources.push({
+      type: 'com.google.heart_rate.bpm',
+      dataType: 'com.google.heart_rate.bpm',
+      values: [{ fpVal: parseFloat(avgHr) }]
+    });
+  }
 
   for (const ds of dataSources) {
     const streamId = `raw:${ds.type}:me:StrActZ:${sessionId}`;

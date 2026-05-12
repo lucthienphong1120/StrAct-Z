@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.37)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.38)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.37). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.38). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -41,6 +41,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.38 (2026-05-12)
+- **UI Refresh Bug**: Fixed issue where Google Fit steps wouldn't update when clicking the cloud refresh button due to missing `loadStats(true)` call.
+- **Google Fit Enhancement**: Added Calories and Heart Rate synchronization to the Google Fit upload logic.
 
 ### v1.50.37 (2026-05-12)
 - **Validation Fix**: Resolved the "You can select up to 0 type of activity" bug by correctly defining `activity_type` as a string and fixing the default limit logic in `getLimits`.
