@@ -42,6 +42,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.50.32 (2026-05-12)
+- **Darker Grey Fallback**: Darkened the fallback grey variables (`#4b5563`) for a more "Stealth" and premium feel.
+- **Premium Gradients Overhaul**: Updated `--gradient-primary` for both Fallback and Normal themes to use multi-stop gradients (starting from deep dark) mimicking the VIP aesthetic.
+- **UI Depth**: Enhanced `--shadow-glow` and `--body-glow` intensity for better visual depth in non-VIP themes.
+
 ### v1.50.31 (2026-05-12)
 - **Theme Fallback Overhaul**: Changed default CSS variables to grey/neutral to prevent orange flash for VIP users.
 - **Role-Based Classes**: Implemented `.is-normal` class for the Strava Orange theme and updated logic to toggle between `.is-normal` and `.is-vip`.
