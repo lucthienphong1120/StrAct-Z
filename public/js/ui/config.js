@@ -682,6 +682,26 @@ async function refreshGoogleFitStats(forceRefresh = false) {
   }
 }
 
+async function clearQueue() {
+  if (!confirm('Bạn có chắc chắn muốn xóa toàn bộ hàng chờ (Queue) của ngày hôm nay không?\nThao tác này sẽ xóa dữ liệu cả trên Google Fit Cloud.')) {
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/google-fit/clear-queue', { method: 'POST' });
+    const data = await res.json();
+    if (data.success) {
+      showToast(`Đã xóa ${data.count} hoạt động khỏi hàng chờ!`, 'success');
+      refreshGoogleFitStats();
+    } else {
+      showToast('Lỗi khi xóa hàng chờ: ' + data.error, 'error');
+    }
+  } catch (err) {
+    console.error('Clear queue error:', err);
+    showToast('Lỗi kết nối máy chủ', 'error');
+  }
+}
+
 // Reliable cross-window communication for Auth
 const authChannel = new BroadcastChannel('stract_z_auth');
 authChannel.onmessage = (event) => {

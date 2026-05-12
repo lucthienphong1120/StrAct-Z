@@ -29,7 +29,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.72</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.73</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -623,8 +623,10 @@
                     <div id="gfQueueRow"
                       style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; display:none;">
                       <span style="font-size:0.75rem; color:var(--text-muted);">⏳ Queue Sync:</span>
-                      <span style="font-size:0.8rem; color:var(--text-warning); font-weight:500;"
-                        id="gfQueueSteps">0</span>
+                      <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:0.8rem; color:var(--text-warning); font-weight:500;" id="gfQueueSteps">0</span>
+                        <button onclick="clearQueue()" class="btn-clear-queue" title="Clear all pending queue for today">Clear</button>
+                      </div>
                     </div>
                     <div
                       style="font-size:0.7rem; color:var(--text-muted); opacity:0.6; font-style:italic; line-height:1.4; border-top: 1px solid rgba(255,255,255,0.05); padding-top:8px;">

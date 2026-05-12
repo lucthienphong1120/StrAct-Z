@@ -34,7 +34,7 @@ const { validateConfig } = require('../utils/validation');
 router.post('/config', async (req, res) => {
   const updates = req.body;
   const role = req.user.role || 'normal';
-  
+
   const validation = validateConfig(updates, role);
   if (!validation.success) {
     return res.status(400).json({ error: validation.error });
@@ -165,15 +165,15 @@ router.get('/insights', async (req, res) => {
     const days = parseInt(req.query.days) || 14;
     const now = new Date();
     // 2 days buffer to handle timezones and late night uploads safely
-    const after = Math.floor((now.getTime() - (days + 2) * 24 * 60 * 60 * 1000) / 1000); 
-    
+    const after = Math.floor((now.getTime() - (days + 2) * 24 * 60 * 60 * 1000) / 1000);
+
     const forceRefresh = req.query.refresh === 'true';
     const activities = await stravaApi.getActivities(req.user.id, 1, 200, after, forceRefresh);
-    
+
     if (forceRefresh) {
-      console.log(`[Cloud Sync] Refreshed insights for user ${req.user.id}. Found ${activities.length} acts since ${new Date(after*1000).toISOString()}`);
+      console.log(`[Cloud Sync] Refreshed insights for user ${req.user.id}. Found ${activities.length} acts since ${new Date(after * 1000).toISOString()}`);
     }
-    
+
     res.json(activities);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -195,11 +195,11 @@ router.get('/strava-activities', async (req, res) => {
     const perPage = parseInt(req.query.per_page) || 10;
     const after = req.query.after ? parseInt(req.query.after) : null;
     const forceRefresh = req.query.refresh === 'true';
-    
+
     // Fetch WITHOUT 'after' to ensure Strava returns results in reverse-chronological order.
     // If 'after' is provided to the Strava API, it defaults to chronological (oldest first).
     let activities = await stravaApi.getActivities(req.user.id, page, perPage, null, forceRefresh);
-    
+
     // Filter by 'after' locally if needed
     if (after) {
       activities = activities.filter(a => {
@@ -210,14 +210,14 @@ router.get('/strava-activities', async (req, res) => {
 
     // Always sort descending (latest first)
     activities.sort((a, b) => new Date(b.start_date || b.start_date_local) - new Date(a.start_date || a.start_date_local));
-    
+
     if (forceRefresh || page === 1) {
       console.log(`[Strava API] User ${req.user.id} fetched ${activities.length} acts (Page ${page}, After: ${after})`);
       if (activities.length > 0) {
         console.log(`[Strava API] Newest act: ${activities[0].name} (${activities[0].start_date})`);
       }
     }
-    
+
     res.json(activities);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -230,7 +230,7 @@ router.post('/generate', async (req, res) => {
     const config = await db.getAllConfig(req.user.id);
     const ov = req.body || {};
 
-    const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
+    const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
     const localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
     let stravaActivities = [];
     if (await stravaApi.isAuthenticated(req.user.id)) {
@@ -243,7 +243,7 @@ router.post('/generate', async (req, res) => {
 
     const sysL = systemLimits.getLimits(req.user.role || 'normal');
     if (stravaActivities.length >= sysL.daily_upload_limit.max) {
-       return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
+      return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
     }
 
     const activity = await generateActivity({
@@ -311,7 +311,7 @@ router.post('/generate-and-upload', async (req, res) => {
     const config = await db.getAllConfig(req.user.id);
     const ov = req.body || {};
 
-    const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
+    const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
     const localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
     let stravaActivities = [];
     if (await stravaApi.isAuthenticated(req.user.id)) {
@@ -324,7 +324,7 @@ router.post('/generate-and-upload', async (req, res) => {
 
     const sysL = systemLimits.getLimits(req.user.role || 'normal');
     if (stravaActivities.length >= sysL.daily_upload_limit.max) {
-       return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
+      return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
     }
 
     const activity = await generateActivity({
@@ -539,13 +539,13 @@ router.post('/scheduler', async (req, res) => {
 
   const s = validation.sanitized;
   await scheduler.updateSchedule(
-    req.user.id, 
-    s.schedule_enabled === 'true', 
-    s.schedule_time, 
-    parseInt(s.schedule_count_min), 
+    req.user.id,
+    s.schedule_enabled === 'true',
+    s.schedule_time,
+    parseInt(s.schedule_count_min),
     parseInt(s.schedule_count_max)
   );
-  
+
   res.json(await scheduler.getStatus(req.user.id));
 });
 
@@ -605,4 +605,32 @@ router.post('/account/activate-vip', async (req, res) => {
   }
 });
 
+// Clear All Queue for Today
+router.post('/google-fit/clear-queue', authMiddleware, async (req, res) => {
+  try {
+    const now = new Date();
+    const hanoiDateStr = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+
+    // Find all uploaded activities for today
+    const activities = await db.getActivitiesByDate(req.user.id, hanoiDateStr);
+    const uploadedToday = activities.filter(a => a.upload_status === 'uploaded');
+
+    console.log(`[API] Clearing ${uploadedToday.length} activities from queue for ${hanoiDateStr}`);
+
+    for (const activity of uploadedToday) {
+      try {
+        await googleFit.deleteActivity(req.user.id, activity);
+      } catch (gfErr) {
+        console.error(`[Google Fit] Clear failed for activity ${activity.id}:`, gfErr);
+      }
+      await db.deleteActivity(req.user.id, activity.id, true);
+    }
+
+    res.json({ success: true, count: uploadedToday.length });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
+
