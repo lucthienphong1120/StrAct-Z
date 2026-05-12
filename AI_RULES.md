@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.51)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.52)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.51). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.52). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -60,8 +60,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Error Handling**: Resolved a 500 error on the stats API by gracefully handling cases where the manual data source has not been created yet for a user.
 - **UI Enhancement**: Added a breakdown view in the Google Fit account card that appears when manual sync data is present.
 
-### v1.50.41 (2026-05-12)
-- **Aggregation Fix**: Improved Google Fit step calculation by explicitly querying both the general step count stream and the StrActZ manual sync source. This ensures that synced activities appear in the dashboard immediately, even before Google's backend performs its final merge.
+### Google Fit Engine (v1.50.52+)
+- **Dynamic Discovery**: The system no longer assumes a `streamId` format. It creates a source via `POST`, retrieves the Google-assigned ID, and later discovers it by scanning the user's data sources for `application.name === 'StrActZ'`.
+- **Field-Exact Mapping**: Strictly adheres to Google Fit REST API schema (e.g., `steps` field for step count).
+- **Dual-Query Aggregation**: 
+  - Query 1: `dataset:aggregate` for official merged data.
+  - Query 2: `datasets.get` for the specific StrAct Z raw stream.
+- **Precision Management**: Uses `BigInt` for nanosecond range identifiers in dataset URLs.
 - **Sync Reliability**: Refined the aggregation loop to sum up all returned datasets for a complete daily total.
 
 ### v1.50.40 (2026-05-12)
@@ -69,7 +74,16 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Server-Side Reporting**: Enhanced API responses and services to return the calculated step count for better logging and user awareness.
 
 ### v1.50.39 (2026-05-12)
-- **Google Fit Reliability**: Fixed Data Source naming convention to use a consistent `streamId`. This prevents hitting the limit on data sources and ensures Google Fit correctly aggregates the manual sync data.
+- **Google Fit Sync Standards**: 
+  - **Source Creation**: Always use `POST` to `/dataSources` and read the `dataStreamId` from the response. Do NOT assume a naming format.
+  - **Stream Discovery**: Use the `allSources` list to find the stream ID where `application.name === 'StrActZ'` and contains the target data type (e.g., `com.google.step_count.delta`).
+  - **Field Mapping (CRITICAL)**: Standard Google Fit types require specific field names:
+    - `com.google.step_count.delta` -> field: `steps` (integer)
+    - `com.google.distance.delta` -> field: `distance` (floatPoint)
+    - `com.google.speed` -> field: `speed` (floatPoint)
+    - `com.google.calories.expended` -> field: `calories` (floatPoint)
+    - `com.google.heart_rate.bpm` -> field: `bpm` (floatPoint)
+  - **Precision**: Use `BigInt` for all nanosecond calculations (`ms * 1000000n`) to prevent precision loss.
 - **Improved Metadata**: Added virtual device info (manufacturer, model) to Google Fit data sources to improve data "trustworthiness" for Google's merging algorithms.
 
 ### v1.50.38 (2026-05-12)

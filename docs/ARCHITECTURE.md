@@ -32,8 +32,10 @@ The engine generates activities in two phases:
 - On server boot, it queries all active accounts and spawns independent cron jobs for any user with `schedule_enabled = 'true'`.
 - The jobs execute silently in the background, validating Strava limits (max 2 uploads per day) before generating and uploading routes.
 
-### 5. Google Fit Integration (`google-fit.js`)
-- **OAuth2 Protocol:** Uses standard Google OAuth2 flow to obtain and refresh tokens for the Fitness API.
-- **Data Source Management:** Automatically creates and updates a custom Data Source for each user to push "raw" activity data.
-- **Technical Detail:** The full stream identifier on Google Cloud is `raw:com.google.step_count.delta:me:StrActZ:stract-z-sync`. This naming convention ensures that StrAct Z data is professional, identifiable, and correctly aggregated within the Google Fit ecosystem.
-- **Dual-Stream Aggregation:** To provide immediate feedback, the system queries both the general Google Fit step stream and the specific `stract-z-sync` source, summing them to display real-time progress before Google's internal merging occurs.
+### 5. Google Fit Engine
+- **Dynamic Discovery (v1.50.50+):** The system does not assume a hardcoded `streamId`. It creates a source via `POST`, retrieves the Google-assigned ID, and later discovers it by scanning the user's data sources for `application.name === 'StrActZ'`.
+- **Field-Exact Mapping:** Strictly adheres to Google Fit REST API schema (e.g., `steps` field for `com.google.step_count.delta`) to ensure data acceptance.
+- **Dual-Query Aggregation:** 
+  - Query 1: `dataset:aggregate` for official merged data.
+  - Query 2: `datasets.get` for the specific StrAct Z raw stream discovered dynamically.
+- **Precision Management:** Uses `BigInt` for nanosecond range identifiers (`ms * 1000000n`) to prevent overflow in JavaScript numbers.

@@ -315,12 +315,10 @@ async function getTodayStats(userId, forceRefresh = false) {
     }
   }
 
-  let debugInfo = {
-    datasetId,
-    manualStream,
+  const debugInfo = {
     manualOk: manualRes.ok,
     manualStatus: manualRes.status,
-    allSources
+    pointCount: syncedSteps > 0 ? 1 : 0
   };
 
   if (manualRes.ok) {
