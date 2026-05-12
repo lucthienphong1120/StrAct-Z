@@ -185,8 +185,11 @@ async function uploadActivity(userId, activity) {
       dataStreamName: 'StrAct Z Sync',
       type: 'derived',
       application: { name: 'StrActZ' },
-      dataType: { name: ds.type },
-      device: { manufacturer: 'StrActZ', model: 'VirtualTracker', type: 'phone', uid: 'manual' }
+      dataType: { 
+        name: ds.type,
+        field: [{ name: ds.type.split('.').pop(), format: ds.values[0].intVal !== undefined ? 'integer' : 'floatPoint' }]
+      },
+      device: { manufacturer: 'StrActZ', model: 'VirtualTracker', type: 'phone', uid: `user_${userId}` }
     };
 
     const dsResponse = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources`, {
@@ -267,7 +270,7 @@ async function getTodayStats(userId, forceRefresh = false) {
   const datasetId = `${nanoStart}-${nanoEnd}`;
   const manualStream = `derived:com.google.step_count.delta:me:StrActZ:stract-z-sync`;
 
-  const [officialRes, manualRes] = await Promise.all([
+  const [officialRes, manualRes, listRes] = await Promise.all([
     fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
@@ -276,11 +279,21 @@ async function getTodayStats(userId, forceRefresh = false) {
     fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${manualStream}/datasets/${datasetId}`, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${tokens.access_token}` }
+    }),
+    fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${tokens.access_token}` }
     })
   ]);
 
   let officialSteps = 0;
   let syncedSteps = 0;
+  let allSources = [];
+
+  if (listRes.ok) {
+    const listData = await listRes.json();
+    allSources = listData.dataSource ? listData.dataSource.map(ds => ds.dataStreamId) : [];
+  }
 
   if (officialRes.ok) {
     const data = await officialRes.json();
@@ -293,7 +306,8 @@ async function getTodayStats(userId, forceRefresh = false) {
     datasetId,
     manualStream,
     manualOk: manualRes.ok,
-    manualStatus: manualRes.status
+    manualStatus: manualRes.status,
+    allSources
   };
 
   if (manualRes.ok) {
