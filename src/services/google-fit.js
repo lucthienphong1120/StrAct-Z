@@ -329,21 +329,23 @@ async function getTodayStats(userId, forceRefresh = false) {
     }
   }
 
-  for (const res of manualResponses) {
+  const manualDetails = [];
+  for (let i = 0; i < manualStreams.length; i++) {
+    const res = manualResponses[i];
+    const streamId = manualStreams[i];
     if (res.ok) {
       const data = await res.json();
-      if (data.point) {
-        syncedSteps += data.point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
-      }
+      const stepsInStream = data.point ? data.point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0) : 0;
+      syncedSteps += stepsInStream;
+      manualDetails.push({ streamId, ok: true, status: res.status, steps: stepsInStream });
+    } else {
+      manualDetails.push({ streamId, ok: false, status: res.status });
     }
   }
 
   // Queue Sync Logic:
   // Get all activities uploaded today from local DB to see what WE expect
-  console.log(`[Google Fit Debug] Querying local activities for date: ${hanoiDateStr}`);
   const localActs = await db.getActivitiesByDate(userId, hanoiDateStr);
-  console.log(`[Google Fit Debug] Found ${localActs.length} local acts for today. IDs:`, localActs.map(a => a.id));
-  
   const uploadedToday = localActs.filter(a => a.upload_status === 'uploaded');
   const expectedSyncedSteps = uploadedToday.reduce((sum, a) => {
     const activityType = a.activity_type === 'Walk' ? 7 : (a.activity_type === 'Ride' ? 1 : 8);
@@ -370,7 +372,7 @@ async function getTodayStats(userId, forceRefresh = false) {
       localActCount: localActs.length,
       localActIds: localActs.map(a => a.id),
       manualCount: manualStreams.length,
-      manualStreams,
+      manualDetails,
       googleTotal,
       expectedSyncedSteps
     }

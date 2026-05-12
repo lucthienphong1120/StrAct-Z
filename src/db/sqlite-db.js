@@ -297,9 +297,21 @@ async function getActivities(accountId, limit = 50) {
 
 async function getActivitiesByDate(accountId, dateStr) {
   const db = await getDb();
-  // route_start_time is stored as ISO string, e.g., '2026-05-10T12:00:00.000Z'
-  const datePattern = dateStr + '%';
-  return await db.all(`SELECT * FROM activities WHERE account_id = ? AND route_start_time LIKE ?`, [accountId, datePattern]);
+  // dateStr is 'YYYY-MM-DD' in Asia/Ho_Chi_Minh
+  // Calculate UTC range for this local date
+  const startLocal = new Date(`${dateStr}T00:00:00.000+07:00`);
+  const endLocal = new Date(`${dateStr}T23:59:59.999+07:00`);
+  
+  const startTime = startLocal.toISOString();
+  const endTime = endLocal.toISOString();
+
+  return await db.all(
+    `SELECT * FROM activities 
+     WHERE account_id = ? 
+     AND route_start_time >= ? 
+     AND route_start_time <= ?`, 
+    [accountId, startTime, endTime]
+  );
 }
 
 async function deleteActivity(accountId, id, hard = false) {
