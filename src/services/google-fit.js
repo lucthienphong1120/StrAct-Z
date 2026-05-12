@@ -177,9 +177,9 @@ async function uploadActivity(userId, activity) {
   }
 
   for (const ds of dataSources) {
-    const streamId = `raw:${ds.type}:me:StrActZ:${sessionId}`;
+    const streamId = `raw:${ds.type}:me:StrActZ:manual_sync`;
     
-    // Create Data Source
+    // Create Data Source with more metadata
     await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources`, {
       method: 'POST',
       headers: {
@@ -189,14 +189,20 @@ async function uploadActivity(userId, activity) {
       body: JSON.stringify({
         dataStreamName: ds.type,
         type: 'raw',
-        application: { name: 'StrAct Z' },
-        dataType: { name: ds.dataType, field: [{ name: ds.type.split('.').pop(), format: ds.values[0].intVal !== undefined ? 'integer' : 'floatPoint' }] }
+        application: { name: 'StrAct Z', version: '1.50.39' },
+        device: { manufacturer: 'StrActZ', model: 'VirtualTracker', type: 'phone', uid: userId.toString() },
+        dataType: { 
+          name: ds.dataType, 
+          field: [{ name: ds.type.split('.').pop(), format: ds.values[0].intVal !== undefined ? 'integer' : 'floatPoint' }] 
+        }
       })
     }).catch(() => {}); // Ignore if already exists
 
     // Patch Data Point
     const datasetId = `${nanoStart}-${nanoEnd}`;
-    await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${streamId}/datasets/${datasetId}`, {
+    console.log(`[Google Fit] Uploading ${ds.type} for user ${userId}: ${datasetId}`);
+    
+    const patchResponse = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${streamId}/datasets/${datasetId}`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${tokens.access_token}`,
@@ -214,6 +220,11 @@ async function uploadActivity(userId, activity) {
         }]
       })
     });
+
+    if (!patchResponse.ok) {
+      const errText = await patchResponse.text();
+      console.error(`[Google Fit] Patch failed for ${ds.type}:`, errText);
+    }
   }
 
   return { success: true };
