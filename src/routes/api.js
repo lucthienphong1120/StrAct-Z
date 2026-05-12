@@ -495,6 +495,15 @@ router.delete('/activities/:id', async (req, res) => {
   } catch (e) { /* ignore */ }
 
   // Hard delete from local DB
+  // Also delete from Google Fit if it was uploaded
+  if (activity.upload_status === 'uploaded') {
+    try {
+      await googleFit.deleteActivity(req.user.id, activity);
+    } catch (err) {
+      console.error(`[Google Fit] Delete failed for activity ${id}:`, err);
+    }
+  }
+
   await db.deleteActivity(req.user.id, id, true);
 
   res.json({

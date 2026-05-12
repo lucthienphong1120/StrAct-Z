@@ -242,7 +242,44 @@ async function uploadActivity(userId, activity) {
   return { success: true, steps: totalSteps };
 }
 
-// ─── Caching Layer ──────────────────────────────────────────────────────────
+async function deleteActivity(userId, activity) {
+  const tokens = await db.getGoogleFitTokens(userId);
+  if (!tokens) return;
+
+  const nanoStart = BigInt(new Date(activity.route_start_time).getTime()) * 1000000n;
+  const nanoEnd = nanoStart + BigInt(activity.duration || 0) * 1000000000n;
+  const datasetId = `${nanoStart}-${nanoEnd}`;
+
+  // 1. Delete Session
+  const sessionId = `stractz_${activity.id}`;
+  await fetch(`https://www.googleapis.com/fitness/v1/users/me/sessions/${sessionId}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${tokens.access_token}` }
+  });
+
+  // 2. Discover and Delete Data Points from our streams
+  const listRes = await fetch('https://www.googleapis.com/fitness/v1/users/me/dataSources', {
+    headers: { 'Authorization': `Bearer ${tokens.access_token}` }
+  });
+  
+  if (listRes.ok) {
+    const listData = await listRes.json();
+    const myStreams = listData.dataSource
+      ? listData.dataSource
+          .filter(ds => ds.dataStreamId.includes('StrActZ'))
+          .map(ds => ds.dataStreamId)
+      : [];
+
+    for (const streamId of myStreams) {
+      await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${streamId}/datasets/${datasetId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${tokens.access_token}` }
+      });
+    }
+  }
+
+  return { success: true };
+}
 const statsCache = new Map(); // userId -> { data, expires }
 const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
