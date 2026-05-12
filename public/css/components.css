@@ -15,9 +15,9 @@
 
 .btn-primary {
   background: var(--gradient-primary);
-  color: white; box-shadow: 0 4px 15px rgba(252, 76, 2, 0.3);
+  color: white; box-shadow: 0 4px 15px var(--strava-orange-glow);
 }
-.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(252, 76, 2, 0.4); }
+.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px var(--strava-orange-glow); }
 
 .btn-secondary {
   background: var(--bg-card);
@@ -58,9 +58,9 @@
   background: var(--strava-orange); color: white;
   font-size: 1rem; padding: 14px 32px;
   border-radius: var(--radius-md);
-  box-shadow: 0 4px 20px rgba(252, 76, 2, 0.4);
+  box-shadow: 0 4px 20px var(--strava-orange-glow);
 }
-.btn-strava:hover { background: var(--strava-orange-dark); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(252, 76, 2, 0.5); }
+.btn-strava:hover { background: var(--strava-orange-dark); transform: translateY(-2px); box-shadow: 0 8px 30px var(--strava-orange-glow); }
 
 /* ─── Form Elements ───────────────────────────────────── */
 .form-group { margin-bottom: 1rem; }
@@ -108,7 +108,7 @@
   border-bottom: 1px solid rgba(42, 49, 80, 0.5);
   transition: var(--transition);
 }
-.activity-item:hover { background: rgba(252, 76, 2, 0.03); }
+.activity-item:hover { background: var(--strava-orange-glow); opacity: 0.8; }
 .activity-item:last-child { border-bottom: none; }
 
 .activity-name { font-weight: 500; font-size: 0.9rem; }

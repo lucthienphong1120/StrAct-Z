@@ -1,12 +1,13 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.31)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.30). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.31). Follow these guidelines strictly.
 
-## 🎨 VIP GOLD Theme
-- VIP users (detected via `userRole === 'vip'`) are distinguished by a **Gold/Amber** theme (`#f59e0b`).
-- Implementation: `document.body.classList.add('is-vip')` is called in `app.js`.
-- CSS variables like `--strava-orange` and `--gradient-primary` are overridden inside the `.is-vip` scope in `style.css`.
-- Use `var(--gradient-vip)` for VIP-specific badges and highlights.
+## 🎨 Theme Standards (v1.50.31+)
+- **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
+- **Normal User**: Distinguished by the **Strava Orange** theme (`#fc4c02`). Applied via `document.body.classList.add('is-normal')`.
+- **VIP User**: Distinguished by the **Gold/Amber** theme (`#f59e0b`). Applied via `document.body.classList.add('is-vip')`.
+- **Implementation**: The role-based class is applied in `loadStats()` (dashboard.js) or `initTheme()`.
+- **Design System**: Use variables like `--strava-orange`, `--gradient-primary`, and `--body-glow` instead of hardcoded hex/rgba values to ensure theme consistency.
 
 ## 🚀 Workflow & Deployment
 - **Repository**: The `StrAct-Z` workspace is a public Git repository.
@@ -40,6 +41,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.31 (2026-05-12)
+- **Theme Fallback Overhaul**: Changed default CSS variables to grey/neutral to prevent orange flash for VIP users.
+- **Role-Based Classes**: Implemented `.is-normal` class for the Strava Orange theme and updated logic to toggle between `.is-normal` and `.is-vip`.
+- **Variable Synchronization**: Replaced hardcoded orange hex/rgba values in `layout.css` and `components.css` with CSS variables (`--strava-orange`, `--strava-orange-glow`, etc.).
+- **Improved Initial Load**: Neutral fallback ensures a premium feel during the brief authentication/stats fetching phase.
 
 ### v1.50.30 (2026-05-11)
 - **Capitalization Fixes**: Standardized all tooltips and UI labels to Sentence Case.

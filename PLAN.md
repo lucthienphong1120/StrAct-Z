@@ -67,6 +67,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] check lại logic Auto Schedule min/max đang đặt từ 1-2 hoạt động/ngày nhưng sao thấy toàn random ra 2
 + [x] update lại hint của Heart Rate Zones (Target) và các giá trị thành chữ thường, tạo readonly config tương ứng để show về tỉ lệ hệ số distance và pace từ Activity Type -> đồng thời move min/max Distance (km) xuống gần
 + [x] test và debug lỗi tích hợp google fit (console log), thông báo khi connect/disconnect,...
++ [x] cấu hình fallback của theme mặc định các icon, tone màu xám, thay vì default màu cam của normal (tránh flash màu cam cho VIP user)
 + [ ] update config Time Range trong custom time (gfx only) default thành 00:00 (tức random time), nếu user đặt vào 00:00 cũng sẽ hiểu là random time trong ngày, chỉ cần Target Date là được
 + [x] check fix lại logic safe time, thời gian random ra sát nhau -> cái này chỉ thêm 1 thời gian để tránh không random ra, logic giống với Avoid Workhours, không thay đổi logic tạo sinh
 + [x] sử dụng cache layer cho số liệu từ Google Fit sync, bỏ nút refresh cạnh đó mà sử dụng chung nút refresh ở trên, tất cả dữ liệu sẽ load lại khi user nhấn nút refresh hoặc reset hoặc Ctrl+Shift+R hoặc F5, hoặc khi truy cập trang dashboard lần đầu (áp dụng tương tự cho data lấy về từ strava cloud và cả 2 tab: History và Insights)
@@ -81,5 +82,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] fix lỗi lưu, you can select up to 0 type of activity
 + [ ] responsive cho mobile
 + [ ] check logic luồng đồng bộ sang fit như nào (realtime hoặc upload previous được giống strava)
-+ [ ] 
++ [ ] hướng dẫn tôi cách bỏ vip của 1 tài khoản (tôi đang test, tôi sẽ ko xóa vội đâu)
 

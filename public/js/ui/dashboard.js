@@ -31,7 +31,9 @@ async function loadStats(forceRefresh = false) {
     window.userRole = stats.role || 'normal';
     if (window.userRole === 'vip') {
       document.body.classList.add('is-vip');
+      document.body.classList.remove('is-normal');
     } else {
+      document.body.classList.add('is-normal');
       document.body.classList.remove('is-vip');
     }
 
@@ -480,20 +482,39 @@ function toggleThemePreview() {
   
   if (window.userRole === 'vip') {
     const isNormal = document.body.classList.toggle('theme-preview-normal');
+    if (isNormal) {
+      document.body.classList.add('is-normal');
+      document.body.classList.remove('is-vip');
+    } else {
+      document.body.classList.remove('is-normal');
+      document.body.classList.add('is-vip');
+    }
     localStorage.setItem('stractz_theme_preview', isNormal ? 'normal' : 'vip');
     if (btn) btn.innerHTML = isNormal ? '✨ Restore VIP Gold Theme' : '👁️ Preview Normal Theme';
     showToast(isNormal ? 'Switched to Normal Theme (Preview)' : 'Restored VIP Gold Theme', 'success');
   } else {
     const isVipPreview = document.body.classList.toggle('is-vip');
+    document.body.classList.toggle('is-normal', !isVipPreview);
     if (btn) btn.innerHTML = isVipPreview ? '🔙 Switch Back to Normal' : '👁️ Preview VIP Gold Theme';
     showToast(isVipPreview ? 'Previewing VIP Gold Theme' : 'Switched back to Normal Theme', 'info');
   }
 }
 
 async function initTheme() {
-  const stats = await api('/stats').catch(() => ({ role: 'normal' }));
-  if (stats.role === 'vip' && localStorage.getItem('stractz_theme_preview') === 'normal') {
-    document.body.classList.add('theme-preview-normal');
+  try {
+    const stats = await api('/stats').catch(() => ({ role: 'normal' }));
+    if (stats.role === 'vip') {
+      if (localStorage.getItem('stractz_theme_preview') === 'normal') {
+        document.body.classList.add('is-normal');
+        document.body.classList.add('theme-preview-normal');
+      } else {
+        document.body.classList.add('is-vip');
+      }
+    } else {
+      document.body.classList.add('is-normal');
+    }
+  } catch (e) {
+    document.body.classList.add('is-normal');
   }
 }
 

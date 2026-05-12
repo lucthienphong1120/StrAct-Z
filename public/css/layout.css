@@ -19,7 +19,7 @@ body::before {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background:
-    radial-gradient(ellipse at 20% 0%, rgba(252, 76, 2, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 0%, var(--body-glow) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
@@ -123,7 +123,7 @@ body::before {
   font-size: 1.1rem; margin-bottom: 0;
 }
 
-.stat-card .stat-icon.orange { background: rgba(252, 76, 2, 0.15); }
+.stat-card .stat-icon.orange { background: var(--strava-orange-glow); }
 .stat-card .stat-icon.green { background: rgba(16, 185, 129, 0.15); }
 .stat-card .stat-icon.blue { background: rgba(59, 130, 246, 0.15); }
 .stat-card .stat-icon.purple { background: rgba(139, 92, 246, 0.15); }
@@ -153,7 +153,7 @@ body::before {
   transition: var(--transition);
 }
 
-.card:hover { border-color: rgba(252, 76, 2, 0.3); }
+.card:hover { border-color: var(--strava-orange-glow); }
 
 .card-header {
   display: flex; align-items: center; justify-content: space-between;
