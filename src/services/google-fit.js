@@ -130,7 +130,7 @@ async function uploadActivity(userId, activity) {
     startTimeMillis: startTime,
     endTimeMillis: endTime,
     activityType: activityType,
-    application: { name: 'StrAct Z', version: '1.50.60', packageName: 'com.stractz.sync' }
+    application: { name: 'StrActZ', version: '1.50.67', packageName: 'com.stractz.sync' }
   };
 
   await fetch(`https://www.googleapis.com/fitness/v1/users/me/sessions/${sessionId}`, {
@@ -188,7 +188,7 @@ async function uploadActivity(userId, activity) {
     // 1. Create or Get Data Source (POST)
     const dsBody = {
       type: 'raw',
-      application: { name: 'StrAct Z', packageName: 'com.stractz.sync' },
+      application: { name: 'StrActZ', packageName: 'com.stractz.sync' },
       dataType: { 
         name: ds.type,
         field: [{ name: getFieldName(ds.type), format: ds.values[0].intVal !== undefined ? 'integer' : 'floatPoint' }]
@@ -290,6 +290,7 @@ async function getTodayStats(userId, forceRefresh = false) {
   if (listRes.ok) {
     const listData = await listRes.json();
     allSources = listData.dataSource ? listData.dataSource.map(ds => ds.dataStreamId) : [];
+    console.log('[Google Fit Discovery] All sources found:', allSources);
   }
 
   // 2. Discover all our manual streams (be flexible with 'StrActZ' vs 'StrAct Z')
