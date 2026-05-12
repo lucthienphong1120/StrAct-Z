@@ -176,6 +176,14 @@ async function uploadActivity(userId, activity) {
     });
   }
 
+  const getFieldName = (type) => {
+    if (type.includes('step_count')) return 'steps';
+    if (type.includes('distance')) return 'distance';
+    if (type.includes('calories')) return 'calories';
+    if (type.includes('heart_rate')) return 'bpm';
+    return type.split('.').pop();
+  };
+
   for (const ds of dataSources) {
     // 1. Create or Get Data Source (POST)
     const dsBody = {
@@ -183,7 +191,7 @@ async function uploadActivity(userId, activity) {
       application: { name: 'StrActZ' },
       dataType: { 
         name: ds.type,
-        field: [{ name: ds.type.split('.').pop(), format: ds.values[0].intVal !== undefined ? 'integer' : 'floatPoint' }]
+        field: [{ name: getFieldName(ds.type), format: ds.values[0].intVal !== undefined ? 'integer' : 'floatPoint' }]
       },
       device: { manufacturer: 'StrActZ', model: 'VirtualTracker', type: 'phone', uid: 'manual' }
     };
@@ -282,7 +290,7 @@ async function getTodayStats(userId, forceRefresh = false) {
   }
 
   // 2. Discover our stream ID
-  const manualStream = allSources.find(s => s.includes('com.google.step_count.delta') && s.includes('StrActZ')) || 'raw:com.google.step_count.delta:me:StrActZ:VirtualTracker:manual:stract-z-sync';
+  const manualStream = allSources.find(s => s.includes('com.google.step_count.delta') && s.includes('StrActZ') && s.startsWith('raw:')) || 'raw:com.google.step_count.delta:me:StrActZ:VirtualTracker:manual:stract-z-sync';
 
   // 3. Query both official and manual data
   const [officialRes, manualRes] = await Promise.all([
