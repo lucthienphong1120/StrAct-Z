@@ -1,6 +1,12 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.74)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.75)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.74). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.75). Follow these guidelines strictly.
+
+## 🛠️ Stability & Pre-Execution Rules (CRITICAL)
+- **Zero-Assumption Policy**: Never assume the name of middleware (e.g., `authMiddleware`), helper functions, or DB methods. **ALWAYS** read the first 50-100 lines of the target file to identify established patterns and variable names.
+- **Syntax Integrity**: Before applying any edit, virtually "lint" the code. Ensure all backticks, quotes, and braces are balanced.
+- **File Integrity**: Avoid using shell commands (PowerShell/Bash) to append or modify code blocks if they contain special characters (`\`, `"`, `` ` ``). Use `replace_file_content` with precise context to maintain file encoding and structure.
+- **Server Health First**: Any change to `server.js` or `src/routes/` must be treated as high-risk. Verify that exports (`module.exports`) are preserved at the end of the file.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
