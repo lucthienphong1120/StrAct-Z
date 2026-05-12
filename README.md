@@ -1,4 +1,4 @@
-# 🏃 StrAct Z v1.50.12
+# 🏃 StrAct Z
 
 **StrAct Z** (Strava Auto Activity Generator) is a robust, multi-tenant backend platform that automatically generates hyper-realistic GPS running, walking, and cycling activities and syncs them to Strava.
 
@@ -46,10 +46,19 @@ For detailed information, please refer to our documentation guides:
 
 ## 📋 Changelog
 
+### v1.50.35 (2026-05-12)
+- **Documentation**: Added manual VIP downgrade instructions to README for easier testing and troubleshooting.
+
+### v1.50.34 (2026-05-12)
+- **Fix**: Resolved VIP logo issues (empty icon box and incorrect text colors).
+
+### v1.50.33 (2026-05-12)
+- **UI Refinement**: Switched to solid text for Normal theme titles and stats to improve readability.
+
+### v1.50.32 (2026-05-12)
+- **Aesthetics**: Implemented darker grey fallback and premium gradients across all themes.
+
 ### v1.50.12 (2026-05-11)
-- **Google Fit UI Polish**: Integrated the official Google Fit logo and refined the status display text for a more premium look.
-- **Visual Branding**: Updated both connection and connected states to use consistent Google Fit branding.
-- **Maintenance**: Updated Service Worker cache version.
 
 ### v1.50.11 (2026-05-11)
 - **Fix Scheduler Bug**: Resolved an issue where "Min Count" would reset from 0 to 1 after a page reload due to incorrect falsy value handling in the UI.
@@ -370,6 +379,16 @@ The project uses high-quality administrative boundary data for Hanoi's 12 urban 
 
 ---
 *Disclaimer: This project is intended for educational purposes and testing API integrations. Please adhere to Strava's API terms of service.*
+
+## 🛠️ Testing & Troubleshooting
+
+### Removing VIP Status (Manual Override)
+If you need to downgrade an account to 'Normal' for testing purposes, you can use the following Node.js command in your terminal (replace `YOUR_USERNAME` with the actual username):
+
+```bash
+node -e "require('./src/db/sqlite-db').getDb().then(db => db.run(\"UPDATE accounts SET role = 'normal' WHERE username = 'YOUR_USERNAME'\").then(() => { console.log('✅ Account downgraded to Normal'); process.exit(0); }))"
+```
+*Note: You must log out and log back in (or refresh the page) for the changes to take effect in your session.*
 
 ## Google Fit API Integration Guide
 

@@ -85,5 +85,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] fix lỗi lưu, you can select up to 0 type of activity
 + [ ] responsive cho mobile
 + [ ] check logic luồng đồng bộ sang fit như nào (realtime hoặc upload previous được giống strava)
-+ [ ] hướng dẫn tôi cách bỏ vip của 1 tài khoản (tôi đang test, tôi sẽ ko xóa vội đâu)
-
++ [x] hướng dẫn tôi cách bỏ vip của 1 tài khoản (tôi đang test, tôi sẽ ko xóa vội đâu) - đã update vào README.md (v1.50.35)
