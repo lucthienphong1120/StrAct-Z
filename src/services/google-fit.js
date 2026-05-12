@@ -177,12 +177,8 @@ async function uploadActivity(userId, activity) {
   }
 
   for (const ds of dataSources) {
-    // 1. Create or Update Data Source (PUT)
-    const streamId = `raw:${ds.type}:me:StrActZ:VirtualTracker:manual:stract-z-sync`;
-    
+    // 1. Create or Get Data Source (POST)
     const dsBody = {
-      dataStreamId: streamId,
-      dataStreamName: 'StrAct Z Sync',
       type: 'raw',
       application: { name: 'StrActZ' },
       dataType: { 
@@ -192,20 +188,25 @@ async function uploadActivity(userId, activity) {
       device: { manufacturer: 'StrActZ', model: 'VirtualTracker', type: 'phone', uid: 'manual' }
     };
 
-    const dsResponse = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${streamId}`, {
-      method: 'PUT',
+    const dsResponse = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources`, {
+      method: 'POST',
       headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
       body: JSON.stringify(dsBody)
     });
 
-    if (!dsResponse.ok) {
+    let streamId;
+    if (dsResponse.ok || dsResponse.status === 409) {
+      const dsData = await dsResponse.json();
+      streamId = dsData.dataStreamId;
+    } else {
       const err = await dsResponse.json();
       console.error(`[Google Fit] Data source creation failed:`, err);
+      continue;
     }
 
-    // Patch Data Point
+    // 2. Patch Data Point
     const datasetId = `${nanoStart}-${nanoEnd}`;
-    console.log(`[Google Fit] Uploading ${ds.type} for user ${userId}: ${datasetId}`);
+    console.log(`[Google Fit] Uploading to ${streamId}: ${datasetId}`);
     
     const patchResponse = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${streamId}/datasets/${datasetId}`, {
       method: 'PATCH',
@@ -268,9 +269,23 @@ async function getTodayStats(userId, forceRefresh = false) {
   const nanoStart = BigInt(startOfDay) * 1000000n;
   const nanoEnd = BigInt(endTime) * 1000000n;
   const datasetId = `${nanoStart}-${nanoEnd}`;
-  const manualStream = `raw:com.google.step_count.delta:me:StrActZ:VirtualTracker:manual:stract-z-sync`;
+  // 1. Fetch all data sources to find our dynamic ID
+  const listRes = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources`, {
+    method: 'GET',
+    headers: { 'Authorization': `Bearer ${tokens.access_token}` }
+  });
 
-  const [officialRes, manualRes, listRes] = await Promise.all([
+  let allSources = [];
+  if (listRes.ok) {
+    const listData = await listRes.json();
+    allSources = listData.dataSource ? listData.dataSource.map(ds => ds.dataStreamId) : [];
+  }
+
+  // 2. Discover our stream ID
+  const manualStream = allSources.find(s => s.includes('com.google.step_count.delta') && s.includes('StrActZ')) || 'raw:com.google.step_count.delta:me:StrActZ:VirtualTracker:manual:stract-z-sync';
+
+  // 3. Query both official and manual data
+  const [officialRes, manualRes] = await Promise.all([
     fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
@@ -279,21 +294,11 @@ async function getTodayStats(userId, forceRefresh = false) {
     fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${manualStream}/datasets/${datasetId}`, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${tokens.access_token}` }
-    }),
-    fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources`, {
-      method: 'GET',
-      headers: { 'Authorization': `Bearer ${tokens.access_token}` }
     })
   ]);
 
   let officialSteps = 0;
   let syncedSteps = 0;
-  let allSources = [];
-
-  if (listRes.ok) {
-    const listData = await listRes.json();
-    allSources = listData.dataSource ? listData.dataSource.map(ds => ds.dataStreamId) : [];
-  }
 
   if (officialRes.ok) {
     const data = await officialRes.json();
