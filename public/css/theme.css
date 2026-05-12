@@ -26,7 +26,8 @@
   --accent-purple: #8b5cf6;
   --accent-red: #ef4444;
   --accent-yellow: #f59e0b;
-  --gradient-primary: linear-gradient(135deg, #020617 0%, #0f172a 40%, #334155 75%, #4b5563 100%);
+  --gradient-primary: linear-gradient(135deg, #4b5563 0%, #6b7280 50%, #9ca3af 100%);
+  --gradient-premium: linear-gradient(135deg, #020617 0%, #0f172a 40%, #334155 75%, #4b5563 100%);
   --gradient-vip: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%);
   --gradient-dark: linear-gradient(135deg, #0a0e1a 0%, #111827 100%);
   --gradient-card: linear-gradient(145deg, rgba(26, 31, 53, 0.9), rgba(17, 24, 39, 0.9));
@@ -48,7 +49,8 @@
   --strava-orange-dark: #d43d00;
   --strava-orange-glow: rgba(252, 76, 2, 0.3);
   --border-focus: #fc4c02;
-  --gradient-primary: linear-gradient(135deg, #020617 0%, #0f172a 40%, #c2410c 75%, #fc4c02 100%);
+  --gradient-primary: linear-gradient(135deg, #fc4c02 0%, #ff6b35 50%, #ff8f5e 100%);
+  --gradient-premium: linear-gradient(135deg, #020617 0%, #0f172a 40%, #c2410c 75%, #fc4c02 100%);
   --shadow-glow: 0 0 30px rgba(252, 76, 2, 0.2);
   --body-glow: rgba(252, 76, 2, 0.1);
 }

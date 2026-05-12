@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.31)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.33)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.31). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.33). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -41,6 +41,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.33 (2026-05-12)
+- **Normal Theme Refinement**: Removed text gradients from `.logo` (title) and `.stat-value` (stats) in Normal/Fallback themes, using solid colors instead for better readability.
+- **Button Gradient Restoration**: Restored the original bright orange/grey gradients for buttons (`--gradient-primary`) to maintain UI consistency.
+- **Icon Premium Logic**: Introduced `--gradient-premium` specifically for icon boxes to keep the dark-start "VIP-like" aesthetic without affecting text clarity.
 
 ### v1.50.32 (2026-05-12)
 - **Darker Grey Fallback**: Darkened the fallback grey variables (`#4b5563`) for a more "Stealth" and premium feel.

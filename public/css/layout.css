@@ -43,8 +43,7 @@ body::before {
 .logo {
   display: flex; align-items: center; gap: 12px;
   font-size: 1.25rem; font-weight: 700;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  color: var(--strava-orange);
   text-decoration: none;
 }
 
@@ -54,11 +53,11 @@ body::before {
 
 .logo-icon {
   width: 36px; height: 36px;
-  background: var(--gradient-primary);
+  background: var(--gradient-premium);
   border-radius: var(--radius-sm);
   display: flex; align-items: center; justify-content: center;
   font-size: 1.2rem;
-  -webkit-text-fill-color: white;
+  color: white;
 }
 
 .header-actions { display: flex; align-items: center; gap: 12px; }
@@ -131,8 +130,7 @@ body::before {
 .stat-value {
   grid-area: value;
   font-size: 1.5rem; font-weight: 800;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  color: var(--strava-orange);
   line-height: 1;
 }
 
