@@ -650,15 +650,21 @@ async function refreshGoogleFitStats(forceRefresh = false) {
     const stepsEl = document.getElementById('gfTodaySteps');
     const officialEl = document.getElementById('gfOfficialSteps');
     const syncedEl = document.getElementById('gfSyncedSteps');
+    const queueEl = document.getElementById('gfQueueSteps');
+    const queueRow = document.getElementById('gfQueueRow');
     const breakdownEl = document.getElementById('gfBreakdown');
-    const syncEl = document.getElementById('gfLastSync');
+    const statusText = document.getElementById('gfStatusText');
+
+    console.log('[Google Fit Debug]', data);
 
     if (stepsEl) stepsEl.textContent = (data.steps || 0).toLocaleString();
     if (officialEl) officialEl.textContent = (data.officialSteps || 0).toLocaleString();
     if (syncedEl) syncedEl.textContent = (data.syncedSteps || 0).toLocaleString();
-    if (breakdownEl) {
-      breakdownEl.style.display = 'block';
-    }
+    if (queueEl) queueEl.textContent = (data.queueSteps || 0).toLocaleString();
+    
+    if (queueRow) queueRow.style.display = (data.queueSteps > 0) ? 'flex' : 'none';
+    if (breakdownEl) breakdownEl.style.display = 'block';
+    if (statusText) statusText.innerText = `Active & Syncing (Last: ${data.lastSync})`;
 
     if (syncEl) {
       syncEl.textContent = `Last sync: ${data.lastSync || '--:--'}`;

@@ -328,22 +328,40 @@ async function getTodayStats(userId, forceRefresh = false) {
     }
   }
 
+  // Queue Sync Logic:
+  // Get all activities uploaded today from local DB to see what WE expect
+  const localActs = await db.getActivitiesByDate(userId, hanoiDateStr);
+  const uploadedToday = localActs.filter(a => a.upload_status === 'uploaded');
+  const expectedSyncedSteps = uploadedToday.reduce((sum, a) => {
+    const activityType = a.activity_type === 'Walk' ? 7 : (a.activity_type === 'Ride' ? 1 : 8);
+    const estSteps = Math.round(a.distance_km * (activityType === 7 ? 1400 : 1250));
+    return sum + estSteps;
+  }, 0);
+
+  // queueSteps is what we uploaded but Google Fit hasn't "seen" in the stream yet
+  const queueSteps = Math.max(0, expectedSyncedSteps - syncedSteps);
+
   // Double-counting prevention logic:
   // isolatedDeviceSteps = Total from Google (which might be merged) - Our manual steps
   const isolatedDeviceSteps = Math.max(0, googleTotal - syncedSteps);
 
   const stats = {
-    steps: isolatedDeviceSteps + syncedSteps,
+    steps: isolatedDeviceSteps + syncedSteps + queueSteps,
     officialSteps: isolatedDeviceSteps,
     syncedSteps,
+    queueSteps,
     lastSync: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
     timestamp: now.getTime(),
     debug: {
       manualOk: manualRes.ok,
       manualStatus: manualRes.status,
-      googleTotal
+      googleTotal,
+      expectedSyncedSteps,
+      manualStream
     }
   };
+
+  console.log('[Google Fit Debug]', stats);
 
   statsCache.set(userId, { data: stats, expires: Date.now() + CACHE_TTL_MS });
 
