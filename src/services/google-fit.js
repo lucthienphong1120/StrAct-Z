@@ -177,26 +177,28 @@ async function uploadActivity(userId, activity) {
   }
 
   for (const ds of dataSources) {
-    const streamId = `raw:${ds.type}:me:StrActZ:stract-z-sync`;
+    const streamId = `derived:${ds.type}:me:StrActZ:stract-z-sync`;
     
-    // Create Data Source with more metadata
-    await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources`, {
+    // 1. Create or Get Data Source (POST)
+    const dsBody = {
+      dataStreamId: streamId,
+      dataStreamName: 'StrAct Z Sync',
+      type: 'derived',
+      application: { name: 'StrActZ' },
+      dataType: { name: ds.type },
+      device: { manufacturer: 'StrActZ', model: 'VirtualTracker', type: 'phone', uid: 'manual' }
+    };
+
+    const dsResponse = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${tokens.access_token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        dataStreamName: ds.type,
-        type: 'raw',
-        application: { name: 'StrAct Z', version: '1.50.39' },
-        device: { manufacturer: 'StrActZ', model: 'VirtualTracker', type: 'phone', uid: userId.toString() },
-        dataType: { 
-          name: ds.dataType, 
-          field: [{ name: ds.type.split('.').pop(), format: ds.values[0].intVal !== undefined ? 'integer' : 'floatPoint' }] 
-        }
-      })
-    }).catch(() => {}); // Ignore if already exists
+      headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(dsBody)
+    });
+
+    if (!dsResponse.ok && dsResponse.status !== 409) {
+      const err = await dsResponse.json();
+      console.error(`[Google Fit] Data source creation failed:`, err);
+    }
 
     // Patch Data Point
     const datasetId = `${nanoStart}-${nanoEnd}`;
@@ -204,10 +206,7 @@ async function uploadActivity(userId, activity) {
     
     const patchResponse = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${streamId}/datasets/${datasetId}`, {
       method: 'PATCH',
-      headers: {
-        'Authorization': `Bearer ${tokens.access_token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         dataSourceId: streamId,
         minStartTimeNs: nanoStart,
@@ -215,7 +214,7 @@ async function uploadActivity(userId, activity) {
         point: [{
           startTimeNanos: nanoStart,
           endTimeNanos: nanoEnd,
-          dataTypeName: ds.dataType,
+          dataTypeName: ds.type,
           value: ds.values
         }]
       })
@@ -264,7 +263,7 @@ async function getTodayStats(userId, forceRefresh = false) {
 
   // Query 2: Manual Sync Steps (Specific source)
   const manualBody = {
-    aggregateBy: [{ dataSourceId: 'raw:com.google.step_count.delta:me:StrActZ:stract-z-sync' }],
+    aggregateBy: [{ dataSourceId: 'raw:com.google.step_count.delta:me:StrActZ:stract-z-sync' }, { dataSourceId: 'derived:com.google.step_count.delta:me:StrActZ:stract-z-sync' }],
     bucketByTime: { durationMillis: 86400000 },
     startTimeMillis: startOfDay,
     endTimeMillis: endTime
