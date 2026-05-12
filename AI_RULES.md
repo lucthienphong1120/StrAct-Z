@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.41)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.42)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.41). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.42). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -41,6 +41,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.42 (2026-05-12)
+- **Google Fit Breakdown**: Separated the Google Fit steps display into two categories: "Device/General" (official steps from Google) and "StrAct Z Sync" (manual steps synced via this app).
+- **Error Handling**: Resolved a 500 error on the stats API by gracefully handling cases where the manual data source has not been created yet for a user.
+- **UI Enhancement**: Added a breakdown view in the Google Fit account card that appears when manual sync data is present.
 
 ### v1.50.41 (2026-05-12)
 - **Aggregation Fix**: Improved Google Fit step calculation by explicitly querying both the general step count stream and the StrActZ manual sync source. This ensures that synced activities appear in the dashboard immediately, even before Google's backend performs its final merge.

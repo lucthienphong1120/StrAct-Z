@@ -254,52 +254,62 @@ async function getTodayStats(userId, forceRefresh = false) {
   const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
   const endTime = now.getTime();
 
-  const aggregateBody = {
-    aggregateBy: [
-      { dataTypeName: 'com.google.step_count.delta' },
-      { dataSourceId: 'raw:com.google.step_count.delta:me:StrActZ:manual_sync' }
-    ],
+  // Query 1: Official/General Steps
+  const officialBody = {
+    aggregateBy: [{ dataTypeName: 'com.google.step_count.delta' }],
     bucketByTime: { durationMillis: 86400000 },
     startTimeMillis: startOfDay,
     endTimeMillis: endTime
   };
 
-  const response = await fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${tokens.access_token}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(aggregateBody)
-  });
+  // Query 2: Manual Sync Steps (Specific source)
+  const manualBody = {
+    aggregateBy: [{ dataSourceId: 'raw:com.google.step_count.delta:me:StrActZ:manual_sync' }],
+    bucketByTime: { durationMillis: 86400000 },
+    startTimeMillis: startOfDay,
+    endTimeMillis: endTime
+  };
 
-  if (!response.ok) {
-    const err = await response.json();
-    throw new Error(err.message || 'Failed to fetch Google Fit stats');
-  }
+  const [officialRes, manualRes] = await Promise.all([
+    fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(officialBody)
+    }),
+    fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(manualBody)
+    })
+  ]);
 
-  const data = await response.json();
-  let totalSteps = 0;
+  let officialSteps = 0;
+  let syncedSteps = 0;
 
-  if (data.bucket && data.bucket[0] && data.bucket[0].dataset) {
-    // Sum up all datasets in the bucket (one for each aggregateBy entry)
-    for (const dataset of data.bucket[0].dataset) {
-      if (dataset.point) {
-        totalSteps += dataset.point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
-      }
+  if (officialRes.ok) {
+    const data = await officialRes.json();
+    if (data.bucket && data.bucket[0] && data.bucket[0].dataset && data.bucket[0].dataset[0].point) {
+      officialSteps = data.bucket[0].dataset[0].point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
     }
   }
 
-  // To prevent double-counting if Google eventually merges them, 
-  // we could implement more complex logic, but for now, this ensures the user sees their synced steps.
-  
+  if (manualRes.ok) {
+    const data = await manualRes.json();
+    if (data.bucket && data.bucket[0] && data.bucket[0].dataset && data.bucket[0].dataset[0].point) {
+      syncedSteps = data.bucket[0].dataset[0].point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
+    }
+  }
+
   const stats = {
-    steps: totalSteps,
+    steps: officialSteps + syncedSteps,
+    officialSteps,
+    syncedSteps,
     lastSync: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
     timestamp: now.getTime()
   };
 
   statsCache.set(userId, { data: stats, expires: Date.now() + CACHE_TTL_MS });
+
   return stats;
 }
 

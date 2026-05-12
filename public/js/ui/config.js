@@ -646,10 +646,21 @@ async function refreshGoogleFitStats(forceRefresh = false) {
     const data = await api(`/google-fit/stats${refreshQuery}`);
     if (data.error) throw new Error(data.error);
     
-    if (stepsEl) stepsEl.textContent = data.steps.toLocaleString();
+    const stepsEl = document.getElementById('gfTodaySteps');
+    const officialEl = document.getElementById('gfOfficialSteps');
+    const syncedEl = document.getElementById('gfSyncedSteps');
+    const breakdownEl = document.getElementById('gfBreakdown');
+    const syncEl = document.getElementById('gfLastSync');
+
+    if (stepsEl) stepsEl.textContent = (data.steps || 0).toLocaleString();
+    if (officialEl) officialEl.textContent = (data.officialSteps || 0).toLocaleString();
+    if (syncedEl) syncedEl.textContent = (data.syncedSteps || 0).toLocaleString();
+    if (breakdownEl) {
+      breakdownEl.style.display = (data.syncedSteps > 0) ? 'block' : 'none';
+    }
+
     if (syncEl) {
-      const time = new Date(data.lastUpdate).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-      syncEl.textContent = `Last sync: ${time}`;
+      syncEl.textContent = `Last sync: ${data.lastSync || '--:--'}`;
     }
     if (statusText) {
       statusText.textContent = 'Status: Active & Syncing';
