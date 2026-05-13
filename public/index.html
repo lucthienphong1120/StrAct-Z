@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.51.18</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.51.19</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -409,7 +409,8 @@
           <!-- Schedule Card -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">⏰ Auto Schedule</div>
+              <div class="card-title">⏰ Auto Schedule <span class="tooltip-icon" id="tipScheduleMain"
+                  data-tooltip="Thiết lập thời gian hệ thống tự động tạo hoạt động hàng ngày.&#10;Hỗ trợ tối đa 2 mốc thời gian (VIP).">?</span></div>
               <label class="toggle">
                 <input type="checkbox" id="scheduleEnabled" onchange="updateSchedule()">
                 <div class="toggle-track"></div>
@@ -419,9 +420,7 @@
               <div id="scheduleContainer" style="display:flex; flex-direction:column; gap:16px;">
                 <div class="form-group" style="margin-bottom:0;">
                   <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
-                    <span>Slot 1 (24h)</span>
-                    <span class="tooltip-icon" id="tipScheduleTime"
-                      data-tooltip="Thời gian hệ thống tự chạy hàng ngày 1.&#10;Kiểu: time&#10;Mặc định: 22:00">?</span>
+                    <span>Mốc thời gian 1 (24h)</span>
                   </label>
                   <input type="time" id="scheduleTime" class="form-input" value="22:00" onchange="updateSchedule()" lang="en-GB">
                 </div>
@@ -429,7 +428,7 @@
                 <div id="scheduleSlot2" style="display:none; padding:16px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px dashed var(--border); margin-top:4px;">
                   <div class="form-group" style="margin-bottom:0;">
                     <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
-                      <span>Slot 2 (24h)</span>
+                      <span>Mốc thời gian 2 (24h)</span>
                       <button class="btn btn-sm" onclick="removeSchedule2()" style="padding:2px 10px; font-size:0.75rem; color:var(--accent-red); background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); border-radius:6px; cursor:pointer;">Remove</button>
                     </label>
                     <input type="time" id="scheduleTime2" class="form-input" value="14:00" onchange="updateSchedule()" lang="en-GB">

@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.18)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.20)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.18). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.20). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -56,11 +56,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
-### v1.51.18 (2026-05-13)
-- **UX: Improved Schedule UI**: Enhanced spacing and added clearer descriptions for schedule slots.
-- **Config: Count-based Scheduling**: Replaced `schedule_enabled_2` with `schedule_count` for better validation and role-based control.
-- **Fix: Default Values**: Set `schedule_time_2` default to 14:00.
-- **Security: Server-side Validation**: Implemented strict validation for `schedule_count` based on user role (VIP vs Normal).
+### v1.51.20 (2026-05-13)
+- **Fix: UI Label Scaling**: Corrected minor font-size adjustments in schedule labels to match global UI guidelines.
+
+### v1.51.19 (2026-05-13)
+- **UI: Refined Schedule Labels**: Renamed slots to "Mốc thời gian 1" and "Mốc thời gian 2".
+- **UX: Unified Tooltip**: Moved schedule documentation to a single common tooltip in the card header.
 
 ### v1.51.17 (2026-05-13)
 - **Feature: Dual-Slot Scheduling**: Added support for configuring up to two independent daily schedule times.

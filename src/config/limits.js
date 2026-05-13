@@ -105,7 +105,7 @@ const LIMITS = {
     default: false
   },
   schedule_time: {
-    label: 'Thời điểm 1 (24h).',
+    label: 'Mốc thời gian 1 (24h).',
     desc_extra: 'Thời gian hệ thống tự chạy hàng ngày 1. Định dạng 24:00',
     type: 'time',
     default: '22:00'
@@ -118,7 +118,7 @@ const LIMITS = {
     max: { normal: 1, vip: 2 }
   },
   schedule_time_2: {
-    label: 'Thời điểm 2 (24h).',
+    label: 'Mốc thời gian 2 (24h).',
     desc_extra: 'Thời gian hệ thống tự chạy hàng ngày 2. Định dạng 24:00',
     type: 'time',
     default: '14:00'
