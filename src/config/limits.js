@@ -129,6 +129,21 @@ const LIMITS = {
     type: 'bool',
     default: true
   },
+  map_lat: {
+    label: 'Vĩ độ bản đồ.',
+    type: 'float',
+    default: 21.0285
+  },
+  map_lng: {
+    label: 'Kinh độ bản đồ.',
+    type: 'float',
+    default: 105.8542
+  },
+  map_zoom: {
+    label: 'Độ phóng đại bản đồ.',
+    type: 'int',
+    default: 12
+  },
   home_count: {
     label: 'Giới hạn điểm Nhà.',
     desc_extra: 'Tác dụng: Số lượng điểm Nhà tối đa bạn có thể đặt trên bản đồ.',

@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.4)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.5)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.4). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.5). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -36,11 +36,18 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Calculation**: Blocked intervals = `[Start - SafeTime, End + SafeTime]`. Selected random time must fall outside these intervals.
 - **SafeTime**: Default 30 minutes (configurable via `overlap_protection_minutes`).
 
-### 4. Map Persistence (v1.43.0+)
-- **Storage**: `map_lat`, `map_lng`, and `map_zoom` are saved in the `config` table.
-- **UI**: The map restores its last saved center and zoom level upon page load.
+### 4. Map Persistence (v1.51.5+)
+- **Storage**: `map_lat`, `map_lng`, and `map_zoom` are saved in the `user_config` table whenever "Activity Areas" are saved.
+- **UI Persistence**:
+  - **Refresh (Global)**: Restores the last saved map view (position/zoom) and all activity areas.
+  - **Reset (Global)**: Resets the map view (position/zoom) to defaults, but **PRESERVES** the saved Home and Work locations (`activity_areas`).
+- **Initialization**: The map restores its last saved center and zoom level upon page load via `window.savedMapState`.
 
-### 5. Log Preservation (v1.50.40+)
+### 5. Knowledge Management
+- **Read Documentation**: AI assistants MUST read the files in the `docs/` directory (e.g., `ARCHITECTURE.md`, `USER_GUIDE.md`) to understand the system's design and intent before proposing major architectural changes.
+- **Preserve Memory**: Always update this `AI_RULES.md` file after significant logic changes.
+
+### 6. Log Preservation (v1.50.40+)
 - **Soft-Delete Only**: Never hard-delete records from the `activities` table.
 - **Status Change**: 
   - If deleted locally (before upload): `upload_status = 'deleted'`.
@@ -48,6 +55,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.5 (2026-05-13)
+- **Feature: Map View Persistence**: Enabled saving of map position (lat/lng) and zoom level when saving Activity Areas.
+- **Logic: Persistence Rules**: Refined the behavior of "Refresh" (restores saved view) vs "Reset" (resets view to default but keeps markers).
+- **Documentation**: Updated `ARCHITECTURE.md` and added a "Read Documentation" rule to `AI_RULES.md`.
 
 ### v1.51.4 (2026-05-13)
 - **UI: Logic Refinement**: Hidden the "View" button for activities in the `REMOVED` state. The button is now only visible for `UPLOADED` activities that exist on Strava Cloud.

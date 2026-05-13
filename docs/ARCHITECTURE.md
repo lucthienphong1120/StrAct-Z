@@ -31,3 +31,11 @@ The engine generates activities in two phases:
 - Uses `node-cron` to manage background tasks.
 - On server boot, it queries all active accounts and spawns independent cron jobs for any user with `schedule_enabled = 'true'`.
 - The jobs execute silently in the background, validating Strava limits (max 2 uploads per day) before generating and uploading routes.
+
+### 5. Map State & Activity Area Persistence (v1.51.5+)
+- **Map View:** The system persists the map's center coordinates (`map_lat`, `map_lng`) and zoom level (`map_zoom`) whenever "Activity Areas" are saved. This ensures a consistent user experience across sessions.
+- **Activity Areas:** Stores user-defined circular zones (Home/Work) as JSON in the `activity_areas` key. 
+- **Persistence Rules:**
+  - **Refresh:** Restores all saved settings, including map view and activity areas.
+  - **Reset:** Resets all general configuration and map view (position/zoom) to defaults, but **preserves** the user's saved Home and Work locations (`activity_areas`).
+- **Additive Boost System:** Each activity area provides a mathematical "boost" to nearby districts during route generation, increasing the likelihood of routes starting or ending in preferred locations.
