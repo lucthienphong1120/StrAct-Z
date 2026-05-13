@@ -56,6 +56,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.11 (2026-05-13)
+- **Map UI Restoration**: Restored the "count/max" format and specific colors (red/green/orange/blue) for the Activity Areas info display.
+- **State Persistence Fix**: Ensured map position, zoom, and lock state are correctly loaded from the database on page refresh.
+- **Save Logic Update**: The `Save` button now persists the latest map view and auto-locks the map as intended.
+
 ### v1.51.10 (2026-05-13)
 - **UI: Full-width Workhours**: Reorganized the Avoid Workhours layout to occupy the full row width, with each time range taking up exactly 50%.
 - **Logic: 24h Time Format**: Standardized time formatting across the entire application to use 24-hour notation (hour12: false), ensuring consistency in both UI and server logs.

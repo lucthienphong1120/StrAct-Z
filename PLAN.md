@@ -95,4 +95,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Refine UI Time Configuration: bỏ khung viền, update input size (v1.51.9)
 + [x] Cập nhật Avoid Workhours full dòng, chia đôi 50/50 (v1.51.10)
 + [x] Enforce định dạng giờ 24h toàn hệ thống (v1.51.10)
++ [x] Khôi phục format Map Info "count/max" và màu sắc (v1.51.11)
++ [x] Sửa lỗi lưu vị trí/zoom bản đồ và auto-lock khi Save (v1.51.11)
 + [x] Check logic random/schedule đảm bảo nằm trong Bounds và không trùng Workhours/Existing (v1.51.9)
++ [ ] phần Time Configuration và Daily Run Time sửa về dùng định dạng 24:00 (cập nhật tài liệu tương ứng)

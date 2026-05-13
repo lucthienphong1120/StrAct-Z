@@ -263,6 +263,7 @@ function updateMapStatsUI() {
   if (infoMapLocked) {
     infoMapLocked.textContent = window.isMapLocked ? 'LOCKED' : 'UNLOCKED';
     infoMapLocked.style.color = window.isMapLocked ? '#f87171' : '#4ade80';
+    infoMapLocked.style.fontWeight = '700';
   }
 
   const homeCount = window.activityCircles.filter(c => c.type === 'home').length;
@@ -270,6 +271,7 @@ function updateMapStatsUI() {
   if (infoHomeCount) {
     infoHomeCount.textContent = `${homeCount}/${sysL.home_count.max}`;
     infoHomeCount.style.color = homeCount >= sysL.home_count.max ? '#fb923c' : 'var(--text-primary)';
+    infoHomeCount.style.fontWeight = '700';
   }
 
   const workCount = window.activityCircles.filter(c => c.type === 'work').length;
@@ -277,11 +279,14 @@ function updateMapStatsUI() {
   if (infoWorkCount) {
     infoWorkCount.textContent = `${workCount}/${sysL.work_count.max}`;
     infoWorkCount.style.color = workCount >= sysL.work_count.max ? '#60a5fa' : 'var(--text-primary)';
+    infoWorkCount.style.fontWeight = '700';
   }
 
   const infoScaleRadius = document.getElementById('infoScaleRadius');
   if (infoScaleRadius) {
     infoScaleRadius.textContent = `${sysL.scale_radius.max}m`;
+    infoScaleRadius.style.color = 'var(--text-primary)';
+    infoScaleRadius.style.fontWeight = '700';
   }
 }
 
