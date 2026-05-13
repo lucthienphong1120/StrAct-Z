@@ -275,7 +275,11 @@ async function generateActivity(config = {}) {
         return false;
       };
 
-      if (isWorkOverlap(ms, msEnd)) return false;
+      // Only avoid working hours on weekdays (Monday=1 to Friday=5)
+      const dayOfWeek = targetDateObj.getDay();
+      const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
+
+      if (isWeekday && isWorkOverlap(ms, msEnd)) return false;
       if (isOverlap(ms)) return false;
       return true;
     };

@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.7)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.8)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.7). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.8). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.8 (2026-05-13)
+- **UI: Time Configuration Overhaul**: Separated "Random Time Bounds" into a global setting that remains visible regardless of the "Custom Time" toggle.
+- **UI: Target Time Validation**: Renamed "Time Range" to "Target Time" for GPX generation and added validation to ensure it stays within the global "Random Time Bounds".
+- **Logic: Weekday-Only Workhours**: Updated "Avoid Workhours" logic to only apply on weekdays (Mon-Fri). Weekend activities are no longer restricted by work hour settings.
 
 ### v1.51.7 (2026-05-13)
 - **UX: Auto-Lock Map**: Implemented automatic map locking when saving "Activity Areas". This secures the map view immediately after configuration and persists the locked state to the database.

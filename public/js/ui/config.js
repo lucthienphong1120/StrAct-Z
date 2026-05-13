@@ -301,6 +301,26 @@ function validateTimeBounds(minTimeStr, maxTimeStr, targetDateStr, isCustomTime)
       showToast('Time cannot be in the future!', 'error');
       return false;
     }
+
+    // New validation: Target Time must be within Random Time Bounds
+    const randMinStr = document.getElementById('cfgRandMinTime').value;
+    const randMaxStr = document.getElementById('cfgRandMaxTime').value;
+    if (randMinStr && randMaxStr) {
+      const [rMinH, rMinM] = randMinStr.split(':').map(Number);
+      const [rMaxH, rMaxM] = randMaxStr.split(':').map(Number);
+      const [cMinH, cMinM] = minTimeStr.split(':').map(Number);
+      const [cMaxH, cMaxM] = maxTimeStr.split(':').map(Number);
+
+      const rMin = rMinH * 60 + rMinM;
+      const rMax = rMaxH * 60 + rMaxM;
+      const cMin = cMinH * 60 + cMinM;
+      const cMax = cMaxH * 60 + cMaxM;
+
+      if (cMin < rMin || cMax > rMax) {
+        showToast(`Target Time phải nằm trong khoảng ${randMinStr} - ${randMaxStr}`, 'error');
+        return false;
+      }
+    }
   } else if (!isCustomTime && minTimeStr) {
     const todayStr = new Date().toLocaleDateString('en-CA');
     const minDateObj = new Date(`${todayStr}T${minTimeStr}:00.000+07:00`);
