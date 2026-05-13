@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.14)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.15)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.14). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.15). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.15 (2026-05-13)
+- **UX: Mobile Responsiveness**: Implemented a comprehensive responsive design. Grids now stack vertically on small screens, the header supports wrapping, and activity list items are optimized for narrow displays.
+- **UI: Utility Classes**: Introduced `.grid-responsive` to standardize layout behavior across devices.
 
 ### v1.51.14 (2026-05-13)
 - **Fix: Layout Corruption**: Resolved an issue in `index.html` where Avoid Workhours inputs were duplicated and corrupted.

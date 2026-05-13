@@ -37,7 +37,8 @@ body::before {
 .header-inner {
   max-width: 1400px; margin: 0 auto;
   display: flex; align-items: center; justify-content: space-between;
-  height: 64px;
+  height: auto; min-height: 64px; flex-wrap: wrap; gap: 12px;
+  padding: 8px 0;
 }
 
 .logo {
@@ -78,6 +79,11 @@ body::before {
 
 /* ─── Main Layout ─────────────────────────────────────── */
 .main { max-width: 1400px; margin: 0 auto; padding: 2rem; position: relative; z-index: 1; }
+
+@media (max-width: 768px) {
+  .main { padding: 1rem; }
+  .header { padding: 0 1rem; }
+}
 
 /* ─── Stats Grid ──────────────────────────────────────── */
 .stats-grid {
@@ -169,3 +175,18 @@ body::before {
 .card-body { padding: 1.5rem; }
 
 .full-width { grid-column: 1 / -1; }
+
+/* ─── Responsive Utilities ────────────────────────────── */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .grid-responsive {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}

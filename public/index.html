@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.51.14</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.51.15</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -204,7 +204,7 @@
                         style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">&#x1F6AB; Avoid
                         Workhours (T2-T6) <span class="tooltip-icon"
                           data-tooltip="Khung giờ không tạo hoạt động ngẫu nhiên (chỉ áp dụng T2-T6).&#10;Kiểu: time (24h)&#10;Mặc định: 08:00-11:30 & 13:30-17:30">?</span></label>
-                      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; align-items:center;">
+                      <div class="grid-responsive">
                         <div style="display:flex;gap:5px;align-items:center;">
                           <input type="time" id="cfgWorkStart1" class="form-input" value="08:00" style="flex:1;" lang="en-GB">
                           <span style="color:var(--text-muted)">-</span>
@@ -220,7 +220,7 @@
                   </div>
                 </div>
 
-                <div id="timeCustomInputs" class="form-row" style="margin-top:10px; opacity:0.4; pointer-events:none;">
+                <div id="timeCustomInputs" class="grid-responsive" style="margin-top:10px; opacity:0.4; pointer-events:none;">
                   <div class="form-group">
                     <label class="form-label">Target Date <span class="tooltip-icon tooltip-right" id="tipTargetDate"
                         data-tooltip="Tạo hoạt động cho một ngày trong quá khứ.&#10;Kiểu: date&#10;Mặc định: Hôm nay&#10;Phạm vi: normal: 7 ngày, vip: 30 ngày">?</span></label>
