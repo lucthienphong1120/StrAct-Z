@@ -1,4 +1,4 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.2)
 
 This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.38). Follow these guidelines strictly.
 
@@ -48,6 +48,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.2 (2026-05-13)
+- **Activity Area Limits**: Refined limits for preferred activity areas on map.
+  - **Home Point**: Max 1 for all accounts (VIP and Normal).
+  - **Work Point**: Max 2 for VIP, Max 1 for Normal.
+- **Dynamic Radius**: Circle radius slider in UI now dynamically respects the `scale_radius` limits (3000m for Normal, 4000m for VIP).
 
 ### v1.51 (2026-05-13)
 - **Major Logic Refinement**: Completed the overhaul of data synchronization and log preservation logic.

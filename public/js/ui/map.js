@@ -160,7 +160,7 @@ function createCircleLayer(lat, lng, radius, type) {
       <b style="color:${color}">${type.toUpperCase()}</b><br>
       <div style="margin:8px 0; font-size:0.8rem;">
         Radius: <b id="${popupId}">${radius}</b>m<br>
-        <input type="range" value="${radius}" min="2000" max="4000" step="100" 
+        <input type="range" value="${radius}" min="2000" max="${window.sysLimits?.scale_radius?.max || 4000}" step="100" 
           style="width:100%; margin-top:5px; accent-color:var(--strava-orange);" 
           oninput="document.getElementById('${popupId}').innerText = this.value; updateCircleRadius(${window.activityCircles.length - 1}, this.value)">
       </div>
@@ -189,8 +189,9 @@ function addActivityCircle(type) {
 function updateCircleRadius(index, newRadius) {
   if (window.activityCircles[index]) {
     let r = parseInt(newRadius);
+    const maxR = window.sysLimits?.scale_radius?.max || 4000;
     if (r < 2000) r = 2000;
-    if (r > 4000) r = 4000;
+    if (r > maxR) r = maxR;
     window.activityCircles[index].circle.setRadius(r);
   }
 }

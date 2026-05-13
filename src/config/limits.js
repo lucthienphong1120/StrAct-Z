@@ -135,14 +135,14 @@ const LIMITS = {
     type: 'int',
     default: 0,
     min: 0,
-    max: { normal: 1, vip: 2 }
+    max: 1
   },
   work_count: {
     label: 'Giới hạn điểm Công ty.',
     desc_extra: 'Tác dụng: Số lượng điểm Công ty tối đa bạn có thể đặt trên bản đồ.',
     type: 'int',
     default: 0,
-    min: 1,
+    min: 0,
     max: { normal: 1, vip: 2 }
   },
   scale_radius: {
