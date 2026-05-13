@@ -158,7 +158,7 @@
 .schedule-time {
   font-size: 1.5rem; font-weight: 700;
   background: var(--gradient-vip);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 .schedule-label { font-size: 0.8rem; color: var(--vip-gold); opacity: 0.9; }
 

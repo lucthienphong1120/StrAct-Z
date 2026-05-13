@@ -93,6 +93,7 @@ body.theme-preview-normal.is-vip .logo,
 body.theme-preview-normal.is-vip .stat-value {
   background: var(--gradient-primary);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: none;
 }
@@ -113,6 +114,7 @@ body.theme-preview-normal.is-vip .btn-primary {
 .is-vip .logo span {
   background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .is-vip .logo {
@@ -122,6 +124,7 @@ body.theme-preview-normal.is-vip .btn-primary {
 .is-vip .stat-value {
   background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

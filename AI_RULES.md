@@ -56,6 +56,9 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.16 (2026-05-13)
+- **Fix: CSS Compatibility**: Added standard `background-clip` properties to resolve warnings in `components.css` and `theme.css`.
+
 ### v1.51.15 (2026-05-13)
 - **UX: Mobile Responsiveness**: Implemented a comprehensive responsive design. Grids now stack vertically on small screens, the header supports wrapping, and activity list items are optimized for narrow displays.
 - **UI: Utility Classes**: Introduced `.grid-responsive` to standardize layout behavior across devices.
