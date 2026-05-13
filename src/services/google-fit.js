@@ -114,30 +114,31 @@ async function uploadActivity(userId, activity) {
   const nanoStart = BigInt(startTime) * 1000000n;
   const nanoEnd = BigInt(endTime) * 1000000n;
 
-  // Map Activity Type
-  let activityType = 8; // Running
+  // Map Activity Type (8=Running, 7=Walking, 1=Biking)
+  let activityType = 8; 
   if (activity.activity_type === 'Walk') activityType = 7;
   else if (activity.activity_type === 'Ride') activityType = 1;
 
   const totalSteps = Math.round(activity.distance_km * (activityType === 7 ? 1400 : 1250));
 
-  // 1. Define 3 different synchronization strategies (naming, packages, device models)
+  // 1. Expanded Strategies (Naming, Package, Device)
   const strategies = [
-    { name: 'StrActZ', package: 'com.stractz.sync', deviceModel: 'VirtualTracker' },
-    { name: 'StrAct-Z', package: 'com.stract_z.sync', deviceModel: 'StrAct-Z-Phone' },
-    { name: 'StrAct Z', package: 'com.stract.z.sync', deviceModel: 'ManualTracker' }
+    { name: 'StrActZ', package: 'com.stractz.sync', model: 'VirtualTracker', uid: 'manual_v1' },
+    { name: 'StrAct-Z', package: 'com.stract_z.sync', model: 'StrAct-Z-Phone', uid: 'manual_v2' },
+    { name: 'GoogleFitSync', package: 'com.google.android.apps.fitness', model: 'ManualInput', uid: 'manual_v3' }
   ];
 
   const results = [];
 
   for (const strategy of strategies) {
     try {
-      console.log(`[Google Fit] >>> Starting Strategy: ${strategy.name} <<<`);
+      console.log(`[Google Fit] Syncing Strategy: ${strategy.name}...`);
       
-      // A. Create Data Sources for this strategy
+      // A. Create Data Sources (Including Activity Segment)
       const dsTypes = [
         { type: 'com.google.step_count.delta', field: 'steps', val: { intVal: totalSteps } },
-        { type: 'com.google.distance.delta', field: 'distance', val: { fpVal: activity.distance_km * 1000 } }
+        { type: 'com.google.distance.delta', field: 'distance', val: { fpVal: activity.distance_km * 1000 } },
+        { type: 'com.google.activity.segment', field: 'activity', val: { intVal: activityType } }
       ];
 
       for (const ds of dsTypes) {
@@ -148,7 +149,7 @@ async function uploadActivity(userId, activity) {
             name: ds.type,
             field: [{ name: ds.field, format: ds.val.intVal !== undefined ? 'integer' : 'floatPoint' }]
           },
-          device: { manufacturer: strategy.name, model: strategy.deviceModel, type: 'phone', uid: `manual_${strategy.name.replace(/\s+/g, '_')}` }
+          device: { manufacturer: strategy.name, model: strategy.model, type: 'phone', uid: strategy.uid }
         };
 
         const dsRes = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources`, {
@@ -158,7 +159,7 @@ async function uploadActivity(userId, activity) {
         });
 
         if (!dsRes.ok && dsRes.status !== 409) {
-          console.error(`[Google Fit][${strategy.name}] DS Creation failed for ${ds.type}:`, await dsRes.text());
+          console.error(`[Google Fit][${strategy.name}] Source Error:`, await dsRes.text());
           continue;
         }
         
@@ -179,18 +180,18 @@ async function uploadActivity(userId, activity) {
         });
 
         if (patchRes.ok) {
-          console.log(`[Google Fit][${strategy.name}] Dataset ${ds.type} Patched OK`);
+          console.log(`[Google Fit][${strategy.name}] ${ds.type} OK`);
         } else {
-          console.error(`[Google Fit][${strategy.name}] Dataset ${ds.type} Patch failed:`, await patchRes.text());
+          console.error(`[Google Fit][${strategy.name}] ${ds.type} Fail:`, await patchRes.text());
         }
       }
 
-      // C. Create Session for this strategy (Unique ID per strategy)
+      // C. Session Creation
       const sessionId = `stractz_${strategy.name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${startTime}`;
       const sessionBody = {
         id: sessionId,
-        name: `${activity.activity_name || 'Activity'} (${strategy.name})`,
-        description: `StrAct Z Sync - Strategy ${strategy.name}`,
+        name: `${activity.activity_name || 'Activity'}`,
+        description: 'StrAct Z Generated',
         startTimeMillis: startTime,
         endTimeMillis: endTime,
         application: { name: strategy.name, packageName: strategy.package },
@@ -204,25 +205,21 @@ async function uploadActivity(userId, activity) {
       });
 
       if (sessRes.ok) {
-        console.log(`[Google Fit][${strategy.name}] Session Created OK: ${sessionId}`);
+        console.log(`[Google Fit][${strategy.name}] Session OK`);
         results.push({ strategy: strategy.name, success: true });
       } else {
         const errSess = await sessRes.text();
-        console.warn(`[Google Fit][${strategy.name}] Session Creation Failed:`, errSess);
+        console.warn(`[Google Fit][${strategy.name}] Session Fail:`, errSess);
         results.push({ strategy: strategy.name, success: false, error: errSess });
       }
 
     } catch (err) {
-      console.error(`[Google Fit][${strategy.name}] Fatal Error:`, err.message);
+      console.error(`[Google Fit][${strategy.name}] Fatal:`, err.message);
       results.push({ strategy: strategy.name, success: false, error: err.message });
     }
   }
 
-  return { 
-    success: results.some(r => r.success), 
-    steps: totalSteps, 
-    debugDetails: results 
-  };
+  return { success: results.some(r => r.success), steps: totalSteps, details: results };
 }
 
 async function deleteActivity(userId, activity) {
@@ -316,32 +313,18 @@ async function getTodayStats(userId, forceRefresh = false) {
   // 2. Discover all our manual streams (be flexible with naming)
   const manualStreams = allSources.filter(s => 
     s.includes('com.google.step_count.delta') && 
-    (s.includes('StrActZ') || s.includes('StrAct Z') || s.includes('StrAct-Z')) && 
+    (s.includes('StrActZ') || s.includes('StrAct Z') || s.includes('StrAct-Z') || s.includes('GoogleFitSync')) && 
     s.startsWith('raw:')
   );
 
-  // 3. Query both official and manual data
-  const officialPromise = fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
+  // 3. Query official data
+  const officialRes = await fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(officialBody)
   });
 
-  const manualPromises = manualStreams.map(streamId => 
-    fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${streamId}/datasets/${datasetId}`, {
-      method: 'GET',
-      headers: { 'Authorization': `Bearer ${tokens.access_token}` }
-    })
-  );
-
-  const [officialRes, ...manualResponses] = await Promise.all([
-    officialPromise,
-    ...manualPromises
-  ]);
-
   let googleTotal = 0;
-  let syncedSteps = 0;
-
   if (officialRes.ok) {
     const data = await officialRes.json();
     if (data.bucket && data.bucket[0] && data.bucket[0].dataset && data.bucket[0].dataset[0].point) {
@@ -349,17 +332,38 @@ async function getTodayStats(userId, forceRefresh = false) {
     }
   }
 
+  // 4. Query manual streams using AGGREGATE (more reliable than direct dataset fetch)
+  let syncedSteps = 0;
   const manualDetails = [];
-  for (let i = 0; i < manualStreams.length; i++) {
-    const res = manualResponses[i];
-    const streamId = manualStreams[i];
-    if (res.ok) {
-      const data = await res.json();
-      const stepsInStream = data.point ? data.point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0) : 0;
-      syncedSteps += stepsInStream;
-      manualDetails.push({ streamId, ok: true, status: res.status, steps: stepsInStream });
-    } else {
-      manualDetails.push({ streamId, ok: false, status: res.status });
+
+  for (const streamId of manualStreams) {
+    try {
+      const aggBody = {
+        aggregateBy: [{ dataSourceId: streamId }],
+        bucketByTime: { durationMillis: (endTime - startOfDay) || 86400000 },
+        startTimeMillis: startOfDay,
+        endTimeMillis: endTime
+      };
+
+      const res = await fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${tokens.access_token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(aggBody)
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        let streamTotal = 0;
+        if (data.bucket && data.bucket[0] && data.bucket[0].dataset && data.bucket[0].dataset[0].point) {
+          streamTotal = data.bucket[0].dataset[0].point.reduce((sum, p) => sum + (p.value[0].intVal || 0), 0);
+        }
+        syncedSteps += streamTotal;
+        manualDetails.push({ streamId, ok: true, steps: streamTotal });
+      } else {
+        manualDetails.push({ streamId, ok: false, status: res.status });
+      }
+    } catch (e) {
+      manualDetails.push({ streamId, ok: false, error: e.message });
     }
   }
 
