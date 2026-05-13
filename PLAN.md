@@ -80,7 +80,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] cập nhật Local Generated History bổ sung time filter tương tự Strava Cloud Activities, check chéo mapping những uploaded activities (4 trạng thái duy nhất) -> để lưu trữ log
 + [x] check lý do bất đồng bộ dữ liệu hoạt động giữa Local Generated History và Strava Cloud Activities
 + [x] cập nhật hint của Activity Areas Map, thêm phần trọng số format giống Distance Multipliers, Heart Rate Zones, show thêm config về limit số lượng home, work (vip: 2, normal: 1), và scale radius (vip: 4000, normal: 3000) - giống Daily Upload Limit
-+ [ ] cấu hình cho phép schedule 2 khung giờ -> tùy chọn 1 khung giờ hoặc 2 khung giờ
++ [x] cấu hình cho phép schedule 2 khung giờ -> tùy chọn 1 khung giờ hoặc 2 khung giờ (v1.51.17)
 + [ ] sửa logic bao phủ của khu vực hoạt động thay vì Fully	Mostly	Partially chưa hợp lý vì mỗi quận sẽ có độ rộng khác nhau, và 1 vòng tròn có thể to bao phủ cả 1 quận hoặc 1 quận cũng có thể to bao phủ 1 vòng tròn -> tìm giải pháp hợp lý, có thể theo tỉ lệ diện tích, nhưng tôi vẫn muốn tỉ lệ các quận công bằng và hợp lý (không quan tâm quận to hay quận nhỏ), chia theo 3 vùng trọng số như hiện tại
 + [x] fix lỗi lưu, you can select up to 0 type of activity (v1.50.38)
 + [x] responsive cho mobile (v1.51.15)

@@ -502,6 +502,8 @@ router.post('/scheduler', async (req, res) => {
   const validation = validateConfig({
     schedule_enabled: updates.enabled,
     schedule_time: updates.time,
+    schedule_enabled_2: updates.enabled2,
+    schedule_time_2: updates.time2,
     schedule_count_min: updates.countMin,
     schedule_count_max: updates.countMax
   }, role);
@@ -514,7 +516,9 @@ router.post('/scheduler', async (req, res) => {
   await scheduler.updateSchedule(
     req.user.id, 
     s.schedule_enabled === 'true', 
-    s.schedule_time, 
+    s.schedule_time,
+    s.schedule_enabled_2 === 'true',
+    s.schedule_time_2,
     parseInt(s.schedule_count_min), 
     parseInt(s.schedule_count_max)
   );

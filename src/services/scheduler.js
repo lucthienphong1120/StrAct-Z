@@ -197,32 +197,48 @@ async function executeJob(accountId) {
  */
 async function startScheduler(accountId) {
   const config = await db.getAllConfig(accountId);
+  const tasks = [];
 
-  if (config.schedule_enabled !== 'true') {
-    return false;
-  }
-
-  const cronExpression = config.schedule_cron || '0 6 * * *';
-
-  if (!cron.validate(cronExpression)) {
-    console.error(`[Scheduler] Invalid cron expression for account ${accountId}: ${cronExpression}`);
-    return false;
-  }
-
-  // Stop existing task
+  // Stop existing tasks
   stopScheduler(accountId);
 
-  const task = cron.schedule(cronExpression, async () => {
-    console.log(`[Scheduler] Cron triggered for account ${accountId}`);
-    await executeJob(accountId);
-  }, {
-    timezone: 'Asia/Ho_Chi_Minh'
-  });
+  // First schedule
+  if (config.schedule_enabled === 'true') {
+    const time1 = config.schedule_time || '22:00';
+    const [h1, m1] = time1.split(':');
+    const cron1 = `${parseInt(m1)} ${parseInt(h1)} * * *`;
+    
+    if (cron.validate(cron1)) {
+      const task1 = cron.schedule(cron1, async () => {
+        console.log(`[Scheduler] Slot 1 triggered for account ${accountId}`);
+        await executeJob(accountId);
+      }, { timezone: 'Asia/Ho_Chi_Minh' });
+      tasks.push(task1);
+      console.log(`[Scheduler] Slot 1 started for ${accountId}: ${cron1}`);
+    }
+  }
 
-  scheduledTasks.set(accountId, task);
+  // Second schedule
+  if (config.schedule_enabled_2 === 'true') {
+    const time2 = config.schedule_time_2 || '06:00';
+    const [h2, m2] = time2.split(':');
+    const cron2 = `${parseInt(m2)} ${parseInt(h2)} * * *`;
+    
+    if (cron.validate(cron2)) {
+      const task2 = cron.schedule(cron2, async () => {
+        console.log(`[Scheduler] Slot 2 triggered for account ${accountId}`);
+        await executeJob(accountId);
+      }, { timezone: 'Asia/Ho_Chi_Minh' });
+      tasks.push(task2);
+      console.log(`[Scheduler] Slot 2 started for ${accountId}: ${cron2}`);
+    }
+  }
 
-  console.log(`[Scheduler] Started for account ${accountId} with cron: ${cronExpression}`);
-  return true;
+  if (tasks.length > 0) {
+    scheduledTasks.set(accountId, tasks);
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -239,11 +255,15 @@ async function startAllSchedulers() {
  * Stop the scheduler for a specific account
  */
 function stopScheduler(accountId) {
-  const task = scheduledTasks.get(accountId);
-  if (task) {
-    task.stop();
+  const tasks = scheduledTasks.get(accountId);
+  if (tasks && Array.isArray(tasks)) {
+    tasks.forEach(t => t.stop());
     scheduledTasks.delete(accountId);
-    console.log(`[Scheduler] Stopped for account ${accountId}`);
+    console.log(`[Scheduler] All tasks stopped for account ${accountId}`);
+  } else if (tasks) {
+    // Legacy single task support
+    tasks.stop();
+    scheduledTasks.delete(accountId);
   }
 }
 
@@ -254,8 +274,9 @@ async function getStatus(accountId) {
   const config = await db.getAllConfig(accountId);
   return {
     enabled: config.schedule_enabled === 'true',
-    cronExpression: config.schedule_cron || '0 6 * * *',
-    scheduleTime: config.schedule_time || '06:00',
+    scheduleTime: config.schedule_time || '22:00',
+    enabled2: config.schedule_enabled_2 === 'true',
+    scheduleTime2: config.schedule_time_2 || '06:00',
     scheduleCountMin: parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : 1,
     scheduleCountMax: parseInt(config.schedule_count_max) >= 0 ? parseInt(config.schedule_count_max) : 2,
     isRunning: isRunning.get(accountId) || false,
@@ -266,25 +287,17 @@ async function getStatus(accountId) {
 /**
  * Update schedule for a specific account
  */
-async function updateSchedule(accountId, enabled, time, countMin, countMax) {
-  await db.setConfig(accountId, 'schedule_enabled', enabled ? 'true' : 'false');
-
-  if (time) {
-    await db.setConfig(accountId, 'schedule_time', time);
-    // Convert time to cron expression
-    const [hours, minutes] = time.split(':');
-    const cronExpression = `${parseInt(minutes)} ${parseInt(hours)} * * *`;
-    await db.setConfig(accountId, 'schedule_cron', cronExpression);
-  }
+async function updateSchedule(accountId, enabled1, time1, enabled2, time2, countMin, countMax) {
+  await db.setConfig(accountId, 'schedule_enabled', enabled1 ? 'true' : 'false');
+  if (time1) await db.setConfig(accountId, 'schedule_time', time1);
+  
+  await db.setConfig(accountId, 'schedule_enabled_2', enabled2 ? 'true' : 'false');
+  if (time2) await db.setConfig(accountId, 'schedule_time_2', time2);
   
   if (countMin !== undefined && countMin !== null) await db.setConfig(accountId, 'schedule_count_min', countMin);
   if (countMax !== undefined && countMax !== null) await db.setConfig(accountId, 'schedule_count_max', countMax);
 
-  if (enabled) {
-    await startScheduler(accountId);
-  } else {
-    stopScheduler(accountId);
-  }
+  await startScheduler(accountId);
 }
 
 module.exports = {

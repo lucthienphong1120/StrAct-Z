@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.15)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.18)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.15). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.18). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,14 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.18 (2026-05-13)
+- **Refactor**: Updated documentation to reflect version 1.51.18.
+
+### v1.51.17 (2026-05-13)
+- **Feature: Dual-Slot Scheduling**: Added support for configuring up to two independent daily schedule times.
+- **UI: Dynamic Slots**: Introduced "+ Add Time Slot" and "Remove" buttons to toggle the second schedule slot.
+- **Logic: Multi-Cron Support**: Refactored the backend scheduler to manage multiple cron jobs per account simultaneously.
 
 ### v1.51.16 (2026-05-13)
 - **Fix: CSS Compatibility**: Added standard `background-clip` properties to resolve warnings in `components.css` and `theme.css`.

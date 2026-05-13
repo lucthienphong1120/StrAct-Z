@@ -105,10 +105,21 @@ const LIMITS = {
     default: false
   },
   schedule_time: {
-    label: 'Thời điểm hệ thống tự động chạy hàng ngày (24h).',
+    label: 'Thời điểm 1 (24h).',
     desc_extra: 'Định dạng 24:00 (ví dụ: 22:00 thay vì 10:00 PM)',
     type: 'time',
     default: '22:00'
+  },
+  schedule_enabled_2: {
+    label: 'Kích hoạt khung giờ thứ 2.',
+    type: 'bool',
+    default: false
+  },
+  schedule_time_2: {
+    label: 'Thời điểm 2 (24h).',
+    desc_extra: 'Định dạng 24:00',
+    type: 'time',
+    default: '06:00'
   },
   schedule_count_min: {
     label: 'Số lượng hoạt động tối thiểu tạo tự động mỗi ngày.',
