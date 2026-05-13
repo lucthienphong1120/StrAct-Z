@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.51.11</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.51.12</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -190,9 +190,9 @@
                       Bounds <span class="tooltip-icon"
                         data-tooltip="Khung giờ hoạt động chung của hệ thống.&#10;Kiểu: time (24h)&#10;Mặc định: 04:30 - 21:30">?</span></label>
                     <div style="display:flex;gap:10px;align-items:center;">
-                      <input type="time" id="cfgRandMinTime" class="form-input" value="04:30" style="flex:1;">
+                      <input type="time" id="cfgRandMinTime" class="form-input" value="04:30" style="flex:1;" lang="en-GB">
                       <span style="color:var(--text-muted)">-</span>
-                      <input type="time" id="cfgRandMaxTime" class="form-input" value="21:30" style="flex:1;">
+                      <input type="time" id="cfgRandMaxTime" class="form-input" value="21:30" style="flex:1;" lang="en-GB">
                     </div>
                   </div>
                 </div>
@@ -206,12 +206,15 @@
                           data-tooltip="Khung giờ không tạo hoạt động ngẫu nhiên (chỉ áp dụng T2-T6).&#10;Kiểu: time (24h)&#10;Mặc định: 08:00-11:30 & 13:30-17:30">?</span></label>
                       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; align-items:center;">
                         <div style="display:flex;gap:5px;align-items:center;">
-                          <input type="time" id="cfgWorkStart1" class="form-input" value="08:00" style="flex:1;">
+                          <input type="time" id="cfgWorkStart1" class="form-input" value="08:00" style="flex:1;" lang="en-GB">
                           <span style="color:var(--text-muted)">-</span>
-                          <input type="time" id="cfgWorkEnd1" class="form-input" value="11:30" style="flex:1;">
+                          <input type="time" id="cfgWorkEnd1" class="form-input" value="11:30" style="flex:1;" lang="en-GB">
                         </div>
                         <div style="display:flex;gap:5px;align-items:center;">
-                          <input type="time" id="cfgWorkStart2" class="form-input" value="13:30" style="flex:1;">
+                          <input type="time" id="cfgWorkStart2" class="form-input" value="13:30" style="flex:1;" lang="en-GB">
+                          <span style="color:var(--text-muted)">-</span>
+                          <input type="time" id="cfgWorkEnd2" class="form-input" value="17:30" style="flex:1;" lang="en-GB">
+                        </div>"cfgWorkStart2" class="form-input" value="13:30" style="flex:1;">
                           <span style="color:var(--text-muted)">-</span>
                           <input type="time" id="cfgWorkEnd2" class="form-input" value="17:30" style="flex:1;">
                         </div>
@@ -229,7 +232,7 @@
                   <div class="form-group">
                     <label class="form-label">Target Time <span class="tooltip-icon tooltip-left" id="tipCustomTime"
                         data-tooltip="Thời gian cụ thể cho ngày mục tiêu (phải nằm trong Random Time Bounds).&#10;Kiểu: time&#10;Mặc định: 04:30">?</span></label>
-                    <input type="time" id="cfgCustomMinTime" class="form-input" value="04:30">
+                    <input type="time" id="cfgCustomMinTime" class="form-input" value="04:30" lang="en-GB">
                   </div>
                 </div>
               </div>
@@ -417,9 +420,9 @@
             </div>
             <div class="card-body">
               <div class="form-group">
-                <label class="form-label">Daily Run Time <span class="tooltip-icon tooltip-right" id="tipScheduleTime"
-                    data-tooltip="Thời điểm hệ thống tự động chạy hàng ngày.&#10;Kiểu: time&#10;Mặc định: 06:00">?</span></label>
-                <input type="time" id="scheduleTime" class="form-input" value="06:00" onchange="updateSchedule()">
+                <label class="form-label">Daily Run Time (24h) <span class="tooltip-icon tooltip-right" id="tipScheduleTime"
+                    data-tooltip="Thời điểm hệ thống tự động chạy hàng ngày.&#10;Kiểu: time&#10;Mặc định: 22:00">?</span></label>
+                <input type="time" id="scheduleTime" class="form-input" value="22:00" onchange="updateSchedule()" lang="en-GB">
               </div>
               <div class="form-row">
                 <div class="form-group">

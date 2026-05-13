@@ -56,6 +56,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.12 (2026-05-13)
+- **Standard: 24h Time Format**: Standardized all time inputs and displays to use the 24-hour format (`HH:mm`).
+- **UI: 24h Enforcement**: Added `lang="en-GB"` to time inputs to encourage 24h rendering in browsers and updated all tooltips/labels to emphasize the 24:00 format.
+
 ### v1.51.11 (2026-05-13)
 - **Map UI Restoration**: Restored the "count/max" format and specific colors (red/green/orange/blue) for the Activity Areas info display.
 - **State Persistence Fix**: Ensured map position, zoom, and lock state are correctly loaded from the database on page refresh.

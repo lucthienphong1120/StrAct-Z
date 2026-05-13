@@ -53,12 +53,14 @@ const LIMITS = {
     default: false
   },
   random_time_bounds: {
-    label: 'Thời gian bắt đầu hoạt động ngẫu nhiên.',
+    label: 'Thời gian bắt đầu hoạt động ngẫu nhiên (24h).',
+    desc_extra: 'Định dạng 24:00 (ví dụ: 21:30 thay vì 09:30 PM)',
     type: 'time',
     default: { start: '04:30', end: '21:30' }
   },
   avoid_workhours: {
-    label: 'Khung giờ không tạo hoạt động ngẫu nhiên.',
+    label: 'Khung giờ không tạo hoạt động ngẫu nhiên (24h).',
+    desc_extra: 'Định dạng 24:00 (ví dụ: 17:30 thay vì 05:30 PM)',
     type: 'time',
     default: {
       start1: '08:00', end1: '11:30',
@@ -103,7 +105,8 @@ const LIMITS = {
     default: false
   },
   schedule_time: {
-    label: 'Thời điểm hệ thống tự động chạy hàng ngày.',
+    label: 'Thời điểm hệ thống tự động chạy hàng ngày (24h).',
+    desc_extra: 'Định dạng 24:00 (ví dụ: 22:00 thay vì 10:00 PM)',
     type: 'time',
     default: '22:00'
   },
