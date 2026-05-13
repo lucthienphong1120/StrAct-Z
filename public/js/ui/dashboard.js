@@ -208,7 +208,7 @@ async function loadActivities() {
             <div class="activity-date" style="display:flex; gap:6px; margin-top:4px; flex-wrap:wrap; align-items:center;">
                <span class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); padding: 2px 6px;">🕒 ${timeStr} ${dateOnlyStr}</span>
                ${districtTags}
-               ${a.created_by ? `<span class="status-badge" style="background: rgba(255,255,255,0.05); color: var(--accent-red); border: 1px solid var(--border); padding: 2px 6px;">${a.created_by}</span>` : ''}
+               ${a.created_by ? `<span class="status-badge" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); padding: 2px 6px;">${a.created_by}</span>` : ''}
             </div>
           </div>
           <div class="activity-meta">${a.distance_km?.toFixed(1)} km</div>

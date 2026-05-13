@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.21)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.22)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.21). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.22). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -56,12 +56,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
-### v1.51.21 (2026-05-13)
-- **Feature: Activity Source Labels**: Added a label in Local Generated History to identify how each activity was created (Manual, Schedule 1, or Schedule 2).
-- **Plan**: + [x] thêm thông tin cách event được tạo cho event trong Local Generated History là 1 label format giống và ở cạnh label quận (giá trị: Manual / Schedule 1/Schedule 2) (v1.51.21).
-- **Database: Enhanced Schema**: Added `created_by` and fixed missing `account_id` column in the `activities` table.
+### v1.51.22 (2026-05-13)
+- **UI: Activity Source Style**: Updated the source badge color to neutral grey (`var(--text-secondary)`) to match the district labels.
 
-### v1.51.20 (2026-05-13)
+### v1.51.21 (2026-05-13)
 - **UI: Refined Schedule Labels**: Renamed slots to "Mốc thời gian 1" and "Mốc thời gian 2".
 - **UX: Unified Tooltip**: Moved schedule documentation to a single common tooltip in the card header.
 
