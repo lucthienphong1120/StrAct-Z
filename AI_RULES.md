@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.6)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.7)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.6). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.7). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,9 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.7 (2026-05-13)
+- **UX: Auto-Lock Map**: Implemented automatic map locking when saving "Activity Areas". This secures the map view immediately after configuration and persists the locked state to the database.
 
 ### v1.51.6 (2026-05-13)
 - **Fix: Config Validation**: Resolved a bug in `getLimits` that caused fields without explicit `max` limits (like `map_lat`) to default to a maximum of `0`, leading to "400 Bad Request" errors during save.

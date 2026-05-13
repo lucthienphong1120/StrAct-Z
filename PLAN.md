@@ -88,3 +88,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] hướng dẫn cách bỏ vip của 1 tài khoản
 + [x] fix lỗi ReferenceError: center is not defined khi tạo khu vực Home/Work trên bản đồ (v1.50.37)
 + [x] Activity Areas sửa lại tối đa điểm nhà là 1 không phải 2, tối đa điểm công ty là 2 với vip và 1 với normal account
++ [x] Auto-lock map khi save Activity Areas (v1.51.7)

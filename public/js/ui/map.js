@@ -230,7 +230,8 @@ async function saveActivityAreas() {
         activity_areas: JSON.stringify(data),
         map_lat: center.lat.toString(),
         map_lng: center.lng.toString(),
-        map_zoom: zoom.toString()
+        map_zoom: zoom.toString(),
+        map_locked: 'true'
       }
     });
     
@@ -238,6 +239,12 @@ async function saveActivityAreas() {
     else {
       showToast('Activity areas & map view saved!', 'success');
       window.savedMapState = { lat: center.lat, lng: center.lng, zoom: zoom };
+      
+      // Auto-lock map after saving
+      window.isMapLocked = true;
+      applyMapLock();
+      updateLockUI();
+      updateMapStatsUI();
     }
   } catch (err) {
     showToast('Failed to save areas: ' + err.message, 'error');
