@@ -71,7 +71,16 @@ async function updateSchedule() {
     return;
   }
   updateScheduleDisplay(status);
-  showToast('Schedule updated successfully', 'success');
+  
+  let msg = '';
+  if (!enabled) {
+    msg = 'Schedule disabled';
+  } else {
+    let times = [time];
+    if (scheduleCount >= 2) times.push(time2);
+    msg = `Schedule enabled at ${times.join(' & ')} (${countMin}-${countMax} acts)`;
+  }
+  showToast(msg, 'success');
 }
 
 // Export to window

@@ -57,7 +57,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 ## 🛠️ Developer Rules
 
 ### v1.51.20 (2026-05-13)
-- **Fix: UI Label Scaling**: Corrected minor font-size adjustments in schedule labels to match global UI guidelines.
+- **UX: Detailed Notifications**: Restored detailed information (time slots and activity count) in the schedule update toast notification.
 
 ### v1.51.19 (2026-05-13)
 - **UI: Refined Schedule Labels**: Renamed slots to "Mốc thời gian 1" and "Mốc thời gian 2".

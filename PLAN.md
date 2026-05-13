@@ -100,3 +100,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Check logic random/schedule đảm bảo nằm trong Bounds và không trùng Workhours/Existing (v1.51.9)
 + [x] phần Time Configuration và Daily Run Time sửa về dùng định dạng 24:00 (v1.51.12)
 + [x] Fix lỗi vỡ layout index.html và lỗi JS loadConfig (v1.51.14)
++ [ ] thêm thông tin thời gian chạy cho event trong Local Generated History
