@@ -170,15 +170,20 @@ function createCircleLayer(lat, lng, radius, type) {
 }
 
 function addActivityCircle(type) {
-  if (!window.map) return;
+  if (!window.map || !window.sysLimits) return;
   if (type !== 'home' && type !== 'work') return;
 
   const count = window.activityCircles.filter(c => c.type === type).length;
-  if (count >= 1) return showToast(`Only 1 ${type} area allowed`, 'warning');
+  const max = type === 'home' ? window.sysLimits.home_count.max : window.sysLimits.work_count.max;
+  
+  if (count >= max) {
+    return showToast(`Bạn đã đạt giới hạn tối đa (${max}) khu vực ${type.toUpperCase()}`, 'warning');
+  }
 
+  const center = window.map.getCenter();
   createCircleLayer(center.lat, center.lng, 2000, type);
   updateMapStatsUI();
-  showToast(`Added ${type} area`, 'info');
+  showToast(`Đã thêm khu vực ${type.toUpperCase()}`, 'info');
 }
 
 function updateCircleRadius(index, newRadius) {

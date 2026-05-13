@@ -86,4 +86,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] responsive cho mobile
 + [x] check logic luồng đồng bộ sang fit như nào (realtime hoặc upload previous được giống strava)
 + [x] hướng dẫn cách bỏ vip của 1 tài khoản
-
++ [x] fix lỗi ReferenceError: center is not defined khi tạo khu vực Home/Work trên bản đồ (v1.50.37)

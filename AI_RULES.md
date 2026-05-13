@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.36)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.37)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.36). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.37). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -41,6 +41,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.37 (2026-05-13)
+- **Bug Fix**: Resolved `ReferenceError: center is not defined` in `addActivityCircle` function (map.js).
+- **Dynamic Limits**: Replaced hardcoded activity area limits with dynamic values from `sysLimits` (allowing up to 2 areas for VIP).
+- **Localization**: Updated map interaction toasts to Vietnamese for consistency with the rest of the UI.
 
 ### v1.50.36 (2026-05-13)
 - **Google Fit Sync Optimization**: Refactored the Google Fit integration to use more reliable data aggregation and simplified the dataset patching logic.
