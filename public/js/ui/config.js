@@ -222,43 +222,42 @@ async function loadConfig() {
     const osrmToggle = document.getElementById('cfgOsrm');
     if (osrmToggle) osrmToggle.checked = config.use_osrm !== 'false';
     
-    const today = new Date().toLocaleDateString('en-CA');
-    document.getElementById('cfgTargetDate').value = today;
-    
-    document.getElementById('cfgCustomMinTime').value = config.min_time || '04:30';
-    document.getElementById('cfgCustomMaxTime').value = config.max_time || '21:30';
-    document.getElementById('cfgRandMinTime').value = config.min_time || '04:30';
-    document.getElementById('cfgRandMaxTime').value = config.max_time || '21:30';
-    document.getElementById('cfgWorkStart1').value = config.work_start1 || '08:00';
-    document.getElementById('cfgWorkEnd1').value = config.work_end1 || '11:30';
-    document.getElementById('cfgWorkStart2').value = config.work_start2 || '13:30';
-    document.getElementById('cfgWorkEnd2').value = config.work_end2 || '17:30';
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    };
+    const setChecked = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.checked = val;
+    };
 
-    document.getElementById('cfgMinDist').value = config.min_distance_km || '0.5';
-    document.getElementById('cfgMaxDist').value = config.max_distance_km || '10';
-    document.getElementById('cfgMinPace').value = config.min_pace || '7.0';
-    document.getElementById('cfgMaxPace').value = config.max_pace || '15.0';
-    document.getElementById('cfgActivityType').value = config.activity_type || 'Random';
-    document.getElementById('cfgHeartRate').checked = config.heart_rate_enabled === 'true';
-    document.getElementById('cfgUserAge').value = config.user_age || '25';
+    const today = new Date().toLocaleDateString('en-CA');
+    setVal('cfgTargetDate', today);
+    
+    setVal('cfgCustomMinTime', config.min_time || '04:30');
+    setVal('cfgRandMinTime', config.min_time || '04:30');
+    setVal('cfgRandMaxTime', config.max_time || '21:30');
+    setVal('cfgWorkStart1', config.work_start1 || '08:00');
+    setVal('cfgWorkEnd1', config.work_end1 || '11:30');
+    setVal('cfgWorkStart2', config.work_start2 || '13:30');
+    setVal('cfgWorkEnd2', config.work_end2 || '17:30');
+
+    setVal('cfgMinDist', config.min_distance_km || '0.5');
+    setVal('cfgMaxDist', config.max_distance_km || '10');
+    setVal('cfgMinPace', config.min_pace || '7.0');
+    setVal('cfgMaxPace', config.max_pace || '15.0');
+    setVal('cfgActivityType', config.activity_type || 'Random');
+    setChecked('cfgHeartRate', config.heart_rate_enabled === 'true');
+    setVal('cfgUserAge', config.user_age || '25');
     updateMHR(); 
     
-    if (document.getElementById('cfgSimWeather')) {
-      document.getElementById('cfgSimWeather').checked = config.sim_weather !== 'false';
-    }
-    if (document.getElementById('cfgSimRedLights')) {
-      document.getElementById('cfgSimRedLights').checked = config.sim_redlights !== 'false';
-    }
+    setChecked('cfgSimWeather', config.sim_weather !== 'false');
+    setChecked('cfgSimRedLights', config.sim_redlights !== 'false');
     
     toggleHRInputs();
 
-    if (document.getElementById('cfgSyncGoogleFit')) {
-      document.getElementById('cfgSyncGoogleFit').checked = config.sync_google_fit === 'true';
-    }
-
-    if (document.getElementById('cfgOverlapProtection')) {
-      document.getElementById('cfgOverlapProtection').value = config.overlap_protection_minutes || '30';
-    }
+    setChecked('cfgSyncGoogleFit', config.sync_google_fit === 'true');
+    setVal('cfgOverlapProtection', config.overlap_protection_minutes || '30');
 
     if (config.map_lat && config.map_lng && config.map_zoom) {
       window.savedMapState = {

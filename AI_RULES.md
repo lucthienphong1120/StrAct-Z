@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.10)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.14)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.10). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.14). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.14 (2026-05-13)
+- **Fix: Layout Corruption**: Resolved an issue in `index.html` where Avoid Workhours inputs were duplicated and corrupted.
+- **Fix: JS Null Pointer**: Fixed a crash in `loadConfig` caused by attempts to set values on non-existent UI elements (`cfgCustomMaxTime`).
+- **Logic: Safe UI Updates**: Introduced `setVal` and `setChecked` helpers in `config.js` to prevent future null pointer errors when UI elements are missing.
 
 ### v1.51.12 (2026-05-13)
 - **Standard: 24h Time Format**: Standardized all time inputs and displays to use the 24-hour format (`HH:mm`).
