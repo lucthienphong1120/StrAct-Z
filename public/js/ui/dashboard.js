@@ -4,6 +4,7 @@
 
 async function loadDashboard(forceRefresh = false) {
   window.latestStravaActivities = []; // Store for cross-check
+  window.allCloudActivities = [];     // Store for robust cross-check (insights)
   await fetchLimits();
   await loadDistricts();
   await Promise.all([
@@ -171,13 +172,20 @@ async function loadActivities() {
 
       // --- New Single-Badge Logic ---
       const isUploadedLocal = (a.upload_status === 'uploaded' || !!a.strava_activity_id);
-      const stravaRecord = isUploadedLocal ? window.latestStravaActivities?.find(s => String(s.id) === String(a.strava_activity_id)) : null;
+      
+      // Use window.allCloudActivities (from insights, up to 200 acts) as primary source for cross-check
+      // Fallback to latestStravaActivities if allCloudActivities is empty
+      const cloudBuffer = (window.allCloudActivities && window.allCloudActivities.length > 0) 
+        ? window.allCloudActivities 
+        : (window.latestStravaActivities || []);
+
+      const stravaRecord = isUploadedLocal ? cloudBuffer.find(s => String(s.id) === String(a.strava_activity_id)) : null;
       
       let badge = '';
       
       if (isUploadedLocal) {
         // If we have cloud data loaded, check if it's still there
-        const cloudDataAvailable = window.latestStravaActivities?.length > 0;
+        const cloudDataAvailable = cloudBuffer.length > 0;
         if (cloudDataAvailable && !stravaRecord) {
           badge = `<span class="status-badge removed" title="Đã tạo local và upload lên cloud, sau đó xóa ở cloud">⚪ REMOVED</span>`;
         } else {
@@ -355,6 +363,7 @@ async function loadInsights(forceRefresh = false) {
   try {
     const refreshQuery = forceRefresh ? '&refresh=true' : '';
     const activities = await api(`/insights?days=${range}${refreshQuery}`);
+    window.allCloudActivities = activities || []; // Store for cross-check in loadActivities
     updateActivityChart(activities, parseInt(range));
   } catch (err) {
     console.error('Insights error:', err);

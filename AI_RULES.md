@@ -1,4 +1,4 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.38)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51)
 
 This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.38). Follow these guidelines strictly.
 
@@ -40,7 +40,31 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Storage**: `map_lat`, `map_lng`, and `map_zoom` are saved in the `config` table.
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
+### 5. Log Preservation (v1.50.40+)
+- **Soft-Delete Only**: Never hard-delete records from the `activities` table.
+- **Status Change**: 
+  - If deleted locally (before upload): `upload_status = 'deleted'`.
+  - If deleted from cloud (or detected missing): `upload_status = 'removed'`.
+- **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
+
 ## 🛠️ Developer Rules
+
+### v1.51 (2026-05-13)
+- **Major Logic Refinement**: Completed the overhaul of data synchronization and log preservation logic.
+- **Sync**: Improved cross-check accuracy using a 200-item cloud activity buffer.
+- **Privacy & Logs**: Transitioned to mandatory soft-delete for all activity records to maintain permanent history.
+- **Reliability**: Fixed `Reset` function crash by implementing missing backend methods.
+
+### v1.50.40 (2026-05-13)
+- **Feature: Log Preservation**: Removed `clearActivities` from the configuration reset flow. History is now preserved during reset.
+- **Logic: Soft-Delete**: Updated `deleteActivity` and API routes to ensure activities are only soft-deleted (status changed to `deleted` or `removed`) to maintain a persistent log.
+- **UI UX**: Reverted Reset confirmation message to exclude history clearing.
+
+### v1.50.39 (2026-05-13)
+- **Fix: Data Asynchrony**: Improved the cross-check logic for "Local Generated History" status mapping. It now uses a 200-item buffer from Insights data instead of paged Cloud Activities (10 items), preventing false "REMOVED" status for older activities.
+- **Fix: Reset Function**: Implemented missing `clearActivities` backend method in `sqlite-db.js` to prevent crashes when resetting configuration.
+- **UI UX**: Updated Reset confirmation message to be more explicit about clearing local history.
+- **Cache Management**: Unified cloud activity reset logic in `loadDashboard`.
 
 ### v1.50.38 (2026-05-13)
 - **Bug Fix**: Fixed a validation error where `activity_type` could not be saved because its limit defaulted to 0.

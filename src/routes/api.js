@@ -49,10 +49,9 @@ router.post('/config', async (req, res) => {
 router.post('/config/reset', async (req, res) => {
   try {
     await db.resetConfig(req.user.id);
-    await db.clearActivities(req.user.id);
     stravaApi.clearActivityCache(req.user.id);
     googleFit.clearCache(req.user.id);
-    res.json({ success: true, message: 'Configuration reset to defaults (Map areas preserved)' });
+    res.json({ success: true, message: 'Configuration reset to defaults (Map areas & history preserved)' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -476,8 +475,9 @@ router.delete('/activities/:id', async (req, res) => {
     if (fs.existsSync(gpxPath)) fs.unlinkSync(gpxPath);
   } catch (e) { /* ignore */ }
 
-  // Hard delete from local DB
-  await db.deleteActivity(req.user.id, id, true);
+  // Soft delete from local DB
+  const status = stravaDeleted ? 'removed' : 'deleted';
+  await db.deleteActivity(req.user.id, id, false, status);
 
   res.json({
     success: true,

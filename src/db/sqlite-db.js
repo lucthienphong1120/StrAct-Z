@@ -302,13 +302,21 @@ async function getActivitiesByDate(accountId, dateStr) {
   return await db.all(`SELECT * FROM activities WHERE account_id = ? AND route_start_time LIKE ?`, [accountId, datePattern]);
 }
 
-async function deleteActivity(accountId, id, hard = false) {
+async function deleteActivity(accountId, id, hard = false, status = 'deleted') {
   const db = await getDb();
   if (hard) {
+    // Only use hard delete for cleanup if absolutely necessary, 
+    // but per rules we should preserve logs.
     await db.run(`DELETE FROM activities WHERE id = ? AND account_id = ?`, [id, accountId]);
   } else {
-    await db.run(`UPDATE activities SET upload_status = 'deleted', deleted_at = ? WHERE id = ? AND account_id = ?`, [new Date().toISOString(), id, accountId]);
+    await db.run(`UPDATE activities SET upload_status = ?, deleted_at = ? WHERE id = ? AND account_id = ?`, [status, new Date().toISOString(), id, accountId]);
   }
+  return true;
+}
+
+async function clearActivities(accountId) {
+  const db = await getDb();
+  await db.run('DELETE FROM activities WHERE account_id = ?', [accountId]);
   return true;
 }
 
@@ -452,7 +460,7 @@ module.exports = {
   saveTokens, getTokens, deleteTokens,
   saveExternalTokens, getExternalTokens, deleteExternalTokens,
   saveActivity, updateActivity, getActivities, getActivitiesByDate,
-  getActivityStats, deleteActivity,
+  getActivityStats, deleteActivity, clearActivities,
   getUserByUsername, createAccount, getAccountCount, getAllAccounts, updateAccountPassword,
   activateVip, checkBruteForce, getAccountRole, resetConfig,
 };

@@ -528,7 +528,7 @@ function getOverrideConfig() {
 }
 
 async function resetToDefault() {
-  if (!confirm('Are you sure you want to reset all settings to default? (Map areas will be preserved)')) return;
+  if (!confirm('Are you sure you want to reset all settings to default? (Map areas & history will be preserved)')) return;
 
   showToast('Resetting configuration...', 'info');
   try {
