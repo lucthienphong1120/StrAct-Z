@@ -288,8 +288,9 @@ function validateTimeBounds(minTimeStr, maxTimeStr, targetDateStr, isCustomTime)
   if (minTimeStr && maxTimeStr) {
     const [minH, minM] = minTimeStr.split(':').map(Number);
     const [maxH, maxM] = maxTimeStr.split(':').map(Number);
-    if (minH * 60 + minM >= maxH * 60 + maxM) {
-      showToast('Start Time must be earlier than End Time!', 'error');
+    // Allow equal for fixed time scheduling
+    if (minH * 60 + minM > maxH * 60 + maxM) {
+      showToast('Start Time cannot be later than End Time!', 'error');
       return false;
     }
   }
@@ -516,7 +517,7 @@ function getOverrideConfig() {
   const overrideConfig = {
     target_date: isCustomTime ? document.getElementById('cfgTargetDate').value : undefined,
     min_time: isCustomTime ? document.getElementById('cfgCustomMinTime').value : document.getElementById('cfgRandMinTime').value,
-    max_time: isCustomTime ? document.getElementById('cfgCustomMaxTime').value : document.getElementById('cfgRandMaxTime').value,
+    max_time: isCustomTime ? document.getElementById('cfgCustomMinTime').value : document.getElementById('cfgRandMaxTime').value,
     work_start1: document.getElementById('cfgWorkStart1').value,
     work_end1: document.getElementById('cfgWorkEnd1').value,
     work_start2: document.getElementById('cfgWorkStart2').value,

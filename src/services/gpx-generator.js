@@ -290,39 +290,50 @@ async function generateActivity(config = {}) {
     const effectiveMaxMs = Math.min(maxMs, nowOffsetMs > 0 ? nowOffsetMs : maxMs);
     
     const intervals = [];
-    const checkPoints = [minMs, workStart1, workEnd1, workStart2, workEnd2, effectiveMaxMs];
-    blockedRanges.forEach(r => {
-      if (r.start > minMs && r.start < effectiveMaxMs) checkPoints.push(r.start);
-      if (r.end > minMs && r.end < effectiveMaxMs) checkPoints.push(r.end);
-      // Also add points shifted by new duration to find boundaries
-      if (r.start - estimatedDurationMs > minMs && r.start - estimatedDurationMs < effectiveMaxMs) checkPoints.push(r.start - estimatedDurationMs);
-    });
-    checkPoints.sort((a, b) => a - b);
-    
-    for (let i = 0; i < checkPoints.length - 1; i++) {
-      const start = checkPoints[i];
-      const end = checkPoints[i+1];
-      if (start >= end) continue;
-      // Check middle point for validity
-      if (start >= minMs && end <= effectiveMaxMs && isValidTime((start + end) / 2)) {
-        intervals.push({ start, end, duration: end - start });
+    if (minMs === maxMs) {
+      // Fixed time: Check if valid
+      if (isValidTime(minMs)) {
+        intervals.push({ start: minMs, end: minMs, duration: 0 });
+      }
+    } else {
+      const checkPoints = [minMs, workStart1, workEnd1, workStart2, workEnd2, effectiveMaxMs];
+      blockedRanges.forEach(r => {
+        if (r.start > minMs && r.start < effectiveMaxMs) checkPoints.push(r.start);
+        if (r.end > minMs && r.end < effectiveMaxMs) checkPoints.push(r.end);
+        // Also add points shifted by new duration to find boundaries
+        if (r.start - estimatedDurationMs > minMs && r.start - estimatedDurationMs < effectiveMaxMs) checkPoints.push(r.start - estimatedDurationMs);
+      });
+      checkPoints.sort((a, b) => a - b);
+      
+      for (let i = 0; i < checkPoints.length - 1; i++) {
+        const start = checkPoints[i];
+        const end = checkPoints[i+1];
+        if (start >= end) continue;
+        // Check middle point for validity
+        if (start >= minMs && end <= effectiveMaxMs && isValidTime((start + end) / 2)) {
+          intervals.push({ start, end, duration: end - start });
+        }
       }
     }
 
     let targetTime;
     if (intervals.length > 0) {
-      const totalDuration = intervals.reduce((sum, int) => sum + int.duration, 0);
-      let randomVal = Math.random() * totalDuration;
-      let selectedOffset = intervals[0].start;
-      
-      for (const int of intervals) {
-        if (randomVal <= int.duration) {
-          selectedOffset = int.start + randomVal;
-          break;
+      if (minMs === maxMs) {
+        targetTime = new Date(targetDateObj.getTime() + minMs);
+      } else {
+        const totalDuration = intervals.reduce((sum, int) => sum + int.duration, 0);
+        let randomVal = Math.random() * totalDuration;
+        let selectedOffset = intervals[0].start;
+        
+        for (const int of intervals) {
+          if (randomVal <= int.duration) {
+            selectedOffset = int.start + randomVal;
+            break;
+          }
+          randomVal -= int.duration;
         }
-        randomVal -= int.duration;
+        targetTime = new Date(targetDateObj.getTime() + selectedOffset);
       }
-      targetTime = new Date(targetDateObj.getTime() + selectedOffset);
     } else {
       // Fallback: If no valid interval, try to pick "Now" but at least 1 min apart if possible
       targetTime = new Date(Date.now() + Math.floor(Math.random() * 10) * 60000);

@@ -89,3 +89,8 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] fix lỗi ReferenceError: center is not defined khi tạo khu vực Home/Work trên bản đồ (v1.50.37)
 + [x] Activity Areas sửa lại tối đa điểm nhà là 1 không phải 2, tối đa điểm công ty là 2 với vip và 1 với normal account
 + [x] Auto-lock map khi save Activity Areas (v1.51.7)
++ [x] Tách Random Time Bounds ra ngoài config chung, không bị ẩn khi toggle Custom Time (v1.51.8)
++ [x] Sửa Target Time thành input 1 giờ duy nhất cho GPX Only (v1.51.9)
++ [x] Cập nhật logic Avoid Workhours chỉ hoạt động T2-T6 (v1.51.8)
++ [x] Refine UI Time Configuration: bỏ khung viền, update input size (v1.51.9)
++ [x] Check logic random/schedule đảm bảo nằm trong Bounds và không trùng Workhours/Existing (v1.51.9)

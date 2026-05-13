@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.8)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.9)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.8). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.9). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.9 (2026-05-13)
+- **UI: Refined Time Config**: Streamlined the Time Configuration interface by making Random Time Bounds standard-sized, removing redundant borders from Avoid Workhours, and simplifying Target Time to a single input for precise scheduling.
+- **Logic: Fixed-Time Scheduling**: Enhanced GPX generation to support exact-time scheduling (Custom Time mode) while maintaining safety checks against work hours and overlapping activities.
 
 ### v1.51.8 (2026-05-13)
 - **UI: Time Configuration Overhaul**: Separated "Random Time Bounds" into a global setting that remains visible regardless of the "Custom Time" toggle.
