@@ -669,7 +669,7 @@ async function refreshGoogleFitStats(forceRefresh = false) {
     
     if (stepsEl) stepsEl.textContent = data.steps.toLocaleString();
     if (syncEl) {
-      const time = new Date(data.lastUpdate).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+      const time = new Date(data.lastUpdate).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
       syncEl.textContent = `Last sync: ${time}`;
     }
     if (statusText) {

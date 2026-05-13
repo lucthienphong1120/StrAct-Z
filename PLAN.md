@@ -93,4 +93,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Sửa Target Time thành input 1 giờ duy nhất cho GPX Only (v1.51.9)
 + [x] Cập nhật logic Avoid Workhours chỉ hoạt động T2-T6 (v1.51.8)
 + [x] Refine UI Time Configuration: bỏ khung viền, update input size (v1.51.9)
++ [x] Cập nhật Avoid Workhours full dòng, chia đôi 50/50 (v1.51.10)
++ [x] Enforce định dạng giờ 24h toàn hệ thống (v1.51.10)
 + [x] Check logic random/schedule đảm bảo nằm trong Bounds và không trùng Workhours/Existing (v1.51.9)

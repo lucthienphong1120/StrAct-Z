@@ -103,7 +103,7 @@ async function executeJob(accountId) {
         userRole: role,
       });
 
-      console.log(`[Scheduler] Generated: ${activity.activityName} at ${activity.startTime.toLocaleTimeString()} - ${activity.distanceKm}km`);
+      console.log(`[Scheduler] Generated: ${activity.activityName} at ${activity.startTime.toLocaleTimeString('vi-VN', { hour12: false })} - ${activity.distanceKm}km`);
       
       // Add to existingActivities for next iteration check
       existingActivities.push({

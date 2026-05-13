@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.51.9</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.51.10</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -188,11 +188,11 @@
                     <label class="form-label"
                       style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">&#x1F552; Random Time
                       Bounds <span class="tooltip-icon"
-                        data-tooltip="Khung giờ hoạt động chung của hệ thống.&#10;Kiểu: time&#10;Mặc định: 04:30 - 21:30">?</span></label>
-                    <div style="display:flex;gap:5px;align-items:center;">
-                      <input type="time" id="cfgRandMinTime" class="form-input" value="04:30">
-                      <span>-</span>
-                      <input type="time" id="cfgRandMaxTime" class="form-input" value="21:30">
+                        data-tooltip="Khung giờ hoạt động chung của hệ thống.&#10;Kiểu: time (24h)&#10;Mặc định: 04:30 - 21:30">?</span></label>
+                    <div style="display:flex;gap:10px;align-items:center;">
+                      <input type="time" id="cfgRandMinTime" class="form-input" value="04:30" style="flex:1;">
+                      <span style="color:var(--text-muted)">-</span>
+                      <input type="time" id="cfgRandMaxTime" class="form-input" value="21:30" style="flex:1;">
                     </div>
                   </div>
                 </div>
@@ -203,22 +203,17 @@
                       <label class="form-label"
                         style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">&#x1F6AB; Avoid
                         Workhours (T2-T6) <span class="tooltip-icon"
-                          data-tooltip="Khung giờ không tạo hoạt động ngẫu nhiên (chỉ áp dụng T2-T6).&#10;Kiểu: time&#10;Mặc định: 08:00-11:30 & 13:30-17:30">?</span></label>
-                      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                          data-tooltip="Khung giờ không tạo hoạt động ngẫu nhiên (chỉ áp dụng T2-T6).&#10;Kiểu: time (24h)&#10;Mặc định: 08:00-11:30 & 13:30-17:30">?</span></label>
+                      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; align-items:center;">
                         <div style="display:flex;gap:5px;align-items:center;">
-                          <input type="time" id="cfgWorkStart1" class="form-input" value="08:00"
-                            style="padding:4px 8px;font-size:0.85rem;width:90px">
-                          <span>-</span>
-                          <input type="time" id="cfgWorkEnd1" class="form-input" value="11:30"
-                            style="padding:4px 8px;font-size:0.85rem;width:90px">
+                          <input type="time" id="cfgWorkStart1" class="form-input" value="08:00" style="flex:1;">
+                          <span style="color:var(--text-muted)">-</span>
+                          <input type="time" id="cfgWorkEnd1" class="form-input" value="11:30" style="flex:1;">
                         </div>
-                        <span style="color:var(--text-muted)"> &amp; </span>
                         <div style="display:flex;gap:5px;align-items:center;">
-                          <input type="time" id="cfgWorkStart2" class="form-input" value="13:30"
-                            style="padding:4px 8px;font-size:0.85rem;width:90px">
-                          <span>-</span>
-                          <input type="time" id="cfgWorkEnd2" class="form-input" value="17:30"
-                            style="padding:4px 8px;font-size:0.85rem;width:90px">
+                          <input type="time" id="cfgWorkStart2" class="form-input" value="13:30" style="flex:1;">
+                          <span style="color:var(--text-muted)">-</span>
+                          <input type="time" id="cfgWorkEnd2" class="form-input" value="17:30" style="flex:1;">
                         </div>
                       </div>
                     </div>

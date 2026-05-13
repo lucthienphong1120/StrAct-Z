@@ -158,7 +158,7 @@ async function loadActivities() {
       const actualTime = a.route_start_time || a.created_at;
       const dateStr = actualTime.endsWith('Z') ? actualTime : actualTime + 'Z';
       const dateObj = new Date(dateStr);
-      const timeStr = dateObj.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' });
+      const timeStr = dateObj.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Ho_Chi_Minh' });
       const dateOnlyStr = dateObj.toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
       
       let districtTags = '';
