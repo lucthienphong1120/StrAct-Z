@@ -101,4 +101,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] phần Time Configuration và Daily Run Time sửa về dùng định dạng 24:00 (v1.51.12)
 + [x] Fix lỗi vỡ layout index.html và lỗi JS loadConfig (v1.51.14)
 + [x] thêm thông tin cách event được tạo cho event trong Local Generated History là 1 label format giống và ở cạnh label quận (giá trị: Manual / Schedule 1/Schedule 2) (v1.51.21)
++ [ ] fix lỗi responsive mobile
++ [ ] fix lỗi label create by schedule chưa hiện
 + [ ] 
