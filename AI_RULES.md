@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.37)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.38)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.37). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.38). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -41,6 +41,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
 ## 🛠️ Developer Rules
+
+### v1.50.38 (2026-05-13)
+- **Bug Fix**: Fixed a validation error where `activity_type` could not be saved because its limit defaulted to 0.
+- **Limit Synchronization**: Added `min: 1` and `max: 1` to `activity_type` in `limits.js` to ensure proper validation for single-choice selections.
+- **VIP Perk Update**: Increased the `home_count` limit for VIP users to 2, matching the previously updated `work_count` limit.
 
 ### v1.50.37 (2026-05-13)
 - **Bug Fix**: Resolved `ReferenceError: center is not defined` in `addActivityCircle` function (map.js).

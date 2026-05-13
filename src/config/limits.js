@@ -135,7 +135,7 @@ const LIMITS = {
     type: 'int',
     default: 0,
     min: 0,
-    max: 1
+    max: { normal: 1, vip: 2 }
   },
   work_count: {
     label: 'Giới hạn điểm Công ty.',
@@ -169,6 +169,8 @@ const LIMITS = {
     default: 'Random',
     default_label: 'Random (60% Run, 30% Walk, 10% Ride)',
     choices: ['Random', 'Run', 'Walk', 'Ride'],
+    min: 1,
+    max: 1,
     weights: {
       Random: { Run: 0.6, Walk: 0.3, Ride: 0.1 },
       Run: { Run: 1.0, Walk: 0.0, Ride: 0.0 },
