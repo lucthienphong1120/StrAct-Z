@@ -90,6 +90,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] trace và debug thực tế vấn đề đồng bộ bước chân fit khi tạo hoạt động (do sai tên field)
 + [ ] sau khi đã chốt và debug xong issue đồng bộ gg fit chuẩn thì thêm label (counted số bước chân ở event trong Local Generated History) -> cạnh label của quận
 + [x] thêm option nữa cho time filter ở local generated history và strava cloud activities: today
-+ [ ] fix lỗi thêm work location trong Activity Areas
++ [ ] fix lỗi thêm work location trong Activity Areas không hoạt động
 + [ ] debug lỗi có event GENERATED nhưng lại ko có nút upload ở Local Generated History
 + [ ] bị break lỗi 4 trạng thái (upload/delete/generate/remove) ở local generated history, bây giờ xóa trên cloud mất luôn bản ghi trên local history, khôi phục lại logic như trước
