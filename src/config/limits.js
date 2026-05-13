@@ -36,7 +36,7 @@ const LIMITS = {
   overlap_protection_minutes: {
     label: 'Thời gian đệm tối thiểu giữa các hoạt động để tránh trùng lặp.',
     type: 'int',
-    default: 45,
+    default: 30,
     min: 10,
     max: { normal: 60, vip: 120 },
     unit: 'phút'
@@ -165,7 +165,7 @@ const LIMITS = {
   activity_type: {
     label: 'Loại hoạt động (Activity Type).',
     desc_extra: 'Tác dụng: Áp dụng hệ số nhân Dist/Pace riêng biệt cho từng loại.',
-    type: 'string',
+    type: 'array',
     default: 'Random',
     default_label: 'Random (60% Run, 30% Walk, 10% Ride)',
     choices: ['Random', 'Run', 'Walk', 'Ride'],
@@ -244,13 +244,6 @@ const LIMITS = {
     label: 'Tự động đồng bộ sang Google Fit.',
     type: 'bool',
     default: false
-  },
-  google_fit_steps_info: {
-    label: 'Cơ chế tính toán bước chân Today.',
-    desc_extra: 'Gồm 3 nguồn dữ liệu chính: \n1. Device/General: Dữ liệu gốc từ điện thoại/đồng hồ/... \n2. StrAct Z Sync: ĐÃ XÁC THỰC trên Google Cloud (Trust Data). \n3. Queue Sync: Đã gửi thành công (200 OK) nhưng đang chờ Google kiểm kho (Pending Index).',
-    type: 'int',
-    default: 0,
-    unit: 'bước'
   }
 };
 
@@ -264,10 +257,10 @@ function getLimits(role = 'normal') {
   for (const key in LIMITS) {
     const item = LIMITS[key];
     if (item.type) {
-      const min_val = (item.min && typeof item.min === 'object' ? item.min[role] : item.min) ??
-        (item.min_range ? item.min_range[role] : undefined);
-      const max_val = (item.max && typeof item.max === 'object' ? item.max[role] : item.max) ??
-        (item.max_range ? item.max_range[role] : undefined);
+      const min_val = (item.min && typeof item.min === 'object' ? item.min[role] : item.min) ||
+        (item.min_range ? item.min_range[role] : 0);
+      const max_val = (item.max && typeof item.max === 'object' ? item.max[role] : item.max) ||
+        (item.max_range ? item.max_range[role] : 0);
 
       result[key] = {
         ...item,

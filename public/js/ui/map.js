@@ -176,7 +176,6 @@ function addActivityCircle(type) {
   const count = window.activityCircles.filter(c => c.type === type).length;
   if (count >= 1) return showToast(`Only 1 ${type} area allowed`, 'warning');
 
-  const center = window.map.getCenter();
   createCircleLayer(center.lat, center.lng, 2000, type);
   updateMapStatsUI();
   showToast(`Added ${type} area`, 'info');

@@ -82,14 +82,8 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] cập nhật hint của Activity Areas Map, thêm phần trọng số format giống Distance Multipliers, Heart Rate Zones, show thêm config về limit số lượng home, work (vip: 2, normal: 1), và scale radius (vip: 4000, normal: 3000) - giống Daily Upload Limit
 + [ ] cấu hình cho phép schedule 2 khung giờ -> tùy chọn 1 khung giờ hoặc 2 khung giờ
 + [ ] sửa logic bao phủ của khu vực hoạt động thay vì Fully	Mostly	Partially chưa hợp lý vì mỗi quận sẽ có độ rộng khác nhau, và 1 vòng tròn có thể to bao phủ cả 1 quận hoặc 1 quận cũng có thể to bao phủ 1 vòng tròn -> tìm giải pháp hợp lý, có thể theo tỉ lệ diện tích, nhưng tôi vẫn muốn tỉ lệ các quận công bằng và hợp lý (không quan tâm quận to hay quận nhỏ), chia theo 3 vùng trọng số như hiện tại
-+ [x] fix lỗi lưu, you can select up to 0 type of activity (v1.50.37)
++ [ ] fix lỗi lưu, you can select up to 0 type of activity
 + [ ] responsive cho mobile
 + [x] check logic luồng đồng bộ sang fit như nào (realtime hoặc upload previous được giống strava)
 + [x] hướng dẫn cách bỏ vip của 1 tài khoản
-+ [x] update README.md thành các file riêng lẻ trong folder docs (phần setup, hướng dẫn use, kiến trúc...) - đồng thời cập nhật AI Rules, giảm phụ thuộc file README (nội dung bây h sẽ reference tới docs)
-+ [x] trace và debug thực tế vấn đề đồng bộ bước chân fit khi tạo hoạt động (do sai tên field)
-+ [ ] sau khi đã chốt và debug xong issue đồng bộ gg fit chuẩn thì thêm label (counted số bước chân ở event trong Local Generated History) -> cạnh label của quận
-+ [x] thêm option nữa cho time filter ở local generated history và strava cloud activities: today
-+ [ ] fix lỗi thêm work location trong Activity Areas không hoạt động
-+ [ ] debug lỗi có event GENERATED nhưng lại ko có nút upload ở Local Generated History
-+ [ ] bị break lỗi 4 trạng thái (upload/delete/generate/remove) ở local generated history, bây giờ xóa trên cloud mất luôn bản ghi trên local history, khôi phục lại logic như trước
+

@@ -1,12 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.83)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.50.36)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.83). Follow these guidelines strictly.
-
-## 🛠️ Stability & Pre-Execution Rules (CRITICAL)
-- **Zero-Assumption Policy**: Never assume the name of middleware (e.g., `authMiddleware`), helper functions, or DB methods. **ALWAYS** read the first 50-100 lines of the target file to identify established patterns and variable names.
-- **Syntax Integrity**: Before applying any edit, virtually "lint" the code. Ensure all backticks, quotes, and braces are balanced.
-- **File Integrity**: Avoid using shell commands (PowerShell/Bash) to append or modify code blocks if they contain special characters (`\`, `"`, `` ` ``). Use `replace_file_content` with precise context to maintain file encoding and structure.
-- **Server Health First**: Any change to `server.js` or `src/routes/` must be treated as high-risk. Verify that exports (`module.exports`) are preserved at the end of the file.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.50.36). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -46,63 +40,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Storage**: `map_lat`, `map_lng`, and `map_zoom` are saved in the `config` table.
 - **UI**: The map restores its last saved center and zoom level upon page load.
 
-### 5. Google Fit Synchronization (v1.50.43+)
-- **Stream Identity**: Uses a consistent `streamId` format: `raw:com.google.step_count.delta:me:StrActZ:stract-z-sync`. This is the unique identifier on Google Cloud.
-- **Sync Method**: Uses `PATCH` requests on `dataSources` with structured `startTimeNanos` and `endTimeNanos`.
-- **Steps Calculation**: Defaults to `distance_km * 1250` (or 1400 if activity type is 7).
-- **Dual-Stream Query**: To bypass Google's merge delay, the system aggregates both the general `com.google.step_count.delta` stream AND the specific `stract-z-sync` source for the daily total.
-## 📂 Documentation Structure (v1.50.42+)
-- **Root README.md**: High-level overview and quick start.
-- **docs/ARCHITECTURE.md**: Technical design and engine details.
-- **docs/SETUP_GUIDE.md**: Environment setup and API integration (Strava/Google Fit).
-- **docs/USER_GUIDE.md**: Dashboard usage and troubleshooting.
-- **docs/CHANGELOG.md**: Detailed version history.
-- **AI_RULES.md**: Rules and context for AI coding assistants.
-
 ## 🛠️ Developer Rules
 
-### v1.50.42 (2026-05-12)
-- **Google Fit Breakdown**: Separated the Google Fit steps display into two categories: "Device/General" (official steps from Google) and "StrAct Z Sync" (manual steps synced via this app).
-- **Error Handling**: Resolved a 500 error on the stats API by gracefully handling cases where the manual data source has not been created yet for a user.
-- **UI Enhancement**: Added a breakdown view in the Google Fit account card that appears when manual sync data is present.
-
-### Google Fit Engine (v1.50.52+)
-- **Dynamic Discovery**: The system no longer assumes a `streamId` format. It creates a source via `POST`, retrieves the Google-assigned ID, and later discovers it by scanning the user's data sources for `application.name === 'StrActZ'`.
-- **Field-Exact Mapping**: Strictly adheres to Google Fit REST API schema (e.g., `steps` field for step count).
-- **Dual-Query Aggregation**: 
-  - Query 1: `dataset:aggregate` for official merged data.
-  - Query 2: `datasets.get` for the specific StrAct Z raw stream.
-- **Precision Management**: Uses `BigInt` for nanosecond range identifiers in dataset URLs.
-- **Sync Reliability**: Refined the aggregation loop to sum up all returned datasets for a complete daily total.
-
-### v1.50.40 (2026-05-12)
-- **Google Fit Transparency**: Added realtime sync feedback to the UI. The success notification now displays the exact number of steps calculated and pushed to Google Fit.
-- **Server-Side Reporting**: Enhanced API responses and services to return the calculated step count for better logging and user awareness.
-
-### v1.50.39 (2026-05-12)
-- **Google Fit Sync Standards**: 
-  - **Source Creation**: Always use `POST` to `/dataSources` and read the `dataStreamId` from the response. Do NOT assume a naming format.
-  - **Stream Discovery**: Use the `allSources` list to find the stream ID where `application.name === 'StrActZ'` and contains the target data type (e.g., `com.google.step_count.delta`).
-  - **Field Mapping (CRITICAL)**: Standard Google Fit types require specific field names:
-    - `com.google.step_count.delta` -> field: `steps` (integer)
-    - `com.google.distance.delta` -> field: `distance` (floatPoint)
-    - `com.google.speed` -> field: `speed` (floatPoint)
-    - `com.google.calories.expended` -> field: `calories` (floatPoint)
-    - `com.google.heart_rate.bpm` -> field: `bpm` (floatPoint)
-  - **Precision**: Use `BigInt` for all nanosecond calculations (`ms * 1000000n`) to prevent precision loss.
-- **Improved Metadata**: Added virtual device info (manufacturer, model) to Google Fit data sources to improve data "trustworthiness" for Google's merging algorithms.
-
-### v1.50.38 (2026-05-12)
-- **UI Refresh Bug**: Fixed issue where Google Fit steps wouldn't update when clicking the cloud refresh button due to missing `loadStats(true)` call.
-- **Google Fit Enhancement**: Added Calories and Heart Rate synchronization to the Google Fit upload logic.
-
-### v1.50.37 (2026-05-12)
-- **Validation Fix**: Resolved the "You can select up to 0 type of activity" bug by correctly defining `activity_type` as a string and fixing the default limit logic in `getLimits`.
-- **Logic Refinement**: Ensured that configuration keys without explicit min/max ranges do not default to zero-length/zero-value constraints.
-
-### v1.50.36 (2026-05-12)
-- **Google Fit Manual Sync**: Enhanced the manual "Upload" route to support Google Fit synchronization. Now, uploading a previously generated activity also pushes it to Google Fit if enabled.
-- **Sync Consistency**: Unified the Google Fit sync logic across Auto-Scheduler, Generate & Upload, and Manual Upload.
+### v1.50.36 (2026-05-13)
+- **Google Fit Sync Optimization**: Refactored the Google Fit integration to use more reliable data aggregation and simplified the dataset patching logic.
+- **Role Management Guide**: Finalized the documentation for manual VIP role downgrades.
+- **UI & Logic Cleanup**: Removed legacy Google Fit clear-queue endpoints and consolidated frontend dashboard logic.
 
 ### v1.50.35 (2026-05-12)
 - **Manual Role Management**: Added documentation to `README.md` for manual account role downgrades (VIP to Normal) via Node.js CLI.

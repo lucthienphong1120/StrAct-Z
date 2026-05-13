@@ -118,8 +118,7 @@ async function loadActivities() {
     const range = document.getElementById('historyFilterRange')?.value || '7_days';
     if (range !== 'total') {
       let days = 7;
-      if (range === 'today') days = 1;
-      else if (range === '3_days') days = 3;
+      if (range === '3_days') days = 3;
       else if (range === '5_days') days = 5;
       else if (range === '7_days') days = 7;
       else if (range === '14_days') days = 14;
@@ -170,34 +169,26 @@ async function loadActivities() {
           }).join('');
       }
 
-      // --- Improved 4-Status Logic ---
+      // --- New Single-Badge Logic ---
       const isUploadedLocal = (a.upload_status === 'uploaded' || !!a.strava_activity_id);
-      const isDeletedLocal = (a.deleted_at || a.upload_status === 'deleted');
+      const stravaRecord = isUploadedLocal ? window.latestStravaActivities?.find(s => String(s.id) === String(a.strava_activity_id)) : null;
       
       let badge = '';
-      if (isDeletedLocal) {
-        badge = `<span class="status-badge deleted" title="Đã xóa ở Local">🔴 DELETED</span>`;
-      } else if (isUploadedLocal) {
-        // Only mark as REMOVED if we have cloud data and it's missing there
-        const stravaRecord = window.latestStravaActivities?.find(s => String(s.id) === String(a.strava_activity_id));
+      
+      if (isUploadedLocal) {
+        // If we have cloud data loaded, check if it's still there
         const cloudDataAvailable = window.latestStravaActivities?.length > 0;
-        
         if (cloudDataAvailable && !stravaRecord) {
-          // Additional check: is the local activity within the time range of loaded cloud activities?
-          const oldestCloud = new Date(window.latestStravaActivities[window.latestStravaActivities.length - 1].start_date).getTime();
-          const activityTime = new Date(dateStr).getTime();
-          
-          if (activityTime >= oldestCloud) {
-            badge = `<span class="status-badge removed" title="Đã upload nhưng sau đó bị xóa trên Cloud">⚪ REMOVED</span>`;
-          } else {
-            // Outside range, assume it's still there but not loaded
-            badge = `<span class="status-badge uploaded" title="Đã upload lên Cloud">🟢 UPLOADED</span>`;
-          }
+          badge = `<span class="status-badge removed" title="Đã tạo local và upload lên cloud, sau đó xóa ở cloud">⚪ REMOVED</span>`;
         } else {
-          badge = `<span class="status-badge uploaded" title="Đã upload lên Cloud">🟢 UPLOADED</span>`;
+          badge = `<span class="status-badge uploaded" title="Đã tạo local và upload lên cloud">🟢 UPLOADED</span>`;
         }
       } else {
-        badge = `<span class="status-badge generated" title="Đã tạo local và chưa upload">🟡 GENERATED</span>`;
+        if (a.deleted_at || a.upload_status === 'deleted') {
+          badge = `<span class="status-badge deleted" title="Đã tạo local và chưa upload, sau đó xóa ở local">🔴 DELETED</span>`;
+        } else {
+          badge = `<span class="status-badge generated" title="Đã tạo local và chưa upload">🟡 GENERATED</span>`;
+        }
       }
 
       return `
@@ -216,12 +207,11 @@ async function loadActivities() {
             ${badge}
             
             <div style="display:flex; gap:6px; margin-left: 10px;">
-              ${(!isDeletedLocal) ? `<button class="btn btn-sm btn-outline-success" onclick="syncToGoogleFit(${a.id})" title="Push to Google Fit ONLY">Push to Fit</button>` : ''}
-              ${(!isUploadedLocal && !isDeletedLocal) ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
+              ${(a.upload_status === 'generated' && !a.deleted_at) ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
               ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
-              ${(!isUploadedLocal && !isDeletedLocal) ? 
+              ${(a.upload_status === 'generated' && !a.deleted_at) ? 
                 `<button class="btn btn-sm btn-danger" style="padding:4px 8px;" title="Delete locally" onclick="deleteActivity(${a.id}, false)">🗑️</button>` : 
-                `<span class="tooltip-icon tooltip-left" data-tooltip="Hoạt động đã upload hoặc đã xóa không thể xóa thêm tại đây.">?</span>`
+                `<span class="tooltip-icon tooltip-left" data-tooltip="Hoạt động đã upload chỉ có thể xóa trực tiếp trên Strava.com. Sau khi xóa trên Strava, hãy Refresh Cloud Data để cập nhật trạng thái tại đây.">?</span>`
               }
             </div>
           </div>
@@ -262,7 +252,6 @@ function onStravaFilterChange() {
 async function refreshCloudData() {
   showToast('Refreshing cloud data...', 'info');
   await Promise.all([
-    loadStats(true),
     loadStravaActivities(true),
     loadInsights(true)
   ]);
@@ -279,8 +268,7 @@ async function loadStravaActivities(forceRefresh = false) {
     let afterQuery = '';
     if (range !== 'total') {
       let days = 7;
-      if (range === 'today') days = 1;
-      else if (range === '3_days') days = 3;
+      if (range === '3_days') days = 3;
       else if (range === '5_days') days = 5;
       else if (range === '7_days') days = 7;
       else if (range === '14_days') days = 14;
@@ -578,11 +566,7 @@ async function generateAndUpload() {
     
     const result = await api('/generate-and-upload', { method: 'POST', body: overrideConfig });
     if (result.success) {
-      let msg = `Uploaded to Strava! Activity: ${result.activity?.activityName || 'Done'}`;
-      if (result.activity?.googleFitSynced) {
-        msg += `\n✨ Google Fit: +${result.activity.googleFitSteps} steps synced!`;
-      }
-      showToast(msg, 'success');
+      showToast(`Uploaded to Strava! Activity: ${result.activity?.activityName || 'Done'}`, 'success');
     } else {
       if (result.message === 'VIP_REQUIRED') {
         showToast('Daily limit reached (2 activities/day). Contact Admin to upgrade.', 'warning');
@@ -604,11 +588,7 @@ async function uploadActivity(id) {
   try {
     const result = await api(`/upload/${id}`, { method: 'POST' });
     if (result.success) {
-      let msg = 'Uploaded successfully!';
-      if (result.googleFitSynced) {
-        msg += `\n✨ Google Fit: +${result.googleFitSteps} steps synced!`;
-      }
-      showToast(msg, 'success');
+      showToast('Uploaded successfully!', 'success');
     } else {
       showToast(result.error || 'Upload failed', 'error');
     }
@@ -646,31 +626,7 @@ window.changeLocalPage = changeLocalPage;
 window.onHistoryFilterChange = onHistoryFilterChange;
 window.onStravaFilterChange = onStravaFilterChange;
 window.refreshCloudData = refreshCloudData;
-async function syncToGoogleFit(id) {
-  const btn = event.currentTarget;
-  const originalText = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>';
-  
-  try {
-    const res = await api(`/google-fit/sync/${id}`, { method: 'POST' });
-    if (res.success) {
-      showToast(`Synced! Estimated Steps: ${res.steps}`, 'success');
-      console.log('[Manual GF Sync] Details:', res.details);
-      if (window.refreshGoogleFitStats) window.refreshGoogleFitStats(true);
-    } else {
-      showToast('Sync completed but no strategies succeeded. Check console.', 'warning');
-      console.warn('[Manual GF Sync] Failed Details:', res.details);
-    }
-  } catch (err) {
-    showToast(`Sync error: ${err.message}`, 'error');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = originalText;
-  }
-}
-
-window.syncToGoogleFit = syncToGoogleFit;
+window.loadStravaActivities = loadStravaActivities;
 window.changeStravaPage = changeStravaPage;
 window.loadInsights = loadInsights;
 window.updateActivityChart = updateActivityChart;

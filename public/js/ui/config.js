@@ -108,8 +108,7 @@ function updateDynamicTooltips() {
     map_locked: 'tipMapLocked',
     home_count: 'tipHomePoints',
     work_count: 'tipWorkPoints',
-    scale_radius: 'tipScaleRadius',
-    google_fit_steps_info: 'tipGfSteps'
+    scale_radius: 'tipScaleRadius'
   };
 
   for (const [key, tipId] of Object.entries(tipMapping)) {
@@ -647,27 +646,10 @@ async function refreshGoogleFitStats(forceRefresh = false) {
     const data = await api(`/google-fit/stats${refreshQuery}`);
     if (data.error) throw new Error(data.error);
     
-    const stepsEl = document.getElementById('gfTodaySteps');
-    const officialEl = document.getElementById('gfOfficialSteps');
-    const syncedEl = document.getElementById('gfSyncedSteps');
-    const queueEl = document.getElementById('gfQueueSteps');
-    const queueRow = document.getElementById('gfQueueRow');
-    const breakdownEl = document.getElementById('gfBreakdown');
-    const statusText = document.getElementById('gfStatusText');
-
-    console.log('[Google Fit Debug]', data);
-
-    if (stepsEl) stepsEl.textContent = (data.steps || 0).toLocaleString();
-    if (officialEl) officialEl.textContent = (data.officialSteps || 0).toLocaleString();
-    if (syncedEl) syncedEl.textContent = (data.syncedSteps || 0).toLocaleString();
-    if (queueEl) queueEl.textContent = (data.queueSteps || 0).toLocaleString();
-    
-    if (queueRow) queueRow.style.display = (data.queueSteps > 0) ? 'flex' : 'none';
-    if (breakdownEl) breakdownEl.style.display = 'block';
-    if (statusText) statusText.innerText = `Active & Syncing (Last: ${data.lastSync})`;
-
+    if (stepsEl) stepsEl.textContent = data.steps.toLocaleString();
     if (syncEl) {
-      syncEl.textContent = `Last sync: ${data.lastSync || '--:--'}`;
+      const time = new Date(data.lastUpdate).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+      syncEl.textContent = `Last sync: ${time}`;
     }
     if (statusText) {
       statusText.textContent = 'Status: Active & Syncing';
@@ -679,26 +661,6 @@ async function refreshGoogleFitStats(forceRefresh = false) {
       statusText.textContent = 'Status: Sync Error';
       statusText.style.color = 'var(--accent-red)';
     }
-  }
-}
-
-async function clearQueue() {
-  if (!confirm('Bạn có chắc chắn muốn xóa toàn bộ hàng chờ (Queue) của ngày hôm nay không?\nThao tác này sẽ xóa dữ liệu cả trên Google Fit Cloud.')) {
-    return;
-  }
-
-  try {
-    const res = await fetch('/api/google-fit/clear-queue', { method: 'POST' });
-    const data = await res.json();
-    if (data.success) {
-      showToast(`Đã xóa ${data.count} hoạt động khỏi hàng chờ!`, 'success');
-      refreshGoogleFitStats();
-    } else {
-      showToast('Lỗi khi xóa hàng chờ: ' + data.error, 'error');
-    }
-  } catch (err) {
-    console.error('Clear queue error:', err);
-    showToast('Lỗi kết nối máy chủ', 'error');
   }
 }
 

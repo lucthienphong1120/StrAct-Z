@@ -62,24 +62,6 @@
 }
 .btn-strava:hover { background: var(--strava-orange-dark); transform: translateY(-2px); box-shadow: 0 8px 30px var(--strava-orange-glow); }
 
-.btn-clear-queue {
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--accent-red);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-size: 0.65rem;
-  cursor: pointer;
-  transition: var(--transition);
-  font-weight: 600;
-  text-transform: uppercase;
-  margin-left: 8px;
-}
-.btn-clear-queue:hover {
-  background: var(--accent-red);
-  color: white;
-}
-
 /* ─── Form Elements ───────────────────────────────────── */
 .form-group { margin-bottom: 1rem; }
 .form-label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; }

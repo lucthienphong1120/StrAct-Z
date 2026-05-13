@@ -13,7 +13,6 @@
   <link rel="stylesheet" href="/css/theme.css">
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/components.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -29,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.83</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.50.36</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -97,6 +96,7 @@
             <option value="7" selected>Last 7 Days</option>
             <option value="14">Last 14 Days</option>
             <option value="30">Last 1 Month</option>
+            <option value="90">Last 3 Months</option>
           </select>
         </div>
         <div class="card-body" style="height: 200px; position: relative;">
@@ -601,37 +601,8 @@
                 <div id="gfStats"
                   style="margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border);">
                   <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:0.8rem; color:var(--text-secondary);">Today's Steps <span id="tipGfSteps"
-                        class="tooltip-icon">?</span>
-                    </span>
-                    <span style="font-weight:700; color:var(--accent-blue); font-size:1.1rem;"
-                      id="gfTodaySteps">0</span>
-                  </div>
-                  <div id="gfBreakdown"
-                    style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--border); display:none;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                      <span style="font-size:0.75rem; color:var(--text-muted);">📱 Device/General:</span>
-                      <span style="font-size:0.8rem; color:var(--text-secondary); font-weight:500;"
-                        id="gfOfficialSteps">0</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                      <span style="font-size:0.75rem; color:var(--text-muted);">✨ StrAct Z Sync:</span>
-                      <span style="font-size:0.8rem; color:var(--accent-blue); font-weight:500;"
-                        id="gfSyncedSteps">0</span>
-                    </div>
-                    <div id="gfQueueRow"
-                      style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; display:none;">
-                      <span style="font-size:0.75rem; color:var(--text-muted);">⏳ Queue Sync:</span>
-                      <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-size:0.8rem; color:var(--text-warning); font-weight:500;" id="gfQueueSteps">0</span>
-                        <button onclick="clearQueue()" class="btn-clear-queue" title="Clear all pending queue for today">Clear</button>
-                      </div>
-                    </div>
-                    <div
-                      style="font-size:0.7rem; color:var(--text-muted); opacity:0.6; font-style:italic; line-height:1.4; border-top: 1px solid rgba(255,255,255,0.05); padding-top:8px;">
-                      * Google cần thời gian để gộp dữ liệu Sync vào Device. Khi hoàn tất, số tại Sync sẽ chuyển dần
-                      sang Device.
-                    </div>
+                    <span style="font-size:0.8rem; color:var(--text-secondary);">Today's Steps:</span>
+                    <span style="font-weight:700; color:var(--accent-blue);" id="gfTodaySteps">0</span>
                   </div>
                   <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
                     <span style="font-size:0.7rem; color:var(--text-muted);" id="gfLastSync">Last sync: --:--</span>
@@ -683,7 +654,6 @@
             <div style="display:flex; gap:10px; align-items:center;">
               <select id="historyFilterRange" class="form-select"
                 style="padding:4px 8px; font-size:0.8rem; width:120px;" onchange="onHistoryFilterChange()">
-                <option value="today">Today</option>
                 <option value="3_days">Last 3 Days</option>
                 <option value="5_days">Last 5 Days</option>
                 <option value="7_days" selected>Last 7 Days</option>
@@ -718,7 +688,6 @@
             <div style="display:flex; gap:10px; align-items:center;">
               <select id="stravaFilterRange" class="form-select" style="padding:4px 8px; font-size:0.8rem; width:120px;"
                 onchange="onStravaFilterChange()">
-                <option value="today">Today</option>
                 <option value="3_days">Last 3 Days</option>
                 <option value="5_days">Last 5 Days</option>
                 <option value="7_days" selected>Last 7 Days</option>
