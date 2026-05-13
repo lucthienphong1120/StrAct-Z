@@ -182,6 +182,7 @@ async function loadActivities() {
       const stravaRecord = isUploadedLocal ? cloudBuffer.find(s => String(s.id) === String(a.strava_activity_id)) : null;
       
       let badge = '';
+      let showViewBtn = false;
       
       if (isUploadedLocal) {
         // If we have cloud data loaded, check if it's still there
@@ -190,6 +191,7 @@ async function loadActivities() {
           badge = `<span class="status-badge removed" title="Đã tạo local và upload lên cloud, sau đó xóa ở cloud">⚪ REMOVED</span>`;
         } else {
           badge = `<span class="status-badge uploaded" title="Đã tạo local và upload lên cloud">🟢 UPLOADED</span>`;
+          showViewBtn = true;
         }
       } else {
         if (a.deleted_at || a.upload_status === 'deleted') {
@@ -216,7 +218,7 @@ async function loadActivities() {
             
             <div style="display:flex; gap:6px; margin-left: 10px;">
               ${(a.upload_status === 'generated' && !a.deleted_at) ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
-              ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
+              ${showViewBtn ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
               ${(a.upload_status === 'generated' && !a.deleted_at) ? 
                 `<button class="btn btn-sm btn-danger" style="padding:4px 8px;" title="Delete locally" onclick="deleteActivity(${a.id}, false)">🗑️</button>` : 
                 `<span class="tooltip-icon tooltip-left" data-tooltip="Hoạt động đã upload chỉ có thể xóa trực tiếp trên Strava.com. Sau khi xóa trên Strava, hãy Refresh Cloud Data để cập nhật trạng thái tại đây.">?</span>`

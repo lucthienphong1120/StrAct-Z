@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.3)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.4)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.3). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.4). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -48,6 +48,9 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.4 (2026-05-13)
+- **UI: Logic Refinement**: Hidden the "View" button for activities in the `REMOVED` state. The button is now only visible for `UPLOADED` activities that exist on Strava Cloud.
 
 ### v1.51.3 (2026-05-13)
 - **Fix: Config Persistence**: Resolved a critical issue where Route Configuration (Allowed Districts) changes were not saved because of a key mismatch (`selected_districts` vs `allowed_districts`) between the frontend and backend validation logic.
