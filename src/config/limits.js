@@ -274,15 +274,20 @@ function getLimits(role = 'normal') {
   for (const key in LIMITS) {
     const item = LIMITS[key];
     if (item.type) {
-      const min_val = (item.min && typeof item.min === 'object' ? item.min[role] : item.min) ||
-        (item.min_range ? item.min_range[role] : 0);
-      const max_val = (item.max && typeof item.max === 'object' ? item.max[role] : item.max) ||
-        (item.max_range ? item.max_range[role] : 0);
+      const resItem = { ...item };
+      
+      if (item.min !== undefined || item.min_range !== undefined) {
+        resItem.min = (item.min && typeof item.min === 'object' ? item.min[role] : item.min) ||
+                      (item.min_range ? item.min_range[role] : 0);
+      }
+      
+      if (item.max !== undefined || item.max_range !== undefined) {
+        resItem.max = (item.max && typeof item.max === 'object' ? item.max[role] : item.max) ||
+                      (item.max_range ? item.max_range[role] : 0);
+      }
 
       result[key] = {
-        ...item,
-        min: min_val,
-        max: max_val,
+        ...resItem,
         // Also keep full range info for UI hints
         full_min: item.min,
         full_max: item.max,
