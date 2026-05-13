@@ -17,7 +17,7 @@ const LIMITS = {
   },
 
   // ─── Route Configuration ──────────────────────────────────────────────────
-  allowed_districts: {
+  selected_districts: {
     label: 'Các quận được phép tạo lộ trình.',
     type: 'array',
     // Default: Dynamically resolved from districts registry

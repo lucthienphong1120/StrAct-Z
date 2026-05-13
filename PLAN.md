@@ -87,4 +87,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] check logic luồng đồng bộ sang fit như nào (realtime hoặc upload previous được giống strava)
 + [x] hướng dẫn cách bỏ vip của 1 tài khoản
 + [x] fix lỗi ReferenceError: center is not defined khi tạo khu vực Home/Work trên bản đồ (v1.50.37)
-+ [ ] Activity Areas sửa lại tối đa điểm nhà là 1 không phải 2, tối đa điểm công ty là 2 với vip và 1 với normal account
++ [x] Activity Areas sửa lại tối đa điểm nhà là 1 không phải 2, tối đa điểm công ty là 2 với vip và 1 với normal account

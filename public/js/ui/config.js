@@ -81,7 +81,7 @@ function updateDynamicTooltips() {
 
   const tipMapping = {
     daily_upload_limit: 'tipDailyLimit',
-    allowed_districts: 'tipDistricts',
+    selected_districts: 'tipDistricts',
     max_district_span: 'tipMaxSpan',
     overlap_protection_minutes: 'tipSafeTime',
     use_osrm: 'tipOsrm',
@@ -335,7 +335,7 @@ function validateInputs(config, isRealTime = false) {
     max_pace: 'max_pace',
     user_age: 'user_age',
     overlap_protection_minutes: 'overlap_protection_minutes',
-    selected_districts: 'allowed_districts'
+    selected_districts: 'selected_districts'
   };
 
   let isValid = true;
