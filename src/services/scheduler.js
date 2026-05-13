@@ -219,8 +219,8 @@ async function startScheduler(accountId) {
   }
 
   // Second schedule
-  if (config.schedule_enabled_2 === 'true') {
-    const time2 = config.schedule_time_2 || '06:00';
+  if (parseInt(config.schedule_count) >= 2) {
+    const time2 = config.schedule_time_2 || '14:00';
     const [h2, m2] = time2.split(':');
     const cron2 = `${parseInt(m2)} ${parseInt(h2)} * * *`;
     
@@ -272,11 +272,12 @@ function stopScheduler(accountId) {
  */
 async function getStatus(accountId) {
   const config = await db.getAllConfig(accountId);
+  const count = parseInt(config.schedule_count) || 1;
   return {
     enabled: config.schedule_enabled === 'true',
     scheduleTime: config.schedule_time || '22:00',
-    enabled2: config.schedule_enabled_2 === 'true',
-    scheduleTime2: config.schedule_time_2 || '06:00',
+    scheduleCount: count,
+    scheduleTime2: config.schedule_time_2 || '14:00',
     scheduleCountMin: parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : 1,
     scheduleCountMax: parseInt(config.schedule_count_max) >= 0 ? parseInt(config.schedule_count_max) : 2,
     isRunning: isRunning.get(accountId) || false,
@@ -287,11 +288,11 @@ async function getStatus(accountId) {
 /**
  * Update schedule for a specific account
  */
-async function updateSchedule(accountId, enabled1, time1, enabled2, time2, countMin, countMax) {
+async function updateSchedule(accountId, enabled1, time1, scheduleCount, time2, countMin, countMax) {
   await db.setConfig(accountId, 'schedule_enabled', enabled1 ? 'true' : 'false');
   if (time1) await db.setConfig(accountId, 'schedule_time', time1);
   
-  await db.setConfig(accountId, 'schedule_enabled_2', enabled2 ? 'true' : 'false');
+  if (scheduleCount !== undefined) await db.setConfig(accountId, 'schedule_count', scheduleCount);
   if (time2) await db.setConfig(accountId, 'schedule_time_2', time2);
   
   if (countMin !== undefined && countMin !== null) await db.setConfig(accountId, 'schedule_count_min', countMin);

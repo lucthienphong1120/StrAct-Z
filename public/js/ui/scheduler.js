@@ -10,10 +10,10 @@ async function loadSchedule() {
     
     const slot2 = document.getElementById('scheduleSlot2');
     const btnAdd = document.getElementById('btnAddSchedule');
-    if (status.enabled2) {
+    if (status.scheduleCount >= 2) {
       slot2.style.display = 'block';
       btnAdd.style.display = 'none';
-      document.getElementById('scheduleTime2').value = status.scheduleTime2 || '06:00';
+      document.getElementById('scheduleTime2').value = status.scheduleTime2 || '14:00';
     } else {
       slot2.style.display = 'none';
       btnAdd.style.display = 'block';
@@ -27,11 +27,11 @@ async function loadSchedule() {
 
 function updateScheduleDisplay(status) {
   const display = document.getElementById('scheduleDisplay');
-  if (status?.enabled || status?.enabled2) {
+  if (status?.enabled) {
     display.style.display = 'flex';
     let times = [];
-    if (status.enabled) times.push(status.scheduleTime);
-    if (status.enabled2) times.push(status.scheduleTime2);
+    times.push(status.scheduleTime);
+    if (status.scheduleCount >= 2) times.push(status.scheduleTime2);
     document.getElementById('scheduleTimeDisplay').textContent = times.join(' & ');
   } else {
     display.style.display = 'none';
@@ -42,7 +42,7 @@ async function updateSchedule() {
   const enabled = document.getElementById('scheduleEnabled').checked;
   const time = document.getElementById('scheduleTime').value;
   
-  const enabled2 = document.getElementById('scheduleSlot2').style.display === 'block';
+  const scheduleCount = document.getElementById('scheduleSlot2').style.display === 'block' ? 2 : 1;
   const time2 = document.getElementById('scheduleTime2').value;
 
   const countMin = parseInt(document.getElementById('scheduleCountMin').value);
@@ -65,7 +65,7 @@ async function updateSchedule() {
     return;
   }
   
-  const status = await api('/scheduler', { method: 'POST', body: { enabled, time, enabled2, time2, countMin, countMax } });
+  const status = await api('/scheduler', { method: 'POST', body: { enabled, time, scheduleCount, time2, countMin, countMax } });
   if (status.error) {
     showToast(status.error, 'error');
     return;

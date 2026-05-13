@@ -57,7 +57,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 ## 🛠️ Developer Rules
 
 ### v1.51.18 (2026-05-13)
-- **Refactor**: Updated documentation to reflect version 1.51.18.
+- **UX: Improved Schedule UI**: Enhanced spacing and added clearer descriptions for schedule slots.
+- **Config: Count-based Scheduling**: Replaced `schedule_enabled_2` with `schedule_count` for better validation and role-based control.
+- **Fix: Default Values**: Set `schedule_time_2` default to 14:00.
+- **Security: Server-side Validation**: Implemented strict validation for `schedule_count` based on user role (VIP vs Normal).
 
 ### v1.51.17 (2026-05-13)
 - **Feature: Dual-Slot Scheduling**: Added support for configuring up to two independent daily schedule times.

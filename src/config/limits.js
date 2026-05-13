@@ -106,20 +106,22 @@ const LIMITS = {
   },
   schedule_time: {
     label: 'Thời điểm 1 (24h).',
-    desc_extra: 'Định dạng 24:00 (ví dụ: 22:00 thay vì 10:00 PM)',
+    desc_extra: 'Thời gian hệ thống tự chạy hàng ngày 1. Định dạng 24:00',
     type: 'time',
     default: '22:00'
   },
-  schedule_enabled_2: {
-    label: 'Kích hoạt khung giờ thứ 2.',
-    type: 'bool',
-    default: false
+  schedule_count: {
+    label: 'Số lượng khung giờ chạy tự động.',
+    type: 'int',
+    default: 1,
+    min: 1,
+    max: { normal: 1, vip: 2 }
   },
   schedule_time_2: {
     label: 'Thời điểm 2 (24h).',
-    desc_extra: 'Định dạng 24:00',
+    desc_extra: 'Thời gian hệ thống tự chạy hàng ngày 2. Định dạng 24:00',
     type: 'time',
-    default: '06:00'
+    default: '14:00'
   },
   schedule_count_min: {
     label: 'Số lượng hoạt động tối thiểu tạo tự động mỗi ngày.',
@@ -289,15 +291,15 @@ function getLimits(role = 'normal') {
     const item = LIMITS[key];
     if (item.type) {
       const resItem = { ...item };
-      
+
       if (item.min !== undefined || item.min_range !== undefined) {
         resItem.min = (item.min && typeof item.min === 'object' ? item.min[role] : item.min) ||
-                      (item.min_range ? item.min_range[role] : 0);
+          (item.min_range ? item.min_range[role] : 0);
       }
-      
+
       if (item.max !== undefined || item.max_range !== undefined) {
         resItem.max = (item.max && typeof item.max === 'object' ? item.max[role] : item.max) ||
-                      (item.max_range ? item.max_range[role] : 0);
+          (item.max_range ? item.max_range[role] : 0);
       }
 
       result[key] = {
