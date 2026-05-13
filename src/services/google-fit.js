@@ -402,16 +402,17 @@ async function getTodayStats(userId, forceRefresh = false) {
     officialSteps: isolatedDeviceSteps,
     syncedSteps,
     queueSteps,
-    lastSync: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+    lastSync: now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Ho_Chi_Minh' }),
     timestamp: now.getTime(),
     debug: {
       queryDate: hanoiDateStr,
-      localActCount: localActs.length,
-      localActIds: localActs.map(a => a.id),
+      localActCount: uploadedToday.length, // Only count uploaded for consistency
+      localActIds: uploadedToday.map(a => a.id),
       manualCount: manualStreams.length,
       manualDetails,
       googleTotal,
-      expectedSyncedSteps
+      expectedSyncedSteps,
+      allSources // Restored like v1.50.49/50
     }
   };
 
