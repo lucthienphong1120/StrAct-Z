@@ -92,3 +92,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] thêm option nữa cho time filter ở local generated history và strava cloud activities: today
 + [ ] fix lỗi thêm work location trong Activity Areas
 + [ ] debug lỗi có event GENERATED nhưng lại ko có nút upload ở Local Generated History
++ [ ] bị break lỗi 4 trạng thái (upload/delete/generate/remove) ở local generated history, bây giờ xóa trên cloud mất luôn bản ghi trên local history, khôi phục lại logic như trước

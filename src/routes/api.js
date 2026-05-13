@@ -606,6 +606,29 @@ router.post('/account/activate-vip', async (req, res) => {
 });
 
 // Clear All Queue for Today
+router.post('/google-fit/sync/:id', async (req, res) => {
+  try {
+    const activities = await db.getActivities(req.user.id, 500);
+    const activity = activities.find(a => a.id === parseInt(req.params.id));
+    if (!activity) return res.status(404).json({ error: 'Activity not found' });
+
+    const config = await db.getAllConfig(req.user.id);
+    const gfResult = await googleFit.uploadActivity(req.user.id, {
+      ...activity,
+      activity_type: config.activity_type || 'Walk'
+    });
+
+    res.json({
+      success: gfResult.success,
+      steps: gfResult.steps,
+      details: gfResult.details || gfResult.debugDetails
+    });
+  } catch (err) {
+    console.error('[API] Manual GF Sync failed:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.post('/google-fit/clear-queue', async (req, res) => {
   try {
     const now = new Date();

@@ -208,6 +208,7 @@ async function loadActivities() {
             ${badge}
             
             <div style="display:flex; gap:6px; margin-left: 10px;">
+              ${(!a.deleted_at && a.upload_status !== 'deleted') ? `<button class="btn btn-sm btn-outline-success" onclick="syncToGoogleFit(${a.id})" title="Push to Google Fit ONLY">Push to Fit</button>` : ''}
               ${(a.upload_status === 'generated' && !a.deleted_at) ? `<button class="btn btn-sm btn-primary" onclick="uploadActivity(${a.id})">Upload</button>` : ''}
               ${a.strava_activity_id ? `<a href="https://www.strava.com/activities/${a.strava_activity_id}" target="_blank" class="btn btn-sm btn-secondary">View</a>` : ''}
               ${(a.upload_status === 'generated' && !a.deleted_at) ? 
@@ -637,7 +638,31 @@ window.changeLocalPage = changeLocalPage;
 window.onHistoryFilterChange = onHistoryFilterChange;
 window.onStravaFilterChange = onStravaFilterChange;
 window.refreshCloudData = refreshCloudData;
-window.loadStravaActivities = loadStravaActivities;
+async function syncToGoogleFit(id) {
+  const btn = event.currentTarget;
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>';
+  
+  try {
+    const res = await api(`/google-fit/sync/${id}`, { method: 'POST' });
+    if (res.success) {
+      showToast(`Synced! Estimated Steps: ${res.steps}`, 'success');
+      console.log('[Manual GF Sync] Details:', res.details);
+      if (window.refreshGoogleFitStats) window.refreshGoogleFitStats(true);
+    } else {
+      showToast('Sync completed but no strategies succeeded. Check console.', 'warning');
+      console.warn('[Manual GF Sync] Failed Details:', res.details);
+    }
+  } catch (err) {
+    showToast(`Sync error: ${err.message}`, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
+}
+
+window.syncToGoogleFit = syncToGoogleFit;
 window.changeStravaPage = changeStravaPage;
 window.loadInsights = loadInsights;
 window.updateActivityChart = updateActivityChart;

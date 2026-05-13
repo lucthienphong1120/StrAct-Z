@@ -109,8 +109,10 @@ async function uploadActivity(userId, activity) {
   }
 
   const startTime = new Date(activity.route_start_time).getTime();
-  const durationMs = activity.duration_min * 60 * 1000;
+  const durationMs = (activity.duration_min || 0) * 60 * 1000;
   const endTime = startTime + durationMs;
+  
+  // Use explicit BigInt for Nanos to avoid precision loss
   const nanoStart = BigInt(startTime) * 1000000n;
   const nanoEnd = BigInt(endTime) * 1000000n;
 
@@ -121,11 +123,11 @@ async function uploadActivity(userId, activity) {
 
   const totalSteps = Math.round(activity.distance_km * (activityType === 7 ? 1400 : 1250));
 
-  // 1. Expanded Strategies (Naming, Package, Device)
+  // 1. Broadened Strategies
   const strategies = [
-    { name: 'StrActZ', package: 'com.stractz.sync', model: 'VirtualTracker', uid: 'manual_v1' },
-    { name: 'StrAct-Z', package: 'com.stract_z.sync', model: 'StrAct-Z-Phone', uid: 'manual_v2' },
-    { name: 'GoogleFitSync', package: 'com.google.android.apps.fitness', model: 'ManualInput', uid: 'manual_v3' }
+    { name: 'StrAct Z', package: 'com.stractz.sync', model: 'VirtualTracker', uid: `stractz_${activity.id}_1` },
+    { name: 'StrAct-Z', package: 'com.stract_z.sync', model: 'StrAct-Z-Phone', uid: `stractz_${activity.id}_2` },
+    { name: 'GoogleFitSync', package: 'com.google.android.apps.fitness', model: 'ManualInput', uid: `stractz_${activity.id}_3` }
   ];
 
   const results = [];
@@ -313,7 +315,7 @@ async function getTodayStats(userId, forceRefresh = false) {
   // 2. Discover all our manual streams (be flexible with naming)
   const manualStreams = allSources.filter(s => 
     s.includes('com.google.step_count.delta') && 
-    (s.includes('StrActZ') || s.includes('StrAct Z') || s.includes('StrAct-Z') || s.includes('GoogleFitSync')) && 
+    (s.toLowerCase().includes('stract')) && 
     s.startsWith('raw:')
   );
 
