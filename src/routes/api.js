@@ -283,6 +283,7 @@ router.post('/generate', async (req, res) => {
       route_start_lng: activity.startLng,
       route_start_time: activity.startTime ? activity.startTime.toISOString() : new Date().toISOString(),
       district_keys: activity.districtKey,
+      created_by: 'Manual',
     });
 
     res.json({

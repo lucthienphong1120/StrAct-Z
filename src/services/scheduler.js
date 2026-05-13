@@ -15,7 +15,7 @@ const isRunning = new Map(); // accountId -> boolean
 /**
  * Execute the auto-generate and upload flow for a specific account
  */
-async function executeJob(accountId) {
+async function executeJob(accountId, slotName = 'Schedule 1') {
   if (isRunning.get(accountId)) {
     console.log(`[Scheduler] Job already running for account ${accountId}, skipping...`);
     return { success: false, message: 'Job already running' };
@@ -123,6 +123,7 @@ async function executeJob(accountId) {
         route_start_lng: activity.startLng,
         route_start_time: activity.startTime ? activity.startTime.toISOString() : new Date().toISOString(),
         district_keys: activity.districtKey,
+        created_by: slotName,
       });
 
       // Upload to Strava
@@ -211,7 +212,7 @@ async function startScheduler(accountId) {
     if (cron.validate(cron1)) {
       const task1 = cron.schedule(cron1, async () => {
         console.log(`[Scheduler] Slot 1 triggered for account ${accountId}`);
-        await executeJob(accountId);
+        await executeJob(accountId, 'Schedule 1');
       }, { timezone: 'Asia/Ho_Chi_Minh' });
       tasks.push(task1);
       console.log(`[Scheduler] Slot 1 started for ${accountId}: ${cron1}`);
@@ -227,7 +228,7 @@ async function startScheduler(accountId) {
     if (cron.validate(cron2)) {
       const task2 = cron.schedule(cron2, async () => {
         console.log(`[Scheduler] Slot 2 triggered for account ${accountId}`);
-        await executeJob(accountId);
+        await executeJob(accountId, 'Schedule 2');
       }, { timezone: 'Asia/Ho_Chi_Minh' });
       tasks.push(task2);
       console.log(`[Scheduler] Slot 2 started for ${accountId}: ${cron2}`);

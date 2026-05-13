@@ -86,6 +86,7 @@ async function getDb() {
     );
     CREATE TABLE IF NOT EXISTS activities (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      account_id INTEGER,
       created_at TEXT,
       activity_name TEXT,
       distance_km REAL,
@@ -99,7 +100,8 @@ async function getDb() {
       route_start_lng REAL,
       route_start_time TEXT,
       district_keys TEXT,
-      deleted_at TEXT
+      deleted_at TEXT,
+      created_by TEXT
     );
     CREATE TABLE IF NOT EXISTS accounts (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -135,6 +137,11 @@ async function getDb() {
   // Seed default VIP code
   try {
     await dbInstance.run("INSERT OR IGNORE INTO vip_codes (code, status) VALUES (?, ?)", ['CRF@2026', 'available']);
+  } catch (e) {}
+
+  try {
+    await dbInstance.exec('ALTER TABLE activities ADD COLUMN account_id INTEGER');
+    console.log('[SQLite] Added account_id column to activities');
   } catch (e) {}
 
   try {
@@ -216,6 +223,11 @@ async function getDb() {
     }
   }
   
+  try {
+    await dbInstance.exec('ALTER TABLE activities ADD COLUMN created_by TEXT');
+    console.log('[SQLite] Added created_by column');
+  } catch (e) {}
+
   return dbInstance;
 }
 
@@ -273,9 +285,10 @@ async function deleteTokens(accountId) {
 
 async function saveActivity(accountId, data) {
   const db = await getDb();
-  const res = await db.run(`INSERT INTO activities (account_id, created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng, route_start_time, district_keys) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [accountId, new Date().toISOString(), data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.gpx_file, data.strava_activity_id || null, data.upload_status || 'pending', null, data.route_start_lat, data.route_start_lng, data.route_start_time || null, data.district_keys || null]);
-  return res.lastID;
+  const now = new Date().toISOString();
+  const result = await db.run(`INSERT INTO activities (account_id, created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, route_start_lat, route_start_lng, route_start_time, district_keys, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [accountId, now, data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.gpx_file, data.strava_activity_id || null, data.upload_status || 'pending', data.route_start_lat, data.route_start_lng, data.route_start_time, data.district_keys, data.created_by]);
+  return result.lastID;
 }
 
 async function updateActivity(accountId, id, data) {
