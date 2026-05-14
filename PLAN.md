@@ -103,4 +103,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] thêm thông tin cách event được tạo cho event trong Local Generated History là 1 label format giống và ở cạnh label quận (giá trị: Manual / Schedule 1/Schedule 2) (v1.51.21)
 + [ ] fix lỗi responsive mobile
 + [ ] fix lỗi label create by schedule chưa hiện
-+ [ ] 
++ [ ] check avoid workhours exception, nếu người dùng tùy chỉnh avoid hour và các event vô tình chặn hết khả năng để tạo 1 event mới thì phải có thông báo không thể tạo, chứ không phải treo hoặc cố đấm ăn xôi (max retries mỗi khi tạo event mà trùng giờ hoặc không hợp lý là 10 lần)
