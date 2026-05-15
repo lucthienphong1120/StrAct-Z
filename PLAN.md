@@ -106,4 +106,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] check avoid workhours exception, nếu người dùng tùy chỉnh avoid hour và các event vô tình chặn hết khả năng để tạo 1 event mới thì phải có thông báo không thể tạo, chứ không phải treo hoặc cố đấm ăn xôi (max retries mỗi khi tạo event mà trùng giờ hoặc không hợp lý là 10 lần), với các event fail thì sẽ có label ở history là FAILED (bổ sung trạng thái thứ 5 ngoài 4 trạng thái đã có)
 + [ ] thêm option tùy chọn (default enable) và cập nhật logic để tăng trọng số +0.8 cho các quận xung quanh event gần nhất (uploaded - nếu đã removed thì lấy event gần nhất uploaded - tính theo cache), mapping data các quận cạnh nhau
 + [ ] cập nhật lại giảm trọng số khu vực nhà/công ty về 0.x (giảm 2-3 lần)
-+ [ ] 
++ [ ] cách hay hơn: sync, lấy các hoạt động của fit và import vào strava (nếu khả thi - nhưng không có thông tin gps)
