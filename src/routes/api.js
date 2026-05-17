@@ -245,6 +245,8 @@ router.post('/generate', async (req, res) => {
        return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
     }
 
+    const lastUploaded = await db.getLastUploadedActivity(req.user.id);
+
     const activity = await generateActivity({
       districtKey: ov.district_key || config.district_key,
       selected_districts: ov.selected_districts || config.selected_districts,
@@ -270,6 +272,8 @@ router.post('/generate', async (req, res) => {
       simRedLights: (ov.sim_redlights || config.sim_redlights) !== 'false',
       overlap_protection_minutes: ov.overlap_protection_minutes || config.overlap_protection_minutes,
       userRole: req.user.role || 'normal',
+      boost_adjacent: config.boost_adjacent,
+      last_district_keys: lastUploaded ? lastUploaded.district_keys : null,
     });
 
     const activityId = await db.saveActivity(req.user.id, {
@@ -327,6 +331,8 @@ router.post('/generate-and-upload', async (req, res) => {
        return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
     }
 
+    const lastUploaded = await db.getLastUploadedActivity(req.user.id);
+
     const activity = await generateActivity({
       districtKey: ov.district_key || config.district_key,
       selected_districts: ov.selected_districts || config.selected_districts,
@@ -352,6 +358,8 @@ router.post('/generate-and-upload', async (req, res) => {
       simRedLights: (ov.sim_redlights || config.sim_redlights) !== 'false',
       overlap_protection_minutes: ov.overlap_protection_minutes || config.overlap_protection_minutes,
       userRole: req.user.role || 'normal',
+      boost_adjacent: config.boost_adjacent,
+      last_district_keys: lastUploaded ? lastUploaded.district_keys : null,
     });
 
     const activityId = await db.saveActivity(req.user.id, {

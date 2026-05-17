@@ -98,7 +98,8 @@ function updateDynamicTooltips() {
     map_locked: 'tipMapLocked',
     home_count: 'tipHomePoints',
     work_count: 'tipWorkPoints',
-    scale_radius: 'tipScaleRadius'
+    scale_radius: 'tipScaleRadius',
+    boost_adjacent: 'tipBoostAdjacent'
   };
 
   for (const [key, tipId] of Object.entries(tipMapping)) {
@@ -221,6 +222,9 @@ async function loadConfig() {
 
     const osrmToggle = document.getElementById('cfgOsrm');
     if (osrmToggle) osrmToggle.checked = config.use_osrm !== 'false';
+
+    const boostAdjacentToggle = document.getElementById('cfgBoostAdjacent');
+    if (boostAdjacentToggle) boostAdjacentToggle.checked = config.boost_adjacent !== 'false';
     
     const setVal = (id, val) => {
       const el = document.getElementById(id);
@@ -473,6 +477,7 @@ async function saveConfig() {
     district_key: 'random',
     max_district_span: document.getElementById('cfgMaxSpan').value,
     use_osrm: document.getElementById('cfgOsrm').checked ? 'true' : 'false',
+    boost_adjacent: document.getElementById('cfgBoostAdjacent')?.checked ? 'true' : 'false',
     min_time: document.getElementById('cfgRandMinTime').value,
     max_time: document.getElementById('cfgRandMaxTime').value,
     work_start1: document.getElementById('cfgWorkStart1').value,
@@ -523,6 +528,7 @@ function getOverrideConfig() {
     max_district_span: document.getElementById('cfgMaxSpan').value,
     district_key: 'random',
     use_osrm: document.getElementById('cfgOsrm').checked ? 'true' : 'false',
+    boost_adjacent: document.getElementById('cfgBoostAdjacent')?.checked ? 'true' : 'false',
     min_distance_km: document.getElementById('cfgMinDist').value,
     max_distance_km: document.getElementById('cfgMaxDist').value,
     min_pace: document.getElementById('cfgMinPace').value,

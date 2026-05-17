@@ -47,6 +47,12 @@ const LIMITS = {
     type: 'bool',
     default: true
   },
+  boost_adjacent: {
+    label: 'Tăng trọng số cho các quận lân cận.',
+    desc_extra: 'Tác dụng: Các quận lân cận với quận của hoạt động gần nhất (đã upload) sẽ được cộng thêm +0.5 trọng số.',
+    type: 'bool',
+    default: true
+  },
   custom_time_enabled: {
     label: 'Giới hạn thời gian cho ngày mục tiêu.',
     type: 'bool',

@@ -15,6 +15,7 @@ const {
   haversineDistance,
 } = require('./route-engine');
 const systemLimits = require('../config/limits');
+const { ADJACENT_DISTRICTS } = require('../config/districts');
 
 const GPX_DIR = path.join(__dirname, '..', '..', 'data', 'gpx');
 fs.mkdirSync(GPX_DIR, { recursive: true });
@@ -205,16 +206,43 @@ async function generateActivity(config = {}) {
         
         if (ratio > 0) {
           if (area.type === 'home') {
-            if (ratio >= 0.85) weight += 2.0;      // Bao trọn / Nằm trọn
-            else if (ratio >= 0.35) weight += 1.2; // Nhiều
+            if (ratio >= 0.85) weight += 1.0;      // Bao trọn / Nằm trọn
+            else if (ratio >= 0.35) weight += 0.8; // Nhiều
             else weight += 0.5;                    // Ít
           } else if (area.type === 'work') {
-            if (ratio >= 0.85) weight += 1.2;      // Bao trọn / Nằm trọn
-            else if (ratio >= 0.35) weight += 0.8; // Nhiều
-            else weight += 0.4;                    // Ít
+            if (ratio >= 0.85) weight += 0.8;      // Bao trọn / Nằm trọn
+            else if (ratio >= 0.35) weight += 0.5; // Nhiều
+            else weight += 0.2;                    // Ít
           }
         }
       });
+
+      // Adjacent Boost Logic
+      const boostAdjacent = config.boost_adjacent !== 'false' && config.boost_adjacent !== false;
+      if (boostAdjacent && config.last_district_keys) {
+        let lastKeys = [];
+        try {
+          lastKeys = typeof config.last_district_keys === 'string' && config.last_district_keys.startsWith('[') 
+            ? JSON.parse(config.last_district_keys) 
+            : config.last_district_keys.split(',');
+        } catch(e) {
+          lastKeys = [];
+        }
+        
+        if (Array.isArray(lastKeys)) {
+          let isAdjacent = false;
+          for (let lk of lastKeys) {
+            if (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(key)) {
+              isAdjacent = true;
+              break;
+            }
+          }
+          if (isAdjacent) {
+            weight += 0.5;
+          }
+        }
+      }
+
       return weight;
     });
 

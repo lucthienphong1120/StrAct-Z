@@ -18,6 +18,7 @@ const DEFAULT_CONFIG = {
   max_district_span: '1',
   overlap_protection_minutes: '30',
   use_osrm: 'true',
+  boost_adjacent: 'true',
   min_time: '04:30',
   max_time: '21:30',
   work_start1: '08:00',
@@ -317,6 +318,11 @@ async function getActivitiesByDate(accountId, dateStr) {
   return await db.all(`SELECT * FROM activities WHERE account_id = ? AND route_start_time LIKE ?`, [accountId, datePattern]);
 }
 
+async function getLastUploadedActivity(accountId) {
+  const db = await getDb();
+  return await db.get(`SELECT * FROM activities WHERE account_id = ? AND upload_status IN ('uploaded', 'removed') ORDER BY id DESC LIMIT 1`, [accountId]);
+}
+
 async function deleteActivity(accountId, id, hard = false, status = 'deleted') {
   const db = await getDb();
   if (hard) {
@@ -474,7 +480,7 @@ module.exports = {
   getConfig, setConfig, getAllConfig,
   saveTokens, getTokens, deleteTokens,
   saveExternalTokens, getExternalTokens, deleteExternalTokens,
-  saveActivity, updateActivity, getActivities, getActivitiesByDate,
+  saveActivity, updateActivity, getActivities, getActivitiesByDate, getLastUploadedActivity,
   getActivityStats, deleteActivity, clearActivities,
   getUserByUsername, createAccount, getAccountCount, getAllAccounts, updateAccountPassword,
   activateVip, checkBruteForce, getAccountRole, resetConfig,

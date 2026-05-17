@@ -74,6 +74,10 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         break; 
       }
 
+
+
+      const lastUploaded = await db.getLastUploadedActivity(accountId);
+
       // Generate activity (async - uses OSRM)
       console.log(`[Scheduler] Account ${accountId} generating activity ${i+1}/${taskCount}...`);
       const activity = await generateActivity({
@@ -101,6 +105,8 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         simWeather: config.sim_weather !== 'false',
         simRedLights: config.sim_redlights !== 'false',
         userRole: role,
+        boost_adjacent: config.boost_adjacent,
+        last_district_keys: lastUploaded ? lastUploaded.district_keys : null,
       });
 
       console.log(`[Scheduler] Generated: ${activity.activityName} at ${activity.startTime.toLocaleTimeString('vi-VN', { hour12: false })} - ${activity.distanceKm}km`);
