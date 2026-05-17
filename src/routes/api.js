@@ -305,6 +305,26 @@ router.post('/generate', async (req, res) => {
     });
   } catch (err) {
     console.error('Generate error:', err);
+    if (err.code === 'NO_VALID_TIME_SLOT') {
+      // Save a failed record so it shows in history
+      try {
+        await db.saveActivity(req.user.id, {
+          activity_name: 'Không thể tạo hoạt động',
+          distance_km: 0,
+          duration_min: 0,
+          pace_min_km: 0,
+          gpx_file: null,
+          upload_status: 'failed',
+          route_start_lat: null,
+          route_start_lng: null,
+          route_start_time: new Date().toISOString(),
+          district_keys: null,
+          created_by: 'Manual',
+          error_message: err.message,
+        });
+      } catch (_) {}
+      return res.status(409).json({ error: err.message, code: err.code });
+    }
     res.status(500).json({ error: err.message });
   }
 });
@@ -400,6 +420,25 @@ router.post('/generate-and-upload', async (req, res) => {
     });
   } catch (err) {
     console.error('Generate and Upload error:', err);
+    if (err.code === 'NO_VALID_TIME_SLOT') {
+      try {
+        await db.saveActivity(req.user.id, {
+          activity_name: 'Không thể tạo hoạt động',
+          distance_km: 0,
+          duration_min: 0,
+          pace_min_km: 0,
+          gpx_file: null,
+          upload_status: 'failed',
+          route_start_lat: null,
+          route_start_lng: null,
+          route_start_time: new Date().toISOString(),
+          district_keys: null,
+          created_by: 'Manual',
+          error_message: err.message,
+        });
+      } catch (_) {}
+      return res.status(409).json({ error: err.message, code: err.code });
+    }
     res.status(500).json({ error: err.message, message: err.message });
   }
 });

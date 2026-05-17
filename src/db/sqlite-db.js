@@ -287,8 +287,8 @@ async function deleteTokens(accountId) {
 async function saveActivity(accountId, data) {
   const db = await getDb();
   const now = new Date().toISOString();
-  const result = await db.run(`INSERT INTO activities (account_id, created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, route_start_lat, route_start_lng, route_start_time, district_keys, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [accountId, now, data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.gpx_file, data.strava_activity_id || null, data.upload_status || 'pending', data.route_start_lat, data.route_start_lng, data.route_start_time, data.district_keys, data.created_by]);
+  const result = await db.run(`INSERT INTO activities (account_id, created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng, route_start_time, district_keys, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [accountId, now, data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.gpx_file, data.strava_activity_id || null, data.upload_status || 'pending', data.error_message || null, data.route_start_lat, data.route_start_lng, data.route_start_time, data.district_keys, data.created_by]);
   return result.lastID;
 }
 

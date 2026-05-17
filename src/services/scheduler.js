@@ -76,38 +76,53 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
 
 
 
+      let activity;
       const lastUploaded = await db.getLastUploadedActivity(accountId);
-
-      // Generate activity (async - uses OSRM)
-      console.log(`[Scheduler] Account ${accountId} generating activity ${i+1}/${taskCount}...`);
-      const activity = await generateActivity({
-        districtKey: config.district_key,
-        selected_districts: config.selected_districts,
-        max_district_span: config.max_district_span,
-        targetDate: targetDate,
-        existingActivities: existingActivities,
-        minTime: config.min_time,
-        maxTime: config.max_time,
-        workStart1: config.work_start1,
-        workEnd1: config.work_end1,
-        workStart2: config.work_start2,
-        workEnd2: config.work_end2,
-        overlap_protection_minutes: config.overlap_protection_minutes,
-        minDistanceKm: parseFloat(config.min_distance_km),
-        maxDistanceKm: parseFloat(config.max_distance_km),
-        minPace: parseFloat(config.min_pace),
-        maxPace: parseFloat(config.max_pace),
-        activityType: config.activity_type,
-        heartRateEnabled: config.heart_rate_enabled === 'true',
-        minHeartRate: parseInt(config.min_heart_rate),
-        maxHeartRate: parseInt(config.max_heart_rate),
-        useOSRM: config.use_osrm !== 'false',
-        simWeather: config.sim_weather !== 'false',
-        simRedLights: config.sim_redlights !== 'false',
-        userRole: role,
-        boost_adjacent: config.boost_adjacent,
-        last_district_keys: lastUploaded ? lastUploaded.district_keys : null,
-      });
+      try {
+        activity = await generateActivity({
+          districtKey: config.district_key,
+          selected_districts: config.selected_districts,
+          max_district_span: config.max_district_span,
+          targetDate: targetDate,
+          existingActivities: existingActivities,
+          minTime: config.min_time,
+          maxTime: config.max_time,
+          workStart1: config.work_start1,
+          workEnd1: config.work_end1,
+          workStart2: config.work_start2,
+          workEnd2: config.work_end2,
+          overlap_protection_minutes: config.overlap_protection_minutes,
+          minDistanceKm: parseFloat(config.min_distance_km),
+          maxDistanceKm: parseFloat(config.max_distance_km),
+          minPace: parseFloat(config.min_pace),
+          maxPace: parseFloat(config.max_pace),
+          activityType: config.activity_type,
+          heartRateEnabled: config.heart_rate_enabled === 'true',
+          minHeartRate: parseInt(config.min_heart_rate),
+          maxHeartRate: parseInt(config.max_heart_rate),
+          useOSRM: config.use_osrm !== 'false',
+          simWeather: config.sim_weather !== 'false',
+          simRedLights: config.sim_redlights !== 'false',
+          userRole: role,
+          boost_adjacent: config.boost_adjacent,
+          last_district_keys: lastUploaded ? lastUploaded.district_keys : null,
+        });
+      } catch (genErr) {
+        if (genErr.code === 'NO_VALID_TIME_SLOT') {
+          console.warn(`[Scheduler] Account ${accountId}: No valid time slot available. Saving failed record.`);
+          await db.saveActivity(accountId, {
+            activity_name: 'Không thể tạo hoạt động',
+            distance_km: 0, duration_min: 0, pace_min_km: 0,
+            gpx_file: null, upload_status: 'failed',
+            route_start_lat: null, route_start_lng: null,
+            route_start_time: new Date().toISOString(),
+            district_keys: null, created_by: slotName,
+            error_message: genErr.message,
+          });
+          break; // Stop trying for this slot — no point retrying same day
+        }
+        throw genErr; // Other errors bubble up
+      }
 
       console.log(`[Scheduler] Generated: ${activity.activityName} at ${activity.startTime.toLocaleTimeString('vi-VN', { hour12: false })} - ${activity.distanceKm}km`);
       

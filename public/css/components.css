@@ -133,6 +133,7 @@
 .status-badge.generated { background: rgba(245, 158, 11, 0.15); color: var(--accent-yellow); border-color: rgba(245, 158, 11, 0.3); }
 .status-badge.deleted { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); border-color: rgba(239, 68, 68, 0.3); }
 .status-badge.removed { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border-color: var(--border); }
+.status-badge.failed { background: rgba(239, 68, 68, 0.25); color: #ff6b6b; border-color: rgba(239, 68, 68, 0.6); font-weight: 800; }
 
 /* ─── Quick Actions ───────────────────────────────────── */
 .quick-actions {

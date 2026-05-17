@@ -393,8 +393,10 @@ async function generateActivity(config = {}) {
         targetTime = new Date(targetDateObj.getTime() + selectedOffset);
       }
     } else {
-      // Fallback: If no valid interval, try to pick "Now" but at least 1 min apart if possible
-      targetTime = new Date(Date.now() + Math.floor(Math.random() * 10) * 60000);
+      // No valid time slot — all time is blocked by workhours + existing activities
+      const err = new Error('Không còn khung giờ hợp lệ trong ngày hôm nay. Vui lòng kiểm tra lại cài đặt Avoid Workhours hoặc thử lại vào ngày mai.');
+      err.code = 'NO_VALID_TIME_SLOT';
+      throw err;
     }
     
     activityStartTime = targetTime;

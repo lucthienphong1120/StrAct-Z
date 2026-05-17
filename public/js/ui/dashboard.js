@@ -194,7 +194,9 @@ async function loadActivities() {
           showViewBtn = true;
         }
       } else {
-        if (a.deleted_at || a.upload_status === 'deleted') {
+        if (a.upload_status === 'failed') {
+          badge = `<span class="status-badge failed" title="${a.error_message || 'Không thể tạo hoạt động'}">❌ FAILED</span>`;
+        } else if (a.deleted_at || a.upload_status === 'deleted') {
           badge = `<span class="status-badge deleted" title="Đã tạo local và chưa upload, sau đó xóa ở local">🔴 DELETED</span>`;
         } else {
           badge = `<span class="status-badge generated" title="Đã tạo local và chưa upload">🟡 GENERATED</span>`;
@@ -551,11 +553,19 @@ async function generateOnly() {
       showToast(`Generated: ${result.activity.name} (${result.activity.distanceKm}km)`, 'success');
       loadActivities();
       loadStats();
+    } else if (result.code === 'NO_VALID_TIME_SLOT') {
+      showToast('⏰ ' + result.error, 'warning');
+      loadActivities(); // Show the failed record
     } else {
       showToast(result.error || 'Generation failed', 'error');
     }
   } catch (err) {
-    showToast('Generation failed: ' + err.message, 'error');
+    if (err.status === 409) {
+      showToast('⏰ Không còn khung giờ hợp lệ trong ngày hôm nay. Kiểm tra lại cài đặt Avoid Workhours.', 'warning');
+      loadActivities();
+    } else {
+      showToast('Generation failed: ' + err.message, 'error');
+    }
   } finally {
     btn.disabled = false;
     btn.innerHTML = '📝 Generate GPX Only';
@@ -579,6 +589,8 @@ async function generateAndUpload() {
     const result = await api('/generate-and-upload', { method: 'POST', body: overrideConfig });
     if (result.success) {
       showToast(`Uploaded to Strava! Activity: ${result.activity?.activityName || 'Done'}`, 'success');
+    } else if (result.code === 'NO_VALID_TIME_SLOT') {
+      showToast('⏰ ' + result.error, 'warning');
     } else {
       if (result.message === 'VIP_REQUIRED') {
         showToast('Daily limit reached (2 activities/day). Contact Admin to upgrade.', 'warning');
@@ -588,7 +600,12 @@ async function generateAndUpload() {
     }
     await loadDashboard(true);
   } catch (err) {
-    showToast('Failed: ' + err.message, 'error');
+    if (err.status === 409) {
+      showToast('⏰ Không còn khung giờ hợp lệ trong ngày hôm nay. Kiểm tra lại cài đặt Avoid Workhours.', 'warning');
+      await loadDashboard(true);
+    } else {
+      showToast('Failed: ' + err.message, 'error');
+    }
   } finally {
     btn.disabled = false;
     btn.innerHTML = '🚀 Generate & Upload to Strava';
