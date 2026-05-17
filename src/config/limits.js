@@ -49,7 +49,7 @@ const LIMITS = {
   },
   boost_adjacent: {
     label: 'Tăng trọng số cho các quận lân cận.',
-    desc_extra: 'Tác dụng: Các quận lân cận với quận của hoạt động gần nhất (đã upload) sẽ được cộng thêm +0.5 trọng số.',
+    desc_extra: 'Tác dụng: Các quận lân cận của hoạt động gần nhất (đã upload) sẽ được cộng thêm +0.5 trọng số.',
     type: 'bool',
     default: true
   },
