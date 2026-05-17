@@ -410,30 +410,68 @@
   .activity-meta:nth-child(n+4) { display: none; }
 }
 
+@media (max-width: 768px) {
+  /* Header: shrink version label and compact actions */
+  .header { padding: 0 0.75rem; }
+  .logo { font-size: 1.1rem; gap: 8px; }
+  .logo-icon { width: 30px; height: 30px; font-size: 1rem; }
+  .auth-badge { font-size: 0.72rem; padding: 5px 10px; }
+  .header-actions { gap: 8px; }
+
+  /* form-row: 2-col → 1-col on mobile */
+  .form-row { grid-template-columns: 1fr; }
+
+  /* Map card action buttons wrap */
+  .map-card-actions { flex-wrap: wrap; gap: 6px !important; }
+  .map-card-actions .btn { font-size: 0.7rem; padding: 5px 8px; }
+}
+
 @media (max-width: 600px) {
   .card-header { padding: 1rem; flex-direction: column; align-items: flex-start; gap: 10px; }
   .card-body { padding: 1rem; }
   .card-header .btn { width: 100%; }
-  
-  .activity-item { 
-    grid-template-columns: 1fr auto; 
+
+  /* History card header: filter + pagination wrap to separate rows */
+  .history-card-controls {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+  .history-card-controls select { width: 100% !important; }
+  .history-pagination { justify-content: space-between; width: 100%; }
+
+  /* District checkboxes: 3-col → 2-col */
+  #cfgDistricts { grid-template-columns: repeat(2, 1fr) !important; }
+
+  .activity-item {
+    grid-template-columns: 1fr auto;
     gap: 8px;
     padding: 12px;
   }
   .activity-meta { grid-column: 1 / -1; text-align: left; opacity: 0.8; font-size: 0.75rem; }
   .status-badge { grid-column: 2; grid-row: 1 / 3; align-self: center; }
 
-  #activityMap { height: 350px !important; }
+  #activityMap { height: 300px !important; }
   .quick-actions { gap: 8px; }
-  .quick-actions .btn { flex: 1 1 45%; font-size: 0.7rem; padding: 8px; }
+  .quick-actions .btn { flex: 1 1 45%; font-size: 0.72rem; padding: 8px 6px; }
 }
 
 @media (max-width: 500px) {
   .stats-grid { grid-template-columns: 1fr; }
   .header-inner { padding: 0; }
-  .quick-actions { flex-direction: column; }
-  .quick-actions .btn { width: 100%; }
-  
+
+  /* Quick actions: 2×2 grid */
+  .quick-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .quick-actions .btn { width: 100%; font-size: 0.7rem; padding: 8px 4px; }
+
+  /* District checkboxes: 1-col */
+  #cfgDistricts { grid-template-columns: 1fr !important; }
+
+  /* Map buttons: 2×2 */
+  .map-card-actions { display: grid !important; grid-template-columns: 1fr 1fr; gap: 6px !important; }
+  .map-card-actions .btn { width: 100%; font-size: 0.7rem; }
+
   .toast-container { bottom: 16px; right: 12px; left: 12px; }
   .toast { max-width: 100%; width: 100%; }
 }
+

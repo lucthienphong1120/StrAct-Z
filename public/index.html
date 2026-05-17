@@ -482,7 +482,7 @@
               <div class="card-title">📍 Activity Areas (Map) <span id="tipActivityAreas"
                   class="tooltip-icon tooltip-left">?</span>
               </div>
-              <div style="display:flex; gap:5px;">
+              <div class="map-card-actions" style="display:flex; gap:5px;">
                 <button id="btnLockMap" class="btn btn-sm btn-secondary" onclick="toggleMapLock()">🔒 Map
                   Locked</button>
                 <button class="btn btn-sm btn-secondary" onclick="addActivityCircle('home')">🏠 Home</button>
@@ -675,7 +675,7 @@
             <div class="card-title" style="flex:1;">📋 Local Generated History <span class="tooltip-icon tooltip-right"
                 data-tooltip="?">?</span>
             </div>
-            <div style="display:flex; gap:10px; align-items:center;">
+            <div class="history-card-controls" style="display:flex; gap:10px; align-items:center;">
               <select id="historyFilterRange" class="form-select"
                 style="padding:4px 8px; font-size:0.8rem; width:120px;" onchange="onHistoryFilterChange()">
                 <option value="3_days">Last 3 Days</option>
@@ -687,9 +687,11 @@
                 <option value="total">Total History</option>
               </select>
               <span id="historyCount" style="font-size:0.8rem;color:var(--text-muted)"></span>
-              <button class="btn btn-sm btn-secondary" onclick="changeLocalPage(-1)">◀ Prev</button>
-              <span id="localPageInfo" style="font-size:0.8rem;color:var(--text-muted)">Page 1</span>
-              <button class="btn btn-sm btn-secondary" onclick="changeLocalPage(1)">Next ▶</button>
+              <div class="history-pagination" style="display:flex; gap:6px; align-items:center;">
+                <button class="btn btn-sm btn-secondary" onclick="changeLocalPage(-1)">◀ Prev</button>
+                <span id="localPageInfo" style="font-size:0.8rem;color:var(--text-muted)">Page 1</span>
+                <button class="btn btn-sm btn-secondary" onclick="changeLocalPage(1)">Next ▶</button>
+              </div>
             </div>
           </div>
           <div class="card-body" style="padding:0;">
@@ -709,7 +711,7 @@
                 data-tooltip="?">?</span>
             </div>
 
-            <div style="display:flex; gap:10px; align-items:center;">
+            <div class="history-card-controls" style="display:flex; gap:10px; align-items:center;">
               <select id="stravaFilterRange" class="form-select" style="padding:4px 8px; font-size:0.8rem; width:120px;"
                 onchange="onStravaFilterChange()">
                 <option value="3_days">Last 3 Days</option>
@@ -720,9 +722,11 @@
                 <option value="90_days">Last 3 Months</option>
                 <option value="total">Total History</option>
               </select>
-              <button class="btn btn-sm btn-secondary" onclick="changeStravaPage(-1)">◀ Prev</button>
-              <span id="stravaPageInfo" style="font-size:0.8rem;color:var(--text-muted)">Page 1</span>
-              <button class="btn btn-sm btn-secondary" onclick="changeStravaPage(1)">Next ▶</button>
+              <div class="history-pagination" style="display:flex; gap:6px; align-items:center;">
+                <button class="btn btn-sm btn-secondary" onclick="changeStravaPage(-1)">◀ Prev</button>
+                <span id="stravaPageInfo" style="font-size:0.8rem;color:var(--text-muted)">Page 1</span>
+                <button class="btn btn-sm btn-secondary" onclick="changeStravaPage(1)">Next ▶</button>
+              </div>
             </div>
           </div>
           <div class="card-body" style="padding:0;">
