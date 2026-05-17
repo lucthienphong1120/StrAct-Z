@@ -37,7 +37,27 @@ function generateActivityName(activityType, date) {
 function formatGPXTime(date) { return date.toISOString(); }
 
 function escapeXml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/**
+ * Tính diện tích giao nhau (Intersection Area) của 2 đường tròn
+ */
+function getCircleIntersectionArea(r1, r2, d) {
+  if (d >= r1 + r2) return 0;
+  if (d <= Math.abs(r1 - r2)) return Math.PI * Math.pow(Math.min(r1, r2), 2);
+
+  const r1Sq = r1 * r1;
+  const r2Sq = r2 * r2;
+  const dSq = d * d;
+
+  const a1 = r1Sq * Math.acos((dSq + r1Sq - r2Sq) / (2 * d * r1));
+  const a2 = r2Sq * Math.acos((dSq + r2Sq - r1Sq) / (2 * d * r2));
+  
+  // Heron's formula for triangle area
+  const p = (r1 + r2 + d) / 2;
+  const triangleArea = 2 * Math.sqrt(p * (p - r1) * (p - r2) * (p - d));
+
+  return a1 + a2 - triangleArea;
 }
 
 function buildGPX(points, options = {}) {
@@ -174,15 +194,25 @@ async function generateActivity(config = {}) {
       areas.forEach(area => {
         const d = haversineDistance(dist.lat, dist.lng, area.lat, area.lng);
         const areaRadiusM = area.radius;
+        const distRadiusM = (dist.radiusKm || 1.5) * 1000;
         
-        if (area.type === 'home') {
-          if (d + distRadiusM <= areaRadiusM) weight += 2.0; // Bao trọn
-          else if (d <= areaRadiusM) weight += 1.2;         // Nhiều (Center inside)
-          else if (d - distRadiusM <= areaRadiusM) weight += 0.5; // Ít (Overlap)
-        } else if (area.type === 'work') {
-          if (d + distRadiusM <= areaRadiusM) weight += 1.2; // Bao trọn
-          else if (d <= areaRadiusM) weight += 0.8;         // Nhiều
-          else if (d - distRadiusM <= areaRadiusM) weight += 0.4; // Ít
+        // Tính diện tích giao nhau
+        const intersectionArea = getCircleIntersectionArea(distRadiusM, areaRadiusM, d);
+        
+        // Tính tỷ lệ bao phủ dựa trên đường tròn nhỏ hơn
+        const minArea = Math.PI * Math.pow(Math.min(distRadiusM, areaRadiusM), 2);
+        const ratio = minArea > 0 ? intersectionArea / minArea : 0;
+        
+        if (ratio > 0) {
+          if (area.type === 'home') {
+            if (ratio >= 0.85) weight += 2.0;      // Bao trọn / Nằm trọn
+            else if (ratio >= 0.35) weight += 1.2; // Nhiều
+            else weight += 0.5;                    // Ít
+          } else if (area.type === 'work') {
+            if (ratio >= 0.85) weight += 1.2;      // Bao trọn / Nằm trọn
+            else if (ratio >= 0.35) weight += 0.8; // Nhiều
+            else weight += 0.4;                    // Ít
+          }
         }
       });
       return weight;

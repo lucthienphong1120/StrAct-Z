@@ -38,4 +38,7 @@ The engine generates activities in two phases:
 - **Persistence Rules:**
   - **Refresh:** Restores all saved settings, including map view and activity areas.
   - **Reset:** Resets all general configuration and map view (position/zoom) to defaults, but **preserves** the user's saved Home and Work locations (`activity_areas`).
-- **Additive Boost System:** Each activity area provides a mathematical "boost" to nearby districts during route generation, increasing the likelihood of routes starting or ending in preferred locations.
+- **Additive Boost System & Coverage Ratio**: Each activity area provides a mathematical "boost" to nearby districts during route generation based on the **Intersection Area** of the two circles (the district and the activity area). The overlap ratio is calculated as `Ratio = IntersectionArea / min(Area_District, Area_User)`.
+  - **Fully (Bao trọn / Nằm trọn)**: `Ratio >= 0.85` (Giao nhau từ 85% trở lên diện tích của hình nhỏ hơn).
+  - **Mostly (Phần lớn)**: `Ratio >= 0.35` (Giao nhau từ 35% đến dưới 85%).
+  - **Partially (Một phần)**: `Ratio > 0` (Có giao nhau, dưới 35%).

@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.22)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.23)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.22). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.23). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.23 (2026-05-17)
+- **Logic: Activity Areas Coverage**: Cập nhật thuật toán tính toán mức độ bao phủ giữa khu vực ưu tiên và các quận. Thay vì dùng khoảng cách tâm, thuật toán mới sử dụng công thức tính diện tích giao nhau (Intersection Area) chia cho diện tích của vòng tròn nhỏ hơn.
+- **Fairness**: Giải quyết triệt để sự bất cân xứng do diện tích các quận khác nhau, đảm bảo mọi quận đều được xét ưu tiên một cách công bằng (Ratio >= 0.85 cho Fully, >= 0.35 cho Mostly).
 
 ### v1.51.22 (2026-05-13)
 - **UI: Activity Source Style**: Updated the source badge color to neutral grey (`var(--text-secondary)`) to match the district labels.

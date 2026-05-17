@@ -188,8 +188,8 @@ const LIMITS = {
   activity_areas: {
     label: 'Ưu tiên khu vực hoạt động.',
     type: 'map',
-    desc_extra: 'Tác dụng: Tỉ lệ chọn các quận mặc định là 1:1, các quận nằm trong vùng phủ sóng của Nhà/Công ty sẽ được cộng thêm trọng số boost tương ứng.',
-    example: 'Ví dụ: Quận Hoàn Kiếm nằm \'Fully Inside\' vùng Nhà sẽ có trọng số 1.0 (mặc định) + 2.0 (boost) = 3.0 (tỉ lệ chọn cao gấp 3 lần các quận khác).'
+    desc_extra: 'Tác dụng: Tỉ lệ chọn các quận mặc định là 1:1, các quận giao với vùng phủ sóng của Nhà/Công ty sẽ được cộng thêm trọng số boost dựa trên tỷ lệ diện tích giao nhau (Ratio = Giao nhau / Diện tích hình nhỏ hơn).',
+    example: 'Ratio >= 0.85 (Fully), Ratio >= 0.35 (Mostly), Ratio > 0 (Partially).'
   },
 
   // ─── Activity Settings ────────────────────────────────────────────────────
