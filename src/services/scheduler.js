@@ -157,20 +157,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
           ...activity,
           stravaActivityId: finalStatus.activity_id,
         };
-        
-        // Optional Google Fit Sync
-        if (config.sync_google_fit === 'true') {
-          try {
-            console.log(`[Scheduler] Syncing to Google Fit...`);
-            const fullActivity = (await db.getActivities(accountId, 1))[0];
-            await googleFit.uploadActivity(accountId, {
-              ...fullActivity,
-              activity_type: config.activity_type
-            });
-          } catch (gfErr) {
-            console.error('[Scheduler] Google Fit sync failed:', gfErr);
-          }
-        }
+
         
         // Brief delay between uploads if multiple
         if (i < taskCount - 1) {

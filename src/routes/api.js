@@ -387,18 +387,7 @@ router.post('/generate-and-upload', async (req, res) => {
       upload_status: 'uploaded',
     });
 
-    // Optional Google Fit Sync
-    let googleFitSynced = false;
-    if (config.sync_google_fit === 'true') {
-      try {
-        const fullActivity = (await db.getActivities(req.user.id, 1))[0];
-        const gfResult = await googleFit.uploadActivity(req.user.id, {
-          ...fullActivity,
-          activity_type: ov.activity_type || config.activity_type
-        });
-        googleFitSynced = gfResult.success;
-      } catch (e) { console.error('Google Fit Sync failed:', e); }
-    }
+
 
     res.json({
       success: true,
@@ -406,8 +395,7 @@ router.post('/generate-and-upload', async (req, res) => {
         id: activityId,
         activityName: activity.activityName,
         distanceKm: activity.distanceKm,
-        stravaActivityId: finalStatus.activity_id,
-        googleFitSynced
+        stravaActivityId: finalStatus.activity_id
       },
     });
   } catch (err) {

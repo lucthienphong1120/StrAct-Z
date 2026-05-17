@@ -260,7 +260,7 @@ async function loadConfig() {
     
     toggleHRInputs();
 
-    setChecked('cfgSyncGoogleFit', config.sync_google_fit === 'true');
+
     setVal('cfgOverlapProtection', config.overlap_protection_minutes || '30');
 
     if (config.map_lat && config.map_lng && config.map_zoom) {
@@ -494,7 +494,7 @@ async function saveConfig() {
     user_age: document.getElementById('cfgUserAge').value,
     sim_weather: document.getElementById('cfgSimWeather')?.checked ? 'true' : 'false',
     sim_redlights: document.getElementById('cfgSimRedLights')?.checked ? 'true' : 'false',
-    sync_google_fit: document.getElementById('cfgSyncGoogleFit')?.checked ? 'true' : 'false',
+
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || '30',
   };
 
