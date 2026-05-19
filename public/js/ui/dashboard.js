@@ -112,11 +112,27 @@ async function loadDistricts() {
 
 async function loadActivities() {
   try {
-    let allActivities = await api('/activities');
+    const allActivities = await api('/activities?limit=10000');
     const container = document.getElementById('activityList');
     
-    // 1. Time Filtering
+    // Use window.allCloudActivities (from insights, up to 200 acts) as primary source for cross-check
+    // Fallback to latestStravaActivities if allCloudActivities is empty
+    const cloudBuffer = (window.allCloudActivities && window.allCloudActivities.length > 0) 
+      ? window.allCloudActivities 
+      : (window.latestStravaActivities || []);
+
+    // 1. Detect oldest cloud time to handle out-of-range vs removed activities safely
+    let oldestCloudTime = Date.now();
+    if (cloudBuffer.length > 0) {
+      cloudBuffer.forEach(s => {
+        const sTime = new Date(s.start_date || s.created_at).getTime();
+        if (sTime < oldestCloudTime) oldestCloudTime = sTime;
+      });
+    }
+
+    // 2. Time Filtering
     const range = document.getElementById('historyFilterRange')?.value || '7_days';
+    let filteredActivities = allActivities;
     if (range !== 'total') {
       let days = 7;
       if (range === '3_days') days = 3;
@@ -130,14 +146,14 @@ async function loadActivities() {
       cutoff.setHours(0, 0, 0, 0);
       cutoff.setDate(cutoff.getDate() - (days - 1));
       
-      allActivities = allActivities.filter(a => {
+      filteredActivities = allActivities.filter(a => {
         const actualTime = a.route_start_time || a.created_at;
         const dateStr = actualTime.endsWith('Z') ? actualTime : actualTime + 'Z';
         return new Date(dateStr) >= cutoff;
       });
     }
 
-    const total = allActivities.length;
+    const total = filteredActivities.length;
     const totalPages = Math.max(1, Math.ceil(total / window.LOCAL_PAGE_SIZE));
     
     if (window.localCurrentPage > totalPages) window.localCurrentPage = totalPages;
@@ -152,7 +168,7 @@ async function loadActivities() {
     }
 
     const start = (window.localCurrentPage - 1) * window.LOCAL_PAGE_SIZE;
-    const pageActivities = allActivities.slice(start, start + window.LOCAL_PAGE_SIZE);
+    const pageActivities = filteredActivities.slice(start, start + window.LOCAL_PAGE_SIZE);
 
     container.innerHTML = pageActivities.map(a => {
       const actualTime = a.route_start_time || a.created_at;
@@ -170,24 +186,14 @@ async function loadActivities() {
           }).join('');
       }
 
-      // --- New Single-Badge Logic ---
       const isUploadedLocal = (a.upload_status === 'uploaded' || !!a.strava_activity_id);
-      
-      // Use window.allCloudActivities (from insights, up to 200 acts) as primary source for cross-check
-      // Fallback to latestStravaActivities if allCloudActivities is empty
-      const cloudBuffer = (window.allCloudActivities && window.allCloudActivities.length > 0) 
-        ? window.allCloudActivities 
-        : (window.latestStravaActivities || []);
-
       const stravaRecord = isUploadedLocal ? cloudBuffer.find(s => String(s.id) === String(a.strava_activity_id)) : null;
       
       let badge = '';
       let showViewBtn = false;
       
       if (isUploadedLocal) {
-        // If we have cloud data loaded, check if it's still there
-        const cloudDataAvailable = cloudBuffer.length > 0;
-        if (cloudDataAvailable && !stravaRecord) {
+        if (cloudBuffer.length > 0 && !stravaRecord && dateObj.getTime() >= oldestCloudTime) {
           badge = `<span class="status-badge removed" title="Đã tạo local và upload lên cloud, sau đó xóa ở cloud">⚪ REMOVED</span>`;
         } else {
           badge = `<span class="status-badge uploaded" title="Đã tạo local và upload lên cloud">🟢 UPLOADED</span>`;
@@ -387,6 +393,16 @@ function updateActivityChart(activities, days = 14) {
     rangeDays.push(d.toLocaleDateString('en-CA'));
   }
 
+  const dailyCount = rangeDays.map(date => {
+    return activities
+      .filter(a => {
+        const startDate = a.start_date || a.created_at;
+        if (!startDate) return false;
+        const localDate = new Date(startDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+        return localDate === date;
+      }).length;
+  });
+
   const dailyDist = rangeDays.map(date => {
     return activities
       .filter(a => {
@@ -419,19 +435,32 @@ function updateActivityChart(activities, days = 14) {
       datasets: [
         {
           type: 'bar',
-          label: 'Distance (km)',
-          data: dailyDist,
-          backgroundColor: 'rgba(252, 76, 2, 0.5)',
-          borderColor: 'rgba(252, 76, 2, 1)',
+          label: 'Activities',
+          data: dailyCount,
+          backgroundColor: 'rgba(16, 185, 129, 0.35)',
+          borderColor: 'rgba(16, 185, 129, 1)',
           borderWidth: 1,
           borderRadius: 4,
+          yAxisID: 'y2',
+          barPercentage: 0.5
+        },
+        {
+          type: 'line',
+          label: 'Distance (km)',
+          data: dailyDist,
+          backgroundColor: 'rgba(252, 76, 2, 0.1)',
+          borderColor: 'rgba(252, 76, 2, 1)',
+          borderWidth: 2,
+          pointRadius: 3,
+          tension: 0.3,
+          fill: true,
           yAxisID: 'y',
         },
         {
           type: 'line',
           label: 'Duration (min)',
           data: dailyTime,
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          backgroundColor: 'rgba(59, 130, 246, 0.05)',
           borderColor: 'rgba(59, 130, 246, 1)',
           borderWidth: 2,
           pointRadius: 3,
@@ -463,6 +492,15 @@ function updateActivityChart(activities, days = 14) {
           grid: { drawOnChartArea: false },
           ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { size: 10 } }
         },
+        y2: {
+          type: 'linear',
+          display: true,
+          position: 'right',
+          beginAtZero: true,
+          title: { display: true, text: 'acts', color: 'rgba(16, 185, 129, 0.8)', font: { size: 10 } },
+          grid: { drawOnChartArea: false },
+          ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { size: 10 }, stepSize: 1 }
+        },
         x: {
           grid: { display: false },
           ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { size: 10 } }
@@ -483,7 +521,13 @@ function updateActivityChart(activities, days = 14) {
           mode: 'index',
           intersect: false,
           callbacks: {
-            label: (context) => `${context.dataset.label}: ${context.parsed.y.toFixed(1)} ${context.dataset.label.includes('km') ? 'km' : 'min'}`
+            label: (context) => {
+              const label = context.dataset.label;
+              const val = context.parsed.y;
+              if (label.includes('Distance')) return `${label}: ${val.toFixed(1)} km`;
+              if (label.includes('Duration')) return `${label}: ${val.toFixed(0)} min`;
+              return `${label}: ${val.toFixed(0)}`;
+            }
           }
         }
       }

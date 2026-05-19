@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.51.28</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.51.29</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -63,32 +63,31 @@
           <div class="stat-icon orange">🏃</div>
           <div class="stat-value" id="statTotal">0</div>
           <div class="stat-label">Total Activities <small
-              style="display:block; font-size:0.6rem; opacity:0.7;">(Generated & stored in local DB)</small></div>
+              style="display:block; font-size:0.6rem; opacity:0.7;">(Nguồn: Local DB)</small></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon green">✅</div>
           <div class="stat-value" id="statUploaded">0</div>
-          <div class="stat-label">Uploaded <small style="display:block; font-size:0.6rem; opacity:0.7;">(Generated &
-              stored in local DB)</small></div>
+          <div class="stat-label">Uploaded <small style="display:block; font-size:0.6rem; opacity:0.7;">(Nguồn: Local DB)</small></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon blue">📏</div>
           <div class="stat-value" id="statDistance">0</div>
           <div class="stat-label">Total Distance (km) <small
-              style="display:block; font-size:0.6rem; opacity:0.7;">(Generated & stored in local DB)</small></div>
+              style="display:block; font-size:0.6rem; opacity:0.7;">(Nguồn: Local DB)</small></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon purple">⏱️</div>
           <div class="stat-value" id="statDuration">0</div>
           <div class="stat-label">Total Duration (min) <small
-              style="display:block; font-size:0.6rem; opacity:0.7;">(Generated & stored in local DB)</small></div>
+              style="display:block; font-size:0.6rem; opacity:0.7;">(Nguồn: Local DB)</small></div>
         </div>
       </div>
 
       <!-- Activity Insights Chart -->
       <div class="card" style="margin-bottom: 2rem;">
         <div class="card-header">
-          <div class="card-title">📈 Activity Insights (Cloud)</div>
+          <div class="card-title">📈 Activity Insights <span style="font-size:0.75rem; font-weight:normal; opacity:0.7; margin-left:6px;">(Nguồn: Strava Cloud)</span></div>
           <select id="insightsTimeRange" class="form-select" style="width: 140px; font-size: 0.8rem; padding: 4px 8px;"
             onchange="loadInsights()">
             <option value="3">Last 3 Days</option>

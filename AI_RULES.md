@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.28)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.29)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.28). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.29). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.29 (2026-05-19)
+- **Logic: Database Stats Calculation**: Reverted client-side calculations for the 4 dashboard stats cards. Calculated `Total Activities` (all-time, all statuses in DB), `Uploaded` (strictly status is `uploaded`), `Total Distance`, and `Total Duration` (sum of `distance_km` and `duration_min` for `uploaded` and `generated` statuses only) directly in backend SQL database stats query.
+- **UI: Label Data Sources**: Sourced descriptions of 4 cards from `Local DB` and Activity Insights from `Strava Cloud` in `index.html`.
+- **UI: Insights Chart 3-Series**: Refactored `updateActivityChart` to render 3 series: Activity Count (bar, `y2` axis right offset), Distance (line, `y` axis left), and Duration (line, `y1` axis right).
 
 ### v1.51.28 (2026-05-19)
 - **Logic: Auto-schedule Quota & Limit Separation**: Removed `daily_upload_limit` checking from automated scheduler. Daily limits now only apply to manual generations. Capped `taskCount` safely against system max but independent of daily counts.

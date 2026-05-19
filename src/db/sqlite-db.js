@@ -344,12 +344,18 @@ async function clearActivities(accountId) {
 async function getActivityStats(accountId) {
   const db = await getDb();
   const today = new Date().toISOString().slice(0, 10) + '%';
-  const total = (await db.get('SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND deleted_at IS NULL', [accountId])).c;
-  const uploaded = (await db.get("SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND upload_status = 'uploaded' AND deleted_at IS NULL", [accountId])).c;
-  const failed = (await db.get("SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND upload_status = 'failed' AND deleted_at IS NULL", [accountId])).c;
-  // Sum distance and duration for ALL generated activities (except deleted ones)
-  const sums = await db.get("SELECT SUM(distance_km) as dist, SUM(duration_min) as dur FROM activities WHERE account_id = ? AND deleted_at IS NULL", [accountId]);
-  const todayCount = (await db.get('SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND created_at LIKE ? AND deleted_at IS NULL', [accountId, today])).c;
+  
+  // Total Activities: all events in DB regardless of status/deletion
+  const total = (await db.get('SELECT COUNT(*) as c FROM activities WHERE account_id = ?', [accountId])).c;
+  
+  // Uploaded: activities strictly in 'uploaded' status
+  const uploaded = (await db.get("SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND upload_status = 'uploaded'", [accountId])).c;
+  
+  const failed = (await db.get("SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND upload_status = 'failed'", [accountId])).c;
+  
+  // Sum distance and duration ONLY for 'uploaded' and 'generated' activities
+  const sums = await db.get("SELECT SUM(distance_km) as dist, SUM(duration_min) as dur FROM activities WHERE account_id = ? AND upload_status IN ('uploaded', 'generated')", [accountId]);
+  const todayCount = (await db.get('SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND created_at LIKE ?', [accountId, today])).c;
 
   return {
     total,
