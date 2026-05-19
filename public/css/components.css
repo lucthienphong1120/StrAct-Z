@@ -108,7 +108,7 @@
   border-bottom: 1px solid rgba(42, 49, 80, 0.5);
   transition: var(--transition);
 }
-.activity-item:hover { background: var(--strava-orange-glow); opacity: 0.8; }
+.activity-item:hover { background: rgba(255, 255, 255, 0.025); }
 .activity-item:last-child { border-bottom: none; }
 
 .activity-name { font-weight: 500; font-size: 0.9rem; }
