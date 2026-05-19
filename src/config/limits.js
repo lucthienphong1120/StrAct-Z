@@ -141,7 +141,7 @@ const LIMITS = {
     type: 'int',
     default: 2,
     min: 1,
-    max: { normal: 2, vip: 3 }
+    max: 2
   },
 
   // ─── Activity Areas (Map) ─────────────────────────────────────────────────
