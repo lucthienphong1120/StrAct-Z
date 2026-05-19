@@ -21,6 +21,16 @@ router.get('/districts', (req, res) => {
   res.json(DISTRICTS);
 });
 
+// ─── System / Version ───────────────────────────────────────────────────────
+router.get('/version', (req, res) => {
+  try {
+    const pkg = require('../../package.json');
+    res.json({ version: pkg.version });
+  } catch (e) {
+    res.json({ version: 'unknown' });
+  }
+});
+
 // ─── Configuration ──────────────────────────────────────────────────────────
 
 router.get('/config', async (req, res) => {

@@ -107,4 +107,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] cập nhật lại giảm trọng số khu vực nhà/công ty về 0.x (giảm 2-3 lần)
 + [x] check lại lỗi shedule 1,2 ở generated history -> schedule 1 là trước (sớm hơn schedule 2)
 + [ ] check lại lỗi event schedule count: đặt 0-2 acts x 2 schedule nhưng schedule 1 là 0-2, còn schdule 2 luôn spam 3 event mỗi ngày lận
-+ [ ] 
++ [x] làm tính năng check version của client trong trình duyệt/addon, khi khác phiên bản mới nhất thì hiện popup và có nút update để Ctrl+Shift+R (dùng giải cache cho phone và web)

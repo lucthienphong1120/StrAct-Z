@@ -477,4 +477,63 @@
   .toast-container { bottom: 16px; right: 12px; left: 12px; }
   .toast { max-width: 100%; width: 100%; }
 }
+}
 
+/* ─── Update Popup ────────────────────────────────────────── */
+.update-popup {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(252, 76, 2, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 10000;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.update-popup-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.update-icon {
+  font-size: 28px;
+}
+.update-text strong {
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1.05em;
+}
+.update-text p {
+  margin: 0;
+  font-size: 0.9em;
+  color: var(--text-secondary);
+}
+@keyframes slideUp {
+  from { transform: translateY(150px) scale(0.9); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  .update-popup {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    flex-direction: column;
+    text-align: center;
+    padding: 16px;
+  }
+  .update-popup-content {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .update-popup button {
+    width: 100%;
+    margin-top: 8px;
+  }
+}

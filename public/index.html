@@ -772,6 +772,60 @@
       updateSchedule();
     }
   </script>
-</body>
 
+  <!-- Update Popup -->
+  <div id="updatePopup" class="update-popup" style="display: none;">
+    <div class="update-popup-content">
+      <div class="update-icon">🚀</div>
+      <div class="update-text">
+        <strong>Phiên bản mới!</strong>
+        <p>Đã có bản cập nhật mới. Vui lòng tải lại trang để áp dụng (Ctrl+Shift+R).</p>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="forceUpdateClient()">Cập nhật ngay</button>
+  </div>
+
+  <script>
+    // Version Checking Logic
+    async function checkClientVersion() {
+      try {
+        const currentVersionEl = document.querySelector('.logo small');
+        if (!currentVersionEl) return;
+        const currentVersion = currentVersionEl.innerText.replace('v', '').trim();
+        
+        const res = await fetch('/api/version');
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        if (data.version && data.version !== 'unknown' && data.version !== currentVersion) {
+          document.getElementById('updatePopup').style.display = 'flex';
+        }
+      } catch (e) {
+        console.warn('Failed to check version:', e);
+      }
+    }
+
+    async function forceUpdateClient() {
+      try {
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        }
+        if ('serviceWorker' in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (let reg of registrations) {
+            await reg.unregister();
+          }
+        }
+      } catch (e) {}
+      window.location.reload(true);
+    }
+
+    // Check version 3 seconds after load, and then every 10 minutes
+    setTimeout(() => {
+      checkClientVersion();
+      setInterval(checkClientVersion, 10 * 60 * 1000);
+    }, 3000);
+  </script>
+</body>
 </html>
