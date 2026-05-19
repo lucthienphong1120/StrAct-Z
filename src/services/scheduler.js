@@ -30,34 +30,22 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       throw new Error('Not authenticated with Strava. Please connect your account.');
     }
 
-    // Check daily limit
-    const stats = await db.getActivityStats(accountId);
+    // Note: Scheduled activities are NOT limited by daily_upload_limit.
+    // They are only limited by schedule_count_min and schedule_count_max config.
+    const config = await db.getAllConfig(accountId);
     const role = await db.getAccountRole(accountId);
     const limits = systemLimits[role] || systemLimits.normal;
 
-    if (stats.todayCount >= limits.daily_upload_limit.max) {
-      console.log(`[Scheduler] Limit reached for account ${accountId} (${limits.daily_upload_limit.max} activities/day).`);
-      return { success: false, message: 'VIP_REQUIRED' };
-    }
-
-    // Get configuration
-    const config = await db.getAllConfig(accountId);
     const minCount = parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : 1;
     const maxCount = parseInt(config.schedule_count_max) >= 1 ? parseInt(config.schedule_count_max) : 2;
 
-    // Calculate remaining quota for today (across ALL slots)
-    const dailyMax = typeof limits.daily_upload_limit.max === 'number'
-      ? limits.daily_upload_limit.max
-      : (limits.daily_upload_limit_val || 2);
-    const remainingQuota = Math.max(0, dailyMax - stats.todayCount);
-
-    // Random count within user config, then cap by remaining quota
+    // Random count within user config
     let taskCount = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
-    taskCount = Math.min(taskCount, remainingQuota); // Never exceed remaining daily quota
+    if (taskCount > limits.schedule_count_max.max) taskCount = limits.schedule_count_max.max; // Dynamic safety cap
 
     if (taskCount <= 0) {
-      console.log(`[Scheduler] Account ${accountId}: Daily quota exhausted (${stats.todayCount}/${dailyMax}), skipping.`);
-      return { success: false, message: 'Daily quota exhausted' };
+      console.log(`[Scheduler] Account ${accountId}: taskCount is 0, skipping.`);
+      return { success: true, message: 'No activities scheduled for this slot' };
     }
 
     // Get existing activities for today to avoid overlaps
@@ -79,13 +67,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     let successCount = 0;
 
     for (let i = 0; i < taskCount; i++) {
-      // Check daily limit inside loop
-      const loopStats = await db.getActivityStats(accountId);
-      if (loopStats.todayCount >= limits.daily_upload_limit.max) {
-        console.log(`[Scheduler] Limit reached for account ${accountId}.`);
-        if (i === 0) return { success: false, message: 'VIP_REQUIRED' };
-        break; 
-      }
+      // No daily limit check inside loop for scheduled events
 
 
 
