@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.23)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.27)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.23). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.27). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,26 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.27 (2026-05-19)
+- **Feature: FAILED Activity Status**: Added a 5th activity status `failed` (alongside uploaded/generated/deleted/removed). Saved to DB with `error_message` when generation is impossible.
+- **Logic: NO_VALID_TIME_SLOT Guard**: `gpx-generator.js` now throws a named error (`err.code = 'NO_VALID_TIME_SLOT'`) instead of silently falling back to `Date.now()` when all time slots are blocked by workhours + existing activities.
+- **API: 409 Response**: Both `/generate` and `/generate-and-upload` routes catch `NO_VALID_TIME_SLOT`, save a `failed` DB record, and return HTTP 409 with a user-friendly Vietnamese message.
+- **Scheduler: Graceful Handling**: Scheduler catches `NO_VALID_TIME_SLOT` per-slot, saves a failed record, then `break`s the retry loop instead of crashing or retrying.
+- **UI: FAILED Badge**: New `.status-badge.failed` CSS class (bold red, higher opacity than deleted). Badge shows error_message as tooltip title.
+- **UI: Toast Warning**: Frontend shows ⏰ warning toast (not error) when 409 is received from generate actions.
+
+### v1.51.26 (2026-05-17)
+- **Cleanup: Remove Google Fit Sync**: Completely removed the "Sync to Google Fit" activity upload feature from UI (`cfgSyncGoogleFit` toggle) and backend (`scheduler.js`, `api.js`). Google Fit now only reads/displays step counts.
+- **UI: Tooltip Fallback**: All `data-tooltip` attributes in `index.html` are now set to `"?"` as fallback. Full tooltip content is declared exclusively in JS (`config.js`) to avoid duplication.
+
+### v1.51.25 (2026-05-17)
+- **Fix: Mobile Responsive**: Comprehensive mobile layout fixes. `.form-row` stacks to 1-col at ≤768px. Map card buttons wrap via `.map-card-actions`. History controls stack via `.history-card-controls`. District checkboxes: 2-col at 600px, 1-col at 500px. Quick actions: 2×2 grid.
+
+### v1.51.24 (2026-05-17)
+- **Logic: Adjacent District Boost**: Auto-adds +0.5 weight to districts adjacent to the most recent uploaded/removed activity's district. Toggle `boost_adjacent` (default: enabled). `ADJACENT_DISTRICTS` mapping in `src/config/districts.js`.
+- **Logic: Reduced Home/Work Weights**: Home: Fully+1.0/Mostly+0.8/Partially+0.5. Work: Fully+0.8/Mostly+0.5/Partially+0.2.
+- **DB: `getLastUploadedActivity`**: New helper in `sqlite-db.js` to fetch the most recent uploaded or removed activity.
 
 ### v1.51.23 (2026-05-17)
 - **Logic: Activity Areas Coverage**: Cập nhật thuật toán tính toán mức độ bao phủ giữa khu vực ưu tiên và các quận. Thay vì dùng khoảng cách tâm, thuật toán mới sử dụng công thức tính diện tích giao nhau (Intersection Area) chia cho diện tích của vòng tròn nhỏ hơn.
