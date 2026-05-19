@@ -450,7 +450,7 @@ function updateActivityChart(activities, days = 14) {
           borderWidth: 2,
           pointRadius: 3,
           tension: 0.3,
-          fill: true,
+          fill: false,
           yAxisID: 'y',
         },
         {
@@ -462,7 +462,7 @@ function updateActivityChart(activities, days = 14) {
           borderWidth: 2,
           pointRadius: 3,
           tension: 0.3,
-          fill: true,
+          fill: false,
           yAxisID: 'y1',
         }
       ]
