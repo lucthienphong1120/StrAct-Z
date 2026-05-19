@@ -211,35 +211,47 @@ async function startScheduler(accountId) {
   // Stop existing tasks
   stopScheduler(accountId);
 
+  const parseHM = (t) => {
+    const [h, m] = (t || '00:00').split(':').map(Number);
+    return h * 60 + m;
+  };
+
+  const time1 = config.schedule_time || '22:00';
+  const time2 = config.schedule_time_2 || '14:00';
+  const min1 = parseHM(time1);
+  const min2 = parseHM(time2);
+
+  // Always label the earlier slot as "Schedule 1" and the later as "Schedule 2"
+  const slotA = min1 <= min2 ? { time: time1, label: 'Schedule 1' } : { time: time1, label: 'Schedule 2' };
+  const slotB = min1 <= min2 ? { time: time2, label: 'Schedule 2' } : { time: time2, label: 'Schedule 1' };
+
   // First schedule
   if (config.schedule_enabled === 'true') {
-    const time1 = config.schedule_time || '22:00';
-    const [h1, m1] = time1.split(':');
-    const cron1 = `${parseInt(m1)} ${parseInt(h1)} * * *`;
+    const [hA, mA] = slotA.time.split(':');
+    const cronA = `${parseInt(mA)} ${parseInt(hA)} * * *`;
     
-    if (cron.validate(cron1)) {
-      const task1 = cron.schedule(cron1, async () => {
-        console.log(`[Scheduler] Slot 1 triggered for account ${accountId}`);
-        await executeJob(accountId, 'Schedule 1');
+    if (cron.validate(cronA)) {
+      const taskA = cron.schedule(cronA, async () => {
+        console.log(`[Scheduler] ${slotA.label} triggered for account ${accountId}`);
+        await executeJob(accountId, slotA.label);
       }, { timezone: 'Asia/Ho_Chi_Minh' });
-      tasks.push(task1);
-      console.log(`[Scheduler] Slot 1 started for ${accountId}: ${cron1}`);
+      tasks.push(taskA);
+      console.log(`[Scheduler] ${slotA.label} started for ${accountId}: ${cronA}`);
     }
   }
 
   // Second schedule
   if (parseInt(config.schedule_count) >= 2) {
-    const time2 = config.schedule_time_2 || '14:00';
-    const [h2, m2] = time2.split(':');
-    const cron2 = `${parseInt(m2)} ${parseInt(h2)} * * *`;
+    const [hB, mB] = slotB.time.split(':');
+    const cronB = `${parseInt(mB)} ${parseInt(hB)} * * *`;
     
-    if (cron.validate(cron2)) {
-      const task2 = cron.schedule(cron2, async () => {
-        console.log(`[Scheduler] Slot 2 triggered for account ${accountId}`);
-        await executeJob(accountId, 'Schedule 2');
+    if (cron.validate(cronB)) {
+      const taskB = cron.schedule(cronB, async () => {
+        console.log(`[Scheduler] ${slotB.label} triggered for account ${accountId}`);
+        await executeJob(accountId, slotB.label);
       }, { timezone: 'Asia/Ho_Chi_Minh' });
-      tasks.push(task2);
-      console.log(`[Scheduler] Slot 2 started for ${accountId}: ${cron2}`);
+      tasks.push(taskB);
+      console.log(`[Scheduler] ${slotB.label} started for ${accountId}: ${cronB}`);
     }
   }
 
