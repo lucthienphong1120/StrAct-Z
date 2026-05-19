@@ -40,7 +40,7 @@ const DEFAULT_CONFIG = {
   schedule_count: '1',
   schedule_time_2: '14:00',
   schedule_count_min: '1',
-  schedule_count_max: '2',
+  schedule_count_max: '1',
   activity_areas: '[]',
   map_lat: '21.0285',
   map_lng: '105.8542',

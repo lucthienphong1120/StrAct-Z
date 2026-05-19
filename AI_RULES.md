@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.30)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.31)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.30). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.31). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.31 (2026-05-19)
+- **Config: Default Max Schedule Count**: Set default value of `schedule_count_max` to `1` (previously `2`) in both backend db schema configuration (`sqlite-db.js`) and validation rules (`limits.js`).
+- **UI: Color Palette Swapping**: Updated Activity Insights chart color scheme:
+  - **Activities** is now blue (`rgba(59, 130, 246, 1)`).
+  - **Distance** is now green (`rgba(16, 185, 129, 1)`).
+  - **Duration** is now orange (`rgba(252, 76, 2, 1)`).
 
 ### v1.51.30 (2026-05-19)
 - **UI: Stacked Bar Chart for Activities**: Refactored the Activity Insights count dataset into stacked bar sub-datasets so that each activity is represented as a single block segment (1 activity = 1 box).
