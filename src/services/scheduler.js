@@ -42,10 +42,23 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
 
     // Get configuration
     const config = await db.getAllConfig(accountId);
-    const minCount = config.schedule_count_min !== undefined ? parseInt(config.schedule_count_min) : 1;
-    const maxCount = config.schedule_count_max !== undefined ? parseInt(config.schedule_count_max) : 2;
+    const minCount = parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : 1;
+    const maxCount = parseInt(config.schedule_count_max) >= 1 ? parseInt(config.schedule_count_max) : 2;
+
+    // Calculate remaining quota for today (across ALL slots)
+    const dailyMax = typeof limits.daily_upload_limit.max === 'number'
+      ? limits.daily_upload_limit.max
+      : (limits.daily_upload_limit_val || 2);
+    const remainingQuota = Math.max(0, dailyMax - stats.todayCount);
+
+    // Random count within user config, then cap by remaining quota
     let taskCount = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
-    if (taskCount > limits.schedule_count_max.max) taskCount = limits.schedule_count_max.max; // Dynamic safety cap
+    taskCount = Math.min(taskCount, remainingQuota); // Never exceed remaining daily quota
+
+    if (taskCount <= 0) {
+      console.log(`[Scheduler] Account ${accountId}: Daily quota exhausted (${stats.todayCount}/${dailyMax}), skipping.`);
+      return { success: false, message: 'Daily quota exhausted' };
+    }
 
     // Get existing activities for today to avoid overlaps
     const targetDate = new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
