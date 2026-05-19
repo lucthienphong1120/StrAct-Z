@@ -71,7 +71,7 @@ async function loadStats(forceRefresh = false) {
       if (window.userRole === 'vip') {
         vipArea.innerHTML = `
           <div style="padding: 12px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; text-align: center;">
-            <div style="color: #f59e0b; font-weight: 600; font-size: 0.9rem;">✨ You already VIP account!</div>
+            <div style="color: #f59e0b; font-weight: 600; font-size: 0.9rem;">✨ VIP Account Active!</div>
             <div style="margin-top:4px; font-size:0.75rem; color:var(--text-muted);">Thank you for supporting StrAct Z.</div>
           </div>
           <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">

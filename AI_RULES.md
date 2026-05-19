@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.27)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.28)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.27). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.28). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.28 (2026-05-19)
+- **Logic: Auto-schedule Quota & Limit Separation**: Removed `daily_upload_limit` checking from automated scheduler. Daily limits now only apply to manual generations. Capped `taskCount` safely against system max but independent of daily counts.
+- **Config: Max Schedule Count Limit**: Hardcoded `schedule_count_max.max` to `2` for both Normal and VIP roles, preventing VIP users from spawning 3 events per schedule slot.
+- **Feature: Client Version Checker**: Added `/api/version` endpoint to return version from `package.json`. Frontend performs periodic checks. If client version (retrieved from UI small tag) differs from backend, shows a popup modal requesting reload. Click-to-update unregisters service workers, clears cache keys, and performs a hard reload.
+- **UI: Grammar & Table Fixes**: Updated weight description table in `index.html` to match actual backend weights (+1.0/+0.8/+0.5 for Home, +0.8/+0.5/+0.2 for Work). Corrected English grammar on VIP card banner ("✨ VIP Account Active!").
 
 ### v1.51.27 (2026-05-19)
 - **Feature: FAILED Activity Status**: Added a 5th activity status `failed` (alongside uploaded/generated/deleted/removed). Saved to DB with `error_message` when generation is impossible.
