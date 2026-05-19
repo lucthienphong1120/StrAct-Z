@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.29)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.30)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.29). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.30). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.30 (2026-05-19)
+- **UI: Stacked Bar Chart for Activities**: Refactored the Activity Insights count dataset into stacked bar sub-datasets so that each activity is represented as a single block segment (1 activity = 1 box).
+- **UI: Scaled Down Axes**: Hidden the 3rd y-axis (`y2`) to clean up chart layout. Chart only displays `km` on the left axis and `min` on the right axis. Legend filters out sub-datasets to show a single clean "Activities" item.
+- **UI: Tooltip Optimization**: Consolidated tooltip output for stacked sub-datasets into a single hover value displaying `Activities: X`.
+- **UI: Reverted Card Subtitles**: Changed Vietnamese source tags on the 4 stats cards back to their original `(Generated & stored in local DB)` English captions.
 
 ### v1.51.29 (2026-05-19)
 - **Logic: Database Stats Calculation**: Reverted client-side calculations for the 4 dashboard stats cards. Calculated `Total Activities` (all-time, all statuses in DB), `Uploaded` (strictly status is `uploaded`), `Total Distance`, and `Total Duration` (sum of `distance_km` and `duration_min` for `uploaded` and `generated` statuses only) directly in backend SQL database stats query.

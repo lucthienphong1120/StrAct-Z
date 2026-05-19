@@ -393,36 +393,43 @@ function updateActivityChart(activities, days = 14) {
     rangeDays.push(d.toLocaleDateString('en-CA'));
   }
 
-  const dailyCount = rangeDays.map(date => {
-    return activities
-      .filter(a => {
-        const startDate = a.start_date || a.created_at;
-        if (!startDate) return false;
-        const localDate = new Date(startDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
-        return localDate === date;
-      }).length;
+  const activitiesByDate = {};
+  rangeDays.forEach(date => {
+    activitiesByDate[date] = activities.filter(a => {
+      const startDate = a.start_date || a.created_at;
+      if (!startDate) return false;
+      const localDate = new Date(startDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+      return localDate === date;
+    });
   });
 
+  const maxDailyCount = Math.max(...rangeDays.map(d => activitiesByDate[d].length), 1);
+
+  const barDatasets = [];
+  for (let i = 0; i < maxDailyCount; i++) {
+    const data = rangeDays.map(date => {
+      return activitiesByDate[date].length > i ? 1 : 0;
+    });
+    barDatasets.push({
+      type: 'bar',
+      label: i === 0 ? 'Activities' : `Activity Slot ${i + 1}`,
+      data: data,
+      backgroundColor: 'rgba(16, 185, 129, 0.35)',
+      borderColor: 'rgba(16, 185, 129, 1)',
+      borderWidth: 1,
+      borderRadius: 2,
+      stack: 'activities_stack',
+      yAxisID: 'y2',
+      barPercentage: 0.5
+    });
+  }
+
   const dailyDist = rangeDays.map(date => {
-    return activities
-      .filter(a => {
-        const startDate = a.start_date || a.created_at;
-        if (!startDate) return false;
-        const localDate = new Date(startDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
-        return localDate === date;
-      })
-      .reduce((sum, a) => sum + (a.distance / 1000 || a.distance_km || 0), 0);
+    return activitiesByDate[date].reduce((sum, a) => sum + (a.distance / 1000 || a.distance_km || 0), 0);
   });
 
   const dailyTime = rangeDays.map(date => {
-    return activities
-      .filter(a => {
-        const startDate = a.start_date || a.created_at;
-        if (!startDate) return false;
-        const localDate = new Date(startDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
-        return localDate === date;
-      })
-      .reduce((sum, a) => sum + (a.moving_time / 60 || a.duration_min || 0), 0);
+    return activitiesByDate[date].reduce((sum, a) => sum + (a.moving_time / 60 || a.duration_min || 0), 0);
   });
 
   if (window.activityChart) {
@@ -433,17 +440,7 @@ function updateActivityChart(activities, days = 14) {
     data: {
       labels: rangeDays.map(d => d.split('-').slice(1).reverse().join('/')),
       datasets: [
-        {
-          type: 'bar',
-          label: 'Activities',
-          data: dailyCount,
-          backgroundColor: 'rgba(16, 185, 129, 0.35)',
-          borderColor: 'rgba(16, 185, 129, 1)',
-          borderWidth: 1,
-          borderRadius: 4,
-          yAxisID: 'y2',
-          barPercentage: 0.5
-        },
+        ...barDatasets,
         {
           type: 'line',
           label: 'Distance (km)',
@@ -494,14 +491,12 @@ function updateActivityChart(activities, days = 14) {
         },
         y2: {
           type: 'linear',
-          display: true,
-          position: 'right',
-          beginAtZero: true,
-          title: { display: true, text: 'acts', color: 'rgba(16, 185, 129, 0.8)', font: { size: 10 } },
-          grid: { drawOnChartArea: false },
-          ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { size: 10 }, stepSize: 1 }
+          display: false,
+          stacked: true,
+          beginAtZero: true
         },
         x: {
+          stacked: true,
           grid: { display: false },
           ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { size: 10 } }
         }
@@ -510,7 +505,12 @@ function updateActivityChart(activities, days = 14) {
         legend: {
           display: true,
           position: 'top',
-          labels: { color: 'rgba(255, 255, 255, 0.6)', font: { size: 10 }, boxWidth: 12 }
+          labels: {
+            color: 'rgba(255, 255, 255, 0.6)',
+            font: { size: 10 },
+            boxWidth: 12,
+            filter: (item) => !item.text.includes('Slot')
+          }
         },
         tooltip: {
           backgroundColor: 'rgba(15, 23, 42, 0.9)',
@@ -526,7 +526,16 @@ function updateActivityChart(activities, days = 14) {
               const val = context.parsed.y;
               if (label.includes('Distance')) return `${label}: ${val.toFixed(1)} km`;
               if (label.includes('Duration')) return `${label}: ${val.toFixed(0)} min`;
-              return `${label}: ${val.toFixed(0)}`;
+              if (label.includes('Activities') || label.includes('Slot')) {
+                if (label === 'Activities') {
+                  const idx = context.dataIndex;
+                  const date = rangeDays[idx];
+                  const totalActs = activitiesByDate[date].length;
+                  return `Activities: ${totalActs}`;
+                }
+                return null;
+              }
+              return `${label}: ${val}`;
             }
           }
         }
