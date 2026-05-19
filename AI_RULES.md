@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.33)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.34)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.33). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.34). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -56,11 +56,17 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.34 (2026-05-19)
+- **UI: Recolor Chart Series**: Adjusted Activity Insights chart colors:
+  - **Activities** (stacked bar): Orange (`rgba(252, 76, 2, 1)`).
+  - **Distance** (line): Blue (`rgba(59, 130, 246, 1)`).
+  - **Duration** (line): Yellow (`rgba(234, 179, 8, 1)`).
+
 ### v1.51.33 (2026-05-19)
-- **UI: Recolor Chart Series**: Reallocated colors for Activity Insights series:
-  - **Activities** is now orange (`rgba(252, 76, 2, 1)`).
-  - **Distance** is now blue (`rgba(59, 130, 246, 1)`).
-  - **Duration** is now sky blue (`rgba(14, 165, 233, 1)`).
+- **UI: Insights Color Palette Shift**: Swapped series colors on the Activity Insights chart:
+  - **Activities** (stacked bar): Orange (`rgba(252, 76, 2, 1)`).
+  - **Distance** (line): Blue (`rgba(59, 130, 246, 1)`).
+  - **Duration** (line): Yellow (`rgba(234, 179, 8, 1)`).
 
 ### v1.51.32 (2026-05-19)
 - **UI: Remove Line Charts Background Fill**: Disabled gradient fill for Distance and Duration line datasets (set `fill: false`) to show clean boundary lines.
