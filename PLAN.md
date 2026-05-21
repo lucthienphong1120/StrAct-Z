@@ -114,4 +114,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] check lại hint đang lỗi không hiển thị đúng: Heart Rate Zones, Max Heart Rate, Avoid Workhours, Random Time Bounds, Auto Schedule, Local Generated History, Strava Cloud Activities
 + [ ] chuyển hint cạnh title Activity Areas (Map) xuống cạnh chữ Trọng số tác dụng
 + [ ] chuyển hint cạnh Auto Schedule xuống cạnh chữ Mốc thời gian 1 (24h)
++ [ ] chỉ hỏi chưa làm, check thêm cấu trúc dữ liệu của api hoạt động từ strava cloud activities xem có mã định danh thiết bị/nguồn dữ liệu nhập không
 + [ ] 
