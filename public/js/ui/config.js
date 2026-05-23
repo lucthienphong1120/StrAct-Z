@@ -256,7 +256,7 @@ async function loadConfig() {
     const today = new Date().toLocaleDateString('en-CA');
     setVal('cfgTargetDate', today);
     
-    setVal('cfgCustomMinTime', config.min_time || '04:30');
+    setVal('cfgCustomMinTime', config.min_time || '00:00');
     setVal('cfgRandMinTime', config.min_time || '04:30');
     setVal('cfgRandMaxTime', config.max_time || '21:30');
     setVal('cfgWorkStart1', config.work_start1 || '08:00');

@@ -60,9 +60,9 @@ const LIMITS = {
   },
   target_time_custom: {
     label: 'Thời gian cụ thể tạo hoạt động (Target Time).',
-    desc_extra: 'Tác dụng: Chỉ định thời gian trong ngày tạo hoạt động.',
+    desc_extra: 'Tác dụng: Chỉ định thời gian trong ngày tạo hoạt động. Đặt 00:00 để tự động tạo ngẫu nhiên thời gian trong ngày.',
     type: 'time',
-    default: '04:30'
+    default: '00:00'
   },
   random_time_bounds: {
     label: 'Thời gian bắt đầu hoạt động ngẫu nhiên (24h).',
