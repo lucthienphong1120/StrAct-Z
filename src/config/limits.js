@@ -46,8 +46,8 @@ const LIMITS = {
     desc_extra: 'Bằng 50% thời lượng hoạt động trước đó.',
     type: 'int',
     default: 50,
-    min: 50,
-    max: 50,
+    min: 0,
+    max: 100,
     unit: '%'
   },
   use_osrm: {
