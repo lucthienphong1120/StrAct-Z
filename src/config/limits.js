@@ -37,8 +37,8 @@ const LIMITS = {
     label: 'Thời gian đệm tối thiểu giữa các hoạt động để tránh trùng lặp.',
     type: 'int',
     default: 30,
-    min: 10,
-    max: { normal: 60, vip: 120 },
+    min: 15,
+    max: { normal: 45, vip: 90 },
     unit: 'phút'
   },
   rest_time_percent: {

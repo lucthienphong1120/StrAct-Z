@@ -139,6 +139,8 @@ async function generateActivity(config = {}) {
     useOSRM = true,
     userRole = 'normal',
     deviceName = 'Garmin Forerunner 975',
+    simWeather = true,
+    simRedLights = true,
   } = config;
 
   const limits = systemLimits[userRole] || systemLimits.normal;
@@ -450,11 +452,11 @@ async function generateActivity(config = {}) {
   points = generateElevation(points, { baseElevation: randomInRange(2, 5), maxVariation: 3 });
 
   // Add timestamps
-  points = generateTimestamps(points, { startTime: activityStartTime, avgPaceMinPerKm: avgPace });
+  points = generateTimestamps(points, { startTime: activityStartTime, avgPaceMinPerKm: avgPace, simRedLights });
 
   // Add heart rate
   if (heartRateEnabled) {
-    points = generateHeartRate(points, { minHR: finalMinHR, maxHR: finalMaxHR });
+    points = generateHeartRate(points, { minHR: finalMinHR, maxHR: finalMaxHR, simWeather, startTime: activityStartTime });
   } else {
     for (const pt of points) {
       delete pt.heartRate;

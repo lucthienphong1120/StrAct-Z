@@ -527,6 +527,7 @@ async function saveConfig() {
     custom_time_enabled: document.getElementById('cfgCustomTime').checked ? 'true' : 'false',
     target_time_custom: document.getElementById('cfgCustomMinTime').value,
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || '30',
+    rest_time_percent: document.getElementById('cfgRestTime')?.value || '50',
   };
 
   if (!validateInputs(config)) return;
@@ -569,7 +570,10 @@ function getOverrideConfig() {
     heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
     user_age: document.getElementById('cfgUserAge').value,
     max_heart_rate: document.getElementById('cfgMaxHR').value,
+    sim_weather: document.getElementById('cfgSimWeather')?.checked ? 'true' : 'false',
+    sim_redlights: document.getElementById('cfgSimRedLights')?.checked ? 'true' : 'false',
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value,
+    rest_time_percent: document.getElementById('cfgRestTime')?.value,
   };
 
   if (!validateTimeBounds(overrideConfig.min_time, overrideConfig.max_time, overrideConfig.target_date, isCustomTime)) {
