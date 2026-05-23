@@ -315,13 +315,15 @@ async function generateActivity(config = {}) {
     
     // Blocked intervals from existing activities + safe time
     const safeMs = (parseInt(config.overlap_protection_minutes || limits.overlap_minutes || '30')) * 60000;
+    const restPercent = parseInt(config.rest_time_percent || (limits.rest_time_percent ? limits.rest_time_percent.default : 50) || '50');
+    const restMultiplier = restPercent / 100;
     const estimatedDurationMs = (avgPace * distanceKm) * 60000;
 
     const blockedRanges = (config.existingActivities || []).map(a => {
       const start = new Date(a.start_date || a.route_start_time).getTime();
       const durationMs = (a.elapsed_time || (a.duration_min * 60)) * 1000;
       const dayStart = targetDateObj.getTime();
-      const restMs = durationMs * 0.5;
+      const restMs = durationMs * restMultiplier;
       return {
         start: start - dayStart - safeMs,
         end: start - dayStart + durationMs + safeMs + restMs
@@ -330,14 +332,14 @@ async function generateActivity(config = {}) {
 
     const isOverlap = (ms) => {
       const newDurationMs = estimatedDurationMs;
-      const restMsOfNew = 0.5 * newDurationMs;
+      const restMsOfNew = newDurationMs * restMultiplier;
       const msEnd = ms + newDurationMs;
 
       for (const a of config.existingActivities || []) {
         const aStart = new Date(a.start_date || a.route_start_time).getTime() - targetDateObj.getTime();
         const aDurationMs = (a.elapsed_time || (a.duration_min * 60)) * 1000;
         const aEnd = aStart + aDurationMs;
-        const aRestMs = 0.5 * aDurationMs;
+        const aRestMs = aDurationMs * restMultiplier;
 
         // Proposed activity is after existing activity 'a'
         if (ms >= aStart) {
@@ -381,7 +383,7 @@ async function generateActivity(config = {}) {
         intervals.push({ start: minMs, end: minMs, duration: 0 });
       }
     } else {
-      const restMsOfNew = 0.5 * estimatedDurationMs;
+      const restMsOfNew = estimatedDurationMs * restMultiplier;
       const checkPoints = [minMs, workStart1, workEnd1, workStart2, workEnd2, effectiveMaxMs];
       blockedRanges.forEach(r => {
         if (r.start > minMs && r.start < effectiveMaxMs) checkPoints.push(r.start);

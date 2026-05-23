@@ -187,20 +187,17 @@
                 <div class="form-group">
                   <label class="form-label">Rest Time (%) <span class="tooltip-icon tooltip-left" id="tipRestTime"
                       data-tooltip="?">?</span></label>
-                  <input type="text" id="cfgRestTime" class="form-input" value="50%" readonly
-                    style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
+                  <input type="number" id="cfgRestTime" class="form-input" value="50" min="0" max="100">
                 </div>
               </div>
 
               <!-- Date & Time Range -->
               <div class="form-group" style="grid-column: 1 / -1; margin-bottom: 0;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
-                  <label class="form-label" style="margin-bottom:0;">Mode</label>
+                <div style="margin-bottom: 12px;">
                   <label class="toggle">
                     <input type="checkbox" id="cfgCustomTime" onchange="toggleCustomTime()">
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size:0.8rem;color:var(--text-muted)">Custom Time (GPX
-                      Only)</span>
+                    <span class="toggle-label" style="font-size:0.9rem; font-weight:600;">Custom Time (GPX Only)</span>
                   </label>
                 </div>
 
@@ -271,16 +268,6 @@
               <button class="btn btn-sm btn-primary" onclick="saveConfig()">💾 Save</button>
             </div>
             <div class="card-body">
-              <div class="form-row"
-                style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border);">
-                <div class="form-group">
-                  <label class="form-label">Daily Upload Limit <span class="tooltip-icon tooltip-right"
-                      id="tipDailyLimit">?</span></label>
-                  <input type="text" id="cfgDailyLimit" class="form-input" readonly
-                    style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
-                </div>
-              </div>
-
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Activity Type <span class="tooltip-icon tooltip-right"

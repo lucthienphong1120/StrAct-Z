@@ -17,6 +17,7 @@ const DEFAULT_CONFIG = {
   selected_districts: 'hoan_kiem,ba_dinh,hai_ba_trung,dong_da,tay_ho,cau_giay,thanh_xuan,ha_dong,long_bien,hoang_mai',
   max_district_span: '1',
   overlap_protection_minutes: '30',
+  rest_time_percent: '50',
   use_osrm: 'true',
   boost_adjacent: 'true',
   min_time: '04:30',

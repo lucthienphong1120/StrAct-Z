@@ -25,6 +25,7 @@ function applyLimitsToUI() {
 
   syncRange('cfgMaxSpan', 'max_district_span');
   syncRange('cfgOverlapProtection', 'overlap_protection_minutes');
+  syncRange('cfgRestTime', 'rest_time_percent');
   syncRange('cfgMinDist', 'min_distance_km');
   syncRange('cfgMaxDist', 'max_distance_km');
   syncRange('scheduleCountMin', 'schedule_count_min');
@@ -285,7 +286,7 @@ async function loadConfig() {
 
 
     setVal('cfgOverlapProtection', config.overlap_protection_minutes || '30');
-    setVal('cfgRestTime', '50%');
+    setVal('cfgRestTime', config.rest_time_percent || '50');
 
     if (config.map_lat && config.map_lng && config.map_zoom) {
       window.savedMapState = {
@@ -370,7 +371,8 @@ function validateInputs(config, isRealTime = false) {
     min_pace: 'cfgMinPace',
     max_pace: 'cfgMaxPace',
     user_age: 'cfgUserAge',
-    overlap_protection_minutes: 'cfgOverlapProtection'
+    overlap_protection_minutes: 'cfgOverlapProtection',
+    rest_time_percent: 'cfgRestTime'
   };
 
   const keyMap = {
@@ -381,6 +383,7 @@ function validateInputs(config, isRealTime = false) {
     max_pace: 'max_pace',
     user_age: 'user_age',
     overlap_protection_minutes: 'overlap_protection_minutes',
+    rest_time_percent: 'rest_time_percent',
     selected_districts: 'selected_districts'
   };
 
@@ -462,7 +465,7 @@ function validateInputs(config, isRealTime = false) {
 
 function attachRealTimeValidation() {
   const inputs = [
-    'cfgMaxSpan', 'cfgOverlapProtection', 'cfgMinDist', 'cfgMaxDist', 
+    'cfgMaxSpan', 'cfgOverlapProtection', 'cfgRestTime', 'cfgMinDist', 'cfgMaxDist', 
     'cfgMinPace', 'cfgMaxPace', 'cfgUserAge'
   ];
 
@@ -474,6 +477,7 @@ function attachRealTimeValidation() {
       const config = {
         max_district_span: document.getElementById('cfgMaxSpan').value,
         overlap_protection_minutes: document.getElementById('cfgOverlapProtection').value,
+        rest_time_percent: document.getElementById('cfgRestTime').value,
         min_distance_km: document.getElementById('cfgMinDist').value,
         max_distance_km: document.getElementById('cfgMaxDist').value,
         min_pace: document.getElementById('cfgMinPace').value,
@@ -737,3 +741,4 @@ window.addEventListener('message', async (event) => {
 window.connectGoogleFit = connectGoogleFit;
 window.disconnectGoogleFit = disconnectGoogleFit;
 window.refreshGoogleFitStats = refreshGoogleFitStats;
+window.updateDynamicTooltips = updateDynamicTooltips;

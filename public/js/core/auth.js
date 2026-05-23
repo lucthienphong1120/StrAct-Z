@@ -45,8 +45,25 @@ function renderAccountInfo(athlete) {
         <div style="font-size:0.8rem;color:var(--text-muted);">ID: ${athlete?.id || 'N/A'}</div>
       </div>
     </div>
+    <div class="form-group" style="margin-bottom:16px;">
+      <label class="form-label" style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+        Daily Upload Limit
+        <span class="tooltip-icon tooltip-right" id="tipDailyLimit">?</span>
+      </label>
+      <input type="text" id="cfgDailyLimit" class="form-input" readonly
+        style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed; padding:6px 12px; font-size:0.9rem;">
+    </div>
     <button class="btn btn-block btn-outline-danger btn-sm" onclick="disconnect()">Disconnect Strava</button>
   `;
+
+  // Re-sync Daily Limit value and Tooltips if limits are loaded
+  if (window.sysLimits) {
+    const dailyLimit = document.getElementById('cfgDailyLimit');
+    if (dailyLimit) dailyLimit.value = window.sysLimits.daily_upload_limit.max;
+    if (window.updateDynamicTooltips) {
+      window.updateDynamicTooltips();
+    }
+  }
 }
 
 async function systemLogout() {

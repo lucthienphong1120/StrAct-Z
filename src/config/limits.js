@@ -36,7 +36,7 @@ const LIMITS = {
   overlap_protection_minutes: {
     label: 'Thời gian đệm tối thiểu giữa các hoạt động để tránh trùng lặp.',
     type: 'int',
-    default: 45,
+    default: 30,
     min: 10,
     max: { normal: 60, vip: 120 },
     unit: 'phút'
