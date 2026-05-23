@@ -233,9 +233,9 @@ const LIMITS = {
       'Apple Watch Ultra 2',
       'Samsung Galaxy Watch 6',
       'Huawei Watch GT 4',
+      'Huawei Watch Fit',
       'Xiaomi Watch S3',
-      'Strava Android App',
-      'Strava iPhone App'
+      'Strava Android App'
     ],
     min: 1,
     max: 1
