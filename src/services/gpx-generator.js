@@ -321,17 +321,32 @@ async function generateActivity(config = {}) {
       const start = new Date(a.start_date || a.route_start_time).getTime();
       const durationMs = (a.elapsed_time || (a.duration_min * 60)) * 1000;
       const dayStart = targetDateObj.getTime();
+      const restMs = durationMs * 0.5;
       return {
         start: start - dayStart - safeMs,
-        end: start - dayStart + durationMs + safeMs
+        end: start - dayStart + durationMs + safeMs + restMs
       };
     });
 
     const isOverlap = (ms) => {
-      const msEnd = ms + estimatedDurationMs;
-      for (const range of blockedRanges) {
-        // Check if the proposed interval [ms, msEnd] overlaps with [range.start, range.end]
-        if (ms <= range.end && msEnd >= range.start) return true;
+      const newDurationMs = estimatedDurationMs;
+      const restMsOfNew = 0.5 * newDurationMs;
+      const msEnd = ms + newDurationMs;
+
+      for (const a of config.existingActivities || []) {
+        const aStart = new Date(a.start_date || a.route_start_time).getTime() - targetDateObj.getTime();
+        const aDurationMs = (a.elapsed_time || (a.duration_min * 60)) * 1000;
+        const aEnd = aStart + aDurationMs;
+        const aRestMs = 0.5 * aDurationMs;
+
+        // Proposed activity is after existing activity 'a'
+        if (ms >= aStart) {
+          if (ms < aEnd + safeMs + aRestMs) return true;
+        }
+        // Proposed activity is before existing activity 'a'
+        else {
+          if (msEnd + safeMs + restMsOfNew > aStart) return true;
+        }
       }
       return false;
     };
@@ -366,12 +381,14 @@ async function generateActivity(config = {}) {
         intervals.push({ start: minMs, end: minMs, duration: 0 });
       }
     } else {
+      const restMsOfNew = 0.5 * estimatedDurationMs;
       const checkPoints = [minMs, workStart1, workEnd1, workStart2, workEnd2, effectiveMaxMs];
       blockedRanges.forEach(r => {
         if (r.start > minMs && r.start < effectiveMaxMs) checkPoints.push(r.start);
         if (r.end > minMs && r.end < effectiveMaxMs) checkPoints.push(r.end);
-        // Also add points shifted by new duration to find boundaries
-        if (r.start - estimatedDurationMs > minMs && r.start - estimatedDurationMs < effectiveMaxMs) checkPoints.push(r.start - estimatedDurationMs);
+        // Also add points shifted by new duration + rest time to find boundaries
+        const shiftMs = estimatedDurationMs + restMsOfNew;
+        if (r.start - shiftMs > minMs && r.start - shiftMs < effectiveMaxMs) checkPoints.push(r.start - shiftMs);
       });
       checkPoints.sort((a, b) => a - b);
       

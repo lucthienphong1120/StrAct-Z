@@ -74,6 +74,7 @@ function updateDynamicTooltips() {
     selected_districts: 'tipDistricts',
     max_district_span: 'tipMaxSpan',
     overlap_protection_minutes: 'tipSafeTime',
+    rest_time_percent: 'tipRestTime',
     use_osrm: 'tipOsrm',
     random_time_bounds: 'tipRandTime',
     avoid_workhours: 'tipAvoidWork',
@@ -282,6 +283,7 @@ async function loadConfig() {
 
 
     setVal('cfgOverlapProtection', config.overlap_protection_minutes || '30');
+    setVal('cfgRestTime', '50%');
 
     if (config.map_lat && config.map_lng && config.map_zoom) {
       window.savedMapState = {

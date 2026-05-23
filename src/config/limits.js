@@ -41,6 +41,15 @@ const LIMITS = {
     max: { normal: 60, vip: 120 },
     unit: 'phút'
   },
+  rest_time_percent: {
+    label: 'Thời gian nghỉ sau hoạt động.',
+    desc_extra: 'Bằng 50% thời lượng hoạt động trước đó.',
+    type: 'int',
+    default: 50,
+    min: 50,
+    max: 50,
+    unit: '%'
+  },
   use_osrm: {
     label: 'Lộ trình đi theo đường thực tế qua OSRM.',
     desc_extra: 'Tắt để dùng đường chim bay fallback',
@@ -378,6 +387,7 @@ function getLimits(role = 'normal') {
 
   result.max_district_span_val = getVal(LIMITS.max_district_span, role) || 1;
   result.overlap_protection_minutes_val = LIMITS.overlap_protection_minutes.default;
+  result.rest_time_percent_val = LIMITS.rest_time_percent.default;
   result.daily_upload_limit_val = getVal(LIMITS.daily_upload_limit, role) || 2;
   result.overlap_minutes = LIMITS.overlap_protection_minutes.default;
 

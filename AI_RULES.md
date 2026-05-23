@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.35)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.36)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.35). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.36). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.36 (2026-05-23)
+- **UI: Separate Time Configuration Card**: Extracted Safe Time and Time Configuration into its own "Time Configuration" panel. Added a read-only display for Rest Time (default 50% of duration).
+- **Logic: Rest Time Buffer**: Incorporated rest time buffer (50% of preceding activity duration) into the Safe Time interval spacing check within `gpx-generator.js` for robust activity generation scheduling.
 
 ### v1.51.35 (2026-05-23)
 - **Feature: Customizable Device Name**: Added configuration choice to set GPX creator device metadata (such as Garmin, Apple Watch, Samsung, Huawei Fit, Xiaomi, Strava Android App).
