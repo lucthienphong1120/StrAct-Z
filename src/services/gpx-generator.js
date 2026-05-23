@@ -138,7 +138,7 @@ async function generateActivity(config = {}) {
     startTime = null,
     useOSRM = true,
     userRole = 'normal',
-    deviceName = 'Garmin Forerunner 965',
+    deviceName = 'Garmin Forerunner 975',
   } = config;
 
   const limits = systemLimits[userRole] || systemLimits.normal;

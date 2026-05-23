@@ -274,7 +274,7 @@ async function loadConfig() {
     setVal('cfgMinPace', config.min_pace || '7.0');
     setVal('cfgMaxPace', config.max_pace || '15.0');
     setVal('cfgActivityType', config.activity_type || 'Random');
-    setVal('cfgDeviceName', config.device_name || 'Garmin Forerunner 965');
+    setVal('cfgDeviceName', config.device_name || 'Garmin Forerunner 975');
     setChecked('cfgHeartRate', config.heart_rate_enabled === 'true');
     setVal('cfgUserAge', config.user_age || '25');
     updateMHR(); 

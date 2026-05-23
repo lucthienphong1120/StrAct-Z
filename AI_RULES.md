@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.36)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.37)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.36). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.37). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,9 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.37 (2026-05-23)
+- **Feature: 2025-2026 Sports Watch Devices**: Updated device name configuration choices in both frontend select list and backend database/generator validation options to contemporary 2025-2026 models (such as Garmin Forerunner 975, Garmin Fenix 8 Solar, Garmin Enduro 3, Apple Watch Ultra 3, Apple Watch Series 10, Samsung Galaxy Watch Ultra, Samsung Galaxy Watch 7, Huawei Watch GT 5 Pro, Huawei Watch Fit 3, Xiaomi Watch S4 Sport, Strava Android App). Set `Garmin Forerunner 975` as the new system-wide fallback/default device name.
 
 ### v1.51.36 (2026-05-23)
 - **UI: Separate Time Configuration Card**: Extracted Safe Time and Time Configuration into its own "Time Configuration" panel. Added an editable Rest Time (%) slider/input (range 0-100), and left-aligned the Custom Time toggle switch. Relocated Daily Limit into the Strava Account panel.

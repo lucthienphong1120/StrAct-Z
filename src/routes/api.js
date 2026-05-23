@@ -284,7 +284,7 @@ router.post('/generate', async (req, res) => {
       userRole: req.user.role || 'normal',
       boost_adjacent: config.boost_adjacent,
       last_district_keys: lastUploaded ? lastUploaded.district_keys : null,
-      deviceName: ov.device_name || config.device_name || 'Garmin Forerunner 965',
+      deviceName: ov.device_name || config.device_name || 'Garmin Forerunner 975',
     });
 
     const activityId = await db.saveActivity(req.user.id, {
@@ -391,7 +391,7 @@ router.post('/generate-and-upload', async (req, res) => {
       userRole: req.user.role || 'normal',
       boost_adjacent: config.boost_adjacent,
       last_district_keys: lastUploaded ? lastUploaded.district_keys : null,
-      deviceName: ov.device_name || config.device_name || 'Garmin Forerunner 965',
+      deviceName: ov.device_name || config.device_name || 'Garmin Forerunner 975',
     });
 
     const activityId = await db.saveActivity(req.user.id, {
