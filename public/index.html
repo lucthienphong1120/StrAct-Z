@@ -188,7 +188,7 @@
                   <div class="form-group" style="margin-bottom:0;">
                     <label class="form-label"
                       style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">&#x1F552; Random Time
-                      Bounds <span class="tooltip-icon"
+                      Bounds <span class="tooltip-icon" id="tipRandTime"
                         data-tooltip="?">?</span></label>
                     <div style="display:flex;gap:10px;align-items:center;">
                       <input type="time" id="cfgRandMinTime" class="form-input" value="04:30" style="flex:1;"
@@ -205,7 +205,7 @@
                     <div class="form-group" style="grid-column: 1 / -1; margin-bottom:0;">
                       <label class="form-label"
                         style="font-size:0.75rem;margin-bottom:4px;color:var(--text-secondary)">&#x1F6AB; Avoid
-                        Workhours (T2-T6) <span class="tooltip-icon"
+                        Workhours (T2-T6) <span class="tooltip-icon" id="tipAvoidWork"
                           data-tooltip="?">?</span></label>
                       <div class="grid-responsive">
                         <div style="display:flex;gap:5px;align-items:center;">
@@ -417,9 +417,7 @@
           <!-- Schedule Card -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">⏰ Auto Schedule <span class="tooltip-icon" id="tipScheduleMain"
-                  data-tooltip="?">?</span>
-              </div>
+              <div class="card-title">⏰ Auto Schedule</div>
               <label class="toggle">
                 <input type="checkbox" id="scheduleEnabled" onchange="updateSchedule()">
                 <div class="toggle-track"></div>
@@ -429,7 +427,7 @@
               <div id="scheduleContainer" style="display:flex; flex-direction:column; gap:16px;">
                 <div class="form-group" style="margin-bottom:0;">
                   <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
-                    <span>Mốc thời gian 1 (24h)</span>
+                    <span>Mốc thời gian 1 (24h) <span class="tooltip-icon" id="tipScheduleTime" data-tooltip="?">?</span></span>
                   </label>
                   <input type="time" id="scheduleTime" class="form-input" value="22:00" onchange="updateSchedule()"
                     lang="en-GB">
@@ -479,9 +477,7 @@
           <!-- Activity Areas Card -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">📍 Activity Areas (Map) <span id="tipActivityAreas"
-                  class="tooltip-icon tooltip-left">?</span>
-              </div>
+              <div class="card-title">📍 Activity Areas (Map)</div>
               <div class="map-card-actions" style="display:flex; gap:5px;">
                 <button id="btnLockMap" class="btn btn-sm btn-secondary" onclick="toggleMapLock()">🔒 Map
                   Locked</button>
@@ -539,10 +535,10 @@
                       style="color:var(--text-primary); font-size: 0.85rem; font-weight: 500; margin-top:2px;">-</div>
                   </div>
                 </div>
-
+ 
                 <div
                   style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-                  ⚖️ Trọng số tác dụng
+                  ⚖️ Trọng số tác dụng <span id="tipActivityAreas" class="tooltip-icon tooltip-left">?</span>
                 </div>
                 <table
                   style="width:100%; border-collapse: collapse; font-size: 0.75rem; color: rgba(255,255,255,0.6); background:rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 4px; overflow: hidden;">
@@ -672,7 +668,7 @@
         <!-- Activity History (Local) -->
         <div class="card full-width">
           <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
-            <div class="card-title" style="flex:1;">📋 Local Generated History <span class="tooltip-icon tooltip-right"
+            <div class="card-title" style="flex:1;">📋 Local Generated History <span class="tooltip-icon tooltip-right" id="tipLocalHistory"
                 data-tooltip="?">?</span>
             </div>
             <div class="history-card-controls" style="display:flex; gap:10px; align-items:center;">
@@ -707,7 +703,7 @@
         <!-- Strava Cloud Activities -->
         <div class="card full-width">
           <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
-            <div class="card-title" style="flex:1;">☁️ Strava Cloud Activities <span class="tooltip-icon tooltip-right"
+            <div class="card-title" style="flex:1;">☁️ Strava Cloud Activities <span class="tooltip-icon tooltip-right" id="tipStravaCloud"
                 data-tooltip="?">?</span>
             </div>
 

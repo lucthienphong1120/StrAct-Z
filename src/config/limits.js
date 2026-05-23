@@ -229,6 +229,14 @@ const LIMITS = {
     min: 18,
     max: 90
   },
+  max_heart_rate: {
+    label: 'Nhịp tim tối đa (Max Heart Rate).',
+    desc_extra: 'Tác dụng: Được tự động tính dựa trên Tuổi (MHR = 220 - Tuổi).',
+    type: 'int',
+    default: 195,
+    min: 130,
+    max: 202
+  },
   heart_rate_zones: {
     label: 'Vùng nhịp tim (Heart Rate Zones).',
     type: 'map',
@@ -278,6 +286,16 @@ const LIMITS = {
     desc_extra: 'Tác dụng: Tăng Elapsed Time, Giảm Avg Pace, Giảm HR. Xác suất: 1.5% mỗi điểm, dừng 15-60s',
     type: 'bool',
     default: true
+  },
+  local_history: {
+    label: 'Lịch sử hoạt động đã tạo (Local Generated History).',
+    desc_extra: 'Trạng thái hoạt động:\n• UPLOADED: Đã tải lên Strava thành công.\n• GENERATED: Mới chỉ tạo file GPX local, chưa tải lên.\n• DELETED: Đã xóa cục bộ trước khi tải lên.\n• REMOVED: Đã tải lên nhưng sau đó bị xóa khỏi Strava Cloud.\n• FAILED: Không thể tạo hoạt động do lỗi cấu hình hoặc không tìm thấy khung giờ trống.',
+    type: 'info'
+  },
+  strava_cloud: {
+    label: 'Hoạt động trên Strava Cloud.',
+    desc_extra: 'Hiển thị danh sách các hoạt động thực tế từ tài khoản Strava của bạn. Dữ liệu được đồng bộ trực tiếp từ máy chủ Strava.',
+    type: 'info'
   },
   sync_google_fit: {
     label: 'Tự động đồng bộ sang Google Fit.',

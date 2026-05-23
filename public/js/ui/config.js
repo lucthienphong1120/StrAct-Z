@@ -84,6 +84,7 @@ function updateDynamicTooltips() {
     activity_type: 'tipActivityType',
     heart_rate_enabled: 'tipHeartRate',
     user_age: 'tipUserAge',
+    max_heart_rate: 'tipMaxHR',
     min_pace: 'tipMinPace',
     max_pace: 'tipMaxPace',
     sim_weather: 'tipSimWeather',
@@ -99,7 +100,9 @@ function updateDynamicTooltips() {
     home_count: 'tipHomePoints',
     work_count: 'tipWorkPoints',
     scale_radius: 'tipScaleRadius',
-    boost_adjacent: 'tipBoostAdjacent'
+    boost_adjacent: 'tipBoostAdjacent',
+    local_history: 'tipLocalHistory',
+    strava_cloud: 'tipStravaCloud'
   };
 
   for (const [key, tipId] of Object.entries(tipMapping)) {
@@ -115,6 +118,12 @@ function updateDynamicTooltips() {
 function buildTooltipText(cfg) {
   if (!cfg.label) return '';
   
+  if (cfg.type === 'info') {
+    const lines = [cfg.label];
+    if (cfg.desc_extra) lines.push(cfg.desc_extra);
+    return lines.join('\n');
+  }
+  
   if (cfg.type === 'map') {
     const lines = [cfg.label];
     if (cfg.desc_extra) lines.push(cfg.desc_extra);
@@ -125,7 +134,15 @@ function buildTooltipText(cfg) {
     if (mapping) {
       lines.push('');
       for (const [key, val] of Object.entries(mapping)) {
-        lines.push(`• ${key}: ${val}`);
+        let valStr = val;
+        if (typeof val === 'object' && val !== null) {
+          if (val.min !== undefined && val.max !== undefined) {
+            valStr = `${Math.round(val.min * 100)}-${Math.round(val.max * 100)}%`;
+          } else {
+            valStr = JSON.stringify(val);
+          }
+        }
+        lines.push(`• ${key}: ${valStr}`);
       }
     }
     return lines.join('\n');
@@ -140,7 +157,7 @@ function buildTooltipText(cfg) {
   lines.push(`Kiểu: ${cfg.type}`);
   
   let defVal = cfg.default_label || cfg.default;
-  if (typeof defVal === 'object') {
+  if (typeof defVal === 'object' && defVal !== null) {
     if (defVal.start && defVal.end) defVal = `${defVal.start} - ${defVal.end}`;
     else if (defVal.start1) defVal = `${defVal.start1}-${defVal.end1} & ${defVal.start2}-${defVal.end2}`;
     else defVal = JSON.stringify(defVal);

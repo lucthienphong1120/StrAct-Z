@@ -111,8 +111,8 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] giảm màu/hiệu ứng khi hover dòng (line hover) của Strava Cloud Activities và Local Generated History
 + [x] phần Activity Insights (Cloud) tôi muốn hiển thị thêm thông tin thứ 3: số lượng event trong ngày, tổng quãng đường và tổng thời gian (có thể cho cột dọc số lượng event dạng bar, 2 cái kia dạng line chart hoặc thiết kế idea nào phù hợp) -> các thông tin này lấy từ cache của Strava Cloud Activities
 + [x] 4 tab ở trên cũng phải check và update lại logic chuẩn theo Local Generated History toàn thời gian: Total Activities (tổng event tất cả status, Uploaded các event đang ở trạng thái uploaded -> update theo cache, Total Distance và Total Duration tính theo giá trị của tổng event uploaded và generated)
-+ [ ] check lại hint đang lỗi không hiển thị đúng: Heart Rate Zones, Max Heart Rate, Avoid Workhours, Random Time Bounds, Auto Schedule, Local Generated History, Strava Cloud Activities
-+ [ ] chuyển hint cạnh title Activity Areas (Map) xuống cạnh chữ Trọng số tác dụng
-+ [ ] chuyển hint cạnh Auto Schedule xuống cạnh chữ Mốc thời gian 1 (24h)
++ [x] check lại hint đang lỗi không hiển thị đúng: Heart Rate Zones, Max Heart Rate, Avoid Workhours, Random Time Bounds, Auto Schedule, Local Generated History, Strava Cloud Activities
++ [x] chuyển hint cạnh title Activity Areas (Map) xuống cạnh chữ Trọng số tác dụng
++ [x] chuyển hint cạnh Auto Schedule xuống cạnh chữ Mốc thời gian 1 (24h)
 + [ ] chỉ hỏi chưa làm, check thêm cấu trúc dữ liệu của api hoạt động từ strava cloud activities xem có mã định danh thiết bị/nguồn dữ liệu nhập không
 + [ ] 
