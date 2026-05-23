@@ -455,6 +455,10 @@ async function generateActivity(config = {}) {
   // Add heart rate
   if (heartRateEnabled) {
     points = generateHeartRate(points, { minHR: finalMinHR, maxHR: finalMaxHR });
+  } else {
+    for (const pt of points) {
+      delete pt.heartRate;
+    }
   }
 
   // Add cadence
