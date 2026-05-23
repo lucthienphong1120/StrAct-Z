@@ -229,15 +229,13 @@ const LIMITS = {
     default_label: 'Garmin Forerunner 965',
     choices: [
       'Garmin Forerunner 965',
-      'Garmin Forerunner 265',
       'Garmin Fenix 7 Pro',
-      'Garmin Epix Gen 2',
       'Apple Watch Ultra 2',
-      'Apple Watch Series 9',
-      'COROS Pace 3',
-      'COROS Apex 2 Pro',
-      'Suunto Vertical',
-      'Strava Android App'
+      'Samsung Galaxy Watch 6',
+      'Huawei Watch GT 4',
+      'Xiaomi Watch S3',
+      'Strava Android App',
+      'Strava iPhone App'
     ],
     min: 1,
     max: 1
