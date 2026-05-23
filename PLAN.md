@@ -117,7 +117,13 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] check thêm cấu trúc dữ liệu của api hoạt động từ strava cloud activities xem có mã định danh thiết bị/nguồn dữ liệu nhập không
 + [x] tách các cấu hình thời gian ra 1 thẻ riêng (Time configuration), thêm option thời gian nghỉ sau hoạt động (rest time) default = 50% thời lượng hoạt động trước đó -> dạng readonly, cộng thêm với Safe Time (v1.51.36)
 + [x] check và confirm lại logic Safe Time, khi event được tạo sẽ kiểm tra các event trong ngày, thời gian random phải khác với endtime (tự tính hoặc lấy từ hoạt động đã upload) của các event đã tạo + safe time + resttime, đồng thời không được vào avoid workhours (v1.51.36)
-+ [x] cập nhật các mã thiết bị thể thao mới cho năm 2025-2026, set Garmin Forerunner 975 làm mặc định và nâng phiên bản lên v1.51.37 (v1.51.37)
-+ [x] kiểm tra, tối ưu hóa logic đánh giá trạng thái các nút toggle (OSRM, Weather, RedLights, HeartRate, BoostAdjacent) tránh bỏ sót khi bị disable và nâng phiên bản lên v1.51.38 (v1.51.38)
++ [x] cập nhật các mã thiết bị thể thao mới cho năm 2025-2026, set Garmin Forerunner 975 làm mặc định và nâng phiên bản lên v1.51.37
++ [x] kiểm tra, tối ưu hóa logic đánh giá trạng thái các nút toggle (OSRM, Weather, RedLights, HeartRate, BoostAdjacent) tránh bỏ sót khi bị disable và nâng phiên bản lên v1.51.38
++ [ ] kiểm tra token backend mỗi request để đảm bảo tránh lỗ hổng BAC
++ [ ] update docs và tài liệu, prompt mới để update kiến thức
++ [ ] check endpoint /api/version mỗi khi up ver
++ [ ] kiểm tra validate theo backend để tránh normal account sủa request vi phạm (type, range)
++ [ ] check token khi client request change để đảm bảo range/config hợp lệ nếu là vip
++ [ ] 
 
 
