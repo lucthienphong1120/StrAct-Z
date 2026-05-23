@@ -38,6 +38,17 @@ function generateActivityName(activityType, date) {
 function formatGPXTime(date) { return date.toISOString(); }
 
 function escapeXml(str) {
+  if (!str) return '';
+  return str.replace(/[<>&'"]/g, (c) => {
+    switch (c) {
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '&': return '&amp;';
+      case '\'': return '&apos;';
+      case '"': return '&quot;';
+      default: return c;
+    }
+  });
 }
 
 /**
@@ -62,10 +73,10 @@ function getCircleIntersectionArea(r1, r2, d) {
 }
 
 function buildGPX(points, options = {}) {
-  const { activityName = 'Morning Run', activityType = 'running', includeHeartRate = true, includeCadence = true } = options;
+  const { activityName = 'Morning Run', activityType = 'running', includeHeartRate = true, includeCadence = true, deviceName = 'Garmin Connect' } = options;
 
   let gpx = `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="Garmin Connect"
+<gpx version="1.1" creator="${escapeXml(deviceName)}"
   xmlns="http://www.topografix.com/GPX/1/1"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1"
@@ -127,6 +138,7 @@ async function generateActivity(config = {}) {
     startTime = null,
     useOSRM = true,
     userRole = 'normal',
+    deviceName = 'Garmin Forerunner 965',
   } = config;
 
   const limits = systemLimits[userRole] || systemLimits.normal;
@@ -438,6 +450,7 @@ async function generateActivity(config = {}) {
     activityType: finalActivityType.toLowerCase(),
     includeHeartRate: heartRateEnabled,
     includeCadence: true,
+    deviceName,
   });
 
   // Save GPX file

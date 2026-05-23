@@ -114,5 +114,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] check lại hint đang lỗi không hiển thị đúng: Heart Rate Zones, Max Heart Rate, Avoid Workhours, Random Time Bounds, Auto Schedule, Local Generated History, Strava Cloud Activities
 + [x] chuyển hint cạnh title Activity Areas (Map) xuống cạnh chữ Trọng số tác dụng
 + [x] chuyển hint cạnh Auto Schedule xuống cạnh chữ Mốc thời gian 1 (24h)
-+ [ ] chỉ hỏi chưa làm, check thêm cấu trúc dữ liệu của api hoạt động từ strava cloud activities xem có mã định danh thiết bị/nguồn dữ liệu nhập không
-+ [ ] 
++ [x] chỉ hỏi chưa làm, check thêm cấu trúc dữ liệu của api hoạt động từ strava cloud activities xem có mã định danh thiết bị/nguồn dữ liệu nhập không
++ [ ] tách các cấu hình thời gian ra 1 thẻ riêng (Time configuration), thêm option thời gian nghỉ sau hoạt động (rest time) default = 50% thời lượng hoạt động trước đó -> dạng readonly, cộng thêm với Safe Time
++ [ ] check và confirm lại logic Safe Time, khi event được tạo sẽ kiểm tra các event trong ngày, thời gian random phải khác với endtime (tự tính hoặc lấy từ hoạt động đã upload) của các event đã tạo + safe time + resttime, đồng thời không được vào avoid workhours

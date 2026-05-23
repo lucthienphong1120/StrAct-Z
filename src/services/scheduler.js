@@ -101,6 +101,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
           userRole: role,
           boost_adjacent: config.boost_adjacent,
           last_district_keys: lastUploaded ? lastUploaded.district_keys : null,
+          deviceName: config.device_name || 'Garmin Forerunner 965',
         });
       } catch (genErr) {
         if (genErr.code === 'NO_VALID_TIME_SLOT') {

@@ -262,7 +262,7 @@
               </div>
 
               <div class="form-row">
-                <div class="form-group" style="grid-column: 1 / -1;">
+                <div class="form-group">
                   <label class="form-label">Activity Type <span class="tooltip-icon tooltip-right"
                       id="tipActivityType">?</span></label>
                   <select id="cfgActivityType" class="form-select" onchange="updateActivityTypeHint()">
@@ -273,6 +273,22 @@
                   </select>
                   <div id="activityTypeHint" style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">🎲 60%
                     Run, 30% Walk, 10% Ride</div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Device Name <span class="tooltip-icon tooltip-left"
+                      id="tipDeviceName">?</span></label>
+                  <select id="cfgDeviceName" class="form-select">
+                    <option value="Garmin Forerunner 965">Garmin Forerunner 965</option>
+                    <option value="Garmin Forerunner 265">Garmin Forerunner 265</option>
+                    <option value="Garmin Fenix 7 Pro">Garmin Fenix 7 Pro</option>
+                    <option value="Garmin Epix Gen 2">Garmin Epix Gen 2</option>
+                    <option value="Apple Watch Ultra 2">Apple Watch Ultra 2</option>
+                    <option value="Apple Watch Series 9">Apple Watch Series 9</option>
+                    <option value="COROS Pace 3">COROS Pace 3</option>
+                    <option value="COROS Apex 2 Pro">COROS Apex 2 Pro</option>
+                    <option value="Suunto Vertical">Suunto Vertical</option>
+                    <option value="Strava Android App">Strava Android App</option>
+                  </select>
                 </div>
               </div>
               <div class="form-row">

@@ -82,6 +82,7 @@ function updateDynamicTooltips() {
     min_distance_km: 'tipMinDist',
     max_distance_km: 'tipMaxDist',
     activity_type: 'tipActivityType',
+    device_name: 'tipDeviceName',
     heart_rate_enabled: 'tipHeartRate',
     user_age: 'tipUserAge',
     max_heart_rate: 'tipMaxHR',
@@ -269,6 +270,7 @@ async function loadConfig() {
     setVal('cfgMinPace', config.min_pace || '7.0');
     setVal('cfgMaxPace', config.max_pace || '15.0');
     setVal('cfgActivityType', config.activity_type || 'Random');
+    setVal('cfgDeviceName', config.device_name || 'Garmin Forerunner 965');
     setChecked('cfgHeartRate', config.heart_rate_enabled === 'true');
     setVal('cfgUserAge', config.user_age || '25');
     updateMHR(); 
@@ -507,6 +509,7 @@ async function saveConfig() {
     min_pace: document.getElementById('cfgMinPace').value,
     max_pace: document.getElementById('cfgMaxPace').value,
     activity_type: document.getElementById('cfgActivityType').value,
+    device_name: document.getElementById('cfgDeviceName').value,
     heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
     max_heart_rate: document.getElementById('cfgMaxHR').value,
     user_age: document.getElementById('cfgUserAge').value,
@@ -552,6 +555,7 @@ function getOverrideConfig() {
     min_pace: document.getElementById('cfgMinPace').value,
     max_pace: document.getElementById('cfgMaxPace').value,
     activity_type: document.getElementById('cfgActivityType').value,
+    device_name: document.getElementById('cfgDeviceName').value,
     heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
     user_age: document.getElementById('cfgUserAge').value,
     max_heart_rate: document.getElementById('cfgMaxHR').value,

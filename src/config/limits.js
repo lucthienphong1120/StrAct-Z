@@ -221,6 +221,27 @@ const LIMITS = {
       Ride: { Run: 0.0, Walk: 0.0, Ride: 1.0 }
     }
   },
+  device_name: {
+    label: 'Thiết bị ghi nhận (Device Name).',
+    desc_extra: 'Tác dụng: Thiết bị hiển thị ghi nhận hoạt động trên Strava.',
+    type: 'array',
+    default: 'Garmin Forerunner 965',
+    default_label: 'Garmin Forerunner 965',
+    choices: [
+      'Garmin Forerunner 965',
+      'Garmin Forerunner 265',
+      'Garmin Fenix 7 Pro',
+      'Garmin Epix Gen 2',
+      'Apple Watch Ultra 2',
+      'Apple Watch Series 9',
+      'COROS Pace 3',
+      'COROS Apex 2 Pro',
+      'Suunto Vertical',
+      'Strava Android App'
+    ],
+    min: 1,
+    max: 1
+  },
   heart_rate_enabled: {
     label: 'Dữ liệu nhịp tim (Heart Rate).',
     desc_extra: 'Tác dụng: Mô phỏng nhịp tim dựa trên MHR và loại hoạt động.',
