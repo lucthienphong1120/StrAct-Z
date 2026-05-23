@@ -21,6 +21,8 @@ const DEFAULT_CONFIG = {
   boost_adjacent: 'true',
   min_time: '04:30',
   max_time: '21:30',
+  custom_time_enabled: 'false',
+  target_time_custom: '00:00',
   work_start1: '08:00',
   work_end1: '11:30',
   work_start2: '13:30',

@@ -258,7 +258,9 @@ async function loadConfig() {
     const today = new Date().toLocaleDateString('en-CA');
     setVal('cfgTargetDate', today);
     
-    setVal('cfgCustomMinTime', config.min_time || '00:00');
+    setChecked('cfgCustomTime', config.custom_time_enabled === 'true');
+    setVal('cfgCustomMinTime', config.target_time_custom || '00:00');
+    toggleCustomTime();
     setVal('cfgRandMinTime', config.min_time || '04:30');
     setVal('cfgRandMaxTime', config.max_time || '21:30');
     setVal('cfgWorkStart1', config.work_start1 || '08:00');
@@ -518,6 +520,8 @@ async function saveConfig() {
     sim_weather: document.getElementById('cfgSimWeather')?.checked ? 'true' : 'false',
     sim_redlights: document.getElementById('cfgSimRedLights')?.checked ? 'true' : 'false',
 
+    custom_time_enabled: document.getElementById('cfgCustomTime').checked ? 'true' : 'false',
+    target_time_custom: document.getElementById('cfgCustomMinTime').value,
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || '30',
   };
 
