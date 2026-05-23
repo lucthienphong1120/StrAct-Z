@@ -58,15 +58,21 @@ const LIMITS = {
     type: 'bool',
     default: false
   },
+  target_time_custom: {
+    label: 'Thời gian cụ thể tạo hoạt động (Target Time).',
+    desc_extra: 'Tác dụng: Chỉ định thời gian trong ngày tạo hoạt động.',
+    type: 'time',
+    default: '04:30'
+  },
   random_time_bounds: {
     label: 'Thời gian bắt đầu hoạt động ngẫu nhiên (24h).',
-    desc_extra: 'Định dạng 24:00 (ví dụ: 21:30 thay vì 09:30 PM)',
+    desc_extra: 'Định dạng 24:00',
     type: 'time',
     default: { start: '04:30', end: '21:30' }
   },
   avoid_workhours: {
     label: 'Khung giờ không tạo hoạt động ngẫu nhiên (24h).',
-    desc_extra: 'Định dạng 24:00 (ví dụ: 17:30 thay vì 05:30 PM)',
+    desc_extra: 'Định dạng 24:00',
     type: 'time',
     default: {
       start1: '08:00', end1: '11:30',

@@ -78,7 +78,7 @@ function updateDynamicTooltips() {
     random_time_bounds: 'tipRandTime',
     avoid_workhours: 'tipAvoidWork',
     target_date: 'tipTargetDate',
-    custom_time_enabled: 'tipCustomTime',
+    target_time_custom: 'tipCustomTime',
     min_distance_km: 'tipMinDist',
     max_distance_km: 'tipMaxDist',
     activity_type: 'tipActivityType',
@@ -163,7 +163,8 @@ function buildTooltipText(cfg) {
     else defVal = JSON.stringify(defVal);
   }
   
-  lines.push(`Mặc định: ${defVal}${cfg.unit ? ' ' + cfg.unit : ''}`);
+  const unitStr = (cfg.unit && defVal !== 'Hôm nay') ? ' ' + cfg.unit : '';
+  lines.push(`Mặc định: ${defVal}${unitStr}`);
   
   const rangeStr = buildRangeString(cfg);
   if (rangeStr) lines.push(`Phạm vi: ${rangeStr}`);
