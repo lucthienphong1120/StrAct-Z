@@ -58,6 +58,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.44 (2026-05-28)
+- **Clean: Removed Stale Configurations**: Cleaned up the deprecated `district_key` configuration parameters completely across the frontend configuration panel (`config.js`), the backend endpoint (`api.js`), and the scheduled runner (`scheduler.js`) to prevent any potential storage of unused parameters in `user_config` database table.
+- **Fix: Live Map Color Update**: Ensured the Leaflet maps' polygon colors update immediately when switching themes between VIP Gold and Normal without requiring a page refresh.
+
 ### v1.51.43 (2026-05-28)
 - **Fix: Weighted District Selection Bug**: Fixed root cause of all activities generating in Hoàn Kiếm. The `districtKey` parameter in `gpx-generator.js` had a hardcoded default of `'hoan_kiem'` which bypassed the entire weighted random selection algorithm whenever `district_key` was not set in the user's DB config. Changed default to `null` so the code correctly falls into the weighted probability path. Also fixed the unknown-key fallback to use random from `allowedDistricts` instead of hardcoded `'hoan_kiem'`.
 - **UI: Refactor Daily Upload Limit to static HTML**: Moved the Daily Upload Limit input from a dynamically generated JS template string in `auth.js` to a static HTML element in `index.html`. The JS (`renderAccountInfo`) now only injects athlete-specific dynamic data (avatar, name, ID, VIP badge) into `#accountProfile`.
