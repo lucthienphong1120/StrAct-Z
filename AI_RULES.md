@@ -58,6 +58,9 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.45 (2026-05-28)
+- **Fix: Live Activity Area Circles Color Update**: Updated Leaflet maps' Activity Areas (Home/Work) circle colors to dynamically update style using CSS variables when toggling themes (VIP Gold vs. Normal) or previewing. Also updated the frontend legend text colors in `index.html` to reflect theme variable changes properly.
+
 ### v1.51.44 (2026-05-28)
 - **Clean: Removed Stale Configurations**: Cleaned up the deprecated `district_key` configuration parameters completely across the frontend configuration panel (`config.js`), the backend endpoint (`api.js`), and the scheduled runner (`scheduler.js`) to prevent any potential storage of unused parameters in `user_config` database table.
 - **Fix: Live Map Color Update**: Ensured the Leaflet maps' polygon colors update immediately when switching themes between VIP Gold and Normal without requiring a page refresh.
