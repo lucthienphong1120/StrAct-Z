@@ -120,10 +120,10 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] cập nhật các mã thiết bị thể thao mới cho năm 2025-2026, set Garmin Forerunner 975 làm mặc định và nâng phiên bản lên v1.51.37
 + [x] kiểm tra, tối ưu hóa logic đánh giá trạng thái các nút toggle (OSRM, Weather, RedLights, HeartRate, BoostAdjacent) tránh bỏ sót khi bị disable và nâng phiên bản lên v1.51.38
 + [ ] kiểm tra token backend mỗi request để đảm bảo tránh lỗ hổng BAC
-+ [ ] update docs và tài liệu, prompt mới để update kiến thức
-+ [ ] check endpoint /api/version mỗi khi up ver
++ [x] update docs và tài liệu, prompt mới để update kiến thức
++ [x] check endpoint /api/version mỗi khi up ver
 + [ ] kiểm tra validate theo backend để tránh normal account sủa request vi phạm (type, range)
 + [ ] check token khi client request change để đảm bảo range/config hợp lệ nếu là vip
 + [ ] check lại công thức xác suất và trọng số gen vị trí ngẫu nhiên, toàn bộ event 20 ngày gần đây đều là hoàn kiếm
-
++ [x] sau 1 thời gian app bị logout thì các chức năng đặt lịch và upload có còn hoạt động không
 

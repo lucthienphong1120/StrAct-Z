@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.38)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.39)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.38). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.39). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.39 (2026-05-23)
+- **Config: Safe Time Range Bounds**: Expanded the allowable range for safe time buffer (`overlap_protection_minutes`) to 15-45 minutes for Normal accounts and 15-90 minutes for VIP accounts (updated in `limits.js`).
+- **Logic: Rest Time Pass-Through & Persistence**: Fixed a bug where `rest_time_percent` was not properly persisted and passed down to the GPX generator engine. Updated the `/generate` and `/generate-and-upload` route handlers to pass correct override configurations down to the generator.
+- **Maintenance: Client-Side Version Mapping**: Bumped version to v1.51.39 to align frontend version checking with the `/api/version` endpoint.
 
 ### v1.51.38 (2026-05-23)
 - **Logic: Robust Toggle Override Evaluations**: Fixed boolean toggle overrides (such as `use_osrm`, `sim_weather`, `sim_redlights`, `heart_rate_enabled`, and `boost_adjacent`) in route handlers to robustly check both boolean and string values. Fixed bug where disabled `sim_weather` and `sim_redlights` parameters were ignored and always active during GPX generation by properly passing these options from config to route-engine generator functions.

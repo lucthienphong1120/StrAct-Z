@@ -1,6 +1,6 @@
 # ⚙️ Setup & Deployment Guide
 
-This guide will walk you through setting up StrAct Z v1.15.0 on your local machine or server using Node.js and `npm`.
+This guide will walk you through setting up StrAct Z v1.51.39 on your local machine or server using Node.js and `npm`.
 
 ## Prerequisites
 
