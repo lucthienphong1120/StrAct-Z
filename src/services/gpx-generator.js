@@ -125,7 +125,7 @@ async function generateActivity(config = {}) {
   const {
     startLat = 21.0285,
     startLng = 105.8542,
-    districtKey = 'hoan_kiem',
+    districtKey = null,
     minDistanceKm = 0.5,
     maxDistanceKm = 10,
     minPace = 7.0,
@@ -282,7 +282,12 @@ async function generateActivity(config = {}) {
   } else if (HANOI_DISTRICTS[districtKey]) {
     chosenDistrictKeys = [districtKey];
   } else {
-    chosenDistrictKeys = ['hoan_kiem'];
+    // Unknown districtKey: fall back to weighted random selection
+    console.warn(`[Generator] Unknown districtKey "${districtKey}", falling back to weighted random.`);
+    districtKey = null; // force re-entry into weighted pick
+    const totalWeight = allowedDistricts.length;
+    const r = Math.floor(Math.random() * totalWeight);
+    chosenDistrictKeys = [allowedDistricts[r] || 'hoan_kiem'];
   }
 
   // Randomize distance and pace

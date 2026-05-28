@@ -58,6 +58,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.43 (2026-05-28)
+- **Fix: Weighted District Selection Bug**: Fixed root cause of all activities generating in Hoàn Kiếm. The `districtKey` parameter in `gpx-generator.js` had a hardcoded default of `'hoan_kiem'` which bypassed the entire weighted random selection algorithm whenever `district_key` was not set in the user's DB config. Changed default to `null` so the code correctly falls into the weighted probability path. Also fixed the unknown-key fallback to use random from `allowedDistricts` instead of hardcoded `'hoan_kiem'`.
+- **UI: Refactor Daily Upload Limit to static HTML**: Moved the Daily Upload Limit input from a dynamically generated JS template string in `auth.js` to a static HTML element in `index.html`. The JS (`renderAccountInfo`) now only injects athlete-specific dynamic data (avatar, name, ID, VIP badge) into `#accountProfile`.
+
 ### v1.51.42 (2026-05-28)
 - **UI: Expanded Daily Upload Limit Width**: Removed the wrapping `.form-row` from the Daily Upload Limit input field in `renderAccountInfo` within `auth.js`, allowing it to span the full card width (100%) to match other settings input layouts.
 - **UI: Form Layout Consistency Rule**: Established a design rule under Theme Standards requiring all standalone settings inputs to occupy the full card width (100%) and avoid single-child `.form-row` containers.
