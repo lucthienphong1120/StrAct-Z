@@ -105,7 +105,13 @@ async function uploadActivity(userId, activity) {
 
   // Check expiration (with 1-minute buffer)
   if (tokens.expires_at < (Date.now() / 1000) + 60) {
-    tokens = await refreshTokens(userId);
+    try {
+      tokens = await refreshTokens(userId);
+    } catch (err) {
+      console.warn(`[Google Fit] Token refresh failed for user ${userId} during upload, disconnecting:`, err.message);
+      await disconnect(userId).catch(() => {});
+      return { success: false, error: 'Google Fit connection expired. Please reconnect.' };
+    }
   }
 
   const startTime = new Date(activity.route_start_time).getTime();
@@ -133,7 +139,7 @@ async function uploadActivity(userId, activity) {
     application: { name: 'StrAct Z', version: '1.50.0' }
   };
 
-  await fetch(`https://www.googleapis.com/fitness/v1/users/me/sessions/${sessionId}`, {
+  const sessionRes = await fetch(`https://www.googleapis.com/fitness/v1/users/me/sessions/${sessionId}`, {
     method: 'PUT',
     headers: {
       'Authorization': `Bearer ${tokens.access_token}`,
@@ -141,6 +147,12 @@ async function uploadActivity(userId, activity) {
     },
     body: JSON.stringify(sessionBody)
   });
+
+  if (sessionRes.status === 401) {
+    console.warn(`[Google Fit] Session PUT returned 401 for user ${userId}, disconnecting...`);
+    await disconnect(userId).catch(() => {});
+    return { success: false, error: 'Google Fit connection expired. Please reconnect.' };
+  }
 
   // 2. Insert DataSets (Distance, Speed, Steps, Heart Rate)
   const dataSources = [
@@ -181,7 +193,7 @@ async function uploadActivity(userId, activity) {
 
     // Patch Data Point
     const datasetId = `${nanoStart}-${nanoEnd}`;
-    await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${streamId}/datasets/${datasetId}`, {
+    const patchRes = await fetch(`https://www.googleapis.com/fitness/v1/users/me/dataSources/${streamId}/datasets/${datasetId}`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${tokens.access_token}`,
@@ -199,6 +211,12 @@ async function uploadActivity(userId, activity) {
         }]
       })
     });
+
+    if (patchRes.status === 401) {
+      console.warn(`[Google Fit] Datasets PATCH returned 401 for user ${userId}, disconnecting...`);
+      await disconnect(userId).catch(() => {});
+      return { success: false, error: 'Google Fit connection expired. Please reconnect.' };
+    }
   }
 
   return { success: true };
@@ -220,7 +238,13 @@ async function getTodayStats(userId, forceRefresh = false) {
   if (!tokens) throw new Error('Not connected to Google Fit');
 
   if (tokens.expires_at < (Date.now() / 1000) + 60) {
-    tokens = await refreshTokens(userId);
+    try {
+      tokens = await refreshTokens(userId);
+    } catch (err) {
+      console.warn(`[Google Fit] Token refresh failed for user ${userId} on stats fetch, disconnecting:`, err.message);
+      await disconnect(userId).catch(() => {});
+      throw new Error('Google Fit connection expired. Please reconnect.');
+    }
   }
 
   const now = new Date();
@@ -246,7 +270,12 @@ async function getTodayStats(userId, forceRefresh = false) {
   });
 
   if (!response.ok) {
-    const err = await response.json();
+    if (response.status === 401) {
+      console.warn(`[Google Fit] Stats fetch returned 401 for user ${userId}, disconnecting...`);
+      await disconnect(userId).catch(() => {});
+      throw new Error('Google Fit connection expired. Please reconnect.');
+    }
+    const err = await response.json().catch(() => ({}));
     throw new Error(err.message || 'Failed to fetch Google Fit stats');
   }
 
@@ -281,6 +310,7 @@ async function disconnect(userId) {
     console.error('[Google Fit] Revoke failed:', err.message);
   } finally {
     await db.deleteExternalTokens(userId, 'google_fit');
+    clearCache(userId);
   }
 }
 
