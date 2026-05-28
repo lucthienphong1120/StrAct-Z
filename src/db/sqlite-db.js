@@ -12,6 +12,7 @@ const OLD_JSON_DB = path.join(DATA_DIR, 'db.json');
 fs.mkdirSync(DATA_DIR, { recursive: true });
 
 let dbInstance = null;
+let dbPromise = null;
 
 const DEFAULT_CONFIG = {
   selected_districts: 'hoan_kiem,ba_dinh,hai_ba_trung,dong_da,tay_ho,cau_giay,thanh_xuan,ha_dong,long_bien,hoang_mai',
@@ -52,187 +53,199 @@ const DEFAULT_CONFIG = {
 
 async function getDb() {
   if (dbInstance) return dbInstance;
-  dbInstance = await open({
-    filename: DB_FILE,
-    driver: sqlite3.Database
-  });
-  
-  await dbInstance.exec(`
-    CREATE TABLE IF NOT EXISTS config (
-      key TEXT PRIMARY KEY,
-      value TEXT
-    );
-    CREATE TABLE IF NOT EXISTS user_config (
-      account_id INTEGER,
-      key TEXT,
-      value TEXT,
-      PRIMARY KEY (account_id, key)
-    );
-    CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      account_id INTEGER,
-      access_token TEXT,
-      refresh_token TEXT,
-      expires_at INTEGER,
-      athlete_id INTEGER,
-      athlete_name TEXT,
-      athlete_avatar TEXT,
-      scope TEXT
-    );
-    CREATE TABLE IF NOT EXISTS external_tokens (
-      account_id INTEGER,
-      provider TEXT,
-      access_token TEXT,
-      refresh_token TEXT,
-      expires_at INTEGER,
-      scope TEXT,
-      PRIMARY KEY (account_id, provider)
-    );
-    CREATE TABLE IF NOT EXISTS activities (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      account_id INTEGER,
-      created_at TEXT,
-      activity_name TEXT,
-      distance_km REAL,
-      duration_min REAL,
-      pace_min_km REAL,
-      gpx_file TEXT,
-      strava_activity_id TEXT,
-      upload_status TEXT,
-      error_message TEXT,
-      route_start_lat REAL,
-      route_start_lng REAL,
-      route_start_time TEXT,
-      district_keys TEXT,
-      deleted_at TEXT,
-      created_by TEXT
-    );
-    CREATE TABLE IF NOT EXISTS accounts (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      username TEXT UNIQUE NOT NULL,
-      password_hash TEXT NOT NULL,
-      role TEXT DEFAULT 'normal',
-      created_at TEXT
-    );
-    CREATE TABLE IF NOT EXISTS vip_codes (
-      code TEXT PRIMARY KEY,
-      status TEXT DEFAULT 'available',
-      usage_limit INTEGER DEFAULT -1 -- -1 for unlimited
-    );
-    CREATE TABLE IF NOT EXISTS vip_code_usage (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      code TEXT,
-      account_id INTEGER,
-      activated_at TEXT,
-      UNIQUE(code, account_id)
-    );
-    CREATE TABLE IF NOT EXISTS security_logs (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      account_id INTEGER,
-      action TEXT,
-      ip TEXT,
-      created_at TEXT
-    );
-  `);
-  
-  // Migrate from JSON if SQLite config is empty
-  const configCount = await dbInstance.get('SELECT COUNT(*) as c FROM config');
-  
-  // Seed default VIP code
-  try {
-    await dbInstance.run("INSERT OR IGNORE INTO vip_codes (code, status) VALUES (?, ?)", ['CRF@2026', 'available']);
-  } catch (e) {}
+  if (dbPromise) return dbPromise;
 
-  try {
-    await dbInstance.exec('ALTER TABLE activities ADD COLUMN account_id INTEGER');
-    console.log('[SQLite] Added account_id column to activities');
-  } catch (e) {}
-
-  try {
-    await dbInstance.exec('ALTER TABLE activities ADD COLUMN route_start_time TEXT');
-    console.log('[SQLite] Added route_start_time column');
-  } catch (e) {}
-
-  try {
-    await dbInstance.exec('ALTER TABLE activities ADD COLUMN district_keys TEXT');
-    console.log('[SQLite] Added district_keys column');
-  } catch (e) {}
-
-  try {
-    await dbInstance.exec('ALTER TABLE activities ADD COLUMN account_id INTEGER DEFAULT 1');
-    console.log('[SQLite] Added account_id to activities');
-  } catch (e) {}
-
-  try {
-    await dbInstance.exec('ALTER TABLE users ADD COLUMN account_id INTEGER DEFAULT 1');
-    console.log('[SQLite] Added account_id to users');
-  } catch (e) {}
-
-  // Migrate global config to user_config for account 1
-  const uConfCount = await dbInstance.get('SELECT COUNT(*) as c FROM user_config');
-  if (uConfCount.c === 0) {
-    const oldConfs = await dbInstance.all('SELECT * FROM config');
-    for (const row of oldConfs) {
-      await dbInstance.run('INSERT INTO user_config (account_id, key, value) VALUES (1, ?, ?)', [row.key, row.value]);
-    }
-  }
-
-  // Auto-enable ha_dong for legacy configurations
-  await dbInstance.run(`UPDATE user_config SET value = value || ',ha_dong' WHERE key = 'selected_districts' AND value = 'hoan_kiem,hai_ba_trung,hoang_mai,dong_da,ba_dinh,thanh_xuan,cau_giay,tay_ho'`);
-
-  if (configCount.c === 0) {
-    if (fs.existsSync(OLD_JSON_DB)) {
-      try {
-        const oldDb = JSON.parse(fs.readFileSync(OLD_JSON_DB, 'utf-8'));
-        if (oldDb.config) {
-          for (const [k, v] of Object.entries({ ...DEFAULT_CONFIG, ...oldDb.config })) {
-            await dbInstance.run('INSERT INTO config (key, value) VALUES (?, ?)', [k, String(v)]);
-          }
-        }
-        if (oldDb.tokens && oldDb.tokens.access_token) {
-          await dbInstance.run(`INSERT INTO users (access_token, refresh_token, expires_at, athlete_id, athlete_name, athlete_avatar, scope) VALUES (?, ?, ?, ?, ?, ?, ?)`, 
-            [encryption.encrypt(oldDb.tokens.access_token), encryption.encrypt(oldDb.tokens.refresh_token), oldDb.tokens.expires_at, oldDb.tokens.athlete_id, oldDb.tokens.athlete_name, oldDb.tokens.athlete_avatar, oldDb.tokens.scope]);
-        }
-        if (oldDb.activities) {
-          const acts = [...oldDb.activities].reverse();
-          for (const a of acts) {
-            await dbInstance.run(`INSERT INTO activities (id, created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-              [a.id, a.created_at, a.activity_name, a.distance_km, a.duration_min, a.pace_min_km, a.gpx_file, a.strava_activity_id, a.upload_status, a.error_message, a.route_start_lat, a.route_start_lng]);
-          }
-        }
-        console.log('[SQLite] Migrated db.json to SQLite');
-      } catch (e) {
-        console.error('[SQLite] Migration failed', e);
-      }
-    } else {
-      // Just seed default configs to account 1
-      for (const [k, v] of Object.entries(DEFAULT_CONFIG)) {
-        await dbInstance.run('INSERT OR IGNORE INTO user_config (account_id, key, value) VALUES (1, ?, ?)', [k, String(v)]);
-      }
-    }
-  }
-
-  // Seed Admin Account if empty
-  const accountCount = await dbInstance.get('SELECT COUNT(*) as c FROM accounts');
-  if (accountCount.c === 0 && process.env.ADMIN_USERNAME && process.env.ADMIN_PASSWORD) {
+  dbPromise = (async () => {
     try {
-      const hash = bcrypt.hashSync(process.env.ADMIN_PASSWORD, 10);
-      await dbInstance.run(
-        'INSERT INTO accounts (username, password_hash, role, created_at) VALUES (?, ?, ?, ?)',
-        [process.env.ADMIN_USERNAME, hash, 'admin', new Date().toISOString()]
-      );
-      console.log('[SQLite] Seeded initial admin account from .env');
-    } catch (e) {
-      console.error('[SQLite] Failed to seed admin account', e);
-    }
-  }
-  
-  try {
-    await dbInstance.exec('ALTER TABLE activities ADD COLUMN created_by TEXT');
-    console.log('[SQLite] Added created_by column');
-  } catch (e) {}
+      const db = await open({
+        filename: DB_FILE,
+        driver: sqlite3.Database
+      });
+      
+      await db.exec(`
+        CREATE TABLE IF NOT EXISTS config (
+          key TEXT PRIMARY KEY,
+          value TEXT
+        );
+        CREATE TABLE IF NOT EXISTS user_config (
+          account_id INTEGER,
+          key TEXT,
+          value TEXT,
+          PRIMARY KEY (account_id, key)
+        );
+        CREATE TABLE IF NOT EXISTS users (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          account_id INTEGER,
+          access_token TEXT,
+          refresh_token TEXT,
+          expires_at INTEGER,
+          athlete_id INTEGER,
+          athlete_name TEXT,
+          athlete_avatar TEXT,
+          scope TEXT
+        );
+        CREATE TABLE IF NOT EXISTS external_tokens (
+          account_id INTEGER,
+          provider TEXT,
+          access_token TEXT,
+          refresh_token TEXT,
+          expires_at INTEGER,
+          scope TEXT,
+          PRIMARY KEY (account_id, provider)
+        );
+        CREATE TABLE IF NOT EXISTS activities (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          account_id INTEGER,
+          created_at TEXT,
+          activity_name TEXT,
+          distance_km REAL,
+          duration_min REAL,
+          pace_min_km REAL,
+          gpx_file TEXT,
+          strava_activity_id TEXT,
+          upload_status TEXT,
+          error_message TEXT,
+          route_start_lat REAL,
+          route_start_lng REAL,
+          route_start_time TEXT,
+          district_keys TEXT,
+          deleted_at TEXT,
+          created_by TEXT
+        );
+        CREATE TABLE IF NOT EXISTS accounts (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          username TEXT UNIQUE NOT NULL,
+          password_hash TEXT NOT NULL,
+          role TEXT DEFAULT 'normal',
+          created_at TEXT
+        );
+        CREATE TABLE IF NOT EXISTS vip_codes (
+          code TEXT PRIMARY KEY,
+          status TEXT DEFAULT 'available',
+          usage_limit INTEGER DEFAULT -1 -- -1 for unlimited
+        );
+        CREATE TABLE IF NOT EXISTS vip_code_usage (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          code TEXT,
+          account_id INTEGER,
+          activated_at TEXT,
+          UNIQUE(code, account_id)
+        );
+        CREATE TABLE IF NOT EXISTS security_logs (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          account_id INTEGER,
+          action TEXT,
+          ip TEXT,
+          created_at TEXT
+        );
+      `);
+      
+      // Migrate from JSON if SQLite config is empty
+      const configCount = await db.get('SELECT COUNT(*) as c FROM config');
+      
+      // Seed default VIP code
+      try {
+        await db.run("INSERT OR IGNORE INTO vip_codes (code, status) VALUES (?, ?)", ['CRF@2026', 'available']);
+      } catch (e) {}
 
-  return dbInstance;
+      try {
+        await db.exec('ALTER TABLE activities ADD COLUMN account_id INTEGER');
+        console.log('[SQLite] Added account_id column to activities');
+      } catch (e) {}
+
+      try {
+        await db.exec('ALTER TABLE activities ADD COLUMN route_start_time TEXT');
+        console.log('[SQLite] Added route_start_time column');
+      } catch (e) {}
+
+      try {
+        await db.exec('ALTER TABLE activities ADD COLUMN district_keys TEXT');
+        console.log('[SQLite] Added district_keys column');
+      } catch (e) {}
+
+      try {
+        await db.exec('ALTER TABLE activities ADD COLUMN account_id INTEGER DEFAULT 1');
+        console.log('[SQLite] Added account_id to activities');
+      } catch (e) {}
+
+      try {
+        await db.exec('ALTER TABLE users ADD COLUMN account_id INTEGER DEFAULT 1');
+        console.log('[SQLite] Added account_id to users');
+      } catch (e) {}
+
+      // Migrate global config to user_config for account 1
+      const uConfCount = await db.get('SELECT COUNT(*) as c FROM user_config');
+      if (uConfCount.c === 0) {
+        const oldConfs = await db.all('SELECT * FROM config');
+        for (const row of oldConfs) {
+          await db.run('INSERT INTO user_config (account_id, key, value) VALUES (1, ?, ?)', [row.key, row.value]);
+        }
+      }
+
+      // Auto-enable ha_dong for legacy configurations
+      await db.run(`UPDATE user_config SET value = value || ',ha_dong' WHERE key = 'selected_districts' AND value = 'hoan_kiem,hai_ba_trung,hoang_mai,dong_da,ba_dinh,thanh_xuan,cau_giay,tay_ho'`);
+
+      if (configCount.c === 0) {
+        if (fs.existsSync(OLD_JSON_DB)) {
+          try {
+            const oldDb = JSON.parse(fs.readFileSync(OLD_JSON_DB, 'utf-8'));
+            if (oldDb.config) {
+              for (const [k, v] of Object.entries({ ...DEFAULT_CONFIG, ...oldDb.config })) {
+                await db.run('INSERT INTO config (key, value) VALUES (?, ?)', [k, String(v)]);
+              }
+            }
+            if (oldDb.tokens && oldDb.tokens.access_token) {
+              await db.run(`INSERT INTO users (access_token, refresh_token, expires_at, athlete_id, athlete_name, athlete_avatar, scope) VALUES (?, ?, ?, ?, ?, ?, ?)`, 
+                [encryption.encrypt(oldDb.tokens.access_token), encryption.encrypt(oldDb.tokens.refresh_token), oldDb.tokens.expires_at, oldDb.tokens.athlete_id, oldDb.tokens.athlete_name, oldDb.tokens.athlete_avatar, oldDb.tokens.scope]);
+            }
+            if (oldDb.activities) {
+              const acts = [...oldDb.activities].reverse();
+              for (const a of acts) {
+                await db.run(`INSERT INTO activities (id, created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                  [a.id, a.created_at, a.activity_name, a.distance_km, a.duration_min, a.pace_min_km, a.gpx_file, a.strava_activity_id, a.upload_status, a.error_message, a.route_start_lat, a.route_start_lng]);
+              }
+            }
+            console.log('[SQLite] Migrated db.json to SQLite');
+          } catch (e) {
+            console.error('[SQLite] Migration failed', e);
+          }
+        } else {
+          // Just seed default configs to account 1
+          for (const [k, v] of Object.entries(DEFAULT_CONFIG)) {
+            await db.run('INSERT OR IGNORE INTO user_config (account_id, key, value) VALUES (1, ?, ?)', [k, String(v)]);
+          }
+        }
+      }
+
+      // Seed Admin Account if empty
+      const accountCount = await db.get('SELECT COUNT(*) as c FROM accounts');
+      if (accountCount.c === 0 && process.env.ADMIN_USERNAME && process.env.ADMIN_PASSWORD) {
+        try {
+          const hash = bcrypt.hashSync(process.env.ADMIN_PASSWORD, 10);
+          await db.run(
+            'INSERT INTO accounts (username, password_hash, role, created_at) VALUES (?, ?, ?, ?)',
+            [process.env.ADMIN_USERNAME, hash, 'admin', new Date().toISOString()]
+          );
+          console.log('[SQLite] Seeded initial admin account from .env');
+        } catch (e) {
+          console.error('[SQLite] Failed to seed admin account', e);
+        }
+      }
+      
+      try {
+        await db.exec('ALTER TABLE activities ADD COLUMN created_by TEXT');
+        console.log('[SQLite] Added created_by column');
+      } catch (e) {}
+
+      dbInstance = db;
+      return db;
+    } catch (err) {
+      dbPromise = null;
+      throw err;
+    }
+  })();
+
+  return dbPromise;
 }
 
 async function getConfig(accountId, key) {

@@ -117,9 +117,10 @@ async function loadActivities() {
     
     // Use window.allCloudActivities (from insights, up to 200 acts) as primary source for cross-check
     // Fallback to latestStravaActivities if allCloudActivities is empty
-    const cloudBuffer = (window.allCloudActivities && window.allCloudActivities.length > 0) 
+    const rawCloudBuffer = (window.allCloudActivities && Array.isArray(window.allCloudActivities) && window.allCloudActivities.length > 0) 
       ? window.allCloudActivities 
-      : (window.latestStravaActivities || []);
+      : (Array.isArray(window.latestStravaActivities) ? window.latestStravaActivities : []);
+    const cloudBuffer = Array.isArray(rawCloudBuffer) ? rawCloudBuffer : [];
 
     // 1. Detect oldest cloud time to handle out-of-range vs removed activities safely
     let oldestCloudTime = Date.now();
@@ -303,6 +304,13 @@ async function loadStravaActivities(forceRefresh = false) {
     const refreshQuery = forceRefresh ? '&refresh=true' : '';
     let activities = await api(`/strava-activities?page=${window.stravaCurrentPage}&per_page=10${afterQuery}${refreshQuery}`);
     
+    if (!activities || activities.error) {
+      window.latestStravaActivities = [];
+      loadActivities();
+      container.innerHTML = `<div class="empty-state"><div class="icon">❌</div><p>Failed to load Strava activities: ${activities?.error || 'Unknown error'}</p></div>`;
+      return;
+    }
+    
     // Store latest for cross-check (flatten if paginated, but for now we just take the current page view)
     // Actually, to be accurate we might need to know if the ID is missing across all pages.
     // But per user request, we'll map against what's loaded.
@@ -313,7 +321,7 @@ async function loadStravaActivities(forceRefresh = false) {
 
     document.getElementById('stravaPageInfo').textContent = `Page ${window.stravaCurrentPage}`;
     
-    if (!activities || !activities.length) {
+    if (!activities.length) {
       container.innerHTML = '<div class="empty-state"><div class="icon">☁️</div><p>No activities found on Strava.</p></div>';
       return;
     }
@@ -374,6 +382,14 @@ async function loadInsights(forceRefresh = false) {
   try {
     const refreshQuery = forceRefresh ? '&refresh=true' : '';
     const activities = await api(`/insights?days=${range}${refreshQuery}`);
+    
+    if (!activities || activities.error) {
+      window.allCloudActivities = [];
+      updateActivityChart([], parseInt(range));
+      console.warn('Insights error:', activities?.error);
+      return;
+    }
+
     window.allCloudActivities = activities || []; // Store for cross-check in loadActivities
     updateActivityChart(activities, parseInt(range));
   } catch (err) {
@@ -385,6 +401,8 @@ function updateActivityChart(activities, days = 14) {
   const ctx = document.getElementById('activityChart');
   if (!ctx) return;
 
+  const cleanActivities = Array.isArray(activities) ? activities : [];
+
   const rangeDays = [];
   const today = new Date();
   for (let i = days - 1; i >= 0; i--) {
@@ -395,7 +413,7 @@ function updateActivityChart(activities, days = 14) {
 
   const activitiesByDate = {};
   rangeDays.forEach(date => {
-    activitiesByDate[date] = activities.filter(a => {
+    activitiesByDate[date] = cleanActivities.filter(a => {
       const startDate = a.start_date || a.created_at;
       if (!startDate) return false;
       const localDate = new Date(startDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });

@@ -147,6 +147,7 @@ router.get('/google-fit/stats', async (req, res) => {
     const stats = await googleFit.getTodayStats(req.user.id, refresh);
     res.json(stats);
   } catch (err) {
+    console.error(`[Google Fit] Error getting stats for user ${req.user.id}:`, err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -185,6 +186,7 @@ router.get('/insights', async (req, res) => {
     
     res.json(activities);
   } catch (err) {
+    console.error(`[Insights] Error getting insights for user ${req.user.id}:`, err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -229,6 +231,7 @@ router.get('/strava-activities', async (req, res) => {
     
     res.json(activities);
   } catch (err) {
+    console.error(`[Strava API] Error getting activities for user ${req.user.id}:`, err);
     res.status(500).json({ error: err.message });
   }
 });

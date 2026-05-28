@@ -4,7 +4,7 @@ const db = require('../db/database');
 const JWT_SECRET = process.env.APP_SECRET || 'strava_auto_act_default_secret_32';
 
 async function authenticateToken(req, res, next) {
-  const token = req.cookies.token;
+  const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
 
   try {
@@ -25,7 +25,7 @@ async function authenticateToken(req, res, next) {
 }
 
 async function requirePageAuth(req, res, next) {
-  const token = req.cookies.token;
+  const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
   if (!token) return res.redirect('/login.html');
 
   try {

@@ -57,6 +57,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.41 (2026-05-28)
+- **Database: Thread-safe DB Initialization**: Wrapped `getDb()` initialization inside a cached Promise pattern. If multiple endpoints query the session/database concurrently on startup, it will open the SQLite database, execute table creation, and run migrations exactly once, resolving concurrent SQLITE_BUSY / locked database issues.
+- **Middleware: Authorization Header Fallback**: Re-added support for the `Authorization` header fallback in both `authenticateToken` and `requirePageAuth` middleware for full API client compatibility.
+- **UI: Robust Dashboard Error Handling**: Updated the dashboard frontend to handle non-array error responses gracefully from `/api/strava-activities` and `/api/insights`, avoiding client-side runtime crashes. Added detailed server-side logs to API catch blocks.
+
 ### v1.51.40 (2026-05-28)
 - **Security: BAC (Broken Access Control) Prevention**: Updated authentication middleware to query the SQLite database on each request to fetch the fresh, latest user role instead of trusting stale/manipulated JWT cookie payloads.
 - **Security: Server-Side Parameter Overrides Validation**: Enforced `validateConfig` on overrides passed via body parameters to manual GPX generation endpoints (`POST /api/generate` and `POST /api/generate-and-upload`). This prevents normal users from using custom HTTP clients to bypass VIP limits.
