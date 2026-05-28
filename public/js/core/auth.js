@@ -35,7 +35,7 @@ async function checkAuth() {
 }
 
 function renderAccountInfo(athlete) {
-  const el = document.getElementById('accountInfo');
+  const el = document.getElementById('accountProfile');
   const roleBadge = window.userRole === 'vip' ? '<span class="status-badge" style="background:var(--gradient-vip); color:rgba(0,0,0,0.8); padding:2px 10px; font-size:0.65rem; border:none; margin-left:8px; box-shadow: 0 0 10px rgba(245,158,11,0.4); font-weight:800;">VIP GOLD</span>' : '';
   el.innerHTML = `
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
@@ -45,18 +45,9 @@ function renderAccountInfo(athlete) {
         <div style="font-size:0.8rem;color:var(--text-muted);">ID: ${athlete?.id || 'N/A'}</div>
       </div>
     </div>
-    <div class="form-group" style="margin-top: 16px; margin-bottom: 24px;">
-      <label class="form-label" style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-        Daily Upload Limit
-        <span class="tooltip-icon tooltip-right" id="tipDailyLimit">?</span>
-      </label>
-      <input type="text" id="cfgDailyLimit" class="form-input" readonly
-        style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed; padding:6px 12px; font-size:0.9rem;">
-    </div>
-    <button class="btn btn-block btn-outline-danger btn-sm" onclick="disconnect()">Disconnect Strava</button>
   `;
 
-  // Re-sync Daily Limit value and Tooltips if limits are loaded
+  // Sync Daily Limit value and Tooltips after limits are loaded
   if (window.sysLimits) {
     const dailyLimit = document.getElementById('cfgDailyLimit');
     if (dailyLimit) dailyLimit.value = window.sysLimits.daily_upload_limit.max;
