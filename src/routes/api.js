@@ -236,8 +236,13 @@ router.get('/strava-activities', async (req, res) => {
 // Generate GPX only (no upload)
 router.post('/generate', async (req, res) => {
   try {
-    const config = await db.getAllConfig(req.user.id);
     const ov = req.body || {};
+    const validation = validateConfig(ov, req.user.role || 'normal');
+    if (!validation.success) {
+      return res.status(400).json({ error: validation.error });
+    }
+
+    const config = await db.getAllConfig(req.user.id);
 
     const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
     const localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
@@ -344,8 +349,13 @@ router.post('/generate', async (req, res) => {
 // Generate and upload
 router.post('/generate-and-upload', async (req, res) => {
   try {
-    const config = await db.getAllConfig(req.user.id);
     const ov = req.body || {};
+    const validation = validateConfig(ov, req.user.role || 'normal');
+    if (!validation.success) {
+      return res.status(400).json({ error: validation.error });
+    }
+
+    const config = await db.getAllConfig(req.user.id);
 
     const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
     const localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
@@ -587,10 +597,20 @@ router.post('/scheduler/trigger', async (req, res) => {
 
 // ─── GPX Download ────────────────────────────────────────────────────────────
 
-router.get('/gpx/:filename', (req, res) => {
-  const gpxPath = path.join(__dirname, '..', '..', 'data', 'gpx', req.params.filename);
-  if (!fs.existsSync(gpxPath)) return res.status(404).json({ error: 'GPX file not found' });
-  res.download(gpxPath, req.params.filename);
+router.get('/gpx/:filename', async (req, res) => {
+  try {
+    const dbInstance = await db.getDb();
+    const activity = await dbInstance.get('SELECT id FROM activities WHERE account_id = ? AND gpx_file = ?', [req.user.id, req.params.filename]);
+    if (!activity) {
+      return res.status(403).json({ error: 'Access denied. You do not own this GPX file.' });
+    }
+
+    const gpxPath = path.join(__dirname, '..', '..', 'data', 'gpx', req.params.filename);
+    if (!fs.existsSync(gpxPath)) return res.status(404).json({ error: 'GPX file not found' });
+    res.download(gpxPath, req.params.filename);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // ─── Account Management ───────────────────────────────────────────────────────

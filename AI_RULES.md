@@ -1,6 +1,6 @@
-# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.39)
+# 🧠 AI Coding Rules & Project Context - StrAct Z (v1.51.40)
 
-This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.39). Follow these guidelines strictly.
+This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform (v1.51.40). Follow these guidelines strictly.
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
@@ -55,6 +55,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.40 (2026-05-28)
+- **Security: BAC (Broken Access Control) Prevention**: Updated authentication middleware to query the SQLite database on each request to fetch the fresh, latest user role instead of trusting stale/manipulated JWT cookie payloads.
+- **Security: Server-Side Parameter Overrides Validation**: Enforced `validateConfig` on overrides passed via body parameters to manual GPX generation endpoints (`POST /api/generate` and `POST /api/generate-and-upload`). This prevents normal users from using custom HTTP clients to bypass VIP limits.
+- **Security: Time Parameters Validation**: Added server-side validation checks for all custom time settings (e.g. format and boundary checks for `min_time`, `max_time`, and work hours) to prevent malformed values from bypassing safety restrictions.
+- **Security: GPX Ownership Validation**: Secured the GPX file download endpoint (`GET /api/gpx/:filename`) by validating file ownership in the SQLite activities database, preventing IDOR (Insecure Direct Object Reference) file disclosure.
 
 ### v1.51.39 (2026-05-23)
 - **Config: Safe Time Range Bounds**: Expanded the allowable range for safe time buffer (`overlap_protection_minutes`) to 15-45 minutes for Normal accounts and 15-90 minutes for VIP accounts (updated in `limits.js`).

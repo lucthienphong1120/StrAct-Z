@@ -1,6 +1,6 @@
 # 🏗️ System Architecture
 
-StrAct Z v1.51.39 utilizes a lightweight, secure, multi-tenant architecture designed to run on a single Node.js instance backed by SQLite.
+StrAct Z v1.51.40 utilizes a lightweight, secure, multi-tenant architecture designed to run on a single Node.js instance backed by SQLite.
 
 ## Core Components
 

@@ -85,6 +85,30 @@ function validateConfig(updates, role = 'normal') {
     sanitized[key] = rule.type === 'array' ? val.join(',') : String(val);
   }
 
+  // 3. Time Parameters Validation (min_time, max_time, work hours)
+  const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+  const timeKeys = ['min_time', 'max_time', 'work_start1', 'work_end1', 'work_start2', 'work_end2'];
+  for (const key of timeKeys) {
+    if (updates[key] !== undefined) {
+      const val = String(updates[key]);
+      if (!timeRegex.test(val)) {
+        return { success: false, error: `${key.replace(/_/g, ' ')} must be in HH:mm format.` };
+      }
+      sanitized[key] = val;
+    }
+  }
+
+  // Cross-field validation for min_time and max_time
+  const minTimeVal = updates.min_time !== undefined ? updates.min_time : sanitized.min_time;
+  const maxTimeVal = updates.max_time !== undefined ? updates.max_time : sanitized.max_time;
+  if (minTimeVal !== undefined && maxTimeVal !== undefined) {
+    const [minH, minM] = minTimeVal.split(':').map(Number);
+    const [maxH, maxM] = maxTimeVal.split(':').map(Number);
+    if (minH * 60 + minM > maxH * 60 + maxM) {
+      return { success: false, error: 'Start Time cannot be later than End Time.' };
+    }
+  }
+
   return { success: true, error: null, sanitized };
 }
 
