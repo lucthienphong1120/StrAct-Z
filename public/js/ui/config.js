@@ -502,7 +502,6 @@ async function saveConfig() {
   const selected_districts = Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value).join(',');
   const config = {
     selected_districts,
-    district_key: 'random',
     max_district_span: document.getElementById('cfgMaxSpan').value,
     use_osrm: document.getElementById('cfgOsrm').checked ? 'true' : 'false',
     boost_adjacent: document.getElementById('cfgBoostAdjacent')?.checked ? 'true' : 'false',
@@ -558,7 +557,6 @@ function getOverrideConfig() {
     work_end2: document.getElementById('cfgWorkEnd2').value,
     selected_districts,
     max_district_span: document.getElementById('cfgMaxSpan').value,
-    district_key: 'random',
     use_osrm: document.getElementById('cfgOsrm').checked ? 'true' : 'false',
     boost_adjacent: document.getElementById('cfgBoostAdjacent')?.checked ? 'true' : 'false',
     min_distance_km: document.getElementById('cfgMinDist').value,

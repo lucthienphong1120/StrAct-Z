@@ -75,7 +75,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       const lastUploaded = await db.getLastUploadedActivity(accountId);
       try {
         activity = await generateActivity({
-          districtKey: config.district_key,
+          districtKey: null,
           selected_districts: config.selected_districts,
           max_district_span: config.max_district_span,
           targetDate: targetDate,

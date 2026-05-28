@@ -266,7 +266,7 @@ router.post('/generate', async (req, res) => {
     const lastUploaded = await db.getLastUploadedActivity(req.user.id);
 
     const activity = await generateActivity({
-      districtKey: ov.district_key || config.district_key,
+      districtKey: null,
       selected_districts: ov.selected_districts || config.selected_districts,
       max_district_span: ov.max_district_span || config.max_district_span,
       targetDate: targetDate,
@@ -379,7 +379,7 @@ router.post('/generate-and-upload', async (req, res) => {
     const lastUploaded = await db.getLastUploadedActivity(req.user.id);
 
     const activity = await generateActivity({
-      districtKey: ov.district_key || config.district_key,
+      districtKey: null,
       selected_districts: ov.selected_districts || config.selected_districts,
       max_district_span: ov.max_district_span || config.max_district_span,
       targetDate: targetDate,
