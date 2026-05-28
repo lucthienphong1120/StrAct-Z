@@ -124,6 +124,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] check endpoint /api/version mỗi khi up ver
 + [x] kiểm tra validate theo backend để tránh normal account sủa request vi phạm (type, range)
 + [x] check token khi client request change để đảm bảo range/config hợp lệ nếu là vip
-+ [ ] check lại công thức xác suất và trọng số gen vị trí ngẫu nhiên, toàn bộ event 2 tuần gần đây đều là hoàn kiếm
++ [x] check lại công thức xác suất và trọng số gen vị trí ngẫu nhiên, toàn bộ event 2 tuần gần đây đều là hoàn kiếm
 + [x] sau 1 thời gian app bị logout thì các chức năng đặt lịch và upload có còn hoạt động không
 

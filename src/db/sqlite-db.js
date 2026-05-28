@@ -237,6 +237,16 @@ async function getDb() {
         console.log('[SQLite] Added created_by column');
       } catch (e) {}
 
+      // [Migration v1.51.43] Remove stale district_key from user_config.
+      // This field was never part of DEFAULT_CONFIG and caused the weighted
+      // district selection to be bypassed, always generating in Hoàn Kiếm.
+      try {
+        const result = await db.run("DELETE FROM user_config WHERE key = 'district_key'");
+        if (result.changes > 0) {
+          console.log(`[SQLite] Migration v1.51.43: Removed stale district_key from ${result.changes} user(s)`);
+        }
+      } catch (e) {}
+
       dbInstance = db;
       return db;
     } catch (err) {
