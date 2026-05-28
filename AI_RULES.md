@@ -58,6 +58,9 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.46 (2026-05-28)
+- **Fix: Live District Borders (Activity Areas) Map Color Update**: Resolved issue where map borders (District highlights) did not change color when user used "Preview Normal Theme" or "Restore to VIP Theme". Changed `getDistrictStyle` in `map.js` to dynamically determine the VIP status using body classes instead of `window.userRole` (which doesn't change on preview). Restored original static colors for Home (#ff7800) and Work (#3b82f6) circles and legend text.
+
 ### v1.51.45 (2026-05-28)
 - **Fix: Live Activity Area Circles Color Update**: Updated Leaflet maps' Activity Areas (Home/Work) circle colors to dynamically update style using CSS variables when toggling themes (VIP Gold vs. Normal) or previewing. Also updated the frontend legend text colors in `index.html` to reflect theme variable changes properly.
 

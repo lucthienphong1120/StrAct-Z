@@ -85,7 +85,8 @@ async function renderDistrictBorders() {
 }
 
 function getDistrictStyle(feature) {
-  const borderColor = (window.userRole === 'vip') ? '#fbbf24' : '#22d3ee';
+  const isVipTheme = document.body.classList.contains('is-vip') && !document.body.classList.contains('theme-preview-normal');
+  const borderColor = isVipTheme ? '#fbbf24' : '#22d3ee';
   
   const name = feature.properties.name;
   const district = window.sysDistricts.find(d => name.includes(d.name));
@@ -132,10 +133,7 @@ function renderCircles(areasData) {
 }
 
 function createCircleLayer(lat, lng, radius, type) {
-  const style = getComputedStyle(document.body);
-  const homeColor = style.getPropertyValue('--strava-orange').trim() || '#ff7800';
-  const workColor = style.getPropertyValue('--accent-blue').trim() || '#3b82f6';
-  const color = type === 'home' ? homeColor : workColor;
+  const color = type === 'home' ? '#ff7800' : '#3b82f6';
   
   const circle = L.circle([lat, lng], {
     color: color,
@@ -293,21 +291,6 @@ function updateMapStatsUI() {
   }
 }
 
-function updateActivityCirclesStyle() {
-  if (!window.map || !window.activityCircles) return;
-  const style = getComputedStyle(document.body);
-  const homeColor = style.getPropertyValue('--strava-orange').trim() || '#ff7800';
-  const workColor = style.getPropertyValue('--accent-blue').trim() || '#3b82f6';
-  
-  window.activityCircles.forEach(item => {
-    const color = item.type === 'home' ? homeColor : workColor;
-    item.circle.setStyle({
-      color: color,
-      fillColor: color
-    });
-  });
-}
-
 // Export to window
 window.initMap = initMap;
 window.toggleMapLock = toggleMapLock;
@@ -323,4 +306,3 @@ window.updateCircleRadius = updateCircleRadius;
 window.removeCircle = removeCircle;
 window.saveActivityAreas = saveActivityAreas;
 window.updateSelectedDistrictKeys = updateSelectedDistrictKeys;
-window.updateActivityCirclesStyle = updateActivityCirclesStyle;

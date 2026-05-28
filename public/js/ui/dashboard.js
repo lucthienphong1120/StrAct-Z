@@ -39,7 +39,6 @@ async function loadStats(forceRefresh = false) {
     }
     // Sync Leaflet map colors (hardcoded inline styles don't respond to CSS vars)
     if (window.updateDistrictHighlights) window.updateDistrictHighlights();
-    if (window.updateActivityCirclesStyle) window.updateActivityCirclesStyle();
 
     const authText = document.getElementById('authText');
     if (authText) {
@@ -588,7 +587,6 @@ function toggleThemePreview() {
   }
   // Sync Leaflet map polygon colors after theme switch
   if (window.updateDistrictHighlights) window.updateDistrictHighlights();
-  if (window.updateActivityCirclesStyle) window.updateActivityCirclesStyle();
 }
 
 async function initTheme() {
@@ -606,7 +604,6 @@ async function initTheme() {
     }
     // Ensure map polygon colors reflect the correct theme
     if (window.updateDistrictHighlights) window.updateDistrictHighlights();
-    if (window.updateActivityCirclesStyle) window.updateActivityCirclesStyle();
   } catch (e) {
     document.body.classList.add('is-normal');
   }
