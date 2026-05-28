@@ -467,8 +467,8 @@
   .quick-actions { display: grid; grid-template-columns: 1fr 1fr; }
   .quick-actions .btn { width: 100%; font-size: 0.7rem; padding: 8px 4px; }
 
-  /* District checkboxes: 1-col */
-  #cfgDistricts { grid-template-columns: 1fr !important; }
+  /* District checkboxes: 2-col on mobile (1-col wastes too much space) */
+  #cfgDistricts { grid-template-columns: 1fr 1fr !important; }
 
   /* Map buttons: 2×2 */
   .map-card-actions { display: grid !important; grid-template-columns: 1fr 1fr; gap: 6px !important; }
