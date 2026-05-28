@@ -8,6 +8,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **VIP User**: Distinguished by the **Gold/Amber** theme (`#f59e0b`). Applied via `document.body.classList.add('is-vip')`.
 - **Implementation**: The role-based class is applied in `loadStats()` (dashboard.js) or `initTheme()`.
 - **Design System**: Use variables like `--strava-orange`, `--gradient-primary`, and `--body-glow` instead of hardcoded hex/rgba values to ensure theme consistency.
+- **Form Layout Consistency**: Settings input fields (such as 'Daily Upload Limit') must occupy the full width of their card wrapper (100% width) for layout harmony. Avoid wrapping single-input groups in `.form-row` grid templates which limits their width to 50% and causes visual mismatch.
 
 ## 🚀 Workflow & Deployment
 - **Repository**: The `StrAct-Z` workspace is a public Git repository.
@@ -56,6 +57,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.51.42 (2026-05-28)
+- **UI: Expanded Daily Upload Limit Width**: Removed the wrapping `.form-row` from the Daily Upload Limit input field in `renderAccountInfo` within `auth.js`, allowing it to span the full card width (100%) to match other settings input layouts.
+- **UI: Form Layout Consistency Rule**: Established a design rule under Theme Standards requiring all standalone settings inputs to occupy the full card width (100%) and avoid single-child `.form-row` containers.
 
 ### v1.51.41 (2026-05-28)
 - **Database: Thread-safe DB Initialization**: Wrapped `getDb()` initialization inside a cached Promise pattern. If multiple endpoints query the session/database concurrently on startup, it will open the SQLite database, execute table creation, and run migrations exactly once, resolving concurrent SQLITE_BUSY / locked database issues.

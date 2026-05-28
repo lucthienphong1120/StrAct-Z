@@ -45,15 +45,13 @@ function renderAccountInfo(athlete) {
         <div style="font-size:0.8rem;color:var(--text-muted);">ID: ${athlete?.id || 'N/A'}</div>
       </div>
     </div>
-    <div class="form-row" style="margin-top: 16px; margin-bottom: 24px;">
-      <div class="form-group" style="margin-bottom: 0;">
-        <label class="form-label" style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-          Daily Upload Limit
-          <span class="tooltip-icon tooltip-right" id="tipDailyLimit">?</span>
-        </label>
-        <input type="text" id="cfgDailyLimit" class="form-input" readonly
-          style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed; padding:6px 12px; font-size:0.9rem;">
-      </div>
+    <div class="form-group" style="margin-top: 16px; margin-bottom: 24px;">
+      <label class="form-label" style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+        Daily Upload Limit
+        <span class="tooltip-icon tooltip-right" id="tipDailyLimit">?</span>
+      </label>
+      <input type="text" id="cfgDailyLimit" class="form-input" readonly
+        style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed; padding:6px 12px; font-size:0.9rem;">
     </div>
     <button class="btn btn-block btn-outline-danger btn-sm" onclick="disconnect()">Disconnect Strava</button>
   `;
