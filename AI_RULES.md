@@ -46,6 +46,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 ### 5. Knowledge Management
 - **Read Documentation**: AI assistants MUST read the files in the `docs/` directory (e.g., `ARCHITECTURE.md`, `USER_GUIDE.md`) to understand the system's design and intent before proposing major architectural changes.
 - **Preserve Memory**: Always update this `AI_RULES.md` file after significant logic changes.
+- **Version Headers**: Do NOT update version numbers in the titles/headers/first section of `AI_RULES.md`, `docs/ARCHITECTURE.md`, or `docs/SETUP_GUIDE.md` unless there is a specific, valid issue. (Lưu ý quan trọng: các file `AI_RULES.md`, `ARCHITECTURE.md`, `SETUP_GUIDE.md` nếu không có vấn đề gì thì không cần tự ý cập nhật version vào phần đầu file).
 
 ### 6. Log Preservation (v1.50.40+)
 - **Soft-Delete Only**: Never hard-delete records from the `activities` table.
