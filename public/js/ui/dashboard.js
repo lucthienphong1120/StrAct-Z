@@ -37,6 +37,8 @@ async function loadStats(forceRefresh = false) {
       document.body.classList.add('is-normal');
       document.body.classList.remove('is-vip');
     }
+    // Sync Leaflet map colors (hardcoded inline styles don't respond to CSS vars)
+    if (window.updateDistrictHighlights) window.updateDistrictHighlights();
 
     const authText = document.getElementById('authText');
     if (authText) {
@@ -583,6 +585,8 @@ function toggleThemePreview() {
     if (btn) btn.innerHTML = isVipPreview ? '🔙 Switch Back to Normal' : '👁️ Preview VIP Gold Theme';
     showToast(isVipPreview ? 'Previewing VIP Gold Theme' : 'Switched back to Normal Theme', 'info');
   }
+  // Sync Leaflet map polygon colors after theme switch
+  if (window.updateDistrictHighlights) window.updateDistrictHighlights();
 }
 
 async function initTheme() {
@@ -598,6 +602,8 @@ async function initTheme() {
     } else {
       document.body.classList.add('is-normal');
     }
+    // Ensure map polygon colors reflect the correct theme
+    if (window.updateDistrictHighlights) window.updateDistrictHighlights();
   } catch (e) {
     document.body.classList.add('is-normal');
   }
