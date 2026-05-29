@@ -1,7 +1,7 @@
 ## Prompt:
 ```
-"Hãy đọc file AI_RULES.md trong thư mục gốc để nắm bắt kiến trúc dự án, các quy tắc logic vận hành và các tiêu chuẩn versioning của dự án này. Hãy luôn tuân thủ các quy tắc trong đó khi thực hiện mọi yêu cầu tiếp theo."
-Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay đổi công thức tính MHR), hãy cập nhật nó vào AI_RULES.md để "bộ nhớ" này luôn luôn mới nhất!
+"Hãy luôn đọc file AI_RULES.md trong thư mục gốc để nắm bắt kiến trúc dự án, các quy tắc logic vận hành, các tiêu chuẩn versioning của dự án, và file PLAN.md để nắm bắt tiến độ thực hiện các tính năng. Luôn tuân thủ các quy tắc trong đó khi bắt đầu phiên làm việc (session) mới và tiếp tục thực hiện các nhiệm vụ tiếp theo."
+Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay đổi công thức tính MHR), hãy cập nhật nó vào AI_RULES.md để "bộ nhớ" này luôn luôn mới nhất! Đồng thời cập nhật tiến độ hoàn thành các tính năng vào PLAN.md.
 ```
 
 ## Features:
