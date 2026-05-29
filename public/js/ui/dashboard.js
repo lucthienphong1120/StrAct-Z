@@ -24,6 +24,11 @@ async function loadDashboard(forceRefresh = false) {
   
   initMap();
   resetMapView();
+  
+  // Log district weight ratios on page load/refresh
+  if (window.debugDistrictWeightRatios) {
+    window.debugDistrictWeightRatios();
+  }
 }
 
 async function loadStats(forceRefresh = false) {
@@ -723,6 +728,164 @@ async function deleteActivity(id, hasStrava) {
   }
 }
 
+async function debugDistrictWeightRatios() {
+  try {
+    const config = await api('/config');
+    const allActivities = await api('/activities?limit=200');
+    const districts = window.sysDistricts || await api('/districts');
+    if (!districts || districts.length === 0) return;
+
+    const allowedDistricts = config.selected_districts 
+      ? config.selected_districts.split(',').filter(Boolean) 
+      : districts.map(d => d.key);
+
+    const areas = config.activity_areas ? JSON.parse(config.activity_areas) : [];
+    
+    // Find last uploaded/removed activity for adjacent boost
+    const lastUploaded = allActivities.find(a => a.upload_status === 'uploaded' || a.upload_status === 'removed');
+    const lastDistrictKeys = lastUploaded ? lastUploaded.district_keys : null;
+    const boostAdjacent = config.boost_adjacent !== 'false';
+
+    const EARTH_RADIUS = 6371000;
+    const toRad = deg => deg * Math.PI / 180;
+    const haversineDistance = (lat1, lng1, lat2, lng2) => {
+      const dLat = toRad(lat2 - lat1);
+      const dLng = toRad(lng2 - lng1);
+      const a = Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+      return EARTH_RADIUS * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    };
+    
+    const getCircleIntersectionArea = (r1, r2, d) => {
+      if (d >= r1 + r2) return 0;
+      if (d <= Math.abs(r1 - r2)) return Math.PI * Math.pow(Math.min(r1, r2), 2);
+      const r1Sq = r1 * r1;
+      const r2Sq = r2 * r2;
+      const dSq = d * d;
+      const a1 = r1Sq * Math.acos((dSq + r1Sq - r2Sq) / (2 * d * r1));
+      const a2 = r2Sq * Math.acos((dSq + r2Sq - r1Sq) / (2 * d * r2));
+      const p = (r1 + r2 + d) / 2;
+      const triangleArea = 2 * Math.sqrt(p * (p - r1) * (p - r2) * (p - d));
+      return a1 + a2 - triangleArea;
+    };
+
+    const ADJACENT_DISTRICTS = {
+      'hoan_kiem': ['ba_dinh', 'hai_ba_trung', 'dong_da', 'long_bien'],
+      'ba_dinh': ['hoan_kiem', 'dong_da', 'cau_giay', 'tay_ho', 'long_bien'],
+      'dong_da': ['ba_dinh', 'hoan_kiem', 'hai_ba_trung', 'thanh_xuan', 'cau_giay'],
+      'hai_ba_trung': ['hoan_kiem', 'dong_da', 'thanh_xuan', 'hoang_mai', 'long_bien'],
+      'hoang_mai': ['hai_ba_trung', 'thanh_xuan', 'long_bien', 'thanh_tri'],
+      'thanh_xuan': ['dong_da', 'hai_ba_trung', 'hoang_mai', 'cau_giay', 'ha_dong', 'nam_tu_liem', 'thanh_tri'],
+      'cau_giay': ['ba_dinh', 'dong_da', 'thanh_xuan', 'tay_ho', 'nam_tu_liem', 'bac_tu_liem'],
+      'tay_ho': ['ba_dinh', 'cau_giay', 'bac_tu_liem', 'long_bien', 'dong_anh'],
+      'long_bien': ['tay_ho', 'ba_dinh', 'hoan_kiem', 'hai_ba_trung', 'hoang_mai', 'gia_lam', 'dong_anh'],
+      'ha_dong': ['thanh_xuan', 'nam_tu_liem', 'thanh_tri', 'thanh_oai', 'chuong_my', 'hoai_duc'],
+      'bac_tu_liem': ['tay_ho', 'cau_giay', 'nam_tu_liem', 'hoai_duc', 'dan_phuong', 'dong_anh'],
+      'nam_tu_liem': ['cau_giay', 'thanh_xuan', 'ha_dong', 'bac_tu_liem', 'hoai_duc'],
+      'thanh_tri': ['hoang_mai', 'thanh_xuan', 'ha_dong', 'thanh_oai', 'thuong_tin', 'gia_lam'],
+      'gia_lam': ['long_bien', 'dong_anh', 'thanh_tri', 'thuong_tin'],
+      'dong_anh': ['tay_ho', 'long_bien', 'gia_lam', 'bac_tu_liem', 'dan_phuong'],
+      'hoai_duc': ['bac_tu_liem', 'nam_tu_liem', 'ha_dong', 'dan_phuong', 'chuong_my'],
+      'dan_phuong': ['bac_tu_liem', 'hoai_duc', 'dong_anh'],
+      'chuong_my': ['ha_dong', 'hoai_duc', 'thanh_oai'],
+      'thanh_oai': ['ha_dong', 'chuong_my', 'thanh_tri', 'thuong_tin'],
+      'thuong_tin': ['thanh_tri', 'thanh_oai', 'gia_lam']
+    };
+
+    const details = [];
+    let totalWeight = 0;
+
+    districts.forEach(d => {
+      const isAllowed = allowedDistricts.includes(d.key);
+      let weight = 1.0;
+      let areaBoost = 0;
+      let adjacentBoost = 0;
+      
+      const distRadiusM = (d.radiusKm || 1.5) * 1000;
+
+      areas.forEach(area => {
+        const distToArea = haversineDistance(d.lat, d.lng, area.lat, area.lng);
+        const intersection = getCircleIntersectionArea(distRadiusM, area.radius, distToArea);
+        const minArea = Math.PI * Math.pow(Math.min(distRadiusM, area.radius), 2);
+        const ratio = minArea > 0 ? intersection / minArea : 0;
+        
+        if (ratio > 0) {
+          let boost = 0;
+          if (area.type === 'home') {
+            if (ratio >= 0.85) boost = 1.0;
+            else if (ratio >= 0.35) boost = 0.8;
+            else boost = 0.5;
+          } else if (area.type === 'work') {
+            if (ratio >= 0.85) boost = 0.8;
+            else if (ratio >= 0.35) boost = 0.5;
+            else boost = 0.2;
+          }
+          weight += boost;
+          areaBoost += boost;
+        }
+      });
+
+      if (boostAdjacent && lastDistrictKeys) {
+        const lastKeys = typeof lastDistrictKeys === 'string' && lastDistrictKeys.startsWith('[')
+          ? JSON.parse(lastDistrictKeys)
+          : lastDistrictKeys.split(',');
+        
+        if (Array.isArray(lastKeys)) {
+          let isAdjacent = false;
+          for (const lk of lastKeys) {
+            if (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(d.key)) {
+              isAdjacent = true;
+              break;
+            }
+          }
+          if (isAdjacent) {
+            weight += 0.5;
+            adjacentBoost += 0.5;
+          }
+        }
+      }
+
+      if (isAllowed) {
+        totalWeight += weight;
+      }
+
+      details.push({
+        key: d.key,
+        name: d.name,
+        isAllowed,
+        weight,
+        areaBoost,
+        adjacentBoost
+      });
+    });
+
+    console.log(`%c[District Weights Debug]%c\n` +
+      `- Boost Adjacent: ${boostAdjacent ? 'ON' : 'OFF'}\n` +
+      `- Last uploaded district(s): ${lastDistrictKeys || 'None'}\n` +
+      `- Active Activity Areas: ${areas.length}\n` +
+      `----------------------------------------------------`, 
+      'font-weight: bold; color: #fb923c; font-size: 1.1em;', 'color: inherit;');
+
+    details.forEach(item => {
+      const percentage = (item.isAllowed && totalWeight > 0) ? ((item.weight / totalWeight) * 100).toFixed(2) : '0.00';
+      const statusSymbol = item.isAllowed ? '✅' : '❌';
+      let boostDesc = [];
+      if (item.areaBoost > 0) boostDesc.push(`Home/Work Boost: +${item.areaBoost.toFixed(1)}`);
+      if (item.adjacentBoost > 0) boostDesc.push(`Adjacent Boost: +${item.adjacentBoost.toFixed(1)}`);
+      const boostString = boostDesc.length > 0 ? ` (${boostDesc.join(', ')})` : '';
+
+      console.log(
+        `${statusSymbol} [${item.name}] (${item.key}):\n` +
+        `   Trọng số: ${item.weight.toFixed(1)}${boostString}\n` +
+        `   Tỉ lệ chọn: ${percentage}%`
+      );
+    });
+
+  } catch (err) {
+    console.error('[District Weights Debug] Error calculating weights:', err);
+  }
+}
+
 // Export to window
 window.loadDashboard = loadDashboard;
 window.loadStats = loadStats;
@@ -742,3 +905,4 @@ window.generateOnly = generateOnly;
 window.generateAndUpload = generateAndUpload;
 window.uploadActivity = uploadActivity;
 window.deleteActivity = deleteActivity;
+window.debugDistrictWeightRatios = debugDistrictWeightRatios;

@@ -58,6 +58,9 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.48 (2026-05-29)
+- **Feature: Frontend District Weight Ratios Debug Utility**: Added `debugDistrictWeightRatios()` helper function on the client dashboard. It automatically runs on page load/refresh and prints out a detailed analysis of Hanoi districts, their allowed status, calculated weight values (with Home/Work and Adjacent boost breakdowns), and their final selection percentages to the browser console.
+
 ### v1.51.47 (2026-05-29)
 - **Debug: District Weight Ratios Logs**: Added console log statements to display calculated weight values and percentage distributions of allowed Hanoi districts prior to performing the weighted selection in GPX generator.
 
