@@ -260,6 +260,17 @@ async function generateActivity(config = {}) {
       return weight;
     });
 
+    // Print debug log for weight ratios
+    const totalWeightSum = weights.reduce((a, b) => a + b, 0);
+    console.log(`[District Selection] Weight distribution for allowed districts:`);
+    allowedDistricts.forEach((key, index) => {
+      const w = weights[index];
+      const dist = HANOI_DISTRICTS[key];
+      const name = dist ? dist.name : key;
+      const percent = totalWeightSum > 0 ? ((w / totalWeightSum) * 100).toFixed(2) : 0;
+      console.log(`  - District "${name}" (${key}): weight = ${w.toFixed(2)} (${percent}%)`);
+    });
+
     // Weighted pick `span` districts
     let available = [...allowedDistricts];
     let availableWeights = [...weights];

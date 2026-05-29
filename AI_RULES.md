@@ -58,6 +58,9 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.47 (2026-05-29)
+- **Debug: District Weight Ratios Logs**: Added console log statements to display calculated weight values and percentage distributions of allowed Hanoi districts prior to performing the weighted selection in GPX generator.
+
 ### v1.51.46 (2026-05-28)
 - **Fix: Live District Borders (Activity Areas) Map Color Update**: Resolved issue where map borders (District highlights) did not change color when user used "Preview Normal Theme" or "Restore to VIP Theme". Changed `getDistrictStyle` in `map.js` to dynamically determine the VIP status using body classes instead of `window.userRole` (which doesn't change on preview). Restored original static colors for Home (#ff7800) and Work (#3b82f6) circles and legend text.
 
