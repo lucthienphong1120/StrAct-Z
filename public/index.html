@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span>StrAct Z <small
-            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.51.48</small></span>
+            style="font-size: 0.5em; font-weight: 600; margin-left: 4px; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.51.49</small></span>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -503,7 +503,7 @@
           <div class="card">
             <div class="card-header">
               <div class="card-title">📍 Activity Areas (Map)</div>
-              <div class="map-card-actions" style="display:flex; gap:5px;">
+              <div class="map-card-actions" style="display:flex; gap:5px; flex-wrap:wrap;">
                 <button id="btnLockMap" class="btn btn-sm btn-secondary" onclick="toggleMapLock()">🔒 Map
                   Locked</button>
                 <button class="btn btn-sm btn-secondary" onclick="addActivityCircle('home')">🏠 Home</button>
@@ -518,8 +518,7 @@
                   style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
                   📍 Hoạt động ưu tiên
                 </div>
-                <div
-                  style="display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; background:rgba(255,255,255,0.03); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border); margin-bottom: 18px;">
+                <div class="map-info-grid">
                   <div style="text-align:left;">
                     <div
                       style="font-size:0.65rem; color:var(--text-muted); font-weight:600; display:flex; align-items:center; gap:4px;">

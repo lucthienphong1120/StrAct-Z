@@ -58,6 +58,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.49 (2026-05-29)
+- **UI & Debug: Responsive Layout Fixes & Console Log Formatting**:
+  - Filtered out unselected/disallowed districts (0% probability) and formatted the allowed districts weight ratios debug log as a clean table using `console.table()` to save console space.
+  - Resolved responsive layout cramping of the Activity Areas Map card by wrapping header action buttons and stacking the 2-column map info grid into a single column at viewport widths under 1100px.
+
 ### v1.51.48 (2026-05-29)
 - **Feature: Frontend District Weight Ratios Debug Utility**: Added `debugDistrictWeightRatios()` helper function on the client dashboard. It automatically runs on page load/refresh and prints out a detailed analysis of Hanoi districts, their allowed status, calculated weight values (with Home/Work and Adjacent boost breakdowns), and their final selection percentages to the browser console.
 

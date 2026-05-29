@@ -165,6 +165,8 @@ body::before {
   border-bottom: 1px solid var(--border);
   border-top-left-radius: var(--radius-lg);
   border-top-right-radius: var(--radius-lg);
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .card-title {

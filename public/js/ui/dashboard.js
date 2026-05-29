@@ -859,27 +859,30 @@ async function debugDistrictWeightRatios() {
       });
     });
 
-    console.log(`%c[District Weights Debug]%c\n` +
-      `- Boost Adjacent: ${boostAdjacent ? 'ON' : 'OFF'}\n` +
-      `- Last uploaded district(s): ${lastDistrictKeys || 'None'}\n` +
-      `- Active Activity Areas: ${areas.length}\n` +
-      `----------------------------------------------------`, 
+    console.log(`%c[District Weights Debug]%c - Boost Adjacent: ${boostAdjacent ? 'ON' : 'OFF'} | Areas: ${areas.length} | Last district(s): ${lastDistrictKeys || 'None'}`, 
       'font-weight: bold; color: #fb923c; font-size: 1.1em;', 'color: inherit;');
 
-    details.forEach(item => {
-      const percentage = (item.isAllowed && totalWeight > 0) ? ((item.weight / totalWeight) * 100).toFixed(2) : '0.00';
-      const statusSymbol = item.isAllowed ? '✅' : '❌';
-      let boostDesc = [];
-      if (item.areaBoost > 0) boostDesc.push(`Home/Work Boost: +${item.areaBoost.toFixed(1)}`);
-      if (item.adjacentBoost > 0) boostDesc.push(`Adjacent Boost: +${item.adjacentBoost.toFixed(1)}`);
-      const boostString = boostDesc.length > 0 ? ` (${boostDesc.join(', ')})` : '';
+    const allowedDetails = details
+      .filter(item => item.isAllowed)
+      .map(item => {
+        const percentage = totalWeight > 0 ? parseFloat(((item.weight / totalWeight) * 100).toFixed(2)) : 0;
+        let boosts = [];
+        if (item.areaBoost > 0) boosts.push(`Home/Work: +${item.areaBoost.toFixed(1)}`);
+        if (item.adjacentBoost > 0) boosts.push(`Adjacent: +${item.adjacentBoost.toFixed(1)}`);
+        return {
+          'Quận': item.name,
+          'Key': item.key,
+          'Trọng số': parseFloat(item.weight.toFixed(2)),
+          'Tỉ lệ (%)': `${percentage}%`,
+          'Boosts': boosts.join(', ') || 'None'
+        };
+      });
 
-      console.log(
-        `${statusSymbol} [${item.name}] (${item.key}):\n` +
-        `   Trọng số: ${item.weight.toFixed(1)}${boostString}\n` +
-        `   Tỉ lệ chọn: ${percentage}%`
-      );
-    });
+    if (allowedDetails.length > 0) {
+      console.table(allowedDetails);
+    } else {
+      console.log('Không có quận nào được chọn trong Allowed Districts.');
+    }
 
   } catch (err) {
     console.error('[District Weights Debug] Error calculating weights:', err);

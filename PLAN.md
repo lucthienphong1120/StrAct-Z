@@ -126,4 +126,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] check token khi client request change để đảm bảo range/config hợp lệ nếu là vip
 + [x] check lại công thức xác suất và trọng số gen vị trí ngẫu nhiên, toàn bộ event 2 tuần gần đây đều là hoàn kiếm
 + [x] sau 1 thời gian app bị logout thì các chức năng đặt lịch và upload có còn hoạt động không
-
++ [x] tối ưu log debug tỉ lệ quận (console.table, lọc bỏ quận 0%) và sửa layout responsive map card (v1.51.49)
