@@ -162,7 +162,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         const deviceName = config.device_name || 'Garmin Forerunner 975';
         const uploadResult = await stravaApi.uploadActivity(accountId, activity.filepath, {
           name: activity.activityName,
-          description: getShortDescription(deviceName),
+          description: `${getShortDescription(deviceName)}\n${deviceName}`,
           sportType: activity.activityType || 'Run',
         });
 

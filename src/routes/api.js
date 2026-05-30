@@ -437,7 +437,7 @@ router.post('/generate-and-upload', async (req, res) => {
     const deviceName = ov.device_name || config.device_name || 'Garmin Forerunner 975';
     const uploadResult = await stravaApi.uploadActivity(req.user.id, activity.filepath, {
       name: activity.activityName,
-      description: getShortDescription(deviceName),
+      description: `${getShortDescription(deviceName)}\n${deviceName}`,
       sportType: activity.activityType || 'Run',
     });
 
@@ -501,7 +501,7 @@ router.post('/upload/:id', async (req, res) => {
 
     const uploadResult = await stravaApi.uploadActivity(req.user.id, gpxPath, {
       name: activity.activity_name,
-      description: getShortDescription(deviceName),
+      description: `${getShortDescription(deviceName)}\n${deviceName}`,
       sportType: sportType,
     });
 
