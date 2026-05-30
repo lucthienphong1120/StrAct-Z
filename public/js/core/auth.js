@@ -17,7 +17,7 @@ async function checkAuth() {
       document.getElementById('btnLogout').style.display = 'block';
       
       // Update header name with VIP indicator
-      const vipTag = window.userRole === 'vip' ? ' <span style="color:var(--vip-gold); font-size:0.7rem; font-weight:800; border:1px solid var(--vip-gold); padding:1px 6px; border-radius:4px; margin-left:6px; background:rgba(245,158,11,0.1);">VIP</span>' : '';
+      const vipTag = window.userRole === 'vip' ? ' <span class="vip-badge-inline" style="color:var(--vip-gold); font-size:0.7rem; font-weight:800; border:1px solid var(--vip-gold); padding:1px 6px; border-radius:4px; margin-left:6px; background:rgba(245,158,11,0.1);">VIP</span>' : '';
       authText.innerHTML = (data.athlete?.name || 'Connected') + vipTag;
       
       renderAccountInfo(data.athlete);

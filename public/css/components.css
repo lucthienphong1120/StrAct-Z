@@ -414,10 +414,18 @@
 @media (max-width: 768px) {
   /* Header: shrink version label and compact actions */
   .header { padding: 0 0.75rem; }
-  .logo { font-size: 1.1rem; gap: 8px; }
+  .header-inner { flex-wrap: nowrap; gap: 8px; justify-content: space-between; }
+  .logo { font-size: 1.05rem; gap: 6px; flex-shrink: 0; }
   .logo-icon { width: 30px; height: 30px; font-size: 1rem; }
-  .auth-badge { font-size: 0.72rem; padding: 5px 10px; }
-  .header-actions { gap: 8px; }
+  .logo small { font-size: 0.55em !important; padding: 1px 6px !important; margin-left: 2px !important; }
+  .auth-badge { font-size: 0.7rem; padding: 4px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 125px; display: inline-flex; align-items: center; }
+  .auth-badge .vip-badge-inline { font-size: 0.65rem !important; padding: 1px 4px !important; margin-left: 4px !important; }
+  .header-actions { gap: 6px; flex-shrink: 1; min-width: 0; }
+  .header-actions .btn-sm { padding: 4px 8px; font-size: 0.75rem; }
+
+  @media (max-width: 400px) {
+    .logo-text { display: none; }
+  }
 
   /* form-row: 2-col → 1-col on mobile */
   .form-row { grid-template-columns: 1fr; }
@@ -520,20 +528,38 @@
 
 @media (max-width: 600px) {
   .update-popup {
-    bottom: 16px;
-    right: 16px;
-    left: 16px;
-    flex-direction: column;
-    text-align: center;
-    padding: 16px;
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    gap: 12px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
   .update-popup-content {
-    flex-direction: column;
-    gap: 12px;
+    flex-direction: row;
+    gap: 10px;
+    text-align: left;
+  }
+  .update-icon {
+    font-size: 20px;
+  }
+  .update-text strong {
+    font-size: 0.85rem;
+    margin-bottom: 2px;
+  }
+  .update-text p {
+    font-size: 0.72rem;
+    line-height: 1.2;
   }
   .update-popup button {
-    width: 100%;
-    margin-top: 8px;
+    width: auto;
+    margin-top: 0;
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    white-space: nowrap;
   }
 }
 
