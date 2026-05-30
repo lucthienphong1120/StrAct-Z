@@ -380,7 +380,7 @@ async function disconnect(accountId) {
 async function getActivities(accountId, page = 1, perPage = 30, after = null, forceRefresh = false) {
   const cacheKey = `${accountId}-${page}-${perPage}-${after}`;
   if (forceRefresh) {
-    activityCache.delete(cacheKey);
+    clearActivityCache(accountId);
   } else {
     const cached = activityCache.get(cacheKey);
     if (cached && cached.expires > Date.now()) {

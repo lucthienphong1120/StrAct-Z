@@ -685,7 +685,7 @@ async function generateAndUpload() {
       if (result.message === 'VIP_REQUIRED') {
         showToast('Daily limit reached (2 activities/day). Contact Admin to upgrade.', 'warning');
       } else {
-        showToast(result.message || 'Upload failed', 'error');
+        showToast(result.error || result.message || 'Upload failed', 'error');
       }
     }
     await loadDashboard(true);

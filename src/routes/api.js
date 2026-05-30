@@ -278,11 +278,6 @@ router.post('/generate', async (req, res) => {
       } catch (e) { console.warn('Strava fetch failed for overlap check'); }
     }
 
-    const sysL = systemLimits.getLimits(req.user.role || 'normal');
-    if (stravaActivities.length >= sysL.daily_upload_limit.max) {
-       return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
-    }
-
     const lastUploaded = await db.getLastUploadedActivity(req.user.id);
 
     const activity = await generateActivity({
@@ -499,6 +494,21 @@ router.post('/upload/:id', async (req, res) => {
     const activities = await db.getActivities(req.user.id, 200);
     const activity = activities.find(a => a.id === parseInt(req.params.id));
     if (!activity) return res.status(404).json({ error: 'Activity not found' });
+
+    const targetDate = new Date(activity.route_start_time || activity.created_at || Date.now()).toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
+    let stravaActivities = [];
+    if (await stravaApi.isAuthenticated(req.user.id)) {
+      try {
+        const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
+        stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after);
+        stravaActivities = stravaActivities.filter(a => (a.start_date_local || a.start_date).startsWith(targetDate));
+      } catch (e) { console.warn('Strava fetch failed for limit check'); }
+    }
+
+    const sysL = systemLimits.getLimits(req.user.role || 'normal');
+    if (stravaActivities.length >= sysL.daily_upload_limit.max) {
+       return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
+    }
 
     const gpxPath = path.join(__dirname, '..', '..', 'data', 'gpx', activity.gpx_file);
     if (!fs.existsSync(gpxPath)) return res.status(404).json({ error: 'GPX file not found' });

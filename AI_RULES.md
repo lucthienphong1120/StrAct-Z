@@ -58,6 +58,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.53 (2026-05-30)
+- **Fix: Daily Limit Errors, Limit Separation for Offline/Online Generation & Cache Sync**:
+  - Modified frontend API helper to return full response metadata on failure, allowing the UI to display the exact backend limit message instead of generic "Upload failed".
+  - Exempted local GPX generation route (`/api/generate`) from daily upload limits so users can generate local activities without constraint.
+  - Enforced daily limits on manual uploads (`/api/upload/:id`) and background scheduler jobs (`scheduler.js`) to prevent bypassing daily quotas.
+  - Resolved cache synchronization issue by invalidating all cached queries for a user during a force refresh of Strava activities.
+
 ### v1.51.52 (2026-05-30)
 - **Fix: Timezone-Aware Activity Overlap Checking & Safety/Rest Math**:
   - Fixed database activity retrieval in `getActivitiesByDate` to query using absolute UTC intervals matching the local Vietnam (+07:00) day, preventing morning activities (00:00 - 06:59 AM local time) from being ignored during overlap checks.

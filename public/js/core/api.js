@@ -13,7 +13,12 @@ async function api(endpoint, options = {}) {
     });
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({ error: res.statusText }));
-      return { error: errorData.error || `HTTP ${res.status}` };
+      return {
+        error: errorData.error || `HTTP ${res.status}`,
+        code: errorData.code,
+        message: errorData.message,
+        ...errorData
+      };
     }
     return res.json();
   } catch (err) {

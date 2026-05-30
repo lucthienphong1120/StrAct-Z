@@ -63,14 +63,22 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     
     let existingActivities = [...localActivities, ...stravaActivities];
 
+    const sysL = limits;
+    if (stravaActivities.length >= sysL.daily_upload_limit.max) {
+      console.log(`[Scheduler] Daily upload limit reached for account ${accountId} (${stravaActivities.length}/${sysL.daily_upload_limit.max}). Skipping scheduler job.`);
+      return { success: false, message: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` };
+    }
+
     console.log(`[Scheduler] Account ${accountId} will generate ${taskCount} activities...`);
     
     let successCount = 0;
+    let currentStravaCount = stravaActivities.length;
 
     for (let i = 0; i < taskCount; i++) {
-      // No daily limit check inside loop for scheduled events
-
-
+      if (currentStravaCount >= sysL.daily_upload_limit.max) {
+        console.log(`[Scheduler] Account ${accountId}: Daily upload limit of ${sysL.daily_upload_limit.max} reached during loop. Stopping.`);
+        break;
+      }
 
       let activity;
       const lastUploaded = await db.getLastUploadedActivity(accountId);
@@ -168,6 +176,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         });
 
         successCount++;
+        currentStravaCount++;
         lastActivity = {
           ...activity,
           stravaActivityId: finalStatus.activity_id,
