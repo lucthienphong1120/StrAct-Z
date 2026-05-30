@@ -129,7 +129,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] tối ưu log debug tỉ lệ quận (console.table, lọc bỏ quận 0%) và sửa layout responsive map card (v1.51.49)
 + [x] tối ưu hóa độ chân thực GPX (độ cao tích lũy 1-5m, schema gpxtpx), metadata upload (sport type, description chỉ ghi tên thiết bị, creator là tên App nguồn của thiết bị để có tag đồng bộ tương ứng ở dưới), sửa vỡ responsive Avoid Workhours, điều chỉnh trọng số quận, cập nhật danh sách Device Name hỗ trợ Coros, và sửa lỗi cơ chế chống trùng lặp thời gian random (v1.51.52)
 + [x] responsive thông báo cập nhật phiên bản và username, logo vip ở header trên mobile
-+ [ ] đồng nhất khoảng cách giữa các nút config trên dưới (ví dụ avoid workhour và global random time đang bị sát nhau)
++ [x] đồng nhất khoảng cách giữa các nút config trên dưới (ví dụ avoid workhour và global random time đang bị sát nhau)
 + [ ] check lại khi map lock vẫn resize vòng tròn work/home và sửa config map được, khiến khi lưu bị thay đổi dù map vẫn lock
 + [ ]
 
