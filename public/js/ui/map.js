@@ -37,6 +37,15 @@ function applyMapLock() {
     map.boxZoom.disable();
     map.keyboard.disable();
     if (map.tap) map.tap.disable();
+    map.closePopup();
+
+    window.activityCircles.forEach(item => {
+      if (item.marker) {
+        if (item.marker.dragging) item.marker.dragging.disable();
+        item.marker.closePopup();
+        item.marker.unbindPopup();
+      }
+    });
   } else {
     map.dragging.enable();
     map.touchZoom.enable();
@@ -45,6 +54,13 @@ function applyMapLock() {
     map.boxZoom.enable();
     map.keyboard.enable();
     if (map.tap) map.tap.enable();
+
+    window.activityCircles.forEach((item, index) => {
+      if (item.marker) {
+        if (item.marker.dragging) item.marker.dragging.enable();
+        bindPopupToMarker(item, index);
+      }
+    });
   }
 }
 
@@ -114,6 +130,23 @@ function resetMapView() {
   }
 }
 
+function bindPopupToMarker(item, index) {
+  const color = item.type === 'home' ? '#ff7800' : '#3b82f6';
+  const popupId = `radius-val-${index}`;
+  item.marker.bindPopup(`
+    <div style="text-align:center; min-width:150px;">
+      <b style="color:${color}">${item.type.toUpperCase()}</b><br>
+      <div style="margin:8px 0; font-size:0.8rem;">
+        Radius: <b id="${popupId}">${item.circle.getRadius()}</b>m<br>
+        <input type="range" value="${item.circle.getRadius()}" min="2000" max="${window.sysLimits?.scale_radius?.max || 4000}" step="100" 
+          style="width:100%; margin-top:5px; accent-color:var(--strava-orange);" 
+          oninput="document.getElementById('${popupId}').innerText = this.value; updateCircleRadius(${index}, this.value)">
+      </div>
+      <button class="btn btn-sm btn-secondary" style="margin-top:5px; padding:2px 8px; color:var(--accent-red); font-size:0.7rem;" onclick="removeCircle(${index})">🗑️ Delete Area</button>
+    </div>
+  `);
+}
+
 function renderCircles(areasData) {
   if (!window.map) initMap();
   
@@ -129,6 +162,8 @@ function renderCircles(areasData) {
       createCircleLayer(area.lat, area.lng, area.radius, area.type);
     });
   } catch (e) { console.error('Error rendering circles:', e); }
+  
+  applyMapLock();
   updateMapStatsUI();
 }
 
@@ -144,33 +179,27 @@ function createCircleLayer(lat, lng, radius, type) {
   }).addTo(window.map);
 
   const marker = L.marker([lat, lng], {
-    draggable: true,
+    draggable: !window.isMapLocked,
     title: type.toUpperCase()
   }).addTo(window.map);
 
   const item = { circle, marker, type };
   window.activityCircles.push(item);
+  const index = window.activityCircles.length - 1;
 
   marker.on('drag', (e) => {
     circle.setLatLng(e.latlng);
   });
 
-  const popupId = `radius-val-${window.activityCircles.length - 1}`;
-  marker.bindPopup(`
-    <div style="text-align:center; min-width:150px;">
-      <b style="color:${color}">${type.toUpperCase()}</b><br>
-      <div style="margin:8px 0; font-size:0.8rem;">
-        Radius: <b id="${popupId}">${radius}</b>m<br>
-        <input type="range" value="${radius}" min="2000" max="${window.sysLimits?.scale_radius?.max || 4000}" step="100" 
-          style="width:100%; margin-top:5px; accent-color:var(--strava-orange);" 
-          oninput="document.getElementById('${popupId}').innerText = this.value; updateCircleRadius(${window.activityCircles.length - 1}, this.value)">
-      </div>
-      <button class="btn btn-sm btn-secondary" style="margin-top:5px; padding:2px 8px; color:var(--accent-red); font-size:0.7rem;" onclick="removeCircle(${window.activityCircles.length - 1})">🗑️ Delete Area</button>
-    </div>
-  `);
+  if (!window.isMapLocked) {
+    bindPopupToMarker(item, index);
+  }
 }
 
 function addActivityCircle(type) {
+  if (window.isMapLocked) {
+    return showToast('Không thể thêm khu vực khi bản đồ đang khóa.', 'warning');
+  }
   if (!window.map || !window.sysLimits) return;
   if (type !== 'home' && type !== 'work') return;
 
@@ -188,6 +217,7 @@ function addActivityCircle(type) {
 }
 
 function updateCircleRadius(index, newRadius) {
+  if (window.isMapLocked) return;
   if (window.activityCircles[index]) {
     let r = parseInt(newRadius);
     const maxR = window.sysLimits?.scale_radius?.max || 4000;
@@ -198,6 +228,7 @@ function updateCircleRadius(index, newRadius) {
 }
 
 function removeCircle(index) {
+  if (window.isMapLocked) return;
   if (window.activityCircles[index]) {
     window.map.removeLayer(window.activityCircles[index].circle);
     window.map.removeLayer(window.activityCircles[index].marker);
