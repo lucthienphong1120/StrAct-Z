@@ -58,6 +58,14 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.51 (2026-05-30)
+- **Feature: Device Choices, App Sync Source Customization & Manual Badge Fix**:
+  - Dynamically mapped GPX creator parameter to respective device brand application (e.g. "Garmin Connect", "Huawei Health", "Samsung Health", "COROS") to restore native sync source icons/labels at the bottom of Strava.
+  - Simplified Strava description text box to display only the specific watch device name, avoiding the redundant two-line description.
+  - Updated Device Name choices: removed Garmin Enduro 3, updated Apple Watch Series 10 to 11, Samsung Galaxy Watch 7 to 8, Huawei Watch GT 5 Pro to Watch GT 6 Pro, Huawei Watch Fit 3 to Watch Fit 5 Pro, and added Coros Pace 3 and Coros Vertix 2S (with COROS sync source mapping).
+  - Fixed missing `created_by: 'Manual'` field in `/generate-and-upload` API route so that manually created activities correctly display the `MANUAL` badge in local history.
+  - Adjusted Hanoi district weights: Work place Partially coverage boost to +0.3 (from +0.2), Boost Adjacent to +0.8 (from +0.5), Home Fully to +1.5 (from +1.0), and Work Fully to +1.0 (from +0.8).
+
 ### v1.51.50 (2026-05-30)
 - **Feature: Output Realism & Upload Metadata Optimization**:
   - Resolved activity categorization bug: Returned resolved `activityType` from generator and passed it to Strava upload to prevent resolved random activities from defaulting to "Workout" (Tập luyện). This automatically restores Pace (Nhịp độ) in min/km and the Pace chart on Strava for Run/Walk activities.
@@ -65,9 +73,6 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - Added Garmin TrackPointExtension schema location in GPX XML header to ensure Strava successfully parses heart rate and cadence extensions.
   - Optimised elevation generator to clamp within 2m-20m and smoothed out high-frequency noise to yield a realistic 1m-5m elevation gain on Strava.
   - Fixed responsive layout wrapping of the Avoid Workhours time inputs by implementing a CSS flexbox wrapping container to stack items automatically on narrow settings cards.
-  - Adjusted district weight calculations: Home Fully to +1.5 (from +1.0), Work Fully to +1.0 (from +0.8), Work Partially to +0.3 (from +0.2), and Boost Adjacent to +0.8 (from +0.5).
-  - Set GPX creator to the mapped app name (e.g. "Garmin Connect" for Garmin, "Huawei Health" for Huawei) to ensure Strava natively shows the correct partner sync indicator at the bottom. Changed description box contents to only show the watch device name (avoiding the redundant "2 lines in one place" issue).
-  - Updated Device Name choices: removed Garmin Enduro 3, updated Apple Watch Series 10 to 11, Samsung Galaxy Watch 7 to 8, Huawei Watch GT 5 Pro to Watch GT 6 Pro, Huawei Watch Fit 3 to Watch Fit 5 Pro, and added Coros Pace 3 and Coros Vertix 2S (with COROS sync source mapping).
 
 ### v1.51.49 (2026-05-29)
 - **UI & Debug: Responsive Layout Fixes & Console Log Formatting**:

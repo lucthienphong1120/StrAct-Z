@@ -127,7 +127,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] check lại công thức xác suất và trọng số gen vị trí ngẫu nhiên, toàn bộ event 2 tuần gần đây đều là hoàn kiếm
 + [x] sau 1 thời gian app bị logout thì các chức năng đặt lịch và upload có còn hoạt động không
 + [x] tối ưu log debug tỉ lệ quận (console.table, lọc bỏ quận 0%) và sửa layout responsive map card (v1.51.49)
-+ [x] tối ưu hóa độ chân thực GPX (độ cao tích lũy 1-5m, schema gpxtpx), metadata upload (sport type, description chỉ ghi tên thiết bị, creator là tên App nguồn của thiết bị để có tag đồng bộ tương ứng ở dưới), sửa vỡ responsive Avoid Workhours, điều chỉnh trọng số quận, và cập nhật danh sách Device Name hỗ trợ Coros (v1.51.50)
++ [x] tối ưu hóa độ chân thực GPX (độ cao tích lũy 1-5m, schema gpxtpx), metadata upload (sport type, description chỉ ghi tên thiết bị, creator là tên App nguồn của thiết bị để có tag đồng bộ tương ứng ở dưới), sửa vỡ responsive Avoid Workhours, điều chỉnh trọng số quận, và cập nhật danh sách Device Name hỗ trợ Coros (v1.51.51)
 + [ ] responsive thông báo cập nhật phiên bản và username, logo vip ở header trên mobile
 + [ ] đồng nhất khoảng cách giữa các nút config trên dưới (ví dụ avoid workhour và global random time đang bị sát nhau
 + [ ] 
