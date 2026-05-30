@@ -440,6 +440,7 @@ router.post('/generate-and-upload', async (req, res) => {
       route_start_lng: activity.startLng,
       route_start_time: activity.startTime ? activity.startTime.toISOString() : new Date().toISOString(),
       district_keys: activity.districtKey,
+      created_by: 'Manual',
     });
 
     const deviceName = ov.device_name || config.device_name || 'Garmin Forerunner 975';
