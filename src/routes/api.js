@@ -46,7 +46,12 @@ router.get('/version', (req, res) => {
 // ─── Configuration ──────────────────────────────────────────────────────────
 
 router.get('/config', async (req, res) => {
-  res.json(await db.getAllConfig(req.user.id));
+  try {
+    res.json(await db.getAllConfig(req.user.id));
+  } catch (err) {
+    console.error(`[Config API] Error getting config for user ${req.user?.id}:`, err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // System limits endpoint moved below to avoid duplication
@@ -54,18 +59,23 @@ router.get('/config', async (req, res) => {
 const { validateConfig } = require('../utils/validation');
 
 router.post('/config', async (req, res) => {
-  const updates = req.body;
-  const role = req.user.role || 'normal';
-  
-  const validation = validateConfig(updates, role);
-  if (!validation.success) {
-    return res.status(400).json({ error: validation.error });
-  }
+  try {
+    const updates = req.body;
+    const role = req.user.role || 'normal';
+    
+    const validation = validateConfig(updates, role);
+    if (!validation.success) {
+      return res.status(400).json({ error: validation.error });
+    }
 
-  for (const [key, value] of Object.entries(validation.sanitized)) {
-    await db.setConfig(req.user.id, key, value);
+    for (const [key, value] of Object.entries(validation.sanitized)) {
+      await db.setConfig(req.user.id, key, value);
+    }
+    res.json({ success: true, config: await db.getAllConfig(req.user.id) });
+  } catch (err) {
+    console.error(`[Config API] Error saving config for user ${req.user?.id}:`, err);
+    res.status(500).json({ error: err.message });
   }
-  res.json({ success: true, config: await db.getAllConfig(req.user.id) });
 });
 
 router.post('/config/reset', async (req, res) => {
@@ -167,19 +177,24 @@ router.get('/google-fit/stats', async (req, res) => {
 // ─── Stats ──────────────────────────────────────────────────────────────────
 
 router.get('/stats', async (req, res) => {
-  const stats = await db.getActivityStats(req.user.id);
-  const scheduleStatus = await scheduler.getStatus(req.user.id);
-  const tokens = await db.getTokens(req.user.id);
-  const gfTokens = await db.getExternalTokens(req.user.id, 'google_fit');
-  res.json({
-    ...stats,
-    role: req.user.role,
-    schedule: scheduleStatus,
-    authenticated: !!(tokens && tokens.access_token),
-    athleteName: tokens?.athlete_name || null,
-    athleteAvatar: tokens?.athlete_avatar || null,
-    googleFitConnected: !!(gfTokens && gfTokens.access_token),
-  });
+  try {
+    const stats = await db.getActivityStats(req.user.id);
+    const scheduleStatus = await scheduler.getStatus(req.user.id);
+    const tokens = await db.getTokens(req.user.id);
+    const gfTokens = await db.getExternalTokens(req.user.id, 'google_fit');
+    res.json({
+      ...stats,
+      role: req.user.role,
+      schedule: scheduleStatus,
+      authenticated: !!(tokens && tokens.access_token),
+      athleteName: tokens?.athlete_name || null,
+      athleteAvatar: tokens?.athlete_avatar || null,
+      googleFitConnected: !!(gfTokens && gfTokens.access_token),
+    });
+  } catch (err) {
+    console.error(`[Stats API] Error getting stats for user ${req.user?.id}:`, err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 router.get('/insights', async (req, res) => {
@@ -206,10 +221,14 @@ router.get('/insights', async (req, res) => {
 // ─── Activities ─────────────────────────────────────────────────────────────
 
 router.get('/activities', async (req, res) => {
-  const limit = parseInt(req.query.limit) || 100;
-  const all = await db.getActivities(req.user.id, limit);
-  // Exclude hard-deleted (shouldn't exist) but show soft-deleted with flag
-  res.json(all);
+  try {
+    const limit = parseInt(req.query.limit) || 100;
+    const all = await db.getActivities(req.user.id, limit);
+    res.json(all);
+  } catch (err) {
+    console.error(`[Activities API] Error getting activities for user ${req.user?.id}:`, err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 router.get('/strava-activities', async (req, res) => {
@@ -576,37 +595,49 @@ router.delete('/activities/:id', async (req, res) => {
 
 // ─── Scheduler ───────────────────────────────────────────────────────────────
 
-router.get('/scheduler', async (req, res) => res.json(await scheduler.getStatus(req.user.id)));
+router.get('/scheduler', async (req, res) => {
+  try {
+    res.json(await scheduler.getStatus(req.user.id));
+  } catch (err) {
+    console.error(`[Scheduler API] Error getting status for user ${req.user?.id}:`, err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 router.post('/scheduler', async (req, res) => {
-  const updates = req.body;
-  const role = req.user.role || 'normal';
+  try {
+    const updates = req.body;
+    const role = req.user.role || 'normal';
 
-  const validation = validateConfig({
-    schedule_enabled: updates.enabled,
-    schedule_time: updates.time,
-    schedule_count: updates.scheduleCount,
-    schedule_time_2: updates.time2,
-    schedule_count_min: updates.countMin,
-    schedule_count_max: updates.countMax
-  }, role);
+    const validation = validateConfig({
+      schedule_enabled: updates.enabled,
+      schedule_time: updates.time,
+      schedule_count: updates.scheduleCount,
+      schedule_time_2: updates.time2,
+      schedule_count_min: updates.countMin,
+      schedule_count_max: updates.countMax
+    }, role);
 
-  if (!validation.success) {
-    return res.status(400).json({ error: validation.error });
+    if (!validation.success) {
+      return res.status(400).json({ error: validation.error });
+    }
+
+    const s = validation.sanitized;
+    await scheduler.updateSchedule(
+      req.user.id, 
+      s.schedule_enabled === 'true', 
+      s.schedule_time,
+      s.schedule_count,
+      s.schedule_time_2,
+      parseInt(s.schedule_count_min), 
+      parseInt(s.schedule_count_max)
+    );
+    
+    res.json(await scheduler.getStatus(req.user.id));
+  } catch (err) {
+    console.error(`[Scheduler API] Error updating schedule for user ${req.user?.id}:`, err);
+    res.status(500).json({ error: err.message });
   }
-
-  const s = validation.sanitized;
-  await scheduler.updateSchedule(
-    req.user.id, 
-    s.schedule_enabled === 'true', 
-    s.schedule_time,
-    s.schedule_count,
-    s.schedule_time_2,
-    parseInt(s.schedule_count_min), 
-    parseInt(s.schedule_count_max)
-  );
-  
-  res.json(await scheduler.getStatus(req.user.id));
 });
 
 router.post('/scheduler/trigger', async (req, res) => {

@@ -122,6 +122,14 @@ async function loadActivities() {
     const allActivities = await api('/activities?limit=10000');
     const container = document.getElementById('activityList');
     
+    if (!allActivities || allActivities.error || !Array.isArray(allActivities)) {
+      console.error('Failed to load local activities:', allActivities?.error || 'Invalid API response');
+      if (container) {
+        container.innerHTML = `<div class="empty-state"><div class="icon">❌</div><p>Failed to load activities: ${allActivities?.error || 'Invalid response format'}</p></div>`;
+      }
+      return;
+    }
+    
     // Use window.allCloudActivities (from insights, up to 200 acts) as primary source for cross-check
     // Fallback to latestStravaActivities if allCloudActivities is empty
     const rawCloudBuffer = (window.allCloudActivities && Array.isArray(window.allCloudActivities) && window.allCloudActivities.length > 0) 
@@ -812,11 +820,11 @@ async function debugDistrictWeightRatios() {
         if (ratio > 0) {
           let boost = 0;
           if (area.type === 'home') {
-            if (ratio >= 0.85) boost = 1.0;
+            if (ratio >= 0.85) boost = 1.5;
             else if (ratio >= 0.35) boost = 0.8;
             else boost = 0.5;
           } else if (area.type === 'work') {
-            if (ratio >= 0.85) boost = 0.8;
+            if (ratio >= 0.85) boost = 1.0;
             else if (ratio >= 0.35) boost = 0.5;
             else boost = 0.3;
           }
