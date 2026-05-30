@@ -818,7 +818,7 @@ async function debugDistrictWeightRatios() {
           } else if (area.type === 'work') {
             if (ratio >= 0.85) boost = 0.8;
             else if (ratio >= 0.35) boost = 0.5;
-            else boost = 0.2;
+            else boost = 0.3;
           }
           weight += boost;
           areaBoost += boost;
@@ -839,8 +839,8 @@ async function debugDistrictWeightRatios() {
             }
           }
           if (isAdjacent) {
-            weight += 0.5;
-            adjacentBoost += 0.5;
+            weight += 0.8;
+            adjacentBoost += 0.8;
           }
         }
       }

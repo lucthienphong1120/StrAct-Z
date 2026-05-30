@@ -227,7 +227,7 @@ async function generateActivity(config = {}) {
           } else if (area.type === 'work') {
             if (ratio >= 0.85) weight += 0.8;      // Bao trọn / Nằm trọn
             else if (ratio >= 0.35) weight += 0.5; // Nhiều
-            else weight += 0.2;                    // Ít
+            else weight += 0.3;                    // Ít
           }
         }
       });
@@ -253,7 +253,7 @@ async function generateActivity(config = {}) {
             }
           }
           if (isAdjacent) {
-            weight += 0.5;
+            weight += 0.8;
           }
         }
       }

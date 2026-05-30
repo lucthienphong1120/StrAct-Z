@@ -127,5 +127,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] check lại công thức xác suất và trọng số gen vị trí ngẫu nhiên, toàn bộ event 2 tuần gần đây đều là hoàn kiếm
 + [x] sau 1 thời gian app bị logout thì các chức năng đặt lịch và upload có còn hoạt động không
 + [x] tối ưu log debug tỉ lệ quận (console.table, lọc bỏ quận 0%) và sửa layout responsive map card (v1.51.49)
-+ [x] tối ưu hóa độ chân thực GPX (độ cao tích lũy 1-5m, schema gpxtpx) và metadata upload (sport type, description rút gọn theo watch) (v1.51.50)
++ [x] tối ưu hóa độ chân thực GPX (độ cao tích lũy 1-5m, schema gpxtpx), metadata upload (sport type, description rút gọn theo watch), sửa vỡ responsive Avoid Workhours, và điều chỉnh trọng số quận (v1.51.50)
 

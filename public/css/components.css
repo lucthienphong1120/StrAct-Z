@@ -555,3 +555,17 @@
     gap: 10px;
   }
 }
+
+/* ─── Avoid Workhours Flex Wrapping ─── */
+.workhours-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.workhours-container > div {
+  flex: 1 1 180px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
