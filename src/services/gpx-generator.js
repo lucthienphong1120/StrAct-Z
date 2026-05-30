@@ -357,7 +357,7 @@ async function generateActivity(config = {}) {
       const dayStart = targetDateObj.getTime();
       const restMs = durationMs * restMultiplier;
       return {
-        start: start - dayStart - safeMs,
+        start: start - dayStart - safeMs - restMs,
         end: start - dayStart + durationMs + safeMs + restMs
       };
     });
@@ -373,13 +373,17 @@ async function generateActivity(config = {}) {
         const aEnd = aStart + aDurationMs;
         const aRestMs = aDurationMs * restMultiplier;
 
-        // Proposed activity is after existing activity 'a'
-        if (ms >= aStart) {
-          if (ms < aEnd + safeMs + aRestMs) return true;
+        // Rule 1: The start time 'ms' must not fall within the forbidden range:
+        // [aStart - safeMs - aRestMs, aEnd + safeMs + aRestMs]
+        if (ms >= aStart - safeMs - aRestMs && ms < aEnd + safeMs + aRestMs) {
+          return true;
         }
-        // Proposed activity is before existing activity 'a'
-        else {
-          if (msEnd + safeMs + restMsOfNew > aStart) return true;
+
+        // Rule 2: If the proposed activity starts before 'aStart', its execution and rest/safety buffer must not overlap 'aStart'
+        if (ms < aStart) {
+          if (msEnd + safeMs + restMsOfNew > aStart) {
+            return true;
+          }
         }
       }
       return false;

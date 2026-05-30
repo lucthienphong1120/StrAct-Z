@@ -58,6 +58,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.52 (2026-05-30)
+- **Fix: Timezone-Aware Activity Overlap Checking & Safety/Rest Math**:
+  - Fixed database activity retrieval in `getActivitiesByDate` to query using absolute UTC intervals matching the local Vietnam (+07:00) day, preventing morning activities (00:00 - 06:59 AM local time) from being ignored during overlap checks.
+  - Updated Strava activity filters in API routes and scheduler to filter based on `start_date_local` instead of UTC `start_date` to prevent overlap failures.
+  - Corrected overlap calculation formulas in `gpx-generator.js` by subtracting the existing activity's rest duration from the starting boundary of the blocked range, and updated `isOverlap` check to correctly verify the start-time forbidden range `[aStart - safeMs - aRestMs, aEnd + safeMs + aRestMs]`.
+
 ### v1.51.51 (2026-05-30)
 - **Feature: Device Choices, App Sync Source Customization & Manual Badge Fix**:
   - Dynamically mapped GPX creator parameter to respective device brand application (e.g. "Garmin Connect", "Huawei Health", "Samsung Health", "COROS") to restore native sync source icons/labels at the bottom of Strava.
