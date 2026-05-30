@@ -492,7 +492,7 @@ async function generateActivity(config = {}) {
     activityType: finalActivityType.toLowerCase(),
     includeHeartRate: heartRateEnabled,
     includeCadence: true,
-    deviceName,
+    deviceName: 'Garmin Connect', // Always use Garmin Connect creator for native Strava sync indicator
   });
 
   // Save GPX file

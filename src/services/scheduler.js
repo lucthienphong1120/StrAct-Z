@@ -9,17 +9,6 @@ const stravaApi = require('./strava-api');
 const googleFit = require('./google-fit');
 const systemLimits = require('../config/limits');
 
-function getShortDescription(deviceName) {
-  if (!deviceName) return 'Garmin Connect';
-  const name = deviceName.toLowerCase();
-  if (name.includes('garmin')) return 'Garmin Connect';
-  if (name.includes('huawei')) return 'Huawei Health';
-  if (name.includes('samsung')) return 'Samsung Health';
-  if (name.includes('apple')) return 'Apple Health';
-  if (name.includes('xiaomi')) return 'Xiaomi Health';
-  if (name.includes('strava')) return 'Strava Android App';
-  return 'Garmin Connect';
-}
 
 const scheduledTasks = new Map(); // accountId -> cronTask
 const isRunning = new Map(); // accountId -> boolean
@@ -162,7 +151,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         const deviceName = config.device_name || 'Garmin Forerunner 975';
         const uploadResult = await stravaApi.uploadActivity(accountId, activity.filepath, {
           name: activity.activityName,
-          description: `${getShortDescription(deviceName)}\n${deviceName}`,
+          description: deviceName,
           sportType: activity.activityType || 'Run',
         });
 

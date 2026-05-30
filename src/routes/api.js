@@ -15,17 +15,6 @@ const systemLimits = require('../config/limits');
 
 const { DISTRICTS } = require('../config/districts');
 
-function getShortDescription(deviceName) {
-  if (!deviceName) return 'Garmin Connect';
-  const name = deviceName.toLowerCase();
-  if (name.includes('garmin')) return 'Garmin Connect';
-  if (name.includes('huawei')) return 'Huawei Health';
-  if (name.includes('samsung')) return 'Samsung Health';
-  if (name.includes('apple')) return 'Apple Health';
-  if (name.includes('xiaomi')) return 'Xiaomi Health';
-  if (name.includes('strava')) return 'Strava Android App';
-  return 'Garmin Connect';
-}
 
 // ─── Districts ──────────────────────────────────────────────────────────────
 
@@ -456,7 +445,7 @@ router.post('/generate-and-upload', async (req, res) => {
     const deviceName = ov.device_name || config.device_name || 'Garmin Forerunner 975';
     const uploadResult = await stravaApi.uploadActivity(req.user.id, activity.filepath, {
       name: activity.activityName,
-      description: `${getShortDescription(deviceName)}\n${deviceName}`,
+      description: deviceName,
       sportType: activity.activityType || 'Run',
     });
 
@@ -520,7 +509,7 @@ router.post('/upload/:id', async (req, res) => {
 
     const uploadResult = await stravaApi.uploadActivity(req.user.id, gpxPath, {
       name: activity.activity_name,
-      description: `${getShortDescription(deviceName)}\n${deviceName}`,
+      description: deviceName,
       sportType: sportType,
     });
 
