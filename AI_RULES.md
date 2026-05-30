@@ -66,7 +66,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - Optimised elevation generator to clamp within 2m-20m and smoothed out high-frequency noise to yield a realistic 1m-5m elevation gain on Strava.
   - Fixed responsive layout wrapping of the Avoid Workhours time inputs by implementing a CSS flexbox wrapping container to stack items automatically on narrow settings cards.
   - Adjusted district weight calculations: Home Fully to +1.5 (from +1.0), Work Fully to +1.0 (from +0.8), Work Partially to +0.3 (from +0.2), and Boost Adjacent to +0.8 (from +0.5).
-  - Reverted GPX creator to always be "Garmin Connect" to ensure Strava natively shows the Garmin Connect sync indicator at the bottom. Changed description box contents to only show the watch device name (avoiding the redundant "2 lines in one place" issue).
+  - Set GPX creator to the mapped app name (e.g. "Garmin Connect" for Garmin, "Huawei Health" for Huawei) to ensure Strava natively shows the correct partner sync indicator at the bottom. Changed description box contents to only show the watch device name (avoiding the redundant "2 lines in one place" issue).
 
 ### v1.51.49 (2026-05-29)
 - **UI & Debug: Responsive Layout Fixes & Console Log Formatting**:

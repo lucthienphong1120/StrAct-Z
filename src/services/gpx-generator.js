@@ -20,6 +20,18 @@ const { ADJACENT_DISTRICTS } = require('../config/districts');
 const GPX_DIR = path.join(__dirname, '..', '..', 'data', 'gpx');
 fs.mkdirSync(GPX_DIR, { recursive: true });
 
+function getShortDescription(deviceName) {
+  if (!deviceName) return 'Garmin Connect';
+  const name = deviceName.toLowerCase();
+  if (name.includes('garmin')) return 'Garmin Connect';
+  if (name.includes('huawei')) return 'Huawei Health';
+  if (name.includes('samsung')) return 'Samsung Health';
+  if (name.includes('apple')) return 'Apple Health';
+  if (name.includes('xiaomi')) return 'Xiaomi Health';
+  if (name.includes('strava')) return 'Strava Android App';
+  return 'Garmin Connect';
+}
+
 function generateActivityName(activityType, date) {
   const hour = date.getHours();
   let timeOfDay = 'buổi tối';
@@ -492,7 +504,7 @@ async function generateActivity(config = {}) {
     activityType: finalActivityType.toLowerCase(),
     includeHeartRate: heartRateEnabled,
     includeCadence: true,
-    deviceName: 'Garmin Connect', // Always use Garmin Connect creator for native Strava sync indicator
+    deviceName: getShortDescription(deviceName), // Use mapped app name (e.g. Garmin Connect, Huawei Health) as creator
   });
 
   // Save GPX file
