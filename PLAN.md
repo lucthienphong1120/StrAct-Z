@@ -132,5 +132,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] đồng nhất khoảng cách giữa các nút config trên dưới (ví dụ avoid workhour và global random time đang bị sát nhau) (v1.51.52)
 + [x] check lại khi map lock vẫn resize vòng tròn work/home và sửa config map được, khiến khi lưu bị thay đổi dù map vẫn lock (v1.51.52)
 + [x] sửa hiển thị thông báo lỗi khi chạm giới hạn upload, bỏ khóa giới hạn khi chỉ tạo GPX (Generate GPX Only), áp dụng khóa giới hạn vào Scheduler và Manual Upload, và sửa lỗi cache desync sau khi xóa hoạt động trên cloud (v1.51.53)
-+ [ ] thêm device của amazfit, bỏ 1 cái coros
++ [ ] thêm device của amazfit, bỏ 1 cái coros, update xiaomi
 
