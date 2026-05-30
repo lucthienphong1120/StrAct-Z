@@ -67,6 +67,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - Fixed responsive layout wrapping of the Avoid Workhours time inputs by implementing a CSS flexbox wrapping container to stack items automatically on narrow settings cards.
   - Adjusted district weight calculations: Home Fully to +1.5 (from +1.0), Work Fully to +1.0 (from +0.8), Work Partially to +0.3 (from +0.2), and Boost Adjacent to +0.8 (from +0.5).
   - Set GPX creator to the mapped app name (e.g. "Garmin Connect" for Garmin, "Huawei Health" for Huawei) to ensure Strava natively shows the correct partner sync indicator at the bottom. Changed description box contents to only show the watch device name (avoiding the redundant "2 lines in one place" issue).
+  - Updated Device Name choices: removed Garmin Enduro 3, updated Apple Watch Series 10 to 11, Samsung Galaxy Watch 7 to 8, Huawei Watch GT 5 Pro to Watch GT 6 Pro, Huawei Watch Fit 3 to Watch Fit 5 Pro, and added Coros Pace 3 and Coros Vertix 2S (with COROS sync source mapping).
 
 ### v1.51.49 (2026-05-29)
 - **UI & Debug: Responsive Layout Fixes & Console Log Formatting**:
