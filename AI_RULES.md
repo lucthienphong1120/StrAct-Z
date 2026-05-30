@@ -58,6 +58,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.50 (2026-05-30)
+- **Feature: Output Realism & Upload Metadata Optimization**:
+  - Resolved activity categorization bug: Returned resolved `activityType` from generator and passed it to Strava upload to prevent resolved random activities from defaulting to "Workout" (Tập luyện). This automatically restores Pace (Nhịp độ) in min/km and the Pace chart on Strava for Run/Walk activities.
+  - Added short activity descriptions mapped to chosen device (e.g. "Garmin Connect", "Huawei Health", "Samsung Health", etc.).
+  - Added Garmin TrackPointExtension schema location in GPX XML header to ensure Strava successfully parses heart rate and cadence extensions.
+  - Optimised elevation generator to clamp within 2m-20m and smoothed out high-frequency noise to yield a realistic 1m-5m elevation gain on Strava.
+
 ### v1.51.49 (2026-05-29)
 - **UI & Debug: Responsive Layout Fixes & Console Log Formatting**:
   - Filtered out unselected/disallowed districts (0% probability) and formatted the allowed districts weight ratios debug log as a clean table using `console.table()` to save console space.

@@ -372,7 +372,7 @@ function fallbackRoute(waypoints, targetDistM) {
   return trimRouteToDistance(withDist, targetDistM);
 }
 
-// ─── Elevation (Hanoi: 0-8m) ──────────────────────────────────────────────────
+// ─── Elevation (Hanoi: 2-20m) ──────────────────────────────────────────────────
 
 function generateElevation(points, options = {}) {
   const { baseElevation = 3, maxVariation = 5 } = options;
@@ -385,8 +385,8 @@ function generateElevation(points, options = {}) {
     const ele = baseElevation
       + amp1 * Math.sin(2 * Math.PI * freq1 * t)
       + amp2 * Math.sin(2 * Math.PI * freq2 * t + 1.2)
-      + randomInRange(-0.3, 0.3);
-    points[i].elevation = Math.max(0, Math.min(8, Math.round(ele * 10) / 10));
+      + randomInRange(-0.05, 0.05);
+    points[i].elevation = Math.max(2, Math.min(20, Math.round(ele * 10) / 10));
   }
   return points;
 }

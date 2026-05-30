@@ -80,7 +80,8 @@ function buildGPX(points, options = {}) {
   xmlns="http://www.topografix.com/GPX/1/1"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd
+                      http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd">
   <metadata>
     <name>${escapeXml(activityName)}</name>
     <time>${formatGPXTime(points[0].time)}</time>
@@ -464,8 +465,8 @@ async function generateActivity(config = {}) {
     throw new Error('Route generation returned too few points');
   }
 
-  // Add elevation (Hanoi: 0-8m flat)
-  points = generateElevation(points, { baseElevation: randomInRange(2, 5), maxVariation: 3 });
+  // Add elevation (Hanoi: smooth 2-20m)
+  points = generateElevation(points, { baseElevation: randomInRange(5, 10), maxVariation: randomInRange(1.5, 3.5) });
 
   // Add timestamps
   points = generateTimestamps(points, { startTime: activityStartTime, avgPaceMinPerKm: avgPace, simRedLights });
@@ -505,6 +506,7 @@ async function generateActivity(config = {}) {
 
   return {
     filename, filepath, activityName,
+    activityType: finalActivityType,
     distanceKm: Math.round(actualDistance * 10) / 10,
     durationMin: Math.round(actualDuration * 10) / 10,
     paceMinKm: Math.round(avgPace * 10) / 10,

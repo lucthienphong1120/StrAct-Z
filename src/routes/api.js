@@ -15,6 +15,18 @@ const systemLimits = require('../config/limits');
 
 const { DISTRICTS } = require('../config/districts');
 
+function getShortDescription(deviceName) {
+  if (!deviceName) return 'Garmin Connect';
+  const name = deviceName.toLowerCase();
+  if (name.includes('garmin')) return 'Garmin Connect';
+  if (name.includes('huawei')) return 'Huawei Health';
+  if (name.includes('samsung')) return 'Samsung Health';
+  if (name.includes('apple')) return 'Apple Health';
+  if (name.includes('xiaomi')) return 'Xiaomi Health';
+  if (name.includes('strava')) return 'Strava Android App';
+  return 'Garmin Connect';
+}
+
 // ─── Districts ──────────────────────────────────────────────────────────────
 
 router.get('/districts', (req, res) => {
@@ -422,9 +434,11 @@ router.post('/generate-and-upload', async (req, res) => {
       district_keys: activity.districtKey,
     });
 
+    const deviceName = ov.device_name || config.device_name || 'Garmin Forerunner 975';
     const uploadResult = await stravaApi.uploadActivity(req.user.id, activity.filepath, {
       name: activity.activityName,
-      sportType: ov.activity_type || config.activity_type || 'Run',
+      description: getShortDescription(deviceName),
+      sportType: activity.activityType || 'Run',
     });
 
     const finalStatus = await stravaApi.waitForUpload(req.user.id, uploadResult.id);
@@ -480,9 +494,15 @@ router.post('/upload/:id', async (req, res) => {
     const gpxPath = path.join(__dirname, '..', '..', 'data', 'gpx', activity.gpx_file);
     if (!fs.existsSync(gpxPath)) return res.status(404).json({ error: 'GPX file not found' });
 
+    const deviceName = await db.getConfig(req.user.id, 'device_name') || 'Garmin Forerunner 975';
+    let sportType = 'Run';
+    if (activity.activity_name.includes('Đi bộ')) sportType = 'Walk';
+    else if (activity.activity_name.includes('Đạp xe')) sportType = 'Ride';
+
     const uploadResult = await stravaApi.uploadActivity(req.user.id, gpxPath, {
       name: activity.activity_name,
-      sportType: await db.getConfig(req.user.id, 'activity_type') || 'Run',
+      description: getShortDescription(deviceName),
+      sportType: sportType,
     });
 
     const finalStatus = await stravaApi.waitForUpload(req.user.id, uploadResult.id);
