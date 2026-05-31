@@ -386,11 +386,6 @@ router.post('/generate-and-upload', async (req, res) => {
       } catch (e) { console.warn('Strava fetch failed for overlap check'); }
     }
 
-    const sysL = systemLimits.getLimits(req.user.role || 'normal');
-    if (stravaActivities.length >= sysL.daily_upload_limit.max) {
-       return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
-    }
-
     const lastUploaded = await db.getLastUploadedActivity(req.user.id);
 
     const activity = await generateActivity({
@@ -423,6 +418,26 @@ router.post('/generate-and-upload', async (req, res) => {
       last_district_keys: lastUploaded ? lastUploaded.district_keys : null,
       deviceName: ov.device_name || config.device_name || 'Garmin Forerunner 975',
     });
+
+    const sysL = systemLimits.getLimits(req.user.role || 'normal');
+    if (stravaActivities.length >= sysL.daily_upload_limit.max) {
+      const errMsg = `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.`;
+      await db.saveActivity(req.user.id, {
+        activity_name: activity.activityName,
+        distance_km: activity.distanceKm,
+        duration_min: activity.durationMin,
+        pace_min_km: activity.paceMinKm,
+        gpx_file: activity.filename,
+        upload_status: 'failed',
+        route_start_lat: activity.startLat,
+        route_start_lng: activity.startLng,
+        route_start_time: activity.startTime ? activity.startTime.toISOString() : new Date().toISOString(),
+        district_keys: activity.districtKey,
+        created_by: 'Manual',
+        error_message: errMsg,
+      });
+      return res.status(403).json({ error: errMsg });
+    }
 
     const activityId = await db.saveActivity(req.user.id, {
       activity_name: activity.activityName,

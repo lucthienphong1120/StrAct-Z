@@ -58,6 +58,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.54 (2026-05-31)
+- **Fix: Restructured Daily Limit Violation to Record FAILED Activities Instead of Early Exit**:
+  - Restructured `POST /api/generate-and-upload` daily limit check to run after GPX file generation. If the daily upload limit is exceeded, the activity is still saved to the local database with `upload_status: 'failed'` containing the limit details inside `error_message`, and returns a `403` status.
+  - Updated auto scheduler (`scheduler.js`) daily limit checks to run inside the loop after activity generation. If the limit is exceeded, it saves the generated activity as `failed` with the limit error message in the local database and continues loop execution, ensuring users have system history logs that the scheduler executed.
+
 ### v1.51.53 (2026-05-30)
 - **Fix: Daily Limit Errors, Limit Separation for Offline/Online Generation & Cache Sync**:
   - Modified frontend API helper to return full response metadata on failure, allowing the UI to display the exact backend limit message instead of generic "Upload failed".

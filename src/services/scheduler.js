@@ -64,22 +64,12 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     let existingActivities = [...localActivities, ...stravaActivities];
 
     const sysL = limits;
-    if (stravaActivities.length >= sysL.daily_upload_limit.max) {
-      console.log(`[Scheduler] Daily upload limit reached for account ${accountId} (${stravaActivities.length}/${sysL.daily_upload_limit.max}). Skipping scheduler job.`);
-      return { success: false, message: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` };
-    }
-
     console.log(`[Scheduler] Account ${accountId} will generate ${taskCount} activities...`);
     
     let successCount = 0;
     let currentStravaCount = stravaActivities.length;
 
     for (let i = 0; i < taskCount; i++) {
-      if (currentStravaCount >= sysL.daily_upload_limit.max) {
-        console.log(`[Scheduler] Account ${accountId}: Daily upload limit of ${sysL.daily_upload_limit.max} reached during loop. Stopping.`);
-        break;
-      }
-
       let activity;
       const lastUploaded = await db.getLastUploadedActivity(accountId);
       try {
@@ -132,6 +122,26 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
 
       console.log(`[Scheduler] Generated: ${activity.activityName} at ${activity.startTime.toLocaleTimeString('vi-VN', { hour12: false })} - ${activity.distanceKm}km`);
       
+      // Check if daily limit is reached
+      if (currentStravaCount >= sysL.daily_upload_limit.max) {
+        console.log(`[Scheduler] Account ${accountId}: Daily upload limit of ${sysL.daily_upload_limit.max} reached. Saving activity as FAILED.`);
+        await db.saveActivity(accountId, {
+          activity_name: activity.activityName,
+          distance_km: activity.distanceKm,
+          duration_min: activity.durationMin,
+          pace_min_km: activity.paceMinKm,
+          gpx_file: activity.filename,
+          upload_status: 'failed',
+          route_start_lat: activity.startLat,
+          route_start_lng: activity.startLng,
+          route_start_time: activity.startTime ? activity.startTime.toISOString() : new Date().toISOString(),
+          district_keys: activity.districtKey,
+          created_by: slotName,
+          error_message: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.`,
+        });
+        continue;
+      }
+
       // Add to existingActivities for next iteration check
       existingActivities.push({
         start_date: activity.startTime.toISOString(),
