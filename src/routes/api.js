@@ -279,6 +279,7 @@ router.post('/generate', async (req, res) => {
       } catch (e) { console.warn('Strava fetch failed for overlap check'); }
     }
 
+    const lastUploaded = await db.getLastUploadedActivity(req.user.id);
     const genConfig = buildGeneratorConfig(config, { ...ov, target_date: targetDate }, lastUploaded, req.user.role || 'normal');
     genConfig.existingActivities = [...localActivities, ...stravaActivities];
     const activity = await generateActivity(genConfig);
@@ -358,6 +359,7 @@ router.post('/generate-and-upload', async (req, res) => {
       } catch (e) { console.warn('Strava fetch failed for overlap check'); }
     }
 
+    const lastUploaded = await db.getLastUploadedActivity(req.user.id);
     const genConfig = buildGeneratorConfig(config, { ...ov, target_date: targetDate }, lastUploaded, req.user.role || 'normal');
     genConfig.existingActivities = [...localActivities, ...stravaActivities];
     const activity = await generateActivity(genConfig);
