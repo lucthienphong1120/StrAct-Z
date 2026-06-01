@@ -65,7 +65,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - Secured Strava OAuth flow by appending the account ID as the state parameter to prevent CSRF.
   - Enhanced API security by removing the global TLS verification bypass.
   - Hardened sqlite-db operations by adding a whitelist validation check to `updateActivity` parameters to block SQL injection.
-  - Replaced hardcoded cryptographic salt with a dynamic environment-based salt configuration, fallback compatible with legacy data.
+  - Replaced hardcoded cryptographic salt with a dynamic environment-based salt configuration, featuring automatic on-startup token migration to re-encrypt existing database tokens with the new salt.
   - Configured auth token cookies with the `SameSite=Lax` attribute.
   - Refactored generation parameters across API endpoints and scheduler into a unified utility helper `buildGeneratorConfig`.
   - Added a scheduled GPX file cleanup cron task running weekly on Sunday at 03:00 AM.

@@ -12,6 +12,7 @@ Two configurations have been adjusted in `.env`:
   - Add `ENCRYPTION_SALT` to your `.env` file with a secure, unique random string.
   - *Example*: `ENCRYPTION_SALT=y0ur_s3cur3_c0nt3mp0rary_sa1t_2026`
   - **Backward Compatibility**: If the system fails to decrypt existing tokens with the new salt, it automatically falls back to decrypting using the legacy key (derived using the old salt `'salt'`). This ensures users do not lose their current Strava or Google Fit connections.
+  - **Automatic One-Time Migration**: On server startup, the system automatically checks all stored Strava and Google Fit tokens. If any tokens were encrypted using the legacy salt `'salt'`, it decrypts them using the fallback key, re-encrypts them using the new primary key (derived using your new `ENCRYPTION_SALT`), and saves them back to the database. Once this process completes, all stored tokens are fully migrated, and the legacy fallback logic can be cleaned up in a future release.
 
 ### `BASE_URL` (Enforced CORS)
 * **Purpose**: CORS origin has been restricted in production to only allow requests originating from your application's domain.

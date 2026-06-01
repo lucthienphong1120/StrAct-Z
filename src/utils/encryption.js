@@ -47,4 +47,31 @@ function decrypt(hash) {
   }
 }
 
-module.exports = { encrypt, decrypt };
+function decryptWithSaltVerification(hash) {
+  if (!hash) return null;
+  try {
+    if (!hash.includes(':')) return { decrypted: hash, legacyUsed: false }; // Not encrypted
+    const [ivHex, encryptedHex] = hash.split(':');
+    if (!ivHex || !encryptedHex) return { decrypted: hash, legacyUsed: false };
+    const iv = Buffer.from(ivHex, 'hex');
+    
+    // Try with primary key first
+    try {
+      const decipher = crypto.createDecipheriv(algorithm, key, iv);
+      let decrypted = decipher.update(encryptedHex, 'hex', 'utf8');
+      decrypted += decipher.final('utf8');
+      return { decrypted, legacyUsed: false };
+    } catch (primaryErr) {
+      // Fallback to legacy key derived from 'salt'
+      const decipherLegacy = crypto.createDecipheriv(algorithm, legacyKey, iv);
+      let decryptedLegacy = decipherLegacy.update(encryptedHex, 'hex', 'utf8');
+      decryptedLegacy += decipherLegacy.final('utf8');
+      return { decrypted: decryptedLegacy, legacyUsed: true };
+    }
+  } catch (err) {
+    console.error('Decryption verification failed:', err.message);
+    return null;
+  }
+}
+
+module.exports = { encrypt, decrypt, decryptWithSaltVerification };
