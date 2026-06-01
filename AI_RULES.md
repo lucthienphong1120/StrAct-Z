@@ -58,6 +58,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.55 (2026-06-01)
+- **Feature: Updated Supported Devices List**:
+  - Added a popular Amazfit watch ('Amazfit T-Rex 3') to the configuration choices, mapping its GPX creator/short description metadata to 'Zepp App'.
+  - Removed one of the Coros watches ('Coros Vertix 2S') from the choices, keeping 'Coros Pace 3'.
+  - Removed Xiaomi watches from the choices entirely.
+
 ### v1.51.54 (2026-05-31)
 - **Fix: Restructured Daily Limit Violation to Record FAILED Activities Instead of Early Exit**:
   - Restructured `POST /api/generate-and-upload` daily limit check to run after GPX file generation. If the daily upload limit is exceeded, the activity is still saved to the local database with `upload_status: 'failed'` containing the limit details inside `error_message`, and returns a `403` status.

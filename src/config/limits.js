@@ -246,8 +246,7 @@ const LIMITS = {
       'Huawei Watch GT 6 Pro',
       'Huawei Watch Fit 5 Pro',
       'Coros Pace 3',
-      'Coros Vertix 2S',
-      'Xiaomi Watch S4 Sport',
+      'Amazfit T-Rex 3',
       'Strava Android App'
     ],
     min: 1,

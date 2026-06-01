@@ -28,7 +28,7 @@ function getShortDescription(deviceName) {
   if (name.includes('samsung')) return 'Samsung Health';
   if (name.includes('apple')) return 'Apple Health';
   if (name.includes('coros')) return 'COROS';
-  if (name.includes('xiaomi')) return 'Xiaomi Health';
+  if (name.includes('amazfit')) return 'Zepp App';
   if (name.includes('strava')) return 'Strava Android App';
   return 'Garmin Connect';
 }
