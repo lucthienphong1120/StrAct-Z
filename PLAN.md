@@ -139,4 +139,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Sửa lỗi thiếu biến lastUploaded, responsive popup và dọn dẹp migration cũ lên v1.52.1 (v1.52.1)
 + [ ] tách insight chart các ô vuông màu cam cho event tạo từ stract-z, ô màu tím là event từ cloud
 + [ ] limit max event áp dụng cho tất cả event từ cloud, kể cả có tạo từ stract-z hay không (vd 1 ngày đã hoạt động thực đủ 5 event rồi thì schedule tạo ra event FAILED)
++ [ ] đổi màu thông báo 22:00 & 14:00 với normal account
 + [ ] 
