@@ -234,13 +234,13 @@ async function generateActivity(config = {}) {
         
         if (ratio > 0) {
           if (area.type === 'home') {
-            if (ratio >= 0.85) weight += 1.5;      // Bao trọn / Nằm trọn
-            else if (ratio >= 0.35) weight += 0.8; // Nhiều
-            else weight += 0.5;                    // Ít
+            if (ratio >= 0.85) weight += 4.5;      // Bao trọn / Nằm trọn
+            else if (ratio >= 0.35) weight += 3.2; // Nhiều
+            else weight += 1.8;                    // Ít
           } else if (area.type === 'work') {
-            if (ratio >= 0.85) weight += 1.0;      // Bao trọn / Nằm trọn
-            else if (ratio >= 0.35) weight += 0.5; // Nhiều
-            else weight += 0.3;                    // Ít
+            if (ratio >= 0.85) weight += 2.5;      // Bao trọn / Nằm trọn
+            else if (ratio >= 0.35) weight += 1.2; // Nhiều
+            else weight += 0.8;                    // Ít
           }
         }
       });
@@ -266,7 +266,7 @@ async function generateActivity(config = {}) {
             }
           }
           if (isAdjacent) {
-            weight += 0.8;
+            weight += 1.2;
           }
         }
       }

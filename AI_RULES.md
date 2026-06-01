@@ -58,6 +58,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.56 (2026-06-01)
+- **Feature: Adjusted District Weighting Coefficients**:
+  - Re-calibrated district selection weights based on Strava Year in Sport and Strava Metro user behaviors (targeting ~60% Home, ~25% City, and ~15% Work in a standard 10-district configuration).
+  - Updated Home coefficients to +4.5 (Fully), +3.2 (Mostly), and +1.8 (Partially).
+  - Updated Work coefficients to +2.5 (Fully), +1.2 (Mostly), and +0.8 (Partially).
+  - Adjusted Adjacent Boost to +1.2 (from +0.8) and aligned system configurations.
+
 ### v1.51.55 (2026-06-01)
 - **Feature: Updated Supported Devices List**:
   - Added a popular Amazfit watch ('Amazfit T-Rex 3') to the configuration choices, mapping its GPX creator/short description metadata to 'Zepp App'.
