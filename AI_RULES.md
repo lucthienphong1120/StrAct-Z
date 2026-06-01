@@ -58,7 +58,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
-### v1.51.57 (2026-06-01)
+### v1.52.0 (2026-06-01)
 - **Feature: Comprehensive System Hardening & Performance Fixes**:
   - Fixed undeclared variable `lastActivity` in auto scheduler causing reference errors in strict mode.
   - Removed duplicate `getActivities` export from Strava API helper.

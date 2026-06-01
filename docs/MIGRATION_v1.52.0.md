@@ -1,4 +1,4 @@
-# Technical Migration Guide - v1.51.57
+# Technical Migration Guide - v1.52.0
 
 This version introduces security hardening, optimization, and code quality updates based on the comprehensive code review. Below are the key configuration changes and actions required to migrate.
 

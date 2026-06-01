@@ -46,7 +46,7 @@ For detailed information, please refer to our documentation guides:
 
 ## 📋 Changelog
 
-### v1.51.57 (2026-06-01)
+### v1.52.0 (2026-06-01)
 - **Hardening**: Fixed 19 security vulnerabilities, bugs, cleanup, and feature issues identified in the code review. Added `ENCRYPTION_SALT` config variable, public `/health` endpoint, restricted CORS using `BASE_URL`, enabled SQLite WAL mode, and created a weekly GPX cleanup job.
 
 ### v1.50.35 (2026-05-12)
