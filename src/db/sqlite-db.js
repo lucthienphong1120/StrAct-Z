@@ -247,13 +247,6 @@ async function getDb() {
         }
       } catch (e) {}
 
-      // [Migration v1.52.0] Migrate and re-encrypt tokens using primary key
-      try {
-        await migrateEncryptedTokens(db);
-      } catch (e) {
-        console.error('[SQLite] Token migration trigger failed:', e.message);
-      }
-
       dbInstance = db;
       return db;
     } catch (err) {
@@ -529,82 +522,7 @@ async function deleteExternalTokens(accountId, provider) {
   return true;
 }
 
-/**
- * Scans database tables for legacy encrypted tokens, decrypts them using the fallback key,
- * and re-encrypts/saves them using the primary key derived from the new ENCRYPTION_SALT.
- */
-async function migrateEncryptedTokens(db) {
-  console.log('[SQLite] Checking for tokens needing salt migration...');
-  try {
-    // 1. Migrate Strava tokens ("users" table)
-    const users = await db.all('SELECT id, access_token, refresh_token FROM users');
-    for (const u of users) {
-      let needsUpdate = false;
-      let decryptedAccess = null;
-      let decryptedRefresh = null;
 
-      if (u.access_token) {
-        const check = encryption.decryptWithSaltVerification(u.access_token);
-        if (check && check.legacyUsed) {
-          decryptedAccess = check.decrypted;
-          needsUpdate = true;
-        }
-      }
-      if (u.refresh_token) {
-        const check = encryption.decryptWithSaltVerification(u.refresh_token);
-        if (check && check.legacyUsed) {
-          decryptedRefresh = check.decrypted;
-          needsUpdate = true;
-        }
-      }
-
-      if (needsUpdate) {
-        console.log(`[SQLite] Migrating Strava tokens for user record ID ${u.id}...`);
-        const updatedAccess = decryptedAccess ? encryption.encrypt(decryptedAccess) : u.access_token;
-        const updatedRefresh = decryptedRefresh ? encryption.encrypt(decryptedRefresh) : u.refresh_token;
-        await db.run(
-          'UPDATE users SET access_token = ?, refresh_token = ? WHERE id = ?',
-          [updatedAccess, updatedRefresh, u.id]
-        );
-      }
-    }
-
-    // 2. Migrate Google Fit tokens ("external_tokens" table)
-    const externalTokens = await db.all('SELECT account_id, provider, access_token, refresh_token FROM external_tokens');
-    for (const et of externalTokens) {
-      let needsUpdate = false;
-      let decryptedAccess = null;
-      let decryptedRefresh = null;
-
-      if (et.access_token) {
-        const check = encryption.decryptWithSaltVerification(et.access_token);
-        if (check && check.legacyUsed) {
-          decryptedAccess = check.decrypted;
-          needsUpdate = true;
-        }
-      }
-      if (et.refresh_token) {
-        const check = encryption.decryptWithSaltVerification(et.refresh_token);
-        if (check && check.legacyUsed) {
-          decryptedRefresh = check.decrypted;
-          needsUpdate = true;
-        }
-      }
-
-      if (needsUpdate) {
-        console.log(`[SQLite] Migrating external token (${et.provider}) for account ID ${et.account_id}...`);
-        const updatedAccess = decryptedAccess ? encryption.encrypt(decryptedAccess) : et.access_token;
-        const updatedRefresh = decryptedRefresh ? encryption.encrypt(decryptedRefresh) : et.refresh_token;
-        await db.run(
-          'UPDATE external_tokens SET access_token = ?, refresh_token = ? WHERE account_id = ? AND provider = ?',
-          [updatedAccess, updatedRefresh, et.account_id, et.provider]
-        );
-      }
-    }
-  } catch (err) {
-    console.error('[SQLite] Token migration failed:', err.message);
-  }
-}
 
 module.exports = {
   getDb,
