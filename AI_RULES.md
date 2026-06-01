@@ -58,6 +58,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.52.1 (2026-06-01)
+- **Fix: Restored lastUploaded Variable & Cleanup Stale Migrations**:
+  - Restored missing `lastUploaded` query definition inside `/api/generate` and `/api/generate-and-upload` API endpoints.
+  - Optimized new version update popup responsive styling on mobile (flex-direction column, full-width button).
+  - Cleaned up one-time token salt migration and stale `v1.51.43` `district_key` migration blocks from `sqlite-db.js` and `encryption.js`.
+
 ### v1.52.0 (2026-06-01)
 - **Feature: Comprehensive System Hardening & Performance Fixes**:
   - Fixed undeclared variable `lastActivity` in auto scheduler causing reference errors in strict mode.

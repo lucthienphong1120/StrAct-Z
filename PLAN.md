@@ -136,4 +136,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] thêm device của amazfit, bỏ 1 cái coros, bỏ xiaomi (v1.51.55)
 + [x] cập nhật hệ số trọng số quận theo hành vi thực tế trên Strava (Home +4.5/Mostly +3.2/Partially +1.8, Work +2.5/+1.2/+0.8, Adjacent Boost +1.2) (v1.51.56)
 + [x] Sửa 19 lỗi hệ thống theo báo cáo code review và nâng version lên v1.52.0 (v1.52.0)
-
++ [x] Sửa lỗi thiếu biến lastUploaded, responsive popup và dọn dẹp migration cũ lên v1.52.1 (v1.52.1)
