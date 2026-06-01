@@ -135,4 +135,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] cấu trúc lại kiểm tra giới hạn upload của Generate & Upload và Auto Scheduler để lưu hoạt động dưới trạng thái FAILED kèm lý do thay vì dừng sớm (v1.51.54)
 + [x] thêm device của amazfit, bỏ 1 cái coros, bỏ xiaomi (v1.51.55)
 + [x] cập nhật hệ số trọng số quận theo hành vi thực tế trên Strava (Home +4.5/Mostly +3.2/Partially +1.8, Work +2.5/+1.2/+0.8, Adjacent Boost +1.2) (v1.51.56)
++ [x] Sửa 19 lỗi hệ thống theo báo cáo code review và nâng version lên v1.51.57 (v1.51.57)
 

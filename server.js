@@ -55,7 +55,10 @@ const authLimiter = rateLimit({
 });
 
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+  origin: process.env.BASE_URL || 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -70,6 +73,11 @@ app.get('/register.html', (req, res) => {
 // Explicitly serve district data GeoJSON
 app.get('/geo/hanoi_urban_districts.geojson', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'geo', 'hanoi_urban_districts.geojson'));
+});
+
+// Health check endpoint (public)
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', uptime: process.uptime() });
 });
 
 // Protect static files
@@ -91,7 +99,7 @@ app.get('/', requirePageAuth, (req, res) => {
 });
 
 // Start server
-app.listen(PORT, async () => {
+const server = app.listen(PORT, async () => {
   console.log(`\n${'═'.repeat(60)}`);
   console.log(`  🏃 Strava Auto Activity Generator`);
   console.log(`  📡 Server running at http://localhost:${PORT}`);
@@ -107,3 +115,29 @@ app.listen(PORT, async () => {
 
   console.log('');
 });
+
+// Graceful shutdown handler
+const handleShutdown = async (signal) => {
+  console.log(`\n[Server] Received ${signal}, starting graceful shutdown...`);
+  
+  // Stop all scheduler cron tasks and wait for running jobs
+  try {
+    await scheduler.stopAll();
+  } catch (err) {
+    console.error('[Server] Error stopping schedulers:', err.message);
+  }
+
+  server.close(() => {
+    console.log('[Server] HTTP server closed.');
+    process.exit(0);
+  });
+
+  // Force shutdown after 10 seconds
+  setTimeout(() => {
+    console.warn('[Server] Graceful shutdown timeout reached, force exiting...');
+    process.exit(1);
+  }, 10000);
+};
+
+process.on('SIGTERM', () => handleShutdown('SIGTERM'));
+process.on('SIGINT', () => handleShutdown('SIGINT'));

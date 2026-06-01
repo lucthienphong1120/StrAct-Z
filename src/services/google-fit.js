@@ -136,7 +136,7 @@ async function uploadActivity(userId, activity) {
     startTimeMillis: startTime,
     endTimeMillis: endTime,
     activityType: activityType,
-    application: { name: 'StrAct Z', version: '1.50.0' }
+    application: { name: 'StrAct Z', version: require('../../package.json').version }
   };
 
   const sessionRes = await fetch(`https://www.googleapis.com/fitness/v1/users/me/sessions/${sessionId}`, {
@@ -293,6 +293,10 @@ async function getTodayStats(userId, forceRefresh = false) {
   };
 
   statsCache.set(userId, { data: result, expires: Date.now() + CACHE_TTL_MS });
+  if (statsCache.size > 500) {
+    const oldestKey = statsCache.keys().next().value;
+    statsCache.delete(oldestKey);
+  }
   return result;
 }
 

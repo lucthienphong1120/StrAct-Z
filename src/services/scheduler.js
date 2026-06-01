@@ -8,6 +8,9 @@ const { generateActivity } = require('./gpx-generator');
 const stravaApi = require('./strava-api');
 const googleFit = require('./google-fit');
 const systemLimits = require('../config/limits');
+const { buildGeneratorConfig } = require('../utils/activity-config-builder');
+const fs = require('fs');
+const path = require('path');
 
 
 const scheduledTasks = new Map(); // accountId -> cronTask
@@ -66,6 +69,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     const sysL = limits;
     console.log(`[Scheduler] Account ${accountId} will generate ${taskCount} activities...`);
     
+    let lastActivity = null;
     let successCount = 0;
     let currentStravaCount = stravaActivities.length;
 
@@ -73,36 +77,9 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       let activity;
       const lastUploaded = await db.getLastUploadedActivity(accountId);
       try {
-        activity = await generateActivity({
-          districtKey: null,
-          selected_districts: config.selected_districts,
-          max_district_span: config.max_district_span,
-          targetDate: targetDate,
-          existingActivities: existingActivities,
-          minTime: config.min_time,
-          maxTime: config.max_time,
-          workStart1: config.work_start1,
-          workEnd1: config.work_end1,
-          workStart2: config.work_start2,
-          workEnd2: config.work_end2,
-          overlap_protection_minutes: config.overlap_protection_minutes,
-          minDistanceKm: parseFloat(config.min_distance_km),
-          maxDistanceKm: parseFloat(config.max_distance_km),
-          minPace: parseFloat(config.min_pace),
-          maxPace: parseFloat(config.max_pace),
-          activityType: config.activity_type,
-          heartRateEnabled: String(config.heart_rate_enabled) === 'true',
-          minHeartRate: parseInt(config.min_heart_rate),
-          maxHeartRate: parseInt(config.max_heart_rate),
-          useOSRM: String(config.use_osrm) !== 'false',
-          simWeather: String(config.sim_weather) !== 'false',
-          simRedLights: String(config.sim_redlights) !== 'false',
-          rest_time_percent: config.rest_time_percent,
-          userRole: role,
-          boost_adjacent: String(config.boost_adjacent) !== 'false',
-          last_district_keys: lastUploaded ? lastUploaded.district_keys : null,
-          deviceName: config.device_name || 'Garmin Forerunner 975',
-        });
+        const genConfig = buildGeneratorConfig(config, { target_date: targetDate }, lastUploaded, role);
+        genConfig.existingActivities = existingActivities;
+        activity = await generateActivity(genConfig);
       } catch (genErr) {
         if (genErr.code === 'NO_VALID_TIME_SLOT') {
           console.warn(`[Scheduler] Account ${accountId}: No valid time slot available. Saving failed record.`);
@@ -341,6 +318,79 @@ async function updateSchedule(accountId, enabled1, time1, scheduleCount, time2, 
   await startScheduler(accountId);
 }
 
+/**
+ * Cleanup GPX files of uploaded activities older than 30 days
+ */
+async function cleanupOldGPXFiles() {
+  console.log('[Scheduler] Starting GPX cleanup job...');
+  try {
+    const dbInstance = await db.getDb();
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - 30);
+    const cutoffStr = cutoffDate.toISOString();
+    
+    const activities = await dbInstance.all(
+      `SELECT id, gpx_file FROM activities 
+       WHERE upload_status = 'uploaded' 
+         AND gpx_file IS NOT NULL 
+         AND created_at < ?`,
+      [cutoffStr]
+    );
+
+    console.log(`[Scheduler] Found ${activities.length} GPX files older than 30 days to clean up`);
+    let deletedCount = 0;
+    
+    for (const activity of activities) {
+      if (activity.gpx_file) {
+        const gpxPath = path.join(__dirname, '..', '..', 'data', 'gpx', activity.gpx_file);
+        try {
+          if (fs.existsSync(gpxPath)) {
+            fs.unlinkSync(gpxPath);
+            deletedCount++;
+          }
+          await dbInstance.run(
+            `UPDATE activities SET gpx_file = NULL WHERE id = ?`,
+            [activity.id]
+          );
+        } catch (e) {
+          console.error(`[Scheduler] Failed to delete GPX file ${activity.gpx_file}:`, e.message);
+        }
+      }
+    }
+    console.log(`[Scheduler] Successfully deleted ${deletedCount} GPX files`);
+  } catch (err) {
+    console.error('[Scheduler] Error during GPX cleanup:', err.message);
+  }
+}
+
+/**
+ * Gracefully stop all scheduled crons and wait for active jobs
+ */
+async function stopAll() {
+  console.log('[Scheduler] Stopping all scheduled cron tasks...');
+  for (const accountId of scheduledTasks.keys()) {
+    stopScheduler(accountId);
+  }
+
+  let retries = 8;
+  while (Array.from(isRunning.values()).some(running => running) && retries > 0) {
+    console.log('[Scheduler] Waiting for active jobs to complete...');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    retries--;
+  }
+  
+  if (retries === 0) {
+    console.log('[Scheduler] Force stopping: some jobs are still running.');
+  } else {
+    console.log('[Scheduler] All jobs completed and schedulers stopped.');
+  }
+}
+
+// Schedule GPX file cleanup to run once a week on Sunday at 03:00 AM
+cron.schedule('0 3 * * 0', async () => {
+  await cleanupOldGPXFiles();
+}, { timezone: 'Asia/Ho_Chi_Minh' });
+
 module.exports = {
   executeJob,
   startScheduler,
@@ -348,4 +398,6 @@ module.exports = {
   stopScheduler,
   getStatus,
   updateSchedule,
+  cleanupOldGPXFiles,
+  stopAll,
 };

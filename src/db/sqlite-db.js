@@ -62,6 +62,9 @@ async function getDb() {
         driver: sqlite3.Database
       });
       
+      // Enable WAL mode for better concurrency
+      await db.exec('PRAGMA journal_mode=WAL');
+      
       await db.exec(`
         CREATE TABLE IF NOT EXISTS config (
           key TEXT PRIMARY KEY,
@@ -148,10 +151,7 @@ async function getDb() {
         await db.run("INSERT OR IGNORE INTO vip_codes (code, status) VALUES (?, ?)", ['CRF@2026', 'available']);
       } catch (e) {}
 
-      try {
-        await db.exec('ALTER TABLE activities ADD COLUMN account_id INTEGER');
-        console.log('[SQLite] Added account_id column to activities');
-      } catch (e) {}
+
 
       try {
         await db.exec('ALTER TABLE activities ADD COLUMN route_start_time TEXT');
@@ -322,19 +322,27 @@ async function updateActivity(accountId, id, data) {
   const db = await getDb();
   const sets = [];
   const vals = [];
+  const ALLOWED_COLUMNS = [
+    'activity_name', 'distance_km', 'duration_min', 'pace_min_km',
+    'gpx_file', 'strava_activity_id', 'upload_status', 'error_message',
+    'route_start_lat', 'route_start_lng', 'route_start_time',
+    'district_keys', 'deleted_at', 'created_by'
+  ];
   for (const [k, v] of Object.entries(data)) {
-    sets.push(`${k} = ?`);
-    vals.push(v);
+    if (ALLOWED_COLUMNS.includes(k)) {
+      sets.push(`${k} = ?`);
+      vals.push(v);
+    }
   }
   if (sets.length === 0) return;
   vals.push(id, accountId);
   await db.run(`UPDATE activities SET ${sets.join(', ')} WHERE id = ? AND account_id = ?`, vals);
 }
 
-async function getActivities(accountId, limit = 50) {
+async function getActivities(accountId, limit = 50, offset = 0) {
   const db = await getDb();
   // Include deleted activities for logging
-  return await db.all(`SELECT * FROM activities WHERE account_id = ? ORDER BY id DESC LIMIT ?`, [accountId, limit]);
+  return await db.all(`SELECT * FROM activities WHERE account_id = ? ORDER BY id DESC LIMIT ? OFFSET ?`, [accountId, limit, offset]);
 }
 
 async function getActivitiesByDate(accountId, dateStr) {

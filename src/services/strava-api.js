@@ -23,9 +23,6 @@ function clearActivityCache(accountId) {
   }
 }
 
-// Bypass SSL cert verification (common issue on Windows with corporate CA certs)
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 // Custom HTTPS agent
 const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 
@@ -44,32 +41,20 @@ function makeRequest(options, postData = null) {
         if (usageHeader && limitHeader) {
           const usage = usageHeader.split(',').map(Number);
           const limit = limitHeader.split(',').map(Number);
-          if ((limit[0] > 0 && usage[0] >= limit[0] * 0.95) || (limit[1] > 0 && usage[1] >= limit[1] * 0.95)) {
-            console.warn(`[Strava API] WARNING: Approaching rate limit (${usage.join(',')}/${limit.join(',')})`);
-          }
+          global.stravaRateLimit = { usage, limit, timestamp: Date.now() };
         }
 
-        try {
-          const json = JSON.parse(data);
-          if (res.statusCode >= 400) {
-            if (res.statusCode === 429) {
-              reject({ status: 429, body: { error: 'Rate limit exceeded', message: 'Strava API limit reached. Try again in 15 minutes.' } });
-            } else {
-              reject({ status: res.statusCode, body: json });
-            }
-          } else {
-            resolve(json);
-          }
-        } catch (e) {
-          if (res.statusCode >= 400) {
-            if (res.statusCode === 429) {
-              reject({ status: 429, body: { error: 'Rate limit exceeded', message: 'Strava API limit reached.' } });
-            } else {
-              reject({ status: res.statusCode, body: data });
-            }
-          } else {
-            resolve(data);
-          }
+        if (res.statusCode >= 400) {
+          let errBody = {};
+          try { errBody = JSON.parse(data); } catch (e) {}
+          const err = new Error(`HTTP Error ${res.statusCode}: ${errBody.message || 'Request failed'}`);
+          err.statusCode = res.statusCode;
+          err.body = errBody;
+          reject(err);
+        } else {
+          let parsed = data;
+          try { parsed = JSON.parse(data); } catch (e) {}
+          resolve(parsed);
         }
       });
     });
@@ -93,12 +78,13 @@ function makeRequest(options, postData = null) {
 /**
  * Get OAuth authorization URL
  */
-function getAuthUrl() {
+function getAuthUrl(accountId) {
   const clientId = process.env.STRAVA_CLIENT_ID;
   const redirectUri = `${process.env.BASE_URL}/auth/callback`;
   const scope = 'activity:write,activity:read_all,read';
+  const stateQuery = accountId ? `&state=${accountId}` : '';
 
-  return `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}&approval_prompt=force`;
+  return `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}&approval_prompt=force${stateQuery}`;
 }
 
 /**
@@ -410,6 +396,10 @@ async function getActivities(accountId, page = 1, perPage = 30, after = null, fo
   }
 
   activityCache.set(cacheKey, { data: response, expires: Date.now() + CACHE_TTL_MS });
+  if (activityCache.size > 500) {
+    const oldestKey = activityCache.keys().next().value;
+    activityCache.delete(oldestKey);
+  }
 
   return response;
 }
@@ -426,5 +416,4 @@ module.exports = {
   isAuthenticated,
   deleteActivity,
   disconnect,
-  getActivities,
 };

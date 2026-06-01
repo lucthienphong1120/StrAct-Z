@@ -58,6 +58,27 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.51.57 (2026-06-01)
+- **Feature: Comprehensive System Hardening & Performance Fixes**:
+  - Fixed undeclared variable `lastActivity` in auto scheduler causing reference errors in strict mode.
+  - Removed duplicate `getActivities` export from Strava API helper.
+  - Secured Strava OAuth flow by appending the account ID as the state parameter to prevent CSRF.
+  - Enhanced API security by removing the global TLS verification bypass.
+  - Hardened sqlite-db operations by adding a whitelist validation check to `updateActivity` parameters to block SQL injection.
+  - Replaced hardcoded cryptographic salt with a dynamic environment-based salt configuration, fallback compatible with legacy data.
+  - Configured auth token cookies with the `SameSite=Lax` attribute.
+  - Refactored generation parameters across API endpoints and scheduler into a unified utility helper `buildGeneratorConfig`.
+  - Added a scheduled GPX file cleanup cron task running weekly on Sunday at 03:00 AM.
+  - Enforced a maximum entries capacity limit (500 items) on local in-memory caches to prevent unbounded growth memory leaks.
+  - Optimized PWA service worker with a network-first strategy for dynamic HTML/JS/CSS assets and cache-first for fonts/media/CDNs.
+  - Removed duplicate require and double ALTER TABLE migration script.
+  - Read Google Fit application version dynamically from `package.json`.
+  - Implemented graceful shutdown handles for SIGTERM/SIGINT signals to wait for active scheduler jobs.
+  - Added `offset` query parameter for query pagination support.
+  - Enabled SQLite WAL (Write-Ahead Logging) journal mode for better concurrency performance.
+  - Introduced a public `/health` endpoint for uptime monitoring.
+  - Restricted CORS origin matching the configured `BASE_URL`.
+
 ### v1.51.56 (2026-06-01)
 - **Feature: Adjusted District Weighting Coefficients**:
   - Re-calibrated district selection weights based on Strava Year in Sport and Strava Metro user behaviors (targeting ~60% Home, ~25% City, and ~15% Work in a standard 10-district configuration).

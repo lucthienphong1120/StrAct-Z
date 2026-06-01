@@ -1,4 +1,4 @@
-const CACHE_NAME = 'stract-z-v1.51.56';
+const CACHE_NAME = 'stract-z-v1.51.57';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -45,17 +45,52 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Simple cache-first strategy for static assets, network-first for others
-  if (ASSETS_TO_CACHE.some(asset => event.request.url.includes(asset))) {
-    event.respondWith(
-      caches.match(event.request).then((response) => {
-        return response || fetch(event.request);
-      })
-    );
-  } else {
+  const url = event.request.url;
+  
+  // We only intercept caching for resources listed in ASSETS_TO_CACHE
+  const isCachedAsset = ASSETS_TO_CACHE.some(asset => url.includes(asset));
+  if (!isCachedAsset) {
     event.respondWith(
       fetch(event.request).catch(() => {
         return caches.match(event.request);
+      })
+    );
+    return;
+  }
+
+  // Check if it's a dynamic local asset (HTML, JS, CSS, JSON)
+  const isDynamicLocal = url.endsWith('.html') || url.includes('/js/') || url.includes('/css/') || url.endsWith('.json') || url === self.location.origin || url === self.location.origin + '/';
+
+  if (isDynamicLocal) {
+    // Network-first strategy: try network, fallback to cache, and update cache if network succeeds
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          return caches.match(event.request);
+        })
+    );
+  } else {
+    // Cache-first strategy for static resources (images, fonts, external CDNs)
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request).then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
+            });
+          }
+          return networkResponse;
+        });
       })
     );
   }

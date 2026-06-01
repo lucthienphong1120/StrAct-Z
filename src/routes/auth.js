@@ -57,6 +57,7 @@ router.post('/system/login', async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Lax',
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
 
@@ -99,6 +100,7 @@ router.get('/callback', requirePageAuth, async (req, res) => {
     // If state doesn't match accountId, it might be a CSRF or mixed session
     if (state && parseInt(state) !== accountId) {
       console.warn(`OAuth state mismatch: got ${state}, expected ${accountId}`);
+      return res.redirect('/?error=' + encodeURIComponent('CSRF state mismatch'));
     }
     
     await stravaApi.exchangeCode(accountId, code);
