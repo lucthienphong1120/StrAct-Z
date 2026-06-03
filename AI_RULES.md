@@ -60,7 +60,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ### v1.52.9 (2026-06-03)
 - **Feature: Synchronized UI Card Titles and Clean Comments**:
-  - Updated the Map Card title in the UI to match the exact grouping title: `📍 Map View & Priority Areas`.
+  - Updated the Map Card title in the UI to match the exact grouping title: `📍 Map & Priority Areas`.
   - Removed Vietnamese parenthesized translations from the block comments in `src/config/limits.js` for cleaner configuration titles.
 
 ### v1.52.8 (2026-06-03)
@@ -68,7 +68,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - Reorganized the keys within the central `LIMITS` object in `src/config/limits.js` to match the exact visual display order of settings groups and inputs in the UI.
   - Grouped and commented configuration keys into 6 visual blocks:
     1. Route Configuration (🗺️ Route Configuration)
-    2. Map View & Priority Areas (Vùng bản đồ & Vùng ưu tiên)
+    2. Map & Priority Areas (Vùng bản đồ & Vùng ưu tiên)
     3. Time Configuration (⏱️ Time Configuration)
     4. Activity Settings (⚙️ Activity Settings)
     5. Auto Schedule (⏰ Auto Schedule)

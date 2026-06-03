@@ -37,7 +37,7 @@ const LIMITS = {
     default: true
   },
 
-  // ─── 📍 Map View & Priority Areas ──────────────────────────────────────────
+  // ─── 📍 Map & Priority Areas ──────────────────────────────────────────
   map_locked: {
     label: 'Khóa vị trí bản đồ.',
     desc_extra: 'Tác dụng: Khóa di chuyển và phóng to bản đồ bằng chuột để tránh vô tình thay đổi vị trí.',
