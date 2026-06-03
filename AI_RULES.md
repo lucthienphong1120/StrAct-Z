@@ -58,6 +58,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.52.3 (2026-06-03)
+- **Feature: Realistic Activity Type Multipliers**:
+  - Adjusted distance and pace multipliers for Walking (`Walk`) and Cycling (`Ride`) in generator and configs to match realistic athletic performance ratios.
+  - Walk: Distance x0.55 / Pace x1.4.
+  - Cycling (Ride): Distance x2.4 / Pace x0.33.
+
 ### v1.52.2 (2026-06-03)
 - **Feature: Enriched Insights Chart & Hardened Limit Checks & Role-based Scheduler Colors**:
   - Implemented visual split in Activity Insights chart: activities created by StrAct-Z are shown in orange, and other activities from Strava cloud are shown in purple. Added "StrAct Z" and "Strava Cloud" to the chart legend, and updated tooltips to display detailed splits.
