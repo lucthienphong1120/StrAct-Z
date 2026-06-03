@@ -58,6 +58,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.52.9 (2026-06-03)
+- **Feature: Synchronized UI Card Titles and Clean Comments**:
+  - Updated the Map Card title in the UI to match the exact grouping title: `📍 Map View & Priority Areas`.
+  - Removed Vietnamese parenthesized translations from the block comments in `src/config/limits.js` for cleaner configuration titles.
+
 ### v1.52.8 (2026-06-03)
 - **Feature: Restructured Limits Configuration Order**:
   - Reorganized the keys within the central `LIMITS` object in `src/config/limits.js` to match the exact visual display order of settings groups and inputs in the UI.

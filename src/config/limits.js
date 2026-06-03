@@ -7,7 +7,7 @@
 const { getDefaultKeys } = require('./districts');
 
 const LIMITS = {
-  // ─── 🗺️ Route Configuration (Bản đồ & Lộ trình) ───────────────────────────
+  // ─── 🗺️ Route Configuration ───────────────────────────────────────────────
   selected_districts: {
     label: 'Các quận được phép tạo lộ trình.',
     type: 'array',
@@ -37,7 +37,7 @@ const LIMITS = {
     default: true
   },
 
-  // ─── 📍 Map View & Priority Areas (Vùng bản đồ & Vùng ưu tiên) ─────────────
+  // ─── 📍 Map View & Priority Areas ──────────────────────────────────────────
   map_locked: {
     label: 'Khóa vị trí bản đồ.',
     desc_extra: 'Tác dụng: Khóa di chuyển và phóng to bản đồ bằng chuột để tránh vô tình thay đổi vị trí.',
@@ -91,7 +91,7 @@ const LIMITS = {
     example: 'Ratio >= 0.85 (Fully), Ratio >= 0.35 (Mostly), Ratio > 0 (Partially).'
   },
 
-  // ─── ⏱️ Time Configuration (Cấu hình thời gian) ─────────────────────────────
+  // ─── ⏱️ Time Configuration ─────────────────────────────────────────────────
   overlap_protection_minutes: {
     label: 'Thời gian đệm tối thiểu giữa các hoạt động để tránh trùng lặp.',
     type: 'int',
@@ -144,7 +144,7 @@ const LIMITS = {
     default: '00:00'
   },
 
-  // ─── ⚙️ Activity Settings (Cấu hình hoạt động) ─────────────────────────────
+  // ─── ⚙️ Activity Settings ──────────────────────────────────────────────────
   activity_type: {
     label: 'Loại hoạt động (Activity Type).',
     desc_extra: 'Tác dụng: Tỉ lệ tạo ngẫu nhiên từng loại hoạt động.',
@@ -279,7 +279,7 @@ const LIMITS = {
     default: true
   },
 
-  // ─── ⏰ Auto Schedule (Chạy tự động hàng ngày) ──────────────────────────────
+  // ─── ⏰ Auto Schedule ──────────────────────────────────────────────────────
   schedule_enabled: {
     label: 'Tự động tạo hoạt động hàng ngày.',
     type: 'bool',
@@ -319,7 +319,7 @@ const LIMITS = {
     max: 2
   },
 
-  // ─── 🛡️ Hidden / System / Other UI Info (Hệ thống & Thông tin khác) ───────────
+  // ─── 🛡️ Hidden / System / Other UI Info ─────────────────────────────────────
   daily_upload_limit: {
     label: 'Giới hạn tải lên (Daily Limit).',
     type: 'int',
