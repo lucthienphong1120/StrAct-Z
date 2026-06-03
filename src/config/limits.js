@@ -34,7 +34,8 @@ const LIMITS = {
     label: 'Tăng trọng số cho quận hoạt động gần nhất và lân cận.',
     desc_extra: 'Tác dụng: Quận hoạt động gần nhất (đã upload) và các quận lân cận sẽ được cộng thêm +1.5 trọng số.',
     type: 'bool',
-    default: true
+    default: true,
+    weight: 1.5
   },
 
   // ─── 📍 Map & Priority Areas ──────────────────────────────────────────
@@ -88,7 +89,11 @@ const LIMITS = {
     label: 'Ưu tiên khu vực hoạt động.',
     type: 'map',
     desc_extra: 'Tác dụng: Tỉ lệ chọn các quận mặc định là 1:1, các quận giao với vùng phủ sóng của Nhà/Công ty sẽ được cộng thêm trọng số boost dựa trên tỷ lệ diện tích giao nhau (Ratio = Giao nhau / Diện tích hình nhỏ hơn).',
-    example: 'Ratio >= 0.85 (Fully), Ratio >= 0.35 (Mostly), Ratio > 0 (Partially).'
+    example: 'Ratio >= 0.85 (Fully), Ratio >= 0.35 (Mostly), Ratio > 0 (Partially).',
+    weights: {
+      home: { fully: 4.5, mostly: 3.2, partially: 1.5 },
+      work: { fully: 2.8, mostly: 1.5, partially: 0.8 }
+    }
   },
 
   // ─── ⏱️ Time Configuration ─────────────────────────────────────────────────
@@ -204,7 +209,8 @@ const LIMITS = {
     label: 'Hệ số khoảng cách (Distance Multipliers).',
     type: 'map',
     desc_extra: 'Tác dụng: Điều chỉnh độ dài lộ trình thực tế dựa trên hệ số cơ bản.',
-    example: 'Ví dụ: Ride 2.3x có nghĩa là cùng một lộ trình 10km, đạp xe sẽ đi được 23km.'
+    example: 'Ví dụ: Ride 2.3x có nghĩa là cùng một lộ trình 10km, đạp xe sẽ đi được 23km.',
+    default: { Walk: 0.55, Ride: 2.3, Run: 1.0 }
   },
   heart_rate_enabled: {
     label: 'Dữ liệu nhịp tim (Heart Rate).',
@@ -264,7 +270,8 @@ const LIMITS = {
     label: 'Hệ số tốc độ (Pace Multipliers).',
     type: 'map',
     desc_extra: 'Tác dụng: Điều chỉnh tốc độ chạy thực tế so với hệ số cơ bản.',
-    example: 'Ví dụ: Walk 1.7x có nghĩa là nhịp độ đi bộ sẽ chậm hơn 70% so với khi chạy bộ.'
+    example: 'Ví dụ: Walk 1.7x có nghĩa là nhịp độ đi bộ sẽ chậm hơn 70% so với khi chạy bộ.',
+    default: { Walk: 1.7, Ride: 0.45, Run: 1.0 }
   },
   sim_weather: {
     label: 'Giả lập thời tiết (Weather Sim).',

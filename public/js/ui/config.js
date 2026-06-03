@@ -64,6 +64,46 @@ function applyLimitsToUI() {
   // Map Info Display is now handled by updateMapStatsUI() in map.js
   if (window.updateMapStatsUI) window.updateMapStatsUI();
 
+  // Populate Distance Multipliers
+  const distMults = sysL.dist_multipliers?.default;
+  if (distMults) {
+    const dWalk = document.getElementById('distMultWalk');
+    const dRide = document.getElementById('distMultRide');
+    const dRun = document.getElementById('distMultRun');
+    if (dWalk) dWalk.textContent = `${distMults.Walk}x`;
+    if (dRide) dRide.textContent = `${distMults.Ride}x`;
+    if (dRun) dRun.textContent = `${distMults.Run}x`;
+  }
+
+  // Populate Pace Multipliers
+  const paceMults = sysL.pace_multipliers?.default;
+  if (paceMults) {
+    const pWalk = document.getElementById('paceMultWalk');
+    const pRide = document.getElementById('paceMultRide');
+    const pRun = document.getElementById('paceMultRun');
+    if (pWalk) pWalk.textContent = `${paceMults.Walk}x`;
+    if (pRide) pRide.textContent = `${paceMults.Ride}x`;
+    if (pRun) pRun.textContent = `${paceMults.Run}x`;
+  }
+
+  // Populate Area Weights
+  const areaWeights = sysL.activity_areas?.weights;
+  if (areaWeights) {
+    const whf = document.getElementById('weightHomeFully');
+    const whm = document.getElementById('weightHomeMostly');
+    const whp = document.getElementById('weightHomePartially');
+    const wwf = document.getElementById('weightWorkFully');
+    const wwm = document.getElementById('weightWorkMostly');
+    const wwp = document.getElementById('weightWorkPartially');
+
+    if (whf) whf.textContent = `+${areaWeights.home.fully}`;
+    if (whm) whm.textContent = `+${areaWeights.home.mostly}`;
+    if (whp) whp.textContent = `+${areaWeights.home.partially}`;
+    if (wwf) wwf.textContent = `+${areaWeights.work.fully}`;
+    if (wwm) wwm.textContent = `+${areaWeights.work.mostly}`;
+    if (wwp) wwp.textContent = `+${areaWeights.work.partially}`;
+  }
+
   attachRealTimeValidation();
 }
 

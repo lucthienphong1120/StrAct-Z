@@ -824,6 +824,13 @@ async function debugDistrictWeightRatios() {
       
       const distRadiusM = (d.radiusKm || 1.5) * 1000;
 
+      const sysL = window.sysLimits;
+      const areaWeights = sysL?.activity_areas?.weights || {
+        home: { fully: 4.5, mostly: 3.2, partially: 1.5 },
+        work: { fully: 2.8, mostly: 1.5, partially: 0.8 }
+      };
+      const adjBoostWeight = sysL?.boost_adjacent?.weight || 1.5;
+
       areas.forEach(area => {
         const distToArea = haversineDistance(d.lat, d.lng, area.lat, area.lng);
         const intersection = getCircleIntersectionArea(distRadiusM, area.radius, distToArea);
@@ -833,13 +840,13 @@ async function debugDistrictWeightRatios() {
         if (ratio > 0) {
           let boost = 0;
           if (area.type === 'home') {
-            if (ratio >= 0.85) boost = 4.5;
-            else if (ratio >= 0.35) boost = 3.2;
-            else boost = 1.5;
+            if (ratio >= 0.85) boost = areaWeights.home.fully;
+            else if (ratio >= 0.35) boost = areaWeights.home.mostly;
+            else boost = areaWeights.home.partially;
           } else if (area.type === 'work') {
-            if (ratio >= 0.85) boost = 2.8;
-            else if (ratio >= 0.35) boost = 1.5;
-            else boost = 0.8;
+            if (ratio >= 0.85) boost = areaWeights.work.fully;
+            else if (ratio >= 0.35) boost = areaWeights.work.mostly;
+            else boost = areaWeights.work.partially;
           }
           weight += boost;
           areaBoost += boost;
@@ -860,8 +867,8 @@ async function debugDistrictWeightRatios() {
             }
           }
           if (isAdjacent) {
-            weight += 1.5;
-            adjacentBoost += 1.5;
+            weight += adjBoostWeight;
+            adjacentBoost += adjBoostWeight;
           }
         }
       }

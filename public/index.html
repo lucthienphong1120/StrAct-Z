@@ -29,7 +29,7 @@
         <div class="logo-icon">🏃</div>
         <span class="logo-text">StrAct Z</span>
         <small
-          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.53.1</small>
+          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.54.0</small>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -321,15 +321,15 @@
                     style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
                     <div style="text-align:center;">
                       <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">WALK</div>
-                      <div style="color:var(--text-primary); font-size: 0.9rem;">0.55x</div>
+                      <div id="distMultWalk" style="color:var(--text-primary); font-size: 0.9rem;">--</div>
                     </div>
                     <div style="text-align:center;">
                       <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">RIDE</div>
-                      <div style="color:var(--text-primary); font-size: 0.9rem;">2.3x</div>
+                      <div id="distMultRide" style="color:var(--text-primary); font-size: 0.9rem;">--</div>
                     </div>
                     <div style="text-align:center;">
                       <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">RUN</div>
-                      <div style="color:var(--text-primary); font-size: 0.9rem;">1.0x</div>
+                      <div id="distMultRun" style="color:var(--text-primary); font-size: 0.9rem;">--</div>
                     </div>
                   </div>
                 </div>
@@ -402,15 +402,15 @@
                     style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; background:rgba(255,255,255,0.03); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border);">
                     <div style="text-align:center;">
                       <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">WALK</div>
-                      <div style="color:var(--text-primary); font-size: 0.9rem;">1.7x</div>
+                      <div id="paceMultWalk" style="color:var(--text-primary); font-size: 0.9rem;">--</div>
                     </div>
                     <div style="text-align:center;">
                       <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">RIDE</div>
-                      <div style="color:var(--text-primary); font-size: 0.9rem;">0.45x</div>
+                      <div id="paceMultRide" style="color:var(--text-primary); font-size: 0.9rem;">--</div>
                     </div>
                     <div style="text-align:center;">
                       <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase;">RUN</div>
-                      <div style="color:var(--text-primary); font-size: 0.9rem;">1.0x</div>
+                      <div id="paceMultRun" style="color:var(--text-primary); font-size: 0.9rem;">--</div>
                     </div>
                   </div>
                 </div>
@@ -584,15 +584,15 @@
                   <tbody>
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
                       <td style="padding: 6px 10px; color: #fb923c;">🏠 Home (Orange)</td>
-                      <td style="text-align:center; padding: 6px;">+4.5</td>
-                      <td style="text-align:center; padding: 6px;">+3.2</td>
-                      <td style="text-align:center; padding: 6px;">+1.5</td>
+                      <td id="weightHomeFully" style="text-align:center; padding: 6px;">--</td>
+                      <td id="weightHomeMostly" style="text-align:center; padding: 6px;">--</td>
+                      <td id="weightHomePartially" style="text-align:center; padding: 6px;">--</td>
                     </tr>
                     <tr>
                       <td style="padding: 6px 10px; color: #60a5fa;">💼 Work (Blue)</td>
-                      <td style="text-align:center; padding: 6px;">+2.8</td>
-                      <td style="text-align:center; padding: 6px;">+1.5</td>
-                      <td style="text-align:center; padding: 6px;">+0.8</td>
+                      <td id="weightWorkFully" style="text-align:center; padding: 6px;">--</td>
+                      <td id="weightWorkMostly" style="text-align:center; padding: 6px;">--</td>
+                      <td id="weightWorkPartially" style="text-align:center; padding: 6px;">--</td>
                     </tr>
                   </tbody>
                 </table>

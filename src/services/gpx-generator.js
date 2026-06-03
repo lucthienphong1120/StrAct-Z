@@ -194,26 +194,29 @@ async function generateActivity(config = {}) {
   let finalMinHR = 80;
   let finalMaxHR = 160;
 
+  const distMults = limits.dist_multipliers?.default || { Walk: 0.55, Ride: 2.3, Run: 1.0 };
+  const paceMults = limits.pace_multipliers?.default || { Walk: 1.7, Ride: 0.45, Run: 1.0 };
+
   if (finalActivityType === 'Walk') {
-    finalMinDist = minDistanceKm * 0.55;
-    finalMaxDist = maxDistanceKm * 0.55;
-    finalMinPace = minPace * 1.7;
-    finalMaxPace = maxPace * 1.7;
+    finalMinDist = minDistanceKm * distMults.Walk;
+    finalMaxDist = maxDistanceKm * distMults.Walk;
+    finalMinPace = minPace * paceMults.Walk;
+    finalMaxPace = maxPace * paceMults.Walk;
     // HR Zones from config
     finalMinHR = Math.round(mhr * limits.hr_zones.Walk.min);
     finalMaxHR = Math.round(mhr * limits.hr_zones.Walk.max);
   } else if (finalActivityType === 'Ride') {
-    finalMinDist = minDistanceKm * 2.3;
-    finalMaxDist = maxDistanceKm * 2.3;
-    finalMinPace = minPace * 0.45;
-    finalMaxPace = maxPace * 0.45;
+    finalMinDist = minDistanceKm * distMults.Ride;
+    finalMaxDist = maxDistanceKm * distMults.Ride;
+    finalMinPace = minPace * paceMults.Ride;
+    finalMaxPace = maxPace * paceMults.Ride;
     finalMinHR = Math.round(mhr * limits.hr_zones.Ride.min);
     finalMaxHR = Math.round(mhr * limits.hr_zones.Ride.max);
   } else { // Run
-    finalMinDist = minDistanceKm;
-    finalMaxDist = maxDistanceKm;
-    finalMinPace = minPace * 1.0;
-    finalMaxPace = maxPace * 1.0;
+    finalMinDist = minDistanceKm * (distMults.Run || 1.0);
+    finalMaxDist = maxDistanceKm * (distMults.Run || 1.0);
+    finalMinPace = minPace * (paceMults.Run || 1.0);
+    finalMaxPace = maxPace * (paceMults.Run || 1.0);
     finalMinHR = Math.round(mhr * limits.hr_zones.Run.min);
     finalMaxHR = Math.round(mhr * limits.hr_zones.Run.max);
   }
@@ -247,14 +250,18 @@ async function generateActivity(config = {}) {
         const ratio = minArea > 0 ? intersectionArea / minArea : 0;
         
         if (ratio > 0) {
+          const areaWeights = limits.activity_areas?.weights || {
+            home: { fully: 4.5, mostly: 3.2, partially: 1.5 },
+            work: { fully: 2.8, mostly: 1.5, partially: 0.8 }
+          };
           if (area.type === 'home') {
-            if (ratio >= 0.85) weight += 4.5;      // Bao trọn / Nằm trọn
-            else if (ratio >= 0.35) weight += 3.2; // Nhiều
-            else weight += 1.5;                    // Ít
+            if (ratio >= 0.85) weight += areaWeights.home.fully;      // Bao trọn / Nằm trọn
+            else if (ratio >= 0.35) weight += areaWeights.home.mostly; // Nhiều
+            else weight += areaWeights.home.partially;                 // Ít
           } else if (area.type === 'work') {
-            if (ratio >= 0.85) weight += 2.8;      // Bao trọn / Nằm trọn
-            else if (ratio >= 0.35) weight += 1.5; // Nhiều
-            else weight += 0.8;                    // Ít
+            if (ratio >= 0.85) weight += areaWeights.work.fully;      // Bao trọn / Nằm trọn
+            else if (ratio >= 0.35) weight += areaWeights.work.mostly; // Nhiều
+            else weight += areaWeights.work.partially;                 // Ít
           }
         }
       });
@@ -280,7 +287,8 @@ async function generateActivity(config = {}) {
             }
           }
           if (isAdjacent) {
-            weight += 1.5;
+            const adjBoostWeight = limits.boost_adjacent?.weight || 1.5;
+            weight += adjBoostWeight;
           }
         }
       }
