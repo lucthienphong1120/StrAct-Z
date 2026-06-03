@@ -150,7 +150,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] điều chỉnh Boost Adjacent bao gồm cả quận của hoạt động gần nhất và tăng trọng số lên +1.5 (v1.53.0)
 + [x] điều chỉnh trọng số các mức bao phủ Home (+4.5/+3.2/+1.5) và Work (+2.8/+1.5/+0.8) (v1.53.1)
 + [x] quy hoạch toàn bộ hằng số trọng số và hệ số nhân thuật toán về limits.js làm nguồn chân lý duy nhất (Source of Truth) và cập nhật động toàn bộ UI/Frontend (v1.54.0)
-
-
-
-
++ [ ] check lại schedule nếu nhiều hoạt động sẽ gen từng cái 1 và có delay, kiểm tra overlap time, nếu ko phù hợp vẫn có thể 1 uploaded 1 failed
