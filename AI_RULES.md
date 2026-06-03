@@ -62,7 +62,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Detailed Activity Type Hints on UI**:
   - Updated the Activity Type description text shown directly below the dropdown selector in the UI.
   - Descriptions are dynamically mapped and translated as follows:
-    - Random (misc): `🎲 55% Run, 30% Walk, 15% Ride (Tùy chọn mặc định)`
+    - Random (misc): `🎲 55% Run, 30% Walk, 15% Ride`
     - Random (rush): `🎲 70% Ride, 20% Run, 10% Walk`
     - Run: `🎲 90% Run, 5% Walk, 5% Ride`
     - Walk: `🎲 90% Walk, 5% Run, 5% Ride`

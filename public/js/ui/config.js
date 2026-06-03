@@ -60,7 +60,7 @@ function applyLimitsToUI() {
   setZone('hrZoneWalk', hrZones.Walk);
   setZone('hrZoneRide', hrZones.Ride);
   setZone('hrZoneRun', hrZones.Run);
-  
+
   // Map Info Display is now handled by updateMapStatsUI() in map.js
   if (window.updateMapStatsUI) window.updateMapStatsUI();
 
@@ -120,13 +120,13 @@ function updateDynamicTooltips() {
 
 function buildTooltipText(cfg) {
   if (!cfg.label) return '';
-  
+
   if (cfg.type === 'info') {
     const lines = [cfg.label];
     if (cfg.desc_extra) lines.push(cfg.desc_extra);
     return lines.join('\n');
   }
-  
+
   if (cfg.type === 'map') {
     const lines = [cfg.label];
     if (cfg.desc_extra) lines.push(cfg.desc_extra);
@@ -156,22 +156,22 @@ function buildTooltipText(cfg) {
     if (cfg.desc_extra.startsWith('Tác dụng:')) lines.push(cfg.desc_extra);
     else lines.push(`(${cfg.desc_extra})`);
   }
-  
+
   lines.push(`Kiểu: ${cfg.type}`);
-  
+
   let defVal = cfg.default_label || cfg.default;
   if (typeof defVal === 'object' && defVal !== null) {
     if (defVal.start && defVal.end) defVal = `${defVal.start} - ${defVal.end}`;
     else if (defVal.start1) defVal = `${defVal.start1}-${defVal.end1} & ${defVal.start2}-${defVal.end2}`;
     else defVal = JSON.stringify(defVal);
   }
-  
+
   const unitStr = (cfg.unit && defVal !== 'Hôm nay') ? ' ' + cfg.unit : '';
   lines.push(`Mặc định: ${defVal}${unitStr}`);
-  
+
   const rangeStr = buildRangeString(cfg);
   if (rangeStr) lines.push(`Phạm vi: ${rangeStr}`);
-  
+
   return lines.join('\n');
 }
 
@@ -198,7 +198,7 @@ function buildRangeString(cfg) {
 async function loadConfig() {
   try {
     const config = await api('/config');
-    
+
     const container = document.getElementById('cfgDistricts');
     if (container) {
       const selectedKeys = config.selected_districts ? config.selected_districts.split(',') : [];
@@ -206,7 +206,7 @@ async function loadConfig() {
       container.style.display = 'grid';
       container.style.gridTemplateColumns = 'repeat(3, 1fr)';
       container.style.gap = '10px';
-      
+
       window.sysDistricts.forEach(d => {
         let isChecked = '';
         if (config.selected_districts !== undefined) {
@@ -215,7 +215,7 @@ async function loadConfig() {
           const isDefault = d.groups && d.groups.includes('default');
           isChecked = isDefault ? 'checked' : '';
         }
-        
+
         const label = document.createElement('label');
         label.className = 'toggle';
         label.style.fontSize = '0.8rem';
@@ -225,16 +225,16 @@ async function loadConfig() {
           <div class="toggle-track" style="transform:scale(0.8)"></div>
           <span>${d.name}</span>
         `;
-        
+
         const cb = label.querySelector('input');
         cb.addEventListener('change', () => {
           updateSelectedDistrictKeys();
           updateDistrictHighlights();
         });
-        
+
         container.appendChild(label);
       });
-      
+
       updateSelectedDistrictKeys();
     }
 
@@ -246,7 +246,7 @@ async function loadConfig() {
 
     const boostAdjacentToggle = document.getElementById('cfgBoostAdjacent');
     if (boostAdjacentToggle) boostAdjacentToggle.checked = config.boost_adjacent !== 'false';
-    
+
     const setVal = (id, val) => {
       const el = document.getElementById(id);
       if (el) el.value = val;
@@ -258,7 +258,7 @@ async function loadConfig() {
 
     const today = new Date().toLocaleDateString('en-CA');
     setVal('cfgTargetDate', today);
-    
+
     setChecked('cfgCustomTime', config.custom_time_enabled === 'true');
     setVal('cfgCustomMinTime', config.target_time_custom || '00:00');
     toggleCustomTime();
@@ -280,11 +280,11 @@ async function loadConfig() {
     setVal('cfgDeviceName', config.device_name || 'Garmin Forerunner 975');
     setChecked('cfgHeartRate', config.heart_rate_enabled === 'true');
     setVal('cfgUserAge', config.user_age || '25');
-    updateMHR(); 
-    
+    updateMHR();
+
     setChecked('cfgSimWeather', config.sim_weather !== 'false');
     setChecked('cfgSimRedLights', config.sim_redlights !== 'false');
-    
+
     toggleHRInputs();
 
 
@@ -308,7 +308,7 @@ async function loadConfig() {
     if (config.activity_areas) {
       renderCircles(config.activity_areas);
     }
-    
+
     if (window.updateMapStatsUI) window.updateMapStatsUI();
   } catch (err) { console.error('Config error:', err); }
 }
@@ -468,7 +468,7 @@ function validateInputs(config, isRealTime = false) {
 
 function attachRealTimeValidation() {
   const inputs = [
-    'cfgMaxSpan', 'cfgOverlapProtection', 'cfgRestTime', 'cfgMinDist', 'cfgMaxDist', 
+    'cfgMaxSpan', 'cfgOverlapProtection', 'cfgRestTime', 'cfgMinDist', 'cfgMaxDist',
     'cfgMinPace', 'cfgMaxPace', 'cfgUserAge'
   ];
 
@@ -580,11 +580,11 @@ function getOverrideConfig() {
   if (!validateTimeBounds(overrideConfig.min_time, overrideConfig.max_time, overrideConfig.target_date, isCustomTime)) {
     return null;
   }
-  
+
   if (!validateInputs(overrideConfig)) {
     return null;
   }
-  
+
   return overrideConfig;
 }
 
@@ -624,7 +624,7 @@ function toggleCustomTime() {
   const isCustom = document.getElementById('cfgCustomTime').checked;
   const customInputs = document.getElementById('timeCustomInputs');
   const randomInputs = document.getElementById('timeRandomInputs');
-  
+
   if (isCustom) {
     customInputs.style.opacity = '1';
     customInputs.style.pointerEvents = 'auto';
@@ -642,7 +642,7 @@ function updateActivityTypeHint() {
   const type = document.getElementById('cfgActivityType').value;
   const hint = document.getElementById('activityTypeHint');
   if (type === 'Random (misc)') {
-    hint.textContent = '🎲 55% Run, 30% Walk, 15% Ride (Tùy chọn mặc định)';
+    hint.textContent = '🎲 55% Run, 30% Walk, 15% Ride';
   } else if (type === 'Random (rush)') {
     hint.textContent = '🎲 70% Ride, 20% Run, 10% Walk';
   } else if (type === 'Run') {
@@ -661,7 +661,7 @@ function toggleHRInputs() {
   const hrEnabled = document.getElementById('cfgHeartRate').checked;
   const ageInput = document.getElementById('cfgUserAge');
   const mhrInput = document.getElementById('cfgMaxHR');
-  
+
   if (ageInput) {
     ageInput.disabled = !hrEnabled;
     ageInput.closest('.form-group').style.opacity = hrEnabled ? '1' : '0.4';
@@ -705,15 +705,15 @@ async function refreshGoogleFitStats(forceRefresh = false) {
   const statusText = document.getElementById('gfStatusText');
   const stepsEl = document.getElementById('gfTodaySteps');
   const syncEl = document.getElementById('gfLastSync');
-  
+
   if (!statusText) return;
   if (forceRefresh) statusText.textContent = 'Refreshing...';
-  
+
   try {
     const refreshQuery = forceRefresh ? '?refresh=true' : '';
     const data = await api(`/google-fit/stats${refreshQuery}`);
     if (data.error) throw new Error(data.error);
-    
+
     if (stepsEl) stepsEl.textContent = data.steps.toLocaleString();
     if (syncEl) {
       const time = new Date(data.lastUpdate).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
