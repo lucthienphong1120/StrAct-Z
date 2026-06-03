@@ -59,7 +59,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     if (await stravaApi.isAuthenticated(accountId)) {
       try {
         const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
-        stravaActivities = await stravaApi.getActivities(accountId, 1, 50, after);
+        stravaActivities = await stravaApi.getActivities(accountId, 1, 50, after, true);
         stravaActivities = stravaActivities.filter(a => (a.start_date_local || a.start_date).startsWith(targetDate));
       } catch (e) { console.warn(`[Scheduler] Strava fetch failed for account ${accountId}`); }
     }

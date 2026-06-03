@@ -200,7 +200,24 @@ router.get('/insights', async (req, res) => {
       console.log(`[Cloud Sync] Refreshed insights for user ${req.user.id}. Found ${activities.length} acts since ${new Date(after*1000).toISOString()}`);
     }
     
-    res.json(activities);
+    // Enrich activities with is_stract_z flag
+    const localActivities = await db.getActivities(req.user.id, 1000).catch(() => []);
+    const localStravaIds = new Set(
+      localActivities
+        .filter(a => a.strava_activity_id)
+        .map(a => String(a.strava_activity_id))
+    );
+
+    const enrichedActivities = activities.map(a => {
+      const isStrActZ = (a.external_id && (a.external_id.startsWith('stract-z') || a.external_id.includes('stract-z'))) ||
+                        localStravaIds.has(String(a.id));
+      return {
+        ...a,
+        is_stract_z: !!isStrActZ
+      };
+    });
+
+    res.json(enrichedActivities);
   } catch (err) {
     console.error(`[Insights] Error getting insights for user ${req.user.id}:`, err);
     res.status(500).json({ error: err.message });
@@ -274,7 +291,7 @@ router.post('/generate', async (req, res) => {
     if (await stravaApi.isAuthenticated(req.user.id)) {
       try {
         const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
-        stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after);
+        stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after, true);
         stravaActivities = stravaActivities.filter(a => (a.start_date_local || a.start_date).startsWith(targetDate));
       } catch (e) { console.warn('Strava fetch failed for overlap check'); }
     }
@@ -354,7 +371,7 @@ router.post('/generate-and-upload', async (req, res) => {
     if (await stravaApi.isAuthenticated(req.user.id)) {
       try {
         const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
-        stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after);
+        stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after, true);
         stravaActivities = stravaActivities.filter(a => (a.start_date_local || a.start_date).startsWith(targetDate));
       } catch (e) { console.warn('Strava fetch failed for overlap check'); }
     }
@@ -460,7 +477,7 @@ router.post('/upload/:id', async (req, res) => {
     if (await stravaApi.isAuthenticated(req.user.id)) {
       try {
         const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
-        stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after);
+        stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after, true);
         stravaActivities = stravaActivities.filter(a => (a.start_date_local || a.start_date).startsWith(targetDate));
       } catch (e) { console.warn('Strava fetch failed for limit check'); }
     }

@@ -440,15 +440,35 @@ function updateActivityChart(activities, days = 14) {
 
   const barDatasets = [];
   for (let i = 0; i < maxDailyCount; i++) {
-    const data = rangeDays.map(date => {
-      return activitiesByDate[date].length > i ? 1 : 0;
+    const data = [];
+    const backgroundColors = [];
+    const borderColors = [];
+
+    rangeDays.forEach(date => {
+      const dayActs = activitiesByDate[date] || [];
+      if (dayActs.length > i) {
+        data.push(1);
+        const act = dayActs[i];
+        if (act && act.is_stract_z) {
+          backgroundColors.push('rgba(252, 76, 2, 0.35)');
+          borderColors.push('rgba(252, 76, 2, 1)');
+        } else {
+          backgroundColors.push('rgba(139, 92, 246, 0.35)');
+          borderColors.push('rgba(139, 92, 246, 1)');
+        }
+      } else {
+        data.push(0);
+        backgroundColors.push('rgba(252, 76, 2, 0.35)');
+        borderColors.push('rgba(252, 76, 2, 1)');
+      }
     });
+
     barDatasets.push({
       type: 'bar',
-      label: i === 0 ? 'Activities' : `Activity Slot ${i + 1}`,
+      label: `Activity Slot ${i + 1}`,
       data: data,
-      backgroundColor: 'rgba(252, 76, 2, 0.35)',
-      borderColor: 'rgba(252, 76, 2, 1)',
+      backgroundColor: backgroundColors,
+      borderColor: borderColors,
       borderWidth: 1,
       borderRadius: 2,
       stack: 'activities_stack',
@@ -473,6 +493,22 @@ function updateActivityChart(activities, days = 14) {
     data: {
       labels: rangeDays.map(d => d.split('-').slice(1).reverse().join('/')),
       datasets: [
+        {
+          type: 'bar',
+          label: 'StrAct Z',
+          data: [],
+          backgroundColor: 'rgba(252, 76, 2, 0.35)',
+          borderColor: 'rgba(252, 76, 2, 1)',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: 'Strava Cloud',
+          data: [],
+          backgroundColor: 'rgba(139, 92, 246, 0.35)',
+          borderColor: 'rgba(139, 92, 246, 1)',
+          borderWidth: 1
+        },
         ...barDatasets,
         {
           type: 'line',
@@ -559,12 +595,15 @@ function updateActivityChart(activities, days = 14) {
               const val = context.parsed.y;
               if (label.includes('Distance')) return `${label}: ${val.toFixed(1)} km`;
               if (label.includes('Duration')) return `${label}: ${val.toFixed(0)} min`;
-              if (label.includes('Activities') || label.includes('Slot')) {
-                if (label === 'Activities') {
+              if (label.includes('StrAct Z') || label.includes('Strava Cloud') || label.includes('Slot')) {
+                if (label === 'Activity Slot 1') {
                   const idx = context.dataIndex;
                   const date = rangeDays[idx];
                   const totalActs = activitiesByDate[date].length;
-                  return `Activities: ${totalActs}`;
+                  const dayActs = activitiesByDate[date] || [];
+                  const stractZCount = dayActs.filter(a => a.is_stract_z).length;
+                  const cloudCount = dayActs.length - stractZCount;
+                  return `Activities: ${totalActs} (StrAct Z: ${stractZCount}, Cloud: ${cloudCount})`;
                 }
                 return null;
               }

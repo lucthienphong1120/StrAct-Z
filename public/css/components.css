@@ -152,16 +152,40 @@
 .schedule-display {
   display: flex; align-items: center; gap: 12px;
   padding: 16px; border-radius: var(--radius-md);
-  background: rgba(245, 158, 11, 0.05);
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  background: rgba(75, 85, 99, 0.1);
+  border: 1px solid rgba(75, 85, 99, 0.2);
   margin-top: 1rem;
 }
 .schedule-time {
   font-size: 1.5rem; font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.schedule-label { font-size: 0.8rem; color: var(--text-secondary); opacity: 0.9; }
+
+/* Normal user theme & Normal theme preview */
+body.is-normal .schedule-display,
+body.theme-preview-normal.is-vip .schedule-display {
+  background: rgba(252, 76, 2, 0.05);
+  border: 1px solid rgba(252, 76, 2, 0.2);
+}
+body.is-normal .schedule-label,
+body.theme-preview-normal.is-vip .schedule-label {
+  color: var(--strava-orange);
+}
+
+/* VIP user theme (only when not previewing normal theme) */
+body.is-vip:not(.theme-preview-normal) .schedule-display {
+  background: rgba(245, 158, 11, 0.05);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+body.is-vip:not(.theme-preview-normal) .schedule-time {
   background: var(--gradient-vip);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
-.schedule-label { font-size: 0.8rem; color: var(--vip-gold); opacity: 0.9; }
+body.is-vip:not(.theme-preview-normal) .schedule-label {
+  color: var(--vip-gold);
+}
 
 /* ─── Pulse Animation ─────────────────────────────────── */
 .pulse { position: relative; }

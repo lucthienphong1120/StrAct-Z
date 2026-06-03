@@ -58,6 +58,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.52.2 (2026-06-03)
+- **Feature: Enriched Insights Chart & Hardened Limit Checks & Role-based Scheduler Colors**:
+  - Implemented visual split in Activity Insights chart: activities created by StrAct-Z are shown in orange, and other activities from Strava cloud are shown in purple. Added "StrAct Z" and "Strava Cloud" to the chart legend, and updated tooltips to display detailed splits.
+  - Hardened daily upload limit checks in the scheduler and API routes by bypassing cache (`forceRefresh = true` parameter) to ensure calculations are based on live cloud data.
+  - Standardized next auto-run display styling in scheduler card: neutral grey by default/fallback, Strava Orange for normal users and preview normal theme, and VIP Gold for active VIP users.
+
 ### v1.52.1 (2026-06-01)
 - **Fix: Restored lastUploaded Variable & Cleanup Stale Migrations**:
   - Restored missing `lastUploaded` query definition inside `/api/generate` and `/api/generate-and-upload` API endpoints.
