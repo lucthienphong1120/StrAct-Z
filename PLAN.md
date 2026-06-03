@@ -142,5 +142,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] đổi màu thông báo 22:00 & 14:00 với normal account (v1.52.2)
 + [x] bỏ line thời gian trong activity insights để tránh quá nhiều thông tin (v1.52.2)
 + [x] đổi line distance thành màu vàng (v1.52.2)
++ [x] điều chỉnh hệ số khoảng cách và pace của đi bộ và đạp xe cho thực tế hơn (v1.52.2)
+
 
 

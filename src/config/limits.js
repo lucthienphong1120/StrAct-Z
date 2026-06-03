@@ -108,7 +108,7 @@ const LIMITS = {
     label: 'Hệ số khoảng cách (Distance Multipliers).',
     type: 'map',
     desc_extra: 'Tác dụng: Điều chỉnh độ dài lộ trình thực tế so với cài đặt.',
-    example: 'Ví dụ: Ride 1.5x có nghĩa là cùng một lộ trình, đạp xe sẽ đi xa hơn 50%.'
+    example: 'Ví dụ: Ride 2.4x có nghĩa là cùng một lộ trình, đạp xe sẽ đi xa hơn 140%.'
   },
   max_distance_km: {
     label: 'Khoảng cách tối đa của hoạt động.',

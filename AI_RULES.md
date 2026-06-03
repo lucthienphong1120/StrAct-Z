@@ -27,9 +27,9 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Generator Integration**: Generator uses this MHR to scale intensity (Pace vs HR correlation).
 
 ### 2. Activity Type Multipliers
-- **Walking**: Distance x0.7 / Pace x1.25.
+- **Walking**: Distance x0.55 / Pace x1.4.
 - **Running**: Distance x1.0 / Pace x0.8.
-- **Cycling (Ride)**: Distance x1.5 / Pace x0.5.
+- **Cycling (Ride)**: Distance x2.4 / Pace x0.33.
 - These weights are applied in `gpx-generator.js` to ensure realistic pace and duration based on the activity type.
 
 ### 3. Duplicate Protection (Safe Time)

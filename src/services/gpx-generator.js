@@ -181,18 +181,18 @@ async function generateActivity(config = {}) {
   let finalMaxHR = 160;
 
   if (finalActivityType === 'Walk') {
-    finalMinDist = minDistanceKm * 0.7;
-    finalMaxDist = maxDistanceKm * 0.7;
-    finalMinPace = minPace * 1.25;
-    finalMaxPace = maxPace * 1.25;
+    finalMinDist = minDistanceKm * 0.55;
+    finalMaxDist = maxDistanceKm * 0.55;
+    finalMinPace = minPace * 1.4;
+    finalMaxPace = maxPace * 1.4;
     // HR Zones from config
     finalMinHR = Math.round(mhr * limits.hr_zones.Walk.min);
     finalMaxHR = Math.round(mhr * limits.hr_zones.Walk.max);
   } else if (finalActivityType === 'Ride') {
-    finalMinDist = minDistanceKm * 1.5;
-    finalMaxDist = maxDistanceKm * 1.5;
-    finalMinPace = minPace * 0.5;
-    finalMaxPace = maxPace * 0.5;
+    finalMinDist = minDistanceKm * 2.4;
+    finalMaxDist = maxDistanceKm * 2.4;
+    finalMinPace = minPace * 0.33;
+    finalMaxPace = maxPace * 0.33;
     finalMinHR = Math.round(mhr * limits.hr_zones.Ride.min);
     finalMaxHR = Math.round(mhr * limits.hr_zones.Ride.max);
   } else { // Run
