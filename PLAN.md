@@ -140,4 +140,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] tách insight chart các ô vuông màu cam cho event được tạo từ stract-z, ô màu tím là event từ cloud (v1.52.2)
 + [x] limit max event áp dụng cho tất cả event từ cloud, kể cả có tạo từ stract-z hay không (vd 1 ngày đã hoạt động thực đủ 5 event rồi thì schedule tạo ra event FAILED) (v1.52.2)
 + [x] đổi màu thông báo 22:00 & 14:00 với normal account (v1.52.2)
++ [x] bỏ line thời gian trong activity insights để tránh quá nhiều thông tin (v1.52.2)
++ [x] đổi line distance thành màu vàng (v1.52.2)
+
 

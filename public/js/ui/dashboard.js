@@ -481,10 +481,6 @@ function updateActivityChart(activities, days = 14) {
     return activitiesByDate[date].reduce((sum, a) => sum + (a.distance / 1000 || a.distance_km || 0), 0);
   });
 
-  const dailyTime = rangeDays.map(date => {
-    return activitiesByDate[date].reduce((sum, a) => sum + (a.moving_time / 60 || a.duration_min || 0), 0);
-  });
-
   if (window.activityChart) {
     window.activityChart.destroy();
   }
@@ -514,25 +510,13 @@ function updateActivityChart(activities, days = 14) {
           type: 'line',
           label: 'Distance (km)',
           data: dailyDist,
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
-          borderColor: 'rgba(59, 130, 246, 1)',
-          borderWidth: 2,
-          pointRadius: 3,
-          tension: 0.3,
-          fill: false,
-          yAxisID: 'y',
-        },
-        {
-          type: 'line',
-          label: 'Duration (min)',
-          data: dailyTime,
           backgroundColor: 'rgba(234, 179, 8, 0.05)',
           borderColor: 'rgba(234, 179, 8, 1)',
           borderWidth: 2,
           pointRadius: 3,
           tension: 0.3,
           fill: false,
-          yAxisID: 'y1',
+          yAxisID: 'y',
         }
       ]
     },
@@ -545,17 +529,8 @@ function updateActivityChart(activities, days = 14) {
           display: true,
           position: 'left',
           beginAtZero: true,
-          title: { display: true, text: 'km', color: 'rgba(59, 130, 246, 0.8)', font: { size: 10 } },
+          title: { display: true, text: 'km', color: 'rgba(234, 179, 8, 0.8)', font: { size: 10 } },
           grid: { color: 'rgba(255, 255, 255, 0.05)' },
-          ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { size: 10 } }
-        },
-        y1: {
-          type: 'linear',
-          display: true,
-          position: 'right',
-          beginAtZero: true,
-          title: { display: true, text: 'min', color: 'rgba(234, 179, 8, 0.8)', font: { size: 10 } },
-          grid: { drawOnChartArea: false },
           ticks: { color: 'rgba(255, 255, 255, 0.6)', font: { size: 10 } }
         },
         y2: {
@@ -594,7 +569,6 @@ function updateActivityChart(activities, days = 14) {
               const label = context.dataset.label;
               const val = context.parsed.y;
               if (label.includes('Distance')) return `${label}: ${val.toFixed(1)} km`;
-              if (label.includes('Duration')) return `${label}: ${val.toFixed(0)} min`;
               if (label.includes('StrAct Z') || label.includes('Strava Cloud') || label.includes('Slot')) {
                 if (label === 'Activity Slot 1') {
                   const idx = context.dataIndex;
