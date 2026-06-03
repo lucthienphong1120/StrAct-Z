@@ -1,22 +1,13 @@
 /**
  * StrAct Z - Centralized Configuration and Limits
  * This file defines all system constraints, UI ranges, and default values.
+ * Reorganized to match the exact visual display order on the UI.
  */
 
 const { getDefaultKeys } = require('./districts');
 
 const LIMITS = {
-  // ─── Hidden / System ──────────────────────────────────────────────────────
-  daily_upload_limit: {
-    label: 'Giới hạn tải lên (Daily Limit).',
-    type: 'int',
-    desc_extra: 'Tác dụng: Giới hạn số lượng hoạt động tải lên Strava mỗi ngày.',
-    default: 2,
-    min_range: { normal: 2, vip: 5 },
-    max_range: { normal: 2, vip: 5 }
-  },
-
-  // ─── Route Configuration ──────────────────────────────────────────────────
+  // ─── 🗺️ Route Configuration (Bản đồ & Lộ trình) ───────────────────────────
   selected_districts: {
     label: 'Các quận được phép tạo lộ trình.',
     type: 'array',
@@ -33,23 +24,6 @@ const LIMITS = {
     min: 1,
     max: { normal: 2, vip: 3 }
   },
-  overlap_protection_minutes: {
-    label: 'Thời gian đệm tối thiểu giữa các hoạt động để tránh trùng lặp.',
-    type: 'int',
-    default: 30,
-    min: 15,
-    max: { normal: 45, vip: 90 },
-    unit: 'phút'
-  },
-  rest_time_percent: {
-    label: 'Thời gian nghỉ sau hoạt động.',
-    desc_extra: 'Bằng 50% thời lượng hoạt động trước đó.',
-    type: 'int',
-    default: 50,
-    min: 0,
-    max: 100,
-    unit: '%'
-  },
   use_osrm: {
     label: 'Lộ trình đi theo đường thực tế qua OSRM.',
     desc_extra: 'Tắt để dùng đường chim bay fallback',
@@ -62,104 +36,8 @@ const LIMITS = {
     type: 'bool',
     default: true
   },
-  custom_time_enabled: {
-    label: 'Giới hạn thời gian cho ngày mục tiêu.',
-    type: 'bool',
-    default: false
-  },
-  target_time_custom: {
-    label: 'Thời gian cụ thể tạo hoạt động (Target Time).',
-    desc_extra: 'Tác dụng: Chỉ định thời gian cụ thể. Đặt 00:00 để tự động tạo ngẫu nhiên thời gian trong ngày.',
-    type: 'time',
-    default: '00:00'
-  },
-  random_time_bounds: {
-    label: 'Thời gian bắt đầu hoạt động ngẫu nhiên (24h).',
-    desc_extra: 'Định dạng 24:00',
-    type: 'time',
-    default: { start: '04:30', end: '21:30' }
-  },
-  avoid_workhours: {
-    label: 'Khung giờ không tạo hoạt động ngẫu nhiên (24h).',
-    desc_extra: 'Định dạng 24:00',
-    type: 'time',
-    default: {
-      start1: '08:00', end1: '11:30',
-      start2: '13:30', end2: '17:30'
-    }
-  },
-  target_date: {
-    label: 'Tạo hoạt động cho một ngày trong quá khứ.',
-    type: 'date',
-    default: 'Hôm nay',
-    min: 'today',
-    max: { normal: 7, vip: 30 }, // days ago
-    unit: 'ngày'
-  },
-  min_distance_km: {
-    label: 'Khoảng cách tối thiểu của hoạt động.',
-    type: 'float',
-    default: 0.5,
-    min: { normal: 0.2, vip: 0.1 },
-    max: { normal: 2.0, vip: 4.0 },
-    unit: 'km'
-  },
-  dist_multipliers: {
-    label: 'Hệ số khoảng cách (Distance Multipliers).',
-    type: 'map',
-    desc_extra: 'Tác dụng: Điều chỉnh độ dài lộ trình thực tế so với cài đặt.',
-    example: 'Ví dụ: Ride 2.3x có nghĩa là cùng một lộ trình, đạp xe sẽ đi xa hơn 130%.'
-  },
-  max_distance_km: {
-    label: 'Khoảng cách tối đa của hoạt động.',
-    type: 'float',
-    default: 8.0,
-    min: 2.0,
-    max: { normal: 10.0, vip: 15.0 },
-    unit: 'km'
-  },
 
-  // ─── Auto Schedule ────────────────────────────────────────────────────────
-  schedule_enabled: {
-    label: 'Tự động tạo hoạt động hàng ngày.',
-    type: 'bool',
-    default: false
-  },
-  schedule_time: {
-    label: 'Mốc thời gian 1 (24h).',
-    desc_extra: 'Thời gian hệ thống tự chạy hàng ngày 1. Định dạng 24:00',
-    type: 'time',
-    default: '22:00'
-  },
-  schedule_count: {
-    label: 'Số lượng khung giờ chạy tự động.',
-    type: 'int',
-    default: 1,
-    min: 1,
-    max: { normal: 1, vip: 2 }
-  },
-  schedule_time_2: {
-    label: 'Mốc thời gian 2 (24h).',
-    desc_extra: 'Thời gian hệ thống tự chạy hàng ngày 2. Định dạng 24:00',
-    type: 'time',
-    default: '14:00'
-  },
-  schedule_count_min: {
-    label: 'Số lượng hoạt động tối thiểu tạo tự động mỗi ngày.',
-    type: 'int',
-    default: 1,
-    min: 0,
-    max: 2
-  },
-  schedule_count_max: {
-    label: 'Số lượng hoạt động tối đa tạo tự động mỗi ngày.',
-    type: 'int',
-    default: 1,
-    min: 1,
-    max: 2
-  },
-
-  // ─── Activity Areas (Map) ─────────────────────────────────────────────────
+  // ─── 📍 Map View & Priority Areas (Vùng bản đồ & Vùng ưu tiên) ─────────────
   map_locked: {
     label: 'Khóa vị trí bản đồ.',
     desc_extra: 'Tác dụng: Khóa di chuyển và phóng to bản đồ bằng chuột để tránh vô tình thay đổi vị trí.',
@@ -213,7 +91,60 @@ const LIMITS = {
     example: 'Ratio >= 0.85 (Fully), Ratio >= 0.35 (Mostly), Ratio > 0 (Partially).'
   },
 
-  // ─── Activity Settings ────────────────────────────────────────────────────
+  // ─── ⏱️ Time Configuration (Cấu hình thời gian) ─────────────────────────────
+  overlap_protection_minutes: {
+    label: 'Thời gian đệm tối thiểu giữa các hoạt động để tránh trùng lặp.',
+    type: 'int',
+    default: 30,
+    min: 15,
+    max: { normal: 45, vip: 90 },
+    unit: 'phút'
+  },
+  rest_time_percent: {
+    label: 'Thời gian nghỉ sau hoạt động.',
+    desc_extra: 'Bằng 50% thời lượng hoạt động trước đó.',
+    type: 'int',
+    default: 50,
+    min: 0,
+    max: 100,
+    unit: '%'
+  },
+  custom_time_enabled: {
+    label: 'Giới hạn thời gian cho ngày mục tiêu.',
+    type: 'bool',
+    default: false
+  },
+  random_time_bounds: {
+    label: 'Thời gian bắt đầu hoạt động ngẫu nhiên (24h).',
+    desc_extra: 'Định dạng 24:00',
+    type: 'time',
+    default: { start: '04:30', end: '21:30' }
+  },
+  avoid_workhours: {
+    label: 'Khung giờ không tạo hoạt động ngẫu nhiên (24h).',
+    desc_extra: 'Định dạng 24:00',
+    type: 'time',
+    default: {
+      start1: '08:00', end1: '11:30',
+      start2: '13:30', end2: '17:30'
+    }
+  },
+  target_date: {
+    label: 'Tạo hoạt động cho một ngày trong quá khứ.',
+    type: 'date',
+    default: 'Hôm nay',
+    min: 'today',
+    max: { normal: 7, vip: 30 }, // days ago
+    unit: 'ngày'
+  },
+  target_time_custom: {
+    label: 'Thời gian cụ thể tạo hoạt động (Target Time).',
+    desc_extra: 'Tác dụng: Chỉ định thời gian cụ thể. Đặt 00:00 để tự động tạo ngẫu nhiên thời gian trong ngày.',
+    type: 'time',
+    default: '00:00'
+  },
+
+  // ─── ⚙️ Activity Settings (Cấu hình hoạt động) ─────────────────────────────
   activity_type: {
     label: 'Loại hoạt động (Activity Type).',
     desc_extra: 'Tác dụng: Tỉ lệ tạo ngẫu nhiên từng loại hoạt động.',
@@ -252,6 +183,28 @@ const LIMITS = {
     ],
     min: 1,
     max: 1
+  },
+  min_distance_km: {
+    label: 'Khoảng cách tối thiểu của hoạt động.',
+    type: 'float',
+    default: 0.5,
+    min: { normal: 0.5, vip: 0.2 },
+    max: { normal: 2.0, vip: 5.0 },
+    unit: 'km'
+  },
+  max_distance_km: {
+    label: 'Khoảng cách tối đa của hoạt động.',
+    type: 'float',
+    default: 8.0,
+    min: 2.0,
+    max: { normal: 10.0, vip: 15.0 },
+    unit: 'km'
+  },
+  dist_multipliers: {
+    label: 'Hệ số khoảng cách (Distance Multipliers).',
+    type: 'map',
+    desc_extra: 'Tác dụng: Điều chỉnh độ dài lộ trình thực tế dựa trên hệ số cơ bản.',
+    example: 'Ví dụ: Ride 2.3x có nghĩa là cùng một lộ trình 10km, đạp xe sẽ đi được 23km.'
   },
   heart_rate_enabled: {
     label: 'Dữ liệu nhịp tim (Heart Rate).',
@@ -310,8 +263,8 @@ const LIMITS = {
   pace_multipliers: {
     label: 'Hệ số tốc độ (Pace Multipliers).',
     type: 'map',
-    desc_extra: 'Tác dụng: Điều chỉnh tốc độ chạy thực tế so với Pace cài đặt.',
-    example: 'Ví dụ: Walk 1.7x có nghĩa là đi bộ sẽ chậm hơn 70% so với Pace cơ bản (Chạy bộ).'
+    desc_extra: 'Tác dụng: Điều chỉnh tốc độ chạy thực tế so với hệ số cơ bản.',
+    example: 'Ví dụ: Walk 1.7x có nghĩa là nhịp độ đi bộ sẽ chậm hơn 70% so với khi chạy bộ.'
   },
   sim_weather: {
     label: 'Giả lập thời tiết (Weather Sim).',
@@ -324,6 +277,56 @@ const LIMITS = {
     desc_extra: 'Tác dụng: Tăng Elapsed Time, Giảm Avg Pace, Giảm HR. Xác suất: 1.5% mỗi điểm, dừng 15-60s',
     type: 'bool',
     default: true
+  },
+
+  // ─── ⏰ Auto Schedule (Chạy tự động hàng ngày) ──────────────────────────────
+  schedule_enabled: {
+    label: 'Tự động tạo hoạt động hàng ngày.',
+    type: 'bool',
+    default: false
+  },
+  schedule_time: {
+    label: 'Mốc thời gian 1 (24h).',
+    desc_extra: 'Thời gian hệ thống tự chạy hàng ngày 1. Định dạng 24:00',
+    type: 'time',
+    default: '22:00'
+  },
+  schedule_count: {
+    label: 'Số lượng khung giờ chạy tự động.',
+    type: 'int',
+    default: 1,
+    min: 1,
+    max: { normal: 1, vip: 2 }
+  },
+  schedule_time_2: {
+    label: 'Mốc thời gian 2 (24h).',
+    desc_extra: 'Thời gian hệ thống tự chạy hàng ngày 2. Định dạng 24:00',
+    type: 'time',
+    default: '14:00'
+  },
+  schedule_count_min: {
+    label: 'Số lượng hoạt động tối thiểu tạo tự động mỗi ngày.',
+    type: 'int',
+    default: 1,
+    min: 0,
+    max: 2
+  },
+  schedule_count_max: {
+    label: 'Số lượng hoạt động tối đa tạo tự động mỗi ngày.',
+    type: 'int',
+    default: 1,
+    min: 1,
+    max: 2
+  },
+
+  // ─── 🛡️ Hidden / System / Other UI Info (Hệ thống & Thông tin khác) ───────────
+  daily_upload_limit: {
+    label: 'Giới hạn tải lên (Daily Limit).',
+    type: 'int',
+    desc_extra: 'Tác dụng: Giới hạn số lượng hoạt động tải lên Strava mỗi ngày.',
+    default: 2,
+    min_range: { normal: 2, vip: 5 },
+    max_range: { normal: 2, vip: 5 }
   },
   local_history: {
     label: 'Lịch sử hoạt động đã tạo (Local Generated History).',

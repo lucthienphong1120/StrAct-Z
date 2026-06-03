@@ -145,6 +145,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] điều chỉnh hệ số khoảng cách và pace của đi bộ và đạp xe cho thực tế hơn (v1.52.2)
 + [x] điều chỉnh bộ chọn activity type kèm trọng số ngẫu nhiên mới (Random misc/rush, Run, Walk, Ride) (v1.52.6)
 + [x] cập nhật mô tả chi tiết của từng loại hoạt động dưới bộ chọn dropdown, tự động hiển thị mô tả khi tải trang và khi reset (v1.52.7)
++ [x] sắp xếp lại thứ tự và chú thích nhóm thực tế của các cấu hình trong limits.js theo hiển thị trên UI (v1.52.8)
 
 
 
