@@ -40,8 +40,8 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     const role = await db.getAccountRole(accountId);
     const limits = systemLimits[role] || systemLimits.normal;
 
-    const minCount = parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : 1;
-    const maxCount = parseInt(config.schedule_count_max) >= 1 ? parseInt(config.schedule_count_max) : 2;
+    const minCount = parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : systemLimits.schedule_count_min.default;
+    const maxCount = parseInt(config.schedule_count_max) >= 1 ? parseInt(config.schedule_count_max) : systemLimits.schedule_count_max.default;
 
     // Random count within user config
     let taskCount = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
@@ -212,8 +212,8 @@ async function startScheduler(accountId) {
     return h * 60 + m;
   };
 
-  const time1 = config.schedule_time || '22:00';
-  const time2 = config.schedule_time_2 || '14:00';
+  const time1 = config.schedule_time || systemLimits.schedule_time.default;
+  const time2 = config.schedule_time_2 || systemLimits.schedule_time_2.default;
   const min1 = parseHM(time1);
   const min2 = parseHM(time2);
 
@@ -292,11 +292,11 @@ async function getStatus(accountId) {
   const count = parseInt(config.schedule_count) || 1;
   return {
     enabled: config.schedule_enabled === 'true',
-    scheduleTime: config.schedule_time || '22:00',
+    scheduleTime: config.schedule_time || systemLimits.schedule_time.default,
     scheduleCount: count,
-    scheduleTime2: config.schedule_time_2 || '14:00',
-    scheduleCountMin: parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : 1,
-    scheduleCountMax: parseInt(config.schedule_count_max) >= 0 ? parseInt(config.schedule_count_max) : 2,
+    scheduleTime2: config.schedule_time_2 || systemLimits.schedule_time_2.default,
+    scheduleCountMin: parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : systemLimits.schedule_count_min.default,
+    scheduleCountMax: parseInt(config.schedule_count_max) >= 0 ? parseInt(config.schedule_count_max) : systemLimits.schedule_count_max.default,
     isRunning: isRunning.get(accountId) || false,
     taskActive: scheduledTasks.has(accountId),
   };

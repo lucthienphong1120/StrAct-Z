@@ -3,6 +3,8 @@
  * Unifies the parameters built for generateActivity from database config and overrides.
  */
 
+const systemLimits = require('../config/limits');
+
 function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role = 'normal') {
   const ov = overrides;
   const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
@@ -34,7 +36,7 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
     userRole: role,
     boost_adjacent: String(ov.boost_adjacent !== undefined ? ov.boost_adjacent : config.boost_adjacent) !== 'false',
     last_district_keys: lastUploaded ? lastUploaded.district_keys : null,
-    deviceName: ov.device_name || config.device_name || 'Garmin Forerunner 975',
+    deviceName: ov.device_name || config.device_name || systemLimits.device_name.default,
   };
 }
 

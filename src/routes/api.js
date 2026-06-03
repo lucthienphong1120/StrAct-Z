@@ -415,7 +415,7 @@ router.post('/generate-and-upload', async (req, res) => {
       created_by: 'Manual',
     });
 
-    const deviceName = ov.device_name || config.device_name || 'Garmin Forerunner 975';
+    const deviceName = ov.device_name || config.device_name || systemLimits.device_name.default;
     const uploadResult = await stravaApi.uploadActivity(req.user.id, activity.filepath, {
       name: activity.activityName,
       description: deviceName,
@@ -490,7 +490,7 @@ router.post('/upload/:id', async (req, res) => {
     const gpxPath = path.join(__dirname, '..', '..', 'data', 'gpx', activity.gpx_file);
     if (!fs.existsSync(gpxPath)) return res.status(404).json({ error: 'GPX file not found' });
 
-    const deviceName = await db.getConfig(req.user.id, 'device_name') || 'Garmin Forerunner 975';
+    const deviceName = await db.getConfig(req.user.id, 'device_name') || systemLimits.device_name.default;
     let sportType = 'Run';
     if (activity.activity_name.includes('Đi bộ')) sportType = 'Walk';
     else if (activity.activity_name.includes('Đạp xe')) sportType = 'Ride';

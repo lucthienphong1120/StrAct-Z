@@ -299,27 +299,28 @@ async function loadConfig() {
     const today = new Date().toLocaleDateString('en-CA');
     setVal('cfgTargetDate', today);
 
+    const sysL = window.sysLimits;
     setChecked('cfgCustomTime', config.custom_time_enabled === 'true');
-    setVal('cfgCustomMinTime', config.target_time_custom || '00:00');
+    setVal('cfgCustomMinTime', config.target_time_custom || (sysL?.target_time_custom?.default) || '00:00');
     toggleCustomTime();
-    setVal('cfgRandMinTime', config.min_time || '04:30');
-    setVal('cfgRandMaxTime', config.max_time || '21:30');
-    setVal('cfgWorkStart1', config.work_start1 || '08:00');
-    setVal('cfgWorkEnd1', config.work_end1 || '11:30');
-    setVal('cfgWorkStart2', config.work_start2 || '13:30');
-    setVal('cfgWorkEnd2', config.work_end2 || '17:30');
+    setVal('cfgRandMinTime', config.min_time || (sysL?.random_time_bounds?.default?.start) || '04:30');
+    setVal('cfgRandMaxTime', config.max_time || (sysL?.random_time_bounds?.default?.end) || '21:30');
+    setVal('cfgWorkStart1', config.work_start1 || (sysL?.avoid_workhours?.default?.start1) || '08:00');
+    setVal('cfgWorkEnd1', config.work_end1 || (sysL?.avoid_workhours?.default?.end1) || '11:30');
+    setVal('cfgWorkStart2', config.work_start2 || (sysL?.avoid_workhours?.default?.start2) || '13:30');
+    setVal('cfgWorkEnd2', config.work_end2 || (sysL?.avoid_workhours?.default?.end2) || '17:30');
 
-    setVal('cfgMinDist', config.min_distance_km || '0.5');
-    setVal('cfgMaxDist', config.max_distance_km || '10');
-    setVal('cfgMinPace', config.min_pace || '7.0');
-    setVal('cfgMaxPace', config.max_pace || '15.0');
-    let actType = config.activity_type || 'Random (misc)';
+    setVal('cfgMinDist', config.min_distance_km || (sysL?.min_distance_km?.default ? String(sysL.min_distance_km.default) : '0.5'));
+    setVal('cfgMaxDist', config.max_distance_km || (sysL?.max_distance_km?.default ? String(sysL.max_distance_km.default) : '8.0'));
+    setVal('cfgMinPace', config.min_pace || (sysL?.min_pace?.default ? String(sysL.min_pace.default) : '8.0'));
+    setVal('cfgMaxPace', config.max_pace || (sysL?.max_pace?.default ? String(sysL.max_pace.default) : '12.0'));
+    let actType = config.activity_type || (sysL?.activity_type?.default) || 'Random (misc)';
     if (actType === 'Random') actType = 'Random (misc)';
     setVal('cfgActivityType', actType);
     updateActivityTypeHint();
-    setVal('cfgDeviceName', config.device_name || 'Garmin Forerunner 975');
+    setVal('cfgDeviceName', config.device_name || (sysL?.device_name?.default) || 'Garmin Forerunner 975');
     setChecked('cfgHeartRate', config.heart_rate_enabled === 'true');
-    setVal('cfgUserAge', config.user_age || '25');
+    setVal('cfgUserAge', config.user_age || (sysL?.user_age?.default ? String(sysL.user_age.default) : '25'));
     updateMHR();
 
     setChecked('cfgSimWeather', config.sim_weather !== 'false');
@@ -328,8 +329,8 @@ async function loadConfig() {
     toggleHRInputs();
 
 
-    setVal('cfgOverlapProtection', config.overlap_protection_minutes || '30');
-    setVal('cfgRestTime', config.rest_time_percent || '50');
+    setVal('cfgOverlapProtection', config.overlap_protection_minutes || (sysL?.overlap_protection_minutes?.default ? String(sysL.overlap_protection_minutes.default) : '30'));
+    setVal('cfgRestTime', config.rest_time_percent || (sysL?.rest_time_percent?.default ? String(sysL.rest_time_percent.default) : '50'));
 
     if (config.map_lat && config.map_lng && config.map_zoom) {
       window.savedMapState = {

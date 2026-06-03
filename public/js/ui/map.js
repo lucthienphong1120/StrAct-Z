@@ -138,7 +138,7 @@ function bindPopupToMarker(item, index) {
       <b style="color:${color}">${item.type.toUpperCase()}</b><br>
       <div style="margin:8px 0; font-size:0.8rem;">
         Radius: <b id="${popupId}">${item.circle.getRadius()}</b>m<br>
-        <input type="range" value="${item.circle.getRadius()}" min="2000" max="${window.sysLimits?.scale_radius?.max || 4000}" step="100" 
+        <input type="range" value="${item.circle.getRadius()}" min="${window.sysLimits?.scale_radius?.min || 2000}" max="${window.sysLimits?.scale_radius?.max || 4000}" step="100" 
           style="width:100%; margin-top:5px; accent-color:var(--strava-orange);" 
           oninput="document.getElementById('${popupId}').innerText = this.value; updateCircleRadius(${index}, this.value)">
       </div>
@@ -211,7 +211,7 @@ function addActivityCircle(type) {
   }
 
   const center = window.map.getCenter();
-  createCircleLayer(center.lat, center.lng, 2000, type);
+  createCircleLayer(center.lat, center.lng, window.sysLimits?.scale_radius?.min || 2000, type);
   updateMapStatsUI();
   showToast(`Đã thêm khu vực ${type.toUpperCase()}`, 'info');
 }
@@ -221,7 +221,8 @@ function updateCircleRadius(index, newRadius) {
   if (window.activityCircles[index]) {
     let r = parseInt(newRadius);
     const maxR = window.sysLimits?.scale_radius?.max || 4000;
-    if (r < 2000) r = 2000;
+    const minR = window.sysLimits?.scale_radius?.min || 2000;
+    if (r < minR) r = minR;
     if (r > maxR) r = maxR;
     window.activityCircles[index].circle.setRadius(r);
   }

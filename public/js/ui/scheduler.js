@@ -5,22 +5,23 @@
 async function loadSchedule() {
   try {
     const status = await api('/scheduler');
+    const sysL = window.sysLimits;
     document.getElementById('scheduleEnabled').checked = status.enabled;
-    document.getElementById('scheduleTime').value = status.scheduleTime || '22:00';
+    document.getElementById('scheduleTime').value = status.scheduleTime || (sysL?.schedule_time?.default) || '22:00';
     
     const slot2 = document.getElementById('scheduleSlot2');
     const btnAdd = document.getElementById('btnAddSchedule');
     if (status.scheduleCount >= 2) {
       slot2.style.display = 'block';
       btnAdd.style.display = 'none';
-      document.getElementById('scheduleTime2').value = status.scheduleTime2 || '14:00';
+      document.getElementById('scheduleTime2').value = status.scheduleTime2 || (sysL?.schedule_time_2?.default) || '14:00';
     } else {
       slot2.style.display = 'none';
       btnAdd.style.display = 'block';
     }
 
-    document.getElementById('scheduleCountMin').value = (status.scheduleCountMin !== undefined && status.scheduleCountMin !== null) ? status.scheduleCountMin : 1;
-    document.getElementById('scheduleCountMax').value = (status.scheduleCountMax !== undefined && status.scheduleCountMax !== null) ? status.scheduleCountMax : 2;
+    document.getElementById('scheduleCountMin').value = (status.scheduleCountMin !== undefined && status.scheduleCountMin !== null) ? status.scheduleCountMin : ((sysL?.schedule_count_min?.default) !== undefined ? sysL.schedule_count_min.default : 1);
+    document.getElementById('scheduleCountMax').value = (status.scheduleCountMax !== undefined && status.scheduleCountMax !== null) ? status.scheduleCountMax : ((sysL?.schedule_count_max?.default) !== undefined ? sysL.schedule_count_max.default : 2);
     updateScheduleDisplay(status);
   } catch (err) { console.error('Schedule error:', err); }
 }
