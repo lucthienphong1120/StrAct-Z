@@ -835,10 +835,10 @@ async function debugDistrictWeightRatios() {
           if (area.type === 'home') {
             if (ratio >= 0.85) boost = 4.5;
             else if (ratio >= 0.35) boost = 3.2;
-            else boost = 1.8;
+            else boost = 1.5;
           } else if (area.type === 'work') {
-            if (ratio >= 0.85) boost = 2.5;
-            else if (ratio >= 0.35) boost = 1.2;
+            if (ratio >= 0.85) boost = 2.8;
+            else if (ratio >= 0.35) boost = 1.5;
             else boost = 0.8;
           }
           weight += boost;

@@ -148,6 +148,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] sắp xếp lại thứ tự và chú thích nhóm thực tế của các cấu hình trong limits.js theo hiển thị trên UI (v1.52.8)
 + [x] cập nhật tên các card trên UI khớp với tên nhóm cấu hình trong limits.js và lược bỏ chú thích thừa (v1.52.9)
 + [x] điều chỉnh Boost Adjacent bao gồm cả quận của hoạt động gần nhất và tăng trọng số lên +1.5 (v1.53.0)
++ [x] điều chỉnh trọng số các mức bao phủ Home (+4.5/+3.2/+1.5) và Work (+2.8/+1.5/+0.8) (v1.53.1)
 
 
 

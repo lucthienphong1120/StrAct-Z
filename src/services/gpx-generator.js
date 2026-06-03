@@ -250,10 +250,10 @@ async function generateActivity(config = {}) {
           if (area.type === 'home') {
             if (ratio >= 0.85) weight += 4.5;      // Bao trọn / Nằm trọn
             else if (ratio >= 0.35) weight += 3.2; // Nhiều
-            else weight += 1.8;                    // Ít
+            else weight += 1.5;                    // Ít
           } else if (area.type === 'work') {
-            if (ratio >= 0.85) weight += 2.5;      // Bao trọn / Nằm trọn
-            else if (ratio >= 0.35) weight += 1.2; // Nhiều
+            if (ratio >= 0.85) weight += 2.8;      // Bao trọn / Nằm trọn
+            else if (ratio >= 0.35) weight += 1.5; // Nhiều
             else weight += 0.8;                    // Ít
           }
         }

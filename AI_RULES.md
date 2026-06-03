@@ -58,6 +58,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.53.1 (2026-06-03)
+- **Feature: Adjusted Priority Area Coverage Weights**:
+  - Updated Home coverage weights to `+4.5 (Fully) / +3.2 (Mostly) / +1.5 (Partially)`.
+  - Updated Work coverage weights to `+2.8 (Fully) / +1.5 (Mostly) / +0.8 (Partially)`.
+  - Synchronized these new weight definitions across backend GPX generator, frontend dashboard weight analyzer, and HTML weight legend table.
+
 ### v1.53.0 (2026-06-03)
 - **Feature: Upgraded Adjacent District Boost**:
   - Modified Adjacent Boost logic to apply to both the district of the most recent activity itself and all its adjacent (neighboring) districts.
