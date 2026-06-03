@@ -61,8 +61,8 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 ### v1.54.0 (2026-06-03)
 - **Feature: Centralized Config Constants under limits.js**:
   - Unified all priority area weights, adjacent boost weights, and activity distance/pace multipliers into `src/config/limits.js` as the single source of truth.
-  - Rewrote backend [gpx-generator.js](file:///c:/Users/chungnd2/Downloads/StrAct-Z/src/services/gpx-generator.js) to import and read weights dynamically from the configuration.
-  - Replaced hardcoded values in frontend HTML files and debugger helper [dashboard.js](file:///c:/Users/chungnd2/Downloads/StrAct-Z/public/js/ui/dashboard.js) with dynamic DOM interpolation and configuration loading.
+  - Rewrote backend [gpx-generator.js](src/services/gpx-generator.js) to import and read weights dynamically from the configuration.
+  - Replaced hardcoded values in frontend HTML files and debugger helper [dashboard.js](public/js/ui/dashboard.js) with dynamic DOM interpolation and configuration loading.
 
 ### v1.53.1 (2026-06-03)
 - **Feature: Adjusted Priority Area Coverage Weights**:
