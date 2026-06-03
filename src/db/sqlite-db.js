@@ -31,7 +31,7 @@ const DEFAULT_CONFIG = {
   work_end2: '17:30',
   min_distance_km: '0.5',
   max_distance_km: '8.0',
-  activity_type: 'Random',
+  activity_type: 'Random (misc)',
   heart_rate_enabled: 'true',
   user_age: '25',
   min_pace: '8.0',

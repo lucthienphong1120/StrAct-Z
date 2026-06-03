@@ -28,7 +28,7 @@
       <a href="/" class="logo">
         <div class="logo-icon">🏃</div>
         <span class="logo-text">StrAct Z</span>
-        <small style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.52.5</small>
+        <small style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.52.6</small>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -271,13 +271,13 @@
                   <label class="form-label">Activity Type <span class="tooltip-icon tooltip-right"
                       id="tipActivityType">?</span></label>
                   <select id="cfgActivityType" class="form-select" onchange="updateActivityTypeHint()">
-                    <option value="Random">Random</option>
+                    <option value="Random (misc)">Random (misc)</option>
+                    <option value="Random (rush)">Random (rush)</option>
                     <option value="Run">Run</option>
                     <option value="Walk">Walk</option>
                     <option value="Ride">Ride</option>
                   </select>
-                  <div id="activityTypeHint" style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">🎲 60%
-                    Run, 30% Walk, 10% Ride</div>
+                  <div id="activityTypeHint" style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">🎲 55% Run, 30% Walk, 15% Ride</div>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Device Name <span class="tooltip-icon tooltip-left"

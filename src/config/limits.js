@@ -216,18 +216,19 @@ const LIMITS = {
   // ─── Activity Settings ────────────────────────────────────────────────────
   activity_type: {
     label: 'Loại hoạt động (Activity Type).',
-    desc_extra: 'Tác dụng: Áp dụng hệ số nhân Dist/Pace riêng biệt cho từng loại.',
+    desc_extra: 'Tác dụng: Tỉ lệ tạo ngẫu nhiên từng loại hoạt động.',
     type: 'array',
-    default: 'Random',
-    default_label: 'Random (60% Run, 30% Walk, 10% Ride)',
-    choices: ['Random', 'Run', 'Walk', 'Ride'],
+    default: 'Random (misc)',
+    default_label: 'Random (misc) (55% Run, 30% Walk, 15% Ride)',
+    choices: ['Random (misc)', 'Random (rush)', 'Run', 'Walk', 'Ride'],
     min: 1,
     max: 1,
     weights: {
-      Random: { Run: 0.6, Walk: 0.3, Ride: 0.1 },
-      Run: { Run: 1.0, Walk: 0.0, Ride: 0.0 },
-      Walk: { Run: 0.0, Walk: 1.0, Ride: 0.0 },
-      Ride: { Run: 0.0, Walk: 0.0, Ride: 1.0 }
+      'Random (misc)': { Run: 0.55, Walk: 0.30, Ride: 0.15 },
+      'Random (rush)': { Run: 0.20, Walk: 0.10, Ride: 0.70 },
+      'Run': { Run: 0.90, Walk: 0.05, Ride: 0.05 },
+      'Walk': { Run: 0.05, Walk: 0.90, Ride: 0.05 },
+      'Ride': { Run: 0.05, Walk: 0.05, Ride: 0.90 }
     }
   },
   device_name: {
@@ -378,7 +379,7 @@ function getLimits(role = 'normal') {
 
   // Legacy compatibility
   result.hr_zones = LIMITS.heart_rate_zones[role];
-  result.activity_type_weights = LIMITS.activity_type.weights.Random;
+  result.activity_type_weights = LIMITS.activity_type.weights['Random (misc)'];
 
   // Dynamic value extraction for legacy code
   const getVal = (item, role) => {

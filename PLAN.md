@@ -143,6 +143,8 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] bỏ line thời gian trong activity insights để tránh quá nhiều thông tin (v1.52.2)
 + [x] đổi line distance thành màu vàng (v1.52.2)
 + [x] điều chỉnh hệ số khoảng cách và pace của đi bộ và đạp xe cho thực tế hơn (v1.52.2)
++ [x] điều chỉnh bộ chọn activity type kèm trọng số ngẫu nhiên mới (Random misc/rush, Run, Walk, Ride) (v1.52.6)
+
 
 
 

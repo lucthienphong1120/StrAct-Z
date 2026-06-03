@@ -273,7 +273,9 @@ async function loadConfig() {
     setVal('cfgMaxDist', config.max_distance_km || '10');
     setVal('cfgMinPace', config.min_pace || '7.0');
     setVal('cfgMaxPace', config.max_pace || '15.0');
-    setVal('cfgActivityType', config.activity_type || 'Random');
+    let actType = config.activity_type || 'Random (misc)';
+    if (actType === 'Random') actType = 'Random (misc)';
+    setVal('cfgActivityType', actType);
     setVal('cfgDeviceName', config.device_name || 'Garmin Forerunner 975');
     setChecked('cfgHeartRate', config.heart_rate_enabled === 'true');
     setVal('cfgUserAge', config.user_age || '25');
@@ -638,13 +640,20 @@ function toggleCustomTime() {
 function updateActivityTypeHint() {
   const type = document.getElementById('cfgActivityType').value;
   const hint = document.getElementById('activityTypeHint');
-  if (type === 'Random') {
-    hint.textContent = '\ud83c\udfb2 60% Run, 30% Walk, 10% Ride';
-    hint.style.display = 'block';
+  if (type === 'Random (misc)') {
+    hint.textContent = '🎲 55% Run, 30% Walk, 15% Ride';
+  } else if (type === 'Random (rush)') {
+    hint.textContent = '🎲 70% Ride, 20% Run, 10% Walk';
+  } else if (type === 'Run') {
+    hint.textContent = '🎲 90% Run, 5% Walk, 5% Ride';
+  } else if (type === 'Walk') {
+    hint.textContent = '🎲 90% Walk, 5% Run, 5% Ride';
+  } else if (type === 'Ride') {
+    hint.textContent = '🎲 90% Ride, 5% Run, 5% Walk';
   } else {
     hint.textContent = '100% ' + type;
-    hint.style.display = 'block';
   }
+  hint.style.display = 'block';
 }
 
 function toggleHRInputs() {

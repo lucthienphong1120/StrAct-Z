@@ -162,11 +162,25 @@ async function generateActivity(config = {}) {
   // Determine Activity Type
   let finalActivityType = activityType;
   if (activityType === 'Random') {
+    activityType = 'Random (misc)';
+  }
+  const weights = limits.activity_type?.weights?.[activityType];
+  if (weights) {
     const r = Math.random();
-    const w = limits.activity_type_weights;
-    if (r < w.Run) finalActivityType = 'Run';
-    else if (r < w.Run + w.Walk) finalActivityType = 'Walk';
-    else finalActivityType = 'Ride';
+    const runWeight = weights.Run || 0;
+    const walkWeight = weights.Walk || 0;
+    if (r < runWeight) {
+      finalActivityType = 'Run';
+    } else if (r < runWeight + walkWeight) {
+      finalActivityType = 'Walk';
+    } else {
+      finalActivityType = 'Ride';
+    }
+  } else {
+    // Fallback if weights mapping is not found
+    if (activityType.toLowerCase().includes('walk')) finalActivityType = 'Walk';
+    else if (activityType.toLowerCase().includes('ride')) finalActivityType = 'Ride';
+    else finalActivityType = 'Run';
   }
 
   // Adjust Pace, Distance, HR based on Activity Type

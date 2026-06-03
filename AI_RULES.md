@@ -58,6 +58,16 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.52.6 (2026-06-03)
+- **Feature: Dynamic Randomized Activity Type Weights**:
+  - Overhauled the Activity Type configuration dropdown to support detailed random weights for all select options:
+    - Random (misc) [Default]: 55% Run, 30% Walk, 15% Ride
+    - Random (rush): 70% Ride, 20% Run, 10% Walk
+    - Run: 90% Run, 5% Walk, 5% Ride
+    - Walk: 90% Walk, 5% Run, 5% Ride
+    - Ride: 90% Ride, 5% Run, 5% Walk
+  - Updated generator and UI tooltip components to dynamically display the exact weights configuration.
+
 ### v1.52.5 (2026-06-03)
 - **Feature: Customized Activity Multipliers**:
   - Adjusted Walking and Cycling multipliers according to user preference to keep Running as the 1.0x baseline.
