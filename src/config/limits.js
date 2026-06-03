@@ -219,7 +219,7 @@ const LIMITS = {
     desc_extra: 'Tác dụng: Tỉ lệ tạo ngẫu nhiên từng loại hoạt động.',
     type: 'array',
     default: 'Random (misc)',
-    default_label: 'Random (misc) (55% Run, 30% Walk, 15% Ride)',
+    default_label: 'Random (misc)',
     choices: ['Random (misc)', 'Random (rush)', 'Run', 'Walk', 'Ride'],
     min: 1,
     max: 1,
