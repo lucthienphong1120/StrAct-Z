@@ -108,7 +108,7 @@ const LIMITS = {
     label: 'Hệ số khoảng cách (Distance Multipliers).',
     type: 'map',
     desc_extra: 'Tác dụng: Điều chỉnh độ dài lộ trình thực tế so với cài đặt.',
-    example: 'Ví dụ: Ride 2.4x có nghĩa là cùng một lộ trình, đạp xe sẽ đi xa hơn 140%.'
+    example: 'Ví dụ: Ride 2.3x có nghĩa là cùng một lộ trình, đạp xe sẽ đi xa hơn 130%.'
   },
   max_distance_km: {
     label: 'Khoảng cách tối đa của hoạt động.',
@@ -310,7 +310,7 @@ const LIMITS = {
     label: 'Hệ số tốc độ (Pace Multipliers).',
     type: 'map',
     desc_extra: 'Tác dụng: Điều chỉnh tốc độ chạy thực tế so với Pace cài đặt.',
-    example: 'Ví dụ: Walk 1.75x có nghĩa là đi bộ sẽ chậm hơn 75% so với Pace cơ bản (Chạy bộ).'
+    example: 'Ví dụ: Walk 1.7x có nghĩa là đi bộ sẽ chậm hơn 70% so với Pace cơ bản (Chạy bộ).'
   },
   sim_weather: {
     label: 'Giả lập thời tiết (Weather Sim).',
