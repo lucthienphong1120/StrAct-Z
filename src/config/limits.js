@@ -310,7 +310,7 @@ const LIMITS = {
     label: 'Hệ số tốc độ (Pace Multipliers).',
     type: 'map',
     desc_extra: 'Tác dụng: Điều chỉnh tốc độ chạy thực tế so với Pace cài đặt.',
-    example: 'Ví dụ: Run 0.8x có nghĩa là chạy sẽ nhanh hơn 20% so với Pace cơ bản.'
+    example: 'Ví dụ: Walk 1.75x có nghĩa là đi bộ sẽ chậm hơn 75% so với Pace cơ bản (Chạy bộ).'
   },
   sim_weather: {
     label: 'Giả lập thời tiết (Weather Sim).',
