@@ -276,6 +276,7 @@ async function loadConfig() {
     let actType = config.activity_type || 'Random (misc)';
     if (actType === 'Random') actType = 'Random (misc)';
     setVal('cfgActivityType', actType);
+    updateActivityTypeHint();
     setVal('cfgDeviceName', config.device_name || 'Garmin Forerunner 975');
     setChecked('cfgHeartRate', config.heart_rate_enabled === 'true');
     setVal('cfgUserAge', config.user_age || '25');
@@ -641,7 +642,7 @@ function updateActivityTypeHint() {
   const type = document.getElementById('cfgActivityType').value;
   const hint = document.getElementById('activityTypeHint');
   if (type === 'Random (misc)') {
-    hint.textContent = '🎲 55% Run, 30% Walk, 15% Ride';
+    hint.textContent = '🎲 55% Run, 30% Walk, 15% Ride (Tùy chọn mặc định)';
   } else if (type === 'Random (rush)') {
     hint.textContent = '🎲 70% Ride, 20% Run, 10% Walk';
   } else if (type === 'Run') {

@@ -58,6 +58,17 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.52.7 (2026-06-03)
+- **Feature: Detailed Activity Type Hints on UI**:
+  - Updated the Activity Type description text shown directly below the dropdown selector in the UI.
+  - Descriptions are dynamically mapped and translated as follows:
+    - Random (misc): `🎲 55% Run, 30% Walk, 15% Ride (Tùy chọn mặc định)`
+    - Random (rush): `🎲 70% Ride, 20% Run, 10% Walk`
+    - Run: `🎲 90% Run, 5% Walk, 5% Ride`
+    - Walk: `🎲 90% Walk, 5% Run, 5% Ride`
+    - Ride: `🎲 90% Ride, 5% Run, 5% Walk`
+  - Triggered the activity type hint update during config loading on page load and reset, ensuring the correct description displays immediately.
+
 ### v1.52.6 (2026-06-03)
 - **Feature: Dynamic Randomized Activity Type Weights**:
   - Overhauled the Activity Type configuration dropdown to support detailed random weights for all select options:
