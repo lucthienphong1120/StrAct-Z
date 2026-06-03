@@ -274,13 +274,13 @@ async function generateActivity(config = {}) {
         if (Array.isArray(lastKeys)) {
           let isAdjacent = false;
           for (let lk of lastKeys) {
-            if (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(key)) {
+            if (lk === key || (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(key))) {
               isAdjacent = true;
               break;
             }
           }
           if (isAdjacent) {
-            weight += 1.2;
+            weight += 1.5;
           }
         }
       }

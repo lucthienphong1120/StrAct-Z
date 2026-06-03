@@ -833,13 +833,13 @@ async function debugDistrictWeightRatios() {
         if (ratio > 0) {
           let boost = 0;
           if (area.type === 'home') {
-            if (ratio >= 0.85) boost = 1.5;
-            else if (ratio >= 0.35) boost = 0.8;
-            else boost = 0.5;
+            if (ratio >= 0.85) boost = 4.5;
+            else if (ratio >= 0.35) boost = 3.2;
+            else boost = 1.8;
           } else if (area.type === 'work') {
-            if (ratio >= 0.85) boost = 1.0;
-            else if (ratio >= 0.35) boost = 0.5;
-            else boost = 0.3;
+            if (ratio >= 0.85) boost = 2.5;
+            else if (ratio >= 0.35) boost = 1.2;
+            else boost = 0.8;
           }
           weight += boost;
           areaBoost += boost;
@@ -854,14 +854,14 @@ async function debugDistrictWeightRatios() {
         if (Array.isArray(lastKeys)) {
           let isAdjacent = false;
           for (const lk of lastKeys) {
-            if (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(d.key)) {
+            if (lk === d.key || (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(d.key))) {
               isAdjacent = true;
               break;
             }
           }
           if (isAdjacent) {
-            weight += 0.8;
-            adjacentBoost += 0.8;
+            weight += 1.5;
+            adjacentBoost += 1.5;
           }
         }
       }

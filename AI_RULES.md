@@ -58,6 +58,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.53.0 (2026-06-03)
+- **Feature: Upgraded Adjacent District Boost**:
+  - Modified Adjacent Boost logic to apply to both the district of the most recent activity itself and all its adjacent (neighboring) districts.
+  - Increased Adjacent Boost weight from `+1.2` to `+1.5`.
+  - Synchronized weight calculations within frontend dashboard debug tools (correcting Home/Work boosts and Adjacent boost) to align perfectly with backend GPX generator.
+
 ### v1.52.9 (2026-06-03)
 - **Feature: Synchronized UI Card Titles and Clean Comments**:
   - Updated the Map Card title in the UI to match the exact grouping title: `📍 Map & Priority Areas`.
