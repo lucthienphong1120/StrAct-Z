@@ -220,7 +220,7 @@ body.is-vip:not(.theme-preview-normal) .schedule-label {
 /* ─── Toast Notifications ─────────────────────────────── */
 .toast-container {
   position: fixed;
-  top: 24px;
+  top: 70px;
   right: 24px;
   z-index: 9999;
   display: flex;
@@ -537,7 +537,7 @@ body.is-vip:not(.theme-preview-normal) .schedule-label {
   .map-card-actions { display: grid !important; grid-template-columns: 1fr 1fr; gap: 6px !important; }
   .map-card-actions .btn { width: 100%; font-size: 0.7rem; }
 
-  .toast-container { top: 16px; right: 16px; left: auto; bottom: auto; }
+  .toast-container { top: 70px; right: 16px; left: auto; bottom: auto; }
   .toast { max-width: 280px; width: 100%; }
 }
 
