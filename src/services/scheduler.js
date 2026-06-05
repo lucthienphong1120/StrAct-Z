@@ -113,8 +113,10 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         if (remainingDistance > 0) {
           const sign = Math.random() < 0.5 ? -1 : 1;
           const offsetKm = sign * (Math.random() * (0.20 - 0.05) + 0.05); // +/- (50m to 200m)
-          targetDistanceKmOverride = Math.max(0.1, remainingDistance + offsetKm);
-          console.log(`[Scheduler] Target distance active. Target: ${dailyTarget}km, Accumulated: ${accumulatedDistanceForToday.toFixed(2)}km, Remaining: ${remainingDistance.toFixed(2)}km, Offset: ${offsetKm.toFixed(3)}km, Target Override: ${targetDistanceKmOverride.toFixed(2)}km`);
+          const rawOverride = Math.max(0.1, remainingDistance + offsetKm);
+          const maxDist = parseFloat(config.max_distance_km || '8.0');
+          targetDistanceKmOverride = Math.min(maxDist, rawOverride);
+          console.log(`[Scheduler] Target distance active. Target: ${dailyTarget}km, Accumulated: ${accumulatedDistanceForToday.toFixed(2)}km, Remaining: ${remainingDistance.toFixed(2)}km, Offset: ${offsetKm.toFixed(3)}km, Target Override: ${targetDistanceKmOverride.toFixed(2)}km (Raw Override: ${rawOverride.toFixed(2)}km, clamped to max ${maxDist}km)`);
         } else {
           console.log(`[Scheduler] Daily target distance of ${dailyTarget}km already achieved (${accumulatedDistanceForToday.toFixed(2)}km). Using normal random distance.`);
         }

@@ -342,7 +342,7 @@ async function generateActivity(config = {}) {
   let distanceKm;
   if (config.targetDistanceKm && parseFloat(config.targetDistanceKm) > 0) {
     const rawTarget = parseFloat(config.targetDistanceKm);
-    const finalTarget = Math.max(finalMinDist, Math.min(finalMaxDist, rawTarget));
+    const finalTarget = Math.max(finalMinDist, Math.min(finalMaxDist, Math.min(maxDistanceKm, rawTarget)));
     distanceKm = Math.round(finalTarget * 10) / 10;
     console.log(`[Generator] Target distance active: Raw Target = ${rawTarget.toFixed(2)}km, Snapped Target (respecting limits for ${finalActivityType}) = ${distanceKm.toFixed(2)}km`);
   } else {

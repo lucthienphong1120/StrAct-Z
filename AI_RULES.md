@@ -79,14 +79,14 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - The last schedule is determined as Schedule 1 if schedule count is 1, or Schedule 2 if schedule count is 2.
   - Computes the remaining distance by subtracting the total accumulated activity distance today (both local DB activities and Strava Cloud activities) from the target distance.
   - If remaining distance is positive, it sets the generated activity's distance to the remaining distance +/- 50m to 200m random variation.
-  - The generated target distance is capped between the activity type's minimum and maximum constraints (without being affected by the activity's distance multiplier itself) to ensure valid route generation.
+  - The generated target distance is capped between the activity type's minimum and maximum constraints, and strictly capped by the user-configured random max distance (without being affected by the activity's distance multiplier itself) to ensure valid route generation.
 
 ## 🛠️ Developer Rules
 
 ### v1.57.0 (2026-06-05)
 - **Feature: Daily Target Distance (5-30km) for Auto-Scheduler**:
   - Implemented toggle target distance enabled and target distance km settings under the Auto Schedule card.
-  - Calculated remaining daily target distance in the scheduler for the last slot/activity and applied +/- 50-200m randomness.
+  - Calculated remaining daily target distance in the scheduler for the last slot/activity, applied +/- 50-200m randomness, and strictly clamped it to the user-configured maximum random distance constraint.
   - Disables target distance input controls when the toggle is turned off.
 
 ### v1.56.0 (2026-06-05)
