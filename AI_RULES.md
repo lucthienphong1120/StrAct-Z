@@ -83,6 +83,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.58.0 (2026-06-05)
+- **Feature: Layout Positioning, Premium VIP Badge UI, Centered Update Popup & Responsive Overflows**:
+  - Moved Toast notifications to the top-right corner on both PC and mobile devices.
+  - Redesigned the VIP badge indicator in the header to a pulsing gold-gradient element (`.vip-badge-premium`) and wrapped the username in `.auth-username-text` to enable clean truncation on mobile without obscuring the VIP badge.
+  - Centered the Update Version notification popup modal in the middle of the screen (on both PC and mobile) and styled it as a small modal with a bouncing rocket icon.
+
 ### v1.57.0 (2026-06-05)
 - **Feature: Daily Target Distance (5-30km) for Auto-Scheduler**:
   - Implemented toggle target distance enabled and target distance km settings under the Auto Schedule card.

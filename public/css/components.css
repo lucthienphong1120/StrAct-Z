@@ -220,7 +220,7 @@ body.is-vip:not(.theme-preview-normal) .schedule-label {
 /* ─── Toast Notifications ─────────────────────────────── */
 .toast-container {
   position: fixed;
-  bottom: 24px;
+  top: 24px;
   right: 24px;
   z-index: 9999;
   display: flex;
@@ -294,6 +294,37 @@ body.is-vip:not(.theme-preview-normal) .schedule-label {
   background: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(26,31,53,0.95));
 }
 .toast.info .toast-icon { color: var(--accent-blue); }
+
+/* ─── Premium VIP Badges & Username Styling ────────── */
+.auth-username-text {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
+}
+.vip-badge-premium {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+  vertical-align: middle;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(251, 191, 36, 0.5);
+  animation: vipPulse 2s infinite ease-in-out;
+}
+@keyframes vipPulse {
+  0% { box-shadow: 0 0 4px rgba(245, 158, 11, 0.4); }
+  50% { box-shadow: 0 0 12px rgba(245, 158, 11, 0.8); }
+  100% { box-shadow: 0 0 4px rgba(245, 158, 11, 0.4); }
+}
 
 /* ─── Map Styles ────────────────────────────────────────── */
 #activityMap {
@@ -442,8 +473,8 @@ body.is-vip:not(.theme-preview-normal) .schedule-label {
   .logo { font-size: 1.05rem; gap: 6px; flex-shrink: 0; }
   .logo-icon { width: 30px; height: 30px; font-size: 1rem; }
   .logo small { font-size: 0.55em !important; padding: 1px 6px !important; margin-left: 2px !important; }
-  .auth-badge { font-size: 0.7rem; padding: 4px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 125px; display: inline-flex; align-items: center; }
-  .auth-badge .vip-badge-inline { font-size: 0.65rem !important; padding: 1px 4px !important; margin-left: 4px !important; }
+  .auth-badge { font-size: 0.7rem; padding: 4px 8px; white-space: nowrap; display: inline-flex; align-items: center; max-width: none !important; overflow: visible !important; }
+  .auth-username-text { max-width: 75px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; vertical-align: middle; }
   .header-actions { gap: 6px; flex-shrink: 1; min-width: 0; }
   .header-actions .btn-sm { padding: 4px 8px; font-size: 0.75rem; }
 
@@ -506,33 +537,40 @@ body.is-vip:not(.theme-preview-normal) .schedule-label {
   .map-card-actions { display: grid !important; grid-template-columns: 1fr 1fr; gap: 6px !important; }
   .map-card-actions .btn { width: 100%; font-size: 0.7rem; }
 
-  .toast-container { bottom: 16px; right: 12px; left: 12px; }
-  .toast { max-width: 100%; width: 100%; }
+  .toast-container { top: 16px; right: 16px; left: auto; bottom: auto; }
+  .toast { max-width: 280px; width: 100%; }
 }
 
 /* ─── Update Popup ────────────────────────────────────────── */
 .update-popup {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: var(--bg-card);
-  border: 1px solid var(--border);
-  padding: 16px;
+  border: 2px solid var(--border);
+  padding: 24px;
   border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(252, 76, 2, 0.2);
+  box-shadow: 0 15px 50px rgba(0,0,0,0.6), 0 0 25px rgba(245, 158, 11, 0.25);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
-  z-index: 10000;
-  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+  gap: 20px;
+  z-index: 10005;
+  width: 90%;
+  max-width: 380px;
+  animation: modalFadeIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .update-popup-content {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 .update-icon {
-  font-size: 28px;
+  font-size: 40px;
+  animation: bounceUpdate 2s infinite ease-in-out;
 }
 .update-text strong {
   color: var(--text-primary);
@@ -545,29 +583,38 @@ body.is-vip:not(.theme-preview-normal) .schedule-label {
   font-size: 0.9em;
   color: var(--text-secondary);
 }
-@keyframes slideUp {
-  from { transform: translateY(150px) scale(0.9); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
+@keyframes bounceUpdate {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes modalFadeIn {
+  from { transform: translate(-50%, -40%) scale(0.95); opacity: 0; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 
 @media (max-width: 600px) {
   .update-popup {
-    bottom: 16px;
-    right: 16px;
-    left: 16px;
-    padding: 14px 16px;
+    top: 50%;
+    left: 50%;
+    bottom: auto;
+    right: auto;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 320px;
+    padding: 20px;
     border-radius: 12px;
-    gap: 12px;
+    gap: 16px;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
   }
   .update-popup-content {
-    flex-direction: row;
-    gap: 12px;
-    text-align: left;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
   }
   .update-icon {
-    font-size: 24px;
+    font-size: 32px;
   }
   .update-text strong {
     font-size: 0.9rem;

@@ -158,8 +158,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] làm tính năng toggle target distance ở dưới phần Auto schedule (default off làm mờ, khi on sẽ cho phép cấu hình target distance (5-30km)) -> nếu bật thì khi random hoạt động cuối ngày (VD: schedule 2) sẽ check và cố gắng để đạt phần distance còn lại trong ngày (VD: 10km) để đạt target distance (không được vượt quá random max distance) (copy/random cộng trừ 50-200m) (v1.57.0)
 + [x] địa điểm chạy random ưu tiên các khu vực có traffic thấp, hoặc gần hồ, công viên, các địa điểm nổi tiếng hoặc các khu vực có nhiều hoạt động (v1.56.0)
 + [x] Device Name cho nhập Free text (với vip account) -> validate auth để normal account không lạm dụng tính năng hay vượt quyền bảo mật (v1.56.0)
-+ [ ] chuyển toast notify lên trên bên phải thay vì ở dưới góc dưới bên phải màn hình
-+ [ ] làm lại UI nhận diện chữ VIP cạnh tên user và cả mobile
-+ [ ] mobile responsive fit layout overflow để không bị tràn ngoài màn hình, hiện đang bị với thông báo nâng ver, thông báo sự kiện tít dưới màn hình,...
-+ [ ] chuyển thông báo nâng ver fit với màn hình thay vì thông báo ngang góc dưới, đặt ngay giữa màn hình và hình chữ nhật ngắn
-```
++ [x] chuyển toast notify lên trên bên phải thay vì ở dưới góc dưới bên phải màn hình (v1.58.0)
++ [x] làm lại UI nhận diện chữ VIP cạnh tên user và cả mobile (v1.58.0)
++ [x] mobile responsive fit layout overflow để không bị tràn ngoài màn hình, hiện đang bị với thông báo nâng ver, thông báo sự kiện tít dưới màn hình,... (v1.58.0)
++ [x] chuyển thông báo nâng ver fit với màn hình thay vì thông báo ngang góc dưới, đặt ngay giữa màn hình và hình chữ nhật ngắn (v1.58.0)
