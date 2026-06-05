@@ -92,7 +92,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
             district_keys: null, created_by: slotName,
             error_message: genErr.message,
           });
-          break; // Stop trying for this slot — no point retrying same day
+          continue; // Skip trying for this item, continue to the next requested item
         }
         throw genErr; // Other errors bubble up
       }
@@ -170,17 +170,17 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         };
 
         
-        // Brief delay between uploads if multiple
-        if (i < taskCount - 1) {
-          await new Promise(r => setTimeout(r, 2000));
-        }
-
       } catch (uploadErr) {
         console.error('[Scheduler] Upload failed:', uploadErr);
         await db.updateActivity(accountId, activityId, {
           upload_status: 'failed',
           error_message: typeof uploadErr === 'object' ? JSON.stringify(uploadErr.body || uploadErr.message || uploadErr) : String(uploadErr),
         });
+      }
+
+      // Brief delay between activities if multiple
+      if (i < taskCount - 1) {
+        await new Promise(r => setTimeout(r, 2000));
       }
     } // end for
 

@@ -826,10 +826,11 @@ async function debugDistrictWeightRatios() {
 
       const sysL = window.sysLimits;
       const areaWeights = sysL?.activity_areas?.weights || {
-        home: { fully: 4.5, mostly: 3.2, partially: 1.5 },
-        work: { fully: 2.8, mostly: 1.5, partially: 0.8 }
+        home: { fully: 7.0, mostly: 5.2, partially: 2.8 },
+        work: { fully: 5.5, mostly: 3.2, partially: 1.5 }
       };
-      const adjBoostWeight = sysL?.boost_adjacent?.weight || 1.5;
+      const adjacentWeight = sysL?.boost_adjacent?.adjacent_weight || 1.8;
+      const sameWeight = sysL?.boost_adjacent?.same_weight || 2.7;
 
       areas.forEach(area => {
         const distToArea = haversineDistance(d.lat, d.lng, area.lat, area.lng);
@@ -859,17 +860,16 @@ async function debugDistrictWeightRatios() {
           : lastDistrictKeys.split(',');
         
         if (Array.isArray(lastKeys)) {
-          let isAdjacent = false;
+          let boostValue = 0;
           for (const lk of lastKeys) {
-            if (lk === d.key || (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(d.key))) {
-              isAdjacent = true;
-              break;
+            if (lk === d.key) {
+              boostValue = Math.max(boostValue, sameWeight);
+            } else if (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(d.key)) {
+              boostValue = Math.max(boostValue, adjacentWeight);
             }
           }
-          if (isAdjacent) {
-            weight += adjBoostWeight;
-            adjacentBoost += adjBoostWeight;
-          }
+          weight += boostValue;
+          adjacentBoost += boostValue;
         }
       }
 

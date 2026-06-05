@@ -32,12 +32,23 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Cycling (Ride)**: Distance x2.3 / Pace x0.45.
 - These weights are applied in `gpx-generator.js` to ensure realistic pace and duration based on the activity type.
 
-### 3. Duplicate Protection (Safe Time)
+### 3. Priority Areas & Adjacent District Boosts (v1.55.0+)
+- **Priority Area Weights**:
+  - Home: `+7.0 (Fully) / +5.2 (Mostly) / +2.8 (Partially)`
+  - Work: `+5.5 (Fully) / +3.2 (Mostly) / +1.5 (Partially)`
+- **Adjacent Boost Split**:
+  - Same district (the district of the last activity itself): `+2.7` boost.
+  - Neighboring (adjacent) districts: `+1.8` boost.
+  - If multiple last activities exist, the maximum of matching boosts is taken.
+- **Traverse District Count**: Traverses a random number of districts between 1 and the configured `max_district_span` instead of always forcing it to equal `max_district_span`.
+- **Simulation Constants**: Centralized in `limits.js` (e.g. 1.5% red light stop probability, 30% weather probability).
+
+### 4. Duplicate Protection (Safe Time)
 - **Concept**: Prevents new activities from being generated too close to existing ones (already uploaded or in Strava Cloud).
 - **Calculation**: Blocked intervals = `[Start - SafeTime, End + SafeTime]`. Selected random time must fall outside these intervals.
 - **SafeTime**: Default 30 minutes (configurable via `overlap_protection_minutes`).
 
-### 4. Map Persistence (v1.51.5+)
+### 5. Map Persistence (v1.51.5+)
 - **Storage**: `map_lat`, `map_lng`, and `map_zoom` are saved in the `user_config` table whenever "Activity Areas" are saved.
 - **UI Persistence**:
   - **Refresh (Global)**: Restores the last saved map view (position/zoom) and all activity areas.
@@ -57,6 +68,14 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.55.0 (2026-06-05)
+- **Feature: Refined Scheduler, Simulation Centralization & New Weights Split**:
+  - Refined auto scheduler iteration delay execution to run after upload attempt (success or failure) and changed loop block on `NO_VALID_TIME_SLOT` from `break` to `continue` to log all failed tasks.
+  - Centralized OSRM route simulation constants (1.5% red light stop probability, 30% weather probability, and durations) in `limits.js` as source of truth.
+  - Increased Home weights to `+7.0 / +5.2 / +2.8` and Work weights to `+5.5 / +3.2 / +1.5`.
+  - Split Adjacent Boost into same district of last activity (`+2.7`) and neighboring districts (`+1.8`).
+  - Randomized the traversed district span (between 1 and `max_district_span`) instead of forcing it to always equal `max_district_span`.
 
 ### v1.54.0 (2026-06-03)
 - **Feature: Centralized Config Constants under limits.js**:

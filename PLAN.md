@@ -151,3 +151,8 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] điều chỉnh trọng số các mức bao phủ Home (+4.5/+3.2/+1.5) và Work (+2.8/+1.5/+0.8) (v1.53.1)
 + [x] quy hoạch toàn bộ hằng số trọng số và hệ số nhân thuật toán về limits.js làm nguồn chân lý duy nhất (Source of Truth) và cập nhật động toàn bộ UI/Frontend (v1.54.0)
 + [ ] check lại schedule nếu nhiều hoạt động sẽ gen từng cái 1 và có delay, kiểm tra overlap time, nếu ko phù hợp vẫn có thể 1 uploaded 1 failed
++ [ ] check tỉ lệ dừng đèn đỏ 1.5% mỗi point di chuyển hay như nào
++ [ ] tăng tỉ lệ trọng số của home (+7/+5.2/+2.8) và work (+5.5/+3.2/+1.5)
++ [ ] tăng tỉ lệ boot adjacent thành +1.8 cho các quận kế bên và thêm x1.5 (+2.7) cho chính quận của hoạt động gần nhất
++ [ ] check lại tính năng mở rộng phạm vi max 2 quận -> tăng phạm vi random thôi chứ không bắt buộc là luôn đi qua 2 quận
++ [ ] làm tính năng toggle target distance (default off làm mờ, khi on sẽ thêm cấu hình target distance (5-30km), phải đảm bảo khoảng cách gen random max với target distance)

@@ -32,10 +32,11 @@ const LIMITS = {
   },
   boost_adjacent: {
     label: 'Tăng trọng số cho quận hoạt động gần nhất và lân cận.',
-    desc_extra: 'Tác dụng: Quận hoạt động gần nhất (đã upload) và các quận lân cận sẽ được cộng thêm +1.5 trọng số.',
+    desc_extra: 'Tác dụng: Quận hoạt động gần nhất sẽ được cộng thêm +2.7 trọng số, các quận lân cận được cộng thêm +1.8 trọng số.',
     type: 'bool',
     default: true,
-    weight: 1.5
+    adjacent_weight: 1.8,
+    same_weight: 2.7
   },
 
   // ─── 📍 Map & Priority Areas ──────────────────────────────────────────
@@ -91,8 +92,8 @@ const LIMITS = {
     desc_extra: 'Tác dụng: Tỉ lệ chọn các quận mặc định là 1:1, các quận giao với vùng phủ sóng của Nhà/Công ty sẽ được cộng thêm trọng số boost dựa trên tỷ lệ diện tích giao nhau (Ratio = Giao nhau / Diện tích hình nhỏ hơn).',
     example: 'Ratio >= 0.85 (Fully), Ratio >= 0.35 (Mostly), Ratio > 0 (Partially).',
     weights: {
-      home: { fully: 4.5, mostly: 3.2, partially: 1.5 },
-      work: { fully: 2.8, mostly: 1.5, partially: 0.8 }
+      home: { fully: 7.0, mostly: 5.2, partially: 2.8 },
+      work: { fully: 5.5, mostly: 3.2, partially: 1.5 }
     }
   },
 
@@ -277,13 +278,19 @@ const LIMITS = {
     label: 'Giả lập thời tiết (Weather Sim).',
     desc_extra: 'Tác dụng: Tăng Nhịp tim (HR) thêm 5-15 bpm. Điều kiện: Ngẫu nhiên 30% hoặc khung giờ 11h-16h',
     type: 'bool',
-    default: true
+    default: true,
+    probability: 0.3,
+    hr_increase_min: 5,
+    hr_increase_max: 15
   },
   sim_redlights: {
     label: 'Giả lập đèn đỏ (Red Lights).',
     desc_extra: 'Tác dụng: Tăng Elapsed Time, Giảm Avg Pace, Giảm HR. Xác suất: 1.5% mỗi điểm, dừng 15-60s',
     type: 'bool',
-    default: true
+    default: true,
+    probability: 0.015,
+    min_duration: 15,
+    max_duration: 60
   },
 
   // ─── ⏰ Auto Schedule ──────────────────────────────────────────────────────

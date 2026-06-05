@@ -395,6 +395,9 @@ function generateElevation(points, options = {}) {
 
 function generateTimestamps(points, options = {}) {
   const { startTime = new Date(), avgPaceMinPerKm = 7.0, paceVariation = 0.12 } = options;
+  const redLightsProbability = options.redLightsProbability !== undefined ? options.redLightsProbability : 0.015;
+  const redLightsMinDuration = options.redLightsMinDuration !== undefined ? options.redLightsMinDuration : 15;
+  const redLightsMaxDuration = options.redLightsMaxDuration !== undefined ? options.redLightsMaxDuration : 60;
   const avgSpeed = 1000 / (avgPaceMinPerKm * 60);
 
   let cur = new Date(startTime);
@@ -424,8 +427,8 @@ function generateTimestamps(points, options = {}) {
     pt.time = new Date(cur);
     
     // Simulate Red Light / Pause (approx 1.5% chance per point if not near start/end)
-    if (options.simRedLights !== false && progress > 0.1 && progress < 0.9 && Math.random() < 0.015) {
-       const pauseSecs = randomInRange(15, 60);
+    if (options.simRedLights !== false && progress > 0.1 && progress < 0.9 && Math.random() < redLightsProbability) {
+       const pauseSecs = randomInRange(redLightsMinDuration, redLightsMaxDuration);
        const steps = Math.floor(pauseSecs / 5);
        for (let j = 1; j <= steps; j++) {
          cur = new Date(cur.getTime() + 5000);
@@ -442,10 +445,13 @@ function generateTimestamps(points, options = {}) {
 
 function generateHeartRate(points, options = {}) {
   const { minHR = 130, maxHR = 165, restingHR = 65, startTime = null } = options;
+  const weatherProbability = options.weatherProbability !== undefined ? options.weatherProbability : 0.3;
+  const weatherHRMin = options.weatherHRMin !== undefined ? options.weatherHRMin : 5;
+  const weatherHRMax = options.weatherHRMax !== undefined ? options.weatherHRMax : 15;
   
   // Simulate weather factor randomly (hot weather = +HR)
-  const isHotWeather = options.simWeather !== false && Math.random() > 0.7;
-  let weatherFactor = isHotWeather ? randomInRange(3, 8) : 0;
+  const isHotWeather = options.simWeather !== false && Math.random() < weatherProbability;
+  let weatherFactor = isHotWeather ? randomInRange(weatherHRMin, weatherHRMax) : 0;
   
   // Time-of-day factor: trưa/chiều (11:00 - 16:00) nắng cũng tăng chút
   const startHour = startTime ? new Date(startTime).getHours() : 10;

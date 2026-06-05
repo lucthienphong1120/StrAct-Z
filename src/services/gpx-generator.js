@@ -224,6 +224,7 @@ async function generateActivity(config = {}) {
   // Determine District (Random if 'random' or not provided)
   const allowedDistricts = config.selected_districts ? config.selected_districts.split(',').filter(Boolean) : Object.keys(HANOI_DISTRICTS);
   const maxSpan = parseInt(config.max_district_span || '1', 10);
+  const actualSpan = Math.max(1, Math.floor(Math.random() * maxSpan) + 1);
   
   let chosenDistrictKeys = [];
   if (!districtKey || districtKey === 'random') {
@@ -251,8 +252,8 @@ async function generateActivity(config = {}) {
         
         if (ratio > 0) {
           const areaWeights = limits.activity_areas?.weights || {
-            home: { fully: 4.5, mostly: 3.2, partially: 1.5 },
-            work: { fully: 2.8, mostly: 1.5, partially: 0.8 }
+            home: { fully: 7.0, mostly: 5.2, partially: 2.8 },
+            work: { fully: 5.5, mostly: 3.2, partially: 1.5 }
           };
           if (area.type === 'home') {
             if (ratio >= 0.85) weight += areaWeights.home.fully;      // Bao trọn / Nằm trọn
@@ -279,17 +280,17 @@ async function generateActivity(config = {}) {
         }
         
         if (Array.isArray(lastKeys)) {
-          let isAdjacent = false;
+          let boostValue = 0;
           for (let lk of lastKeys) {
-            if (lk === key || (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(key))) {
-              isAdjacent = true;
-              break;
+            if (lk === key) {
+              const sameWeight = limits.boost_adjacent?.same_weight || 2.7;
+              boostValue = Math.max(boostValue, sameWeight);
+            } else if (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(key)) {
+              const adjWeight = limits.boost_adjacent?.adjacent_weight || 1.8;
+              boostValue = Math.max(boostValue, adjWeight);
             }
           }
-          if (isAdjacent) {
-            const adjBoostWeight = limits.boost_adjacent?.weight || 1.5;
-            weight += adjBoostWeight;
-          }
+          weight += boostValue;
         }
       }
 
@@ -310,7 +311,7 @@ async function generateActivity(config = {}) {
     // Weighted pick `span` districts
     let available = [...allowedDistricts];
     let availableWeights = [...weights];
-    const span = Math.min(maxSpan, available.length);
+    const span = Math.min(actualSpan, available.length);
     
     for (let i = 0; i < span && available.length > 0; i++) {
       const totalWeight = availableWeights.reduce((a, b) => a + b, 0);
@@ -508,11 +509,26 @@ async function generateActivity(config = {}) {
   points = generateElevation(points, { baseElevation: randomInRange(5, 10), maxVariation: randomInRange(1.5, 3.5) });
 
   // Add timestamps
-  points = generateTimestamps(points, { startTime: activityStartTime, avgPaceMinPerKm: avgPace, simRedLights });
+  points = generateTimestamps(points, { 
+    startTime: activityStartTime, 
+    avgPaceMinPerKm: avgPace, 
+    simRedLights,
+    redLightsProbability: limits.sim_redlights?.probability,
+    redLightsMinDuration: limits.sim_redlights?.min_duration,
+    redLightsMaxDuration: limits.sim_redlights?.max_duration
+  });
 
   // Add heart rate
   if (heartRateEnabled) {
-    points = generateHeartRate(points, { minHR: finalMinHR, maxHR: finalMaxHR, simWeather, startTime: activityStartTime });
+    points = generateHeartRate(points, { 
+      minHR: finalMinHR, 
+      maxHR: finalMaxHR, 
+      simWeather, 
+      startTime: activityStartTime,
+      weatherProbability: limits.sim_weather?.probability,
+      weatherHRMin: limits.sim_weather?.hr_increase_min,
+      weatherHRMax: limits.sim_weather?.hr_increase_max
+    });
   } else {
     for (const pt of points) {
       delete pt.heartRate;
