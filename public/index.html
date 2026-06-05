@@ -29,7 +29,7 @@
         <div class="logo-icon">🏃</div>
         <span class="logo-text">StrAct Z</span>
         <small
-          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.55.0</small>
+          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v1.56.0</small>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -284,19 +284,20 @@
                 <div class="form-group">
                   <label class="form-label">Device Name <span class="tooltip-icon tooltip-left"
                       id="tipDeviceName">?</span></label>
-                  <select id="cfgDeviceName" class="form-select">
-                    <option value="Garmin Forerunner 975">Garmin Forerunner 975</option>
-                    <option value="Garmin Fenix 8 Solar">Garmin Fenix 8 Solar</option>
-                    <option value="Apple Watch Ultra 3">Apple Watch Ultra 3</option>
-                    <option value="Apple Watch Series 11">Apple Watch Series 11</option>
-                    <option value="Samsung Galaxy Watch Ultra">Samsung Galaxy Watch Ultra</option>
-                    <option value="Samsung Galaxy Watch 8">Samsung Galaxy Watch 8</option>
-                    <option value="Huawei Watch GT 6 Pro">Huawei Watch GT 6 Pro</option>
-                    <option value="Huawei Watch Fit 5 Pro">Huawei Watch Fit 5 Pro</option>
-                    <option value="Coros Pace 3">Coros Pace 3</option>
-                    <option value="Amazfit T-Rex 3">Amazfit T-Rex 3</option>
-                    <option value="Strava Android App">Strava Android App</option>
-                  </select>
+                  <input type="text" id="cfgDeviceName" class="form-input" list="devicePresets" placeholder="Nhập hoặc chọn thiết bị..." style="width: 100%;">
+                  <datalist id="devicePresets">
+                    <option value="Garmin Forerunner 975">
+                    <option value="Garmin Fenix 8 Solar">
+                    <option value="Apple Watch Ultra 3">
+                    <option value="Apple Watch Series 11">
+                    <option value="Samsung Galaxy Watch Ultra">
+                    <option value="Samsung Galaxy Watch 8">
+                    <option value="Huawei Watch GT 6 Pro">
+                    <option value="Huawei Watch Fit 5 Pro">
+                    <option value="Coros Pace 3">
+                    <option value="Amazfit T-Rex 3">
+                    <option value="Strava Android App">
+                  </datalist>
                 </div>
               </div>
               <div class="form-row">

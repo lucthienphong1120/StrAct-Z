@@ -25,6 +25,25 @@ function validateConfig(updates, role = 'normal') {
     let val = value;
     const label = rule.label || key;
 
+    // Special handling for device_name to support custom free-text for VIP
+    if (key === 'device_name') {
+      const strVal = String(value).trim();
+      if (!strVal) {
+        return { success: false, error: 'Device name cannot be empty.' };
+      }
+      if (strVal.length > 100) {
+        return { success: false, error: 'Device name cannot exceed 100 characters.' };
+      }
+      if (role !== 'vip') {
+        const presets = rule.choices || [];
+        if (!presets.includes(strVal)) {
+          return { success: false, error: 'Tài khoản thường chỉ được phép chọn thiết bị có sẵn trong danh sách.' };
+        }
+      }
+      sanitized[key] = strVal;
+      continue;
+    }
+
     // 1. Type Validation & Conversion
     try {
       switch (rule.type) {

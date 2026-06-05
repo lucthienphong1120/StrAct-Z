@@ -504,13 +504,48 @@ function validateInputs(config, isRealTime = false) {
     isValid = false;
   }
 
+  // 3. Custom validation for device_name (VIP vs Normal)
+  if (config.device_name !== undefined) {
+    const devVal = config.device_name.trim();
+    const devEl = document.getElementById('cfgDeviceName');
+    if (devEl) devEl.classList.remove('invalid');
+
+    if (!devVal) {
+      if (devEl) devEl.classList.add('invalid');
+      if (!isRealTime) {
+        showToast('Device Name không được để trống.', 'error');
+        return false;
+      }
+      isValid = false;
+    } else if (devVal.length > 100) {
+      if (devEl) devEl.classList.add('invalid');
+      if (!isRealTime) {
+        showToast('Device Name không được vượt quá 100 ký tự.', 'error');
+        return false;
+      }
+      isValid = false;
+    } else if (sysL._role !== 'vip') {
+      const presets = sysL.device_name?.choices || [];
+      if (!presets.includes(devVal)) {
+        if (devEl) devEl.classList.add('invalid');
+        if (!isRealTime) {
+          showToast('Tính năng thiết bị tùy chỉnh chỉ dành cho tài khoản VIP.', 'warning');
+          // Revert to default
+          devEl.value = sysL.device_name?.default || 'Garmin Forerunner 975';
+          return false;
+        }
+        isValid = false;
+      }
+    }
+  }
+
   return isValid;
 }
 
 function attachRealTimeValidation() {
   const inputs = [
     'cfgMaxSpan', 'cfgOverlapProtection', 'cfgRestTime', 'cfgMinDist', 'cfgMaxDist',
-    'cfgMinPace', 'cfgMaxPace', 'cfgUserAge'
+    'cfgMinPace', 'cfgMaxPace', 'cfgUserAge', 'cfgDeviceName'
   ];
 
   inputs.forEach(id => {
@@ -527,6 +562,7 @@ function attachRealTimeValidation() {
         min_pace: document.getElementById('cfgMinPace').value,
         max_pace: document.getElementById('cfgMaxPace').value,
         user_age: document.getElementById('cfgUserAge').value,
+        device_name: document.getElementById('cfgDeviceName')?.value || '',
         selected_districts: Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value).join(',')
       };
       validateInputs(config, true);

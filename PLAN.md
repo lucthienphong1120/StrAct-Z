@@ -155,6 +155,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] tăng tỉ lệ trọng số của home (+7/+5.2/+2.8) và work (+5.5/+3.2/+1.5) (v1.55.0)
 + [x] tăng tỉ lệ boot adjacent thành +1.8 cho các quận kế bên và thêm x1.5 (+2.7) cho chính quận của hoạt động gần nhất (v1.55.0)
 + [x] check lại tính năng mở rộng phạm vi max 2 quận -> tăng phạm vi random thôi chứ không bắt buộc là luôn đi qua 2 quận (v1.55.0)
-+ [ ] làm tính năng toggle target distance ở dưới phần Auto schedule (default off làm mờ, khi on sẽ thêm cấu hình target distance (5-30km)) -> nếu bật thì khi random hoạt động cuối ngày (VD: schedule 2) sẽ check và cố gắng để đạt phần distance còn lại trong ngày (VD: 10km) để đạt target distance (không được vượt quá random max distance) (copy/random cộng trừ 100-200m)
-+ [ ] địa điểm chạy random ưu tiên các khu vực có traffic thấp, hoặc gần hồ, công viên, các địa điểm nổi tiếng hoặc các khu vực có nhiều hoạt động
-+ [ ]
++ [ ] làm tính năng toggle target distance ở dưới phần Auto schedule (default off làm mờ, khi on sẽ cho phép cấu hình target distance (5-30km)) -> nếu bật thì khi random hoạt động cuối ngày (VD: schedule 2) sẽ check và cố gắng để đạt phần distance còn lại trong ngày (VD: 10km) để đạt target distance (không được vượt quá random max distance) (copy/random cộng trừ 100-200m)
++ [x] địa điểm chạy random ưu tiên các khu vực có traffic thấp, hoặc gần hồ, công viên, các địa điểm nổi tiếng hoặc các khu vực có nhiều hoạt động (v1.56.0)
++ [x] Device Name cho nhập Free text (với vip account) -> validate auth để normal account không lạm dụng tính năng hay vượt quyền bảo mật (v1.56.0)

@@ -14,6 +14,101 @@ DISTRICTS.forEach(d => {
   HANOI_DISTRICTS[d.key] = { name: d.name, lat: d.lat, lng: d.lng, radiusKm: d.radiusKm };
 });
 
+// Predefined scenic, low-traffic running points of interest (POIs) in Hanoi
+const RUNNING_POIS = {
+  hoan_kiem: [
+    { name: 'Hồ Hoàn Kiếm', lat: 21.0285, lng: 105.8542 },
+    { name: 'Nhà hát Lớn Hà Nội', lat: 21.0245, lng: 105.8588 }
+  ],
+  hai_ba_trung: [
+    { name: 'Công viên Thống Nhất', lat: 21.0163, lng: 105.8458 },
+    { name: 'Công viên Tuổi Trẻ', lat: 21.0068, lng: 105.8601 }
+  ],
+  ba_dinh: [
+    { name: 'Công viên Bách Thảo', lat: 21.0425, lng: 105.8285 },
+    { name: 'Hồ Trúc Bạch', lat: 21.0416, lng: 105.8385 },
+    { name: 'Quảng trường Ba Đình', lat: 21.0360, lng: 105.8347 }
+  ],
+  tay_ho: [
+    { name: 'Đường ven Hồ Tây', lat: 21.0558, lng: 105.8083 },
+    { name: 'Công viên Nước Hồ Tây', lat: 21.0762, lng: 105.8175 },
+    { name: 'Đường Thanh Niên', lat: 21.0436, lng: 105.8372 }
+  ],
+  cau_giay: [
+    { name: 'Công viên Cầu Giấy', lat: 21.0205, lng: 105.7905 },
+    { name: 'Công viên Nghĩa Đô', lat: 21.0415, lng: 105.7985 }
+  ],
+  dong_da: [
+    { name: 'Văn Miếu Quốc Tử Giám', lat: 21.0285, lng: 105.8355 },
+    { name: 'Hồ Xã Đàn', lat: 21.0132, lng: 105.8327 },
+    { name: 'Công viên Gò Đống Đa', lat: 21.0130, lng: 105.8238 }
+  ],
+  thanh_xuan: [
+    { name: 'Công viên Thanh Xuân', lat: 20.9982, lng: 105.8008 }
+  ],
+  hoang_mai: [
+    { name: 'Công viên Yên Sở', lat: 20.9664, lng: 105.8521 },
+    { name: 'Bán đảo Linh Đàm', lat: 20.9658, lng: 105.8290 }
+  ],
+  long_bien: [
+    { name: 'Khu đô thị Vinhomes Riverside', lat: 21.0395, lng: 105.9080 },
+    { name: 'Công viên Ngọc Lâm', lat: 21.0438, lng: 105.8755 }
+  ],
+  ha_dong: [
+    { name: 'Công viên hồ Phùng Hưng', lat: 20.9652, lng: 105.7901 },
+    { name: 'Làng lụa Vạn Phúc', lat: 20.9782, lng: 105.7760 }
+  ],
+  bac_tu_liem: [
+    { name: 'Công viên Hòa Bình', lat: 21.0694, lng: 105.7915 }
+  ],
+  nam_tu_liem: [
+    { name: 'Sân vận động Quốc gia Mỹ Đình', lat: 21.0205, lng: 105.7635 },
+    { name: 'Khu vực Landmark 72', lat: 21.0168, lng: 105.7838 }
+  ],
+  thanh_tri: [
+    { name: 'Công viên Chu Văn An', lat: 20.9725, lng: 105.8115 }
+  ],
+  gia_lam: [
+    { name: 'Vinhomes Ocean Park', lat: 20.9930, lng: 105.9520 }
+  ],
+  dong_anh: [
+    { name: 'Công viên Thị trấn Đông Anh', lat: 21.1390, lng: 105.8455 }
+  ],
+  hoai_duc: [
+    { name: 'Khu đô thị Splendora An Khánh', lat: 21.0090, lng: 105.7220 }
+  ],
+  dan_phuong: [
+    { name: 'Khu đô thị sinh thái The Phoenix Garden', lat: 21.1070, lng: 105.6790 }
+  ],
+  chuong_my: [
+    { name: 'Trung tâm Thị trấn Xuân Mai', lat: 20.9030, lng: 105.5870 }
+  ],
+  thanh_oai: [
+    { name: 'Công viên Thanh Hà Mường Thanh', lat: 20.9380, lng: 105.7940 }
+  ],
+  thuong_tin: [
+    { name: 'Khu vực trung tâm Thường Tín', lat: 20.8520, lng: 105.8970 }
+  ]
+};
+
+function getDistrictTargetCenter(districtKey) {
+  const d = HANOI_DISTRICTS[districtKey];
+  if (!d) return null;
+  
+  const pois = RUNNING_POIS[districtKey];
+  if (pois && pois.length > 0 && Math.random() < 0.85) {
+    const poi = pois[Math.floor(Math.random() * pois.length)];
+    const r = randomInRange(150, 450); // tight search radius around scenic spot (150m - 450m)
+    console.log(`[Route Engine] Prioritizing scenic POI: "${poi.name}" in district "${d.name}" with radius ${Math.round(r)}m`);
+    return { lat: poi.lat, lng: poi.lng, radiusM: r };
+  }
+  
+  // Fallback to district center
+  const r = d.radiusKm * 1000 * 0.6;
+  console.log(`[Route Engine] Fallback to center of district "${d.name}" with radius ${Math.round(r)}m`);
+  return { lat: d.lat, lng: d.lng, radiusM: r };
+}
+
 const EARTH_RADIUS = 6371000;
 
 // ─── Math helpers ─────────────────────────────────────────────────────────────
@@ -246,12 +341,11 @@ async function generateRoute(options = {}) {
   const routeType = distanceKm < 2 ? 'out-back' : (Math.random() > 0.35 ? 'loop' : 'out-back');
 
   if (districtKeys && districtKeys.length > 0) {
-    const d0 = HANOI_DISTRICTS[districtKeys[0]];
-    if (d0) {
-      // Randomize start within first district radius
-      const r = randomInRange(0, d0.radiusKm * 1000 * 0.6);
+    const startTarget = getDistrictTargetCenter(districtKeys[0]);
+    if (startTarget) {
+      // Randomize start within the selected target bounds
       const b = randomInRange(0, 360);
-      const pt = destinationPoint(d0.lat, d0.lng, b, r);
+      const pt = destinationPoint(startTarget.lat, startTarget.lng, b, startTarget.radiusM);
       centerLat = pt.lat;
       centerLng = pt.lng;
     }
@@ -267,11 +361,10 @@ async function generateRoute(options = {}) {
       
       // Traverse initial sequence of districts
       for (let i = 1; i < districtKeys.length; i++) {
-        const d = HANOI_DISTRICTS[districtKeys[i]];
-        if (d) {
-          const r = randomInRange(0, d.radiusKm * 1000 * 0.5);
+        const target = getDistrictTargetCenter(districtKeys[i]);
+        if (target) {
           const b = randomInRange(0, 360);
-          waypoints.push(destinationPoint(d.lat, d.lng, b, r));
+          waypoints.push(destinationPoint(target.lat, target.lng, b, target.radiusM));
         }
       }
 
@@ -291,11 +384,10 @@ async function generateRoute(options = {}) {
           direction = -1;
         }
         
-        const d = HANOI_DISTRICTS[districtKeys[currentIdx]];
-        if (d) {
-          const r = randomInRange(0, d.radiusKm * 1000 * 0.7);
+        const target = getDistrictTargetCenter(districtKeys[currentIdx]);
+        if (target) {
           const b = randomInRange(0, 360);
-          waypoints.push(destinationPoint(d.lat, d.lng, b, r));
+          waypoints.push(destinationPoint(target.lat, target.lng, b, target.radiusM));
         }
       }
     }

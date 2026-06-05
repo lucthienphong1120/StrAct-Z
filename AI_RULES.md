@@ -32,7 +32,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Cycling (Ride)**: Distance x2.3 / Pace x0.45.
 - These weights are applied in `gpx-generator.js` to ensure realistic pace and duration based on the activity type.
 
-### 3. Priority Areas & Adjacent District Boosts (v1.55.0+)
+### 3. Priority Areas, Adjacent Boosts & Scenic POIs (v1.56.0+)
 - **Priority Area Weights**:
   - Home: `+7.0 (Fully) / +5.2 (Mostly) / +2.8 (Partially)`
   - Work: `+5.5 (Fully) / +3.2 (Mostly) / +1.5 (Partially)`
@@ -42,6 +42,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - If multiple last activities exist, the maximum of matching boosts is taken.
 - **Traverse District Count**: Traverses a random number of districts between 1 and the configured `max_district_span` instead of always forcing it to equal `max_district_span`.
 - **Simulation Constants**: Centralized in `limits.js` (e.g. 1.5% red light stop probability, 30% weather probability).
+- **Scenic Running POIs**: Prioritizes starting and routing coordinates (85% probability) near predefined scenic lakes, parks, and low-traffic running tracks in Hanoi (e.g. Hồ Hoàn Kiếm, Hồ Tây, Công viên Yên Sở, etc.) with a tight radius (150m - 450m) to generate realistic trails.
+
+### 4. Custom Device Names (v1.56.0)
+- **VIP Accounts**: Allowed to enter any custom free-text Device Name (trimmed, max 100 characters).
+- **Normal Accounts**: UI restricts custom entries, and the backend validates that their chosen device name strictly matches one of the preset choices in `limits.device_name.choices`.
 
 ### 4. Duplicate Protection (Safe Time)
 - **Concept**: Prevents new activities from being generated too close to existing ones (already uploaded or in Strava Cloud).
@@ -68,6 +73,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
 ## 🛠️ Developer Rules
+
+### v1.56.0 (2026-06-05)
+- **Feature: Scenic POIs Routing & VIP Custom Device Name Free-Text**:
+  - Predefined coordinates for famous lakes, parks, and low-traffic tracks in Hanoi (`RUNNING_POIS`) are used to select starting/traversing waypoints with 85% probability.
+  - Replaced Device Name select dropdown with a text input coupled with a datalist presets autocomplete.
+  - Implemented backend/frontend validation to restrict custom Device Name strings to VIP accounts only, preventing non-VIP accounts from bypassing security constraints.
 
 ### v1.55.0 (2026-06-05)
 - **Feature: Refined Scheduler, Simulation Centralization & New Weights Split**:
