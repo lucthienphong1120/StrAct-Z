@@ -150,9 +150,11 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] điều chỉnh Boost Adjacent bao gồm cả quận của hoạt động gần nhất và tăng trọng số lên +1.5 (v1.53.0)
 + [x] điều chỉnh trọng số các mức bao phủ Home (+4.5/+3.2/+1.5) và Work (+2.8/+1.5/+0.8) (v1.53.1)
 + [x] quy hoạch toàn bộ hằng số trọng số và hệ số nhân thuật toán về limits.js làm nguồn chân lý duy nhất (Source of Truth) và cập nhật động toàn bộ UI/Frontend (v1.54.0)
-+ [ ] check lại schedule nếu nhiều hoạt động sẽ gen từng cái 1 và có delay, kiểm tra overlap time, nếu ko phù hợp vẫn có thể 1 uploaded 1 failed
-+ [ ] check tỉ lệ dừng đèn đỏ 1.5% mỗi point di chuyển hay như nào
-+ [ ] tăng tỉ lệ trọng số của home (+7/+5.2/+2.8) và work (+5.5/+3.2/+1.5)
-+ [ ] tăng tỉ lệ boot adjacent thành +1.8 cho các quận kế bên và thêm x1.5 (+2.7) cho chính quận của hoạt động gần nhất
-+ [ ] check lại tính năng mở rộng phạm vi max 2 quận -> tăng phạm vi random thôi chứ không bắt buộc là luôn đi qua 2 quận
-+ [ ] làm tính năng toggle target distance (default off làm mờ, khi on sẽ thêm cấu hình target distance (5-30km), phải đảm bảo khoảng cách gen random max với target distance)
++ [x] check lại schedule nếu nhiều hoạt động sẽ gen từng cái 1 và có delay, kiểm tra overlap time, nếu ko phù hợp vẫn có thể 1 uploaded 1 failed (v1.55.0)
++ [x] check tỉ lệ dừng đèn đỏ 1.5% mỗi point di chuyển hay như nào (v1.55.0)
++ [x] tăng tỉ lệ trọng số của home (+7/+5.2/+2.8) và work (+5.5/+3.2/+1.5) (v1.55.0)
++ [x] tăng tỉ lệ boot adjacent thành +1.8 cho các quận kế bên và thêm x1.5 (+2.7) cho chính quận của hoạt động gần nhất (v1.55.0)
++ [x] check lại tính năng mở rộng phạm vi max 2 quận -> tăng phạm vi random thôi chứ không bắt buộc là luôn đi qua 2 quận (v1.55.0)
++ [ ] làm tính năng toggle target distance ở dưới phần Auto schedule (default off làm mờ, khi on sẽ thêm cấu hình target distance (5-30km)) -> nếu bật thì khi random hoạt động cuối ngày (VD: schedule 2) sẽ check và cố gắng để đạt phần distance còn lại trong ngày (VD: 10km) để đạt target distance (không được vượt quá random max distance) (copy/random cộng trừ 100-200m)
++ [ ] địa điểm chạy random ưu tiên các khu vực có traffic thấp, hoặc gần hồ, công viên, các địa điểm nổi tiếng hoặc các khu vực có nhiều hoạt động
++ [ ]
