@@ -32,11 +32,11 @@ const LIMITS = {
   },
   boost_adjacent: {
     label: 'Tăng trọng số cho quận hoạt động gần nhất và lân cận.',
-    desc_extra: 'Tác dụng: Quận hoạt động gần nhất sẽ được cộng thêm +2.7 trọng số, các quận lân cận được cộng thêm +1.8 trọng số.',
+    desc_extra: 'Tác dụng: Quận hoạt động gần nhất sẽ được cộng thêm +2.1 trọng số, các quận lân cận được cộng thêm +1.4 trọng số.',
     type: 'bool',
     default: true,
-    adjacent_weight: 1.8,
-    same_weight: 2.7
+    adjacent_weight: 1.4,
+    same_weight: 2.1
   },
 
   // ─── 📍 Map & Priority Areas ──────────────────────────────────────────
@@ -92,8 +92,8 @@ const LIMITS = {
     desc_extra: 'Tác dụng: Tỉ lệ chọn các quận mặc định là 1:1, các quận giao với vùng phủ sóng của Nhà/Công ty sẽ được cộng thêm trọng số boost dựa trên tỷ lệ diện tích giao nhau (Ratio = Giao nhau / Diện tích hình nhỏ hơn).',
     example: 'Ratio >= 0.85 (Fully), Ratio >= 0.35 (Mostly), Ratio > 0 (Partially).',
     weights: {
-      home: { fully: 7.0, mostly: 5.2, partially: 2.8 },
-      work: { fully: 5.5, mostly: 3.2, partially: 1.5 }
+      home: { fully: 7.0, mostly: 4.2, partially: 2.8 },
+      work: { fully: 5.2, mostly: 3.0, partially: 1.5 }
     }
   },
 

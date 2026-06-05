@@ -34,11 +34,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ### 3. Priority Areas, Adjacent Boosts & Scenic POIs (v1.56.0+)
 - **Priority Area Weights**:
-  - Home: `+7.0 (Fully) / +5.2 (Mostly) / +2.8 (Partially)`
-  - Work: `+5.5 (Fully) / +3.2 (Mostly) / +1.5 (Partially)`
+  - Home: `+7.0 (Fully) / +4.2 (Mostly) / +2.8 (Partially)`
+  - Work: `+5.2 (Fully) / +3.0 (Mostly) / +1.5 (Partially)`
 - **Adjacent Boost Split**:
-  - Same district (the district of the last activity itself): `+2.7` boost.
-  - Neighboring (adjacent) districts: `+1.8` boost.
+  - Same district (the district of the last activity itself): `+2.1` boost.
+  - Neighboring (adjacent) districts: `+1.4` boost.
   - If multiple last activities exist, the maximum of matching boosts is taken.
 - **Traverse District Count**: Traverses a random number of districts between 1 and the configured `max_district_span` instead of always forcing it to equal `max_district_span`.
 - **Simulation Constants**: Centralized in `limits.js` (e.g. 1.5% red light stop probability, 30% weather probability).

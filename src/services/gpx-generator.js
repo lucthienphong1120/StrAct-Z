@@ -252,8 +252,8 @@ async function generateActivity(config = {}) {
         
         if (ratio > 0) {
           const areaWeights = limits.activity_areas?.weights || {
-            home: { fully: 7.0, mostly: 5.2, partially: 2.8 },
-            work: { fully: 5.5, mostly: 3.2, partially: 1.5 }
+            home: { fully: 7.0, mostly: 4.2, partially: 2.8 },
+            work: { fully: 5.2, mostly: 3.0, partially: 1.5 }
           };
           if (area.type === 'home') {
             if (ratio >= 0.85) weight += areaWeights.home.fully;      // Bao trọn / Nằm trọn
@@ -283,10 +283,10 @@ async function generateActivity(config = {}) {
           let boostValue = 0;
           for (let lk of lastKeys) {
             if (lk === key) {
-              const sameWeight = limits.boost_adjacent?.same_weight || 2.7;
+              const sameWeight = limits.boost_adjacent?.same_weight || 2.1;
               boostValue = Math.max(boostValue, sameWeight);
             } else if (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(key)) {
-              const adjWeight = limits.boost_adjacent?.adjacent_weight || 1.8;
+              const adjWeight = limits.boost_adjacent?.adjacent_weight || 1.4;
               boostValue = Math.max(boostValue, adjWeight);
             }
           }

@@ -826,11 +826,11 @@ async function debugDistrictWeightRatios() {
 
       const sysL = window.sysLimits;
       const areaWeights = sysL?.activity_areas?.weights || {
-        home: { fully: 7.0, mostly: 5.2, partially: 2.8 },
-        work: { fully: 5.5, mostly: 3.2, partially: 1.5 }
+        home: { fully: 7.0, mostly: 4.2, partially: 2.8 },
+        work: { fully: 5.2, mostly: 3.0, partially: 1.5 }
       };
-      const adjacentWeight = sysL?.boost_adjacent?.adjacent_weight || 1.8;
-      const sameWeight = sysL?.boost_adjacent?.same_weight || 2.7;
+      const adjacentWeight = sysL?.boost_adjacent?.adjacent_weight || 1.4;
+      const sameWeight = sysL?.boost_adjacent?.same_weight || 2.1;
 
       areas.forEach(area => {
         const distToArea = haversineDistance(d.lat, d.lng, area.lat, area.lng);
