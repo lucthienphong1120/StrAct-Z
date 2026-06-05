@@ -284,7 +284,8 @@
                 <div class="form-group">
                   <label class="form-label">Device Name <span class="tooltip-icon tooltip-left"
                       id="tipDeviceName">?</span></label>
-                  <input type="text" id="cfgDeviceName" class="form-input" list="devicePresets" placeholder="Nhập hoặc chọn thiết bị..." style="width: 100%;">
+                  <input type="text" id="cfgDeviceName" class="form-input" list="devicePresets"
+                    placeholder="Nhập hoặc chọn thiết bị..." style="width: 100%;">
                   <datalist id="devicePresets">
                     <option value="Garmin Forerunner 975">
                     <option value="Garmin Forerunner 965">
@@ -452,6 +453,49 @@
             </div>
           </div>
 
+          <!-- Google Fit Account -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📉 Google Fit Account</div>
+            </div>
+            <div class="card-body" id="googleFitInfo">
+              <div id="gfDisconnected">
+                <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">Đồng bộ dữ liệu hoạt động
+                  và số bước chân sang Google Fit.</p>
+                <button onclick="connectGoogleFit()" class="btn btn-block btn-secondary" style="gap:10px;">
+                  <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
+                    style="width:18px; height:18px; object-fit:contain;" alt="">
+                  Connect Google Fit
+                </button>
+              </div>
+              <div id="gfConnected" style="display:none;">
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+                  <div
+                    style="width:40px; height:40px; background:rgba(66,133,244,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#4285F4; font-size:1.2rem;">
+                    <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
+                      style="width:32px; height:32px; object-fit:contain;" alt="Google Fit">
+                  </div>
+                  <div>
+                    <div style="font-weight:600; font-size:0.9rem; color:var(--text-primary);">Connected</div>
+                    <div style="font-size:0.75rem; color:var(--text-muted);" id="gfStatusText">Fetching data...</div>
+                  </div>
+                </div>
+                <div id="gfStats"
+                  style="margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border);">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.8rem; color:var(--text-secondary);">Today's Steps:</span>
+                    <span style="font-weight:700; color:var(--accent-blue);" id="gfTodaySteps">0</span>
+                  </div>
+                  <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.7rem; color:var(--text-muted);" id="gfLastSync">Last sync: --:--</span>
+                  </div>
+                </div>
+                <button onclick="disconnectGoogleFit()" class="btn btn-block btn-outline-danger btn-sm">Disconnect
+                  Google Fit</button>
+              </div>
+            </div>
+          </div>
+
         </div> <!-- End Left Column -->
 
         <!-- Right Column -->
@@ -513,18 +557,23 @@
               <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
                 <div class="form-group" style="margin-bottom:12px;">
                   <label class="toggle">
-                    <input type="checkbox" id="cfgTargetDistanceEnabled" onchange="toggleTargetDistanceInputs(); updateSchedule();">
+                    <input type="checkbox" id="cfgTargetDistanceEnabled"
+                      onchange="toggleTargetDistanceInputs(); updateSchedule();">
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size: 0.85rem;">🎯 Đặt mục tiêu cự ly ngày <span class="tooltip-icon tooltip-right" id="tipTargetDistanceEnabled">?</span></span>
+                    <span class="toggle-label" style="font-size: 0.85rem;">🎯 Daily Target Distance <span
+                        class="tooltip-icon tooltip-right" id="tipTargetDistanceEnabled">?</span></span>
                   </label>
                 </div>
-                
-                <div id="targetDistanceInputs" style="transition: opacity 0.3s ease; opacity: 0.5; pointer-events: none;">
+
+                <div id="targetDistanceInputs"
+                  style="transition: opacity 0.3s ease; opacity: 0.5; pointer-events: none;">
                   <div class="form-group" style="margin-bottom:0;">
                     <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
-                      <span>Cự ly mục tiêu (km) <span class="tooltip-icon tooltip-left" id="tipTargetDistanceKm">?</span></span>
+                      <span>Cự ly mục tiêu (km) <span class="tooltip-icon tooltip-left"
+                          id="tipTargetDistanceKm">?</span></span>
                     </label>
-                    <input type="number" step="0.1" id="cfgTargetDistanceKm" class="form-input" value="10.0" min="5.0" max="30.0" onchange="updateSchedule()">
+                    <input type="number" step="0.1" id="cfgTargetDistanceKm" class="form-input" value="10.0" min="5.0"
+                      max="30.0" onchange="updateSchedule()">
                   </div>
                 </div>
               </div>
@@ -644,69 +693,6 @@
             </div>
           </div>
 
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">🔗 Strava Account</div>
-            </div>
-            <div class="card-body">
-              <div id="accountProfile">
-                <p style="color:var(--text-muted)">Loading...</p>
-              </div>
-              <div class="form-group" style="margin-top: 16px; margin-bottom: 24px;">
-                <label class="form-label" style="display:flex; align-items:center; gap:6px;">
-                  Daily Upload Limit
-                  <span class="tooltip-icon tooltip-right" id="tipDailyLimit">?</span>
-                </label>
-                <input type="text" id="cfgDailyLimit" class="form-input" readonly
-                  style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
-              </div>
-              <button class="btn btn-block btn-outline-danger btn-sm" onclick="disconnect()">Disconnect Strava</button>
-            </div>
-          </div>
-
-          <!-- Google Fit Account -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">📉 Google Fit Account</div>
-            </div>
-            <div class="card-body" id="googleFitInfo">
-              <div id="gfDisconnected">
-                <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">Đồng bộ dữ liệu hoạt động
-                  và số bước chân sang Google Fit.</p>
-                <button onclick="connectGoogleFit()" class="btn btn-block btn-secondary" style="gap:10px;">
-                  <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
-                    style="width:18px; height:18px; object-fit:contain;" alt="">
-                  Connect Google Fit
-                </button>
-              </div>
-              <div id="gfConnected" style="display:none;">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-                  <div
-                    style="width:40px; height:40px; background:rgba(66,133,244,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#4285F4; font-size:1.2rem;">
-                    <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
-                      style="width:32px; height:32px; object-fit:contain;" alt="Google Fit">
-                  </div>
-                  <div>
-                    <div style="font-weight:600; font-size:0.9rem; color:var(--text-primary);">Connected</div>
-                    <div style="font-size:0.75rem; color:var(--text-muted);" id="gfStatusText">Fetching data...</div>
-                  </div>
-                </div>
-                <div id="gfStats"
-                  style="margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border);">
-                  <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:0.8rem; color:var(--text-secondary);">Today's Steps:</span>
-                    <span style="font-weight:700; color:var(--accent-blue);" id="gfTodaySteps">0</span>
-                  </div>
-                  <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:0.7rem; color:var(--text-muted);" id="gfLastSync">Last sync: --:--</span>
-                  </div>
-                </div>
-                <button onclick="disconnectGoogleFit()" class="btn btn-block btn-outline-danger btn-sm">Disconnect
-                  Google Fit</button>
-              </div>
-            </div>
-          </div>
-
           <!-- Account Settings -->
           <div class="card">
             <div class="card-header">
@@ -734,6 +720,26 @@
                     style="color:inherit;text-decoration:none;">stract-z@crfnetwork.com</a>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔗 Strava Account</div>
+            </div>
+            <div class="card-body">
+              <div id="accountProfile">
+                <p style="color:var(--text-muted)">Loading...</p>
+              </div>
+              <div class="form-group" style="margin-top: 16px; margin-bottom: 24px;">
+                <label class="form-label" style="display:flex; align-items:center; gap:6px;">
+                  Daily Upload Limit
+                  <span class="tooltip-icon tooltip-right" id="tipDailyLimit">?</span>
+                </label>
+                <input type="text" id="cfgDailyLimit" class="form-input" readonly
+                  style="opacity:0.8; background:rgba(255,255,255,0.05); cursor:not-allowed;">
+              </div>
+              <button class="btn btn-block btn-outline-danger btn-sm" onclick="disconnect()">Disconnect Strava</button>
             </div>
           </div>
         </div> <!-- End Right Column -->

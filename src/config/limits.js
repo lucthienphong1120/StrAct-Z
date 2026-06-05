@@ -349,7 +349,7 @@ const LIMITS = {
   },
   target_distance_enabled: {
     label: 'Đặt mục tiêu cự ly hàng ngày.',
-    desc_extra: 'Tác dụng: Khi được bật, hoạt động tự động cuối cùng trong ngày sẽ được điều chỉnh cự ly để đạt tổng mục tiêu ngày.',
+    desc_extra: 'Tác dụng: Khi được bật, hoạt động cuối cùng trong ngày sẽ điều chỉnh cự ly để cố gắng đạt tổng mục tiêu đề ra.',
     type: 'bool',
     default: false
   },

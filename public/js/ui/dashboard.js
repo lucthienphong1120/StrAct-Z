@@ -820,7 +820,8 @@ async function debugDistrictWeightRatios() {
     districts.forEach(d => {
       const isAllowed = allowedDistricts.includes(d.key);
       let weight = 1.0;
-      let areaBoost = 0;
+      let homeBoost = 0;
+      let workBoost = 0;
       let adjacentBoost = 0;
       
       const distRadiusM = (d.radiusKm || 1.5) * 1000;
@@ -845,13 +846,14 @@ async function debugDistrictWeightRatios() {
             if (ratio >= 0.85) boost = areaWeights.home.fully;
             else if (ratio >= 0.35) boost = areaWeights.home.mostly;
             else boost = areaWeights.home.partially;
+            homeBoost += boost;
           } else if (area.type === 'work') {
             if (ratio >= 0.85) boost = areaWeights.work.fully;
             else if (ratio >= 0.35) boost = areaWeights.work.mostly;
             else boost = areaWeights.work.partially;
+            workBoost += boost;
           }
           weight += boost;
-          areaBoost += boost;
         }
       });
 
@@ -883,7 +885,8 @@ async function debugDistrictWeightRatios() {
         name: d.name,
         isAllowed,
         weight,
-        areaBoost,
+        homeBoost,
+        workBoost,
         adjacentBoost
       });
     });
@@ -896,13 +899,14 @@ async function debugDistrictWeightRatios() {
       .map(item => {
         const percentage = totalWeight > 0 ? parseFloat(((item.weight / totalWeight) * 100).toFixed(2)) : 0;
         let boosts = [];
-        if (item.areaBoost > 0) boosts.push(`Home/Work: +${item.areaBoost.toFixed(1)}`);
-        if (item.adjacentBoost > 0) boosts.push(`Adjacent: +${item.adjacentBoost.toFixed(1)}`);
+        if (item.homeBoost > 0) boosts.push(`Home +${item.homeBoost.toFixed(1)}`);
+        if (item.workBoost > 0) boosts.push(`Work +${item.workBoost.toFixed(1)}`);
+        if (item.adjacentBoost > 0) boosts.push(`Adjacent +${item.adjacentBoost.toFixed(1)}`);
         return {
           'Quận': item.name,
           'Key': item.key,
           'Trọng số': parseFloat(item.weight.toFixed(2)),
-          'Tỉ lệ (%)': `${percentage}%`,
+          'Tỉ lệ': `${percentage}%`,
           'Boosts': boosts.join(', ') || 'None'
         };
       });

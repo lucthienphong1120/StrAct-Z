@@ -77,7 +77,9 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       let activity;
       const lastUploaded = await db.getLastUploadedActivity(accountId);
 
-      // Target distance calculation for the last activity of the last schedule
+      // Target distance calculation for the last activity of the last schedule.
+      // Counts both Strava Cloud activities AND StrAct-Z generated/uploaded activities.
+      // Only applies when target not yet met; if already exceeded, uses normal random.
       let targetDistanceKmOverride = null;
       const isLastSchedule = (parseInt(config.schedule_count) === 1) || (slotName === 'Schedule 2');
       const targetDistanceEnabled = config.target_distance_enabled === 'true';
@@ -94,10 +96,12 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
 
           let dist = 0;
           if (act.distance_km !== undefined) {
+            // Local DB activity (StrAct-Z): only count uploaded or generated (not failed/deleted)
             if (act.upload_status === 'uploaded' || act.upload_status === 'generated') {
               dist = parseFloat(act.distance_km);
             }
           } else if (act.distance !== undefined) {
+            // Strava Cloud activity: distance is in meters, always count
             dist = parseFloat(act.distance) / 1000;
           }
 
@@ -111,14 +115,16 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         let remainingDistance = dailyTarget - accumulatedDistanceForToday;
 
         if (remainingDistance > 0) {
+          // Target not yet reached: set last activity distance to fill the gap (±50-200m)
           const sign = Math.random() < 0.5 ? -1 : 1;
           const offsetKm = sign * (Math.random() * (0.20 - 0.05) + 0.05); // +/- (50m to 200m)
           const rawOverride = Math.max(0.1, remainingDistance + offsetKm);
           const maxDist = parseFloat(config.max_distance_km || '8.0');
           targetDistanceKmOverride = Math.min(maxDist, rawOverride);
-          console.log(`[Scheduler] Target distance active. Target: ${dailyTarget}km, Accumulated: ${accumulatedDistanceForToday.toFixed(2)}km, Remaining: ${remainingDistance.toFixed(2)}km, Offset: ${offsetKm.toFixed(3)}km, Target Override: ${targetDistanceKmOverride.toFixed(2)}km (Raw Override: ${rawOverride.toFixed(2)}km, clamped to max ${maxDist}km)`);
+          console.log(`[Scheduler] Target distance active. Target: ${dailyTarget}km, Accumulated (Strava + StrAct-Z): ${accumulatedDistanceForToday.toFixed(2)}km, Remaining: ${remainingDistance.toFixed(2)}km, Offset: ${offsetKm.toFixed(3)}km, Override: ${targetDistanceKmOverride.toFixed(2)}km (raw: ${rawOverride.toFixed(2)}km, capped at max ${maxDist}km)`);
         } else {
-          console.log(`[Scheduler] Daily target distance of ${dailyTarget}km already achieved (${accumulatedDistanceForToday.toFixed(2)}km). Using normal random distance.`);
+          // Already met or exceeded target: use normal random distance
+          console.log(`[Scheduler] Daily target ${dailyTarget}km already met/exceeded (${accumulatedDistanceForToday.toFixed(2)}km from Strava + StrAct-Z). Using normal random distance.`);
         }
       }
 
