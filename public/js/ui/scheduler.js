@@ -1,7 +1,3 @@
-/**
- * StrAct Z - Scheduler Controls Logic
- */
-
 async function loadSchedule() {
   try {
     const status = await api('/scheduler');
@@ -22,6 +18,13 @@ async function loadSchedule() {
 
     document.getElementById('scheduleCountMin').value = (status.scheduleCountMin !== undefined && status.scheduleCountMin !== null) ? status.scheduleCountMin : ((sysL?.schedule_count_min?.default) !== undefined ? sysL.schedule_count_min.default : 1);
     document.getElementById('scheduleCountMax').value = (status.scheduleCountMax !== undefined && status.scheduleCountMax !== null) ? status.scheduleCountMax : ((sysL?.schedule_count_max?.default) !== undefined ? sysL.schedule_count_max.default : 2);
+    
+    const targetDistEnabledInput = document.getElementById('cfgTargetDistanceEnabled');
+    const targetDistKmInput = document.getElementById('cfgTargetDistanceKm');
+    if (targetDistEnabledInput) targetDistEnabledInput.checked = !!status.targetDistanceEnabled;
+    if (targetDistKmInput) targetDistKmInput.value = status.targetDistanceKm || (sysL?.target_distance_km?.default) || '10.0';
+    toggleTargetDistanceInputs();
+
     updateScheduleDisplay(status);
   } catch (err) { console.error('Schedule error:', err); }
 }
@@ -36,6 +39,23 @@ function updateScheduleDisplay(status) {
     document.getElementById('scheduleTimeDisplay').textContent = times.join(' & ');
   } else {
     display.style.display = 'none';
+  }
+}
+
+function toggleTargetDistanceInputs() {
+  const enabledEl = document.getElementById('cfgTargetDistanceEnabled');
+  const container = document.getElementById('targetDistanceInputs');
+  if (!enabledEl || !container) return;
+
+  const enabled = enabledEl.checked;
+  if (enabled) {
+    container.style.opacity = '1';
+    container.style.pointerEvents = 'auto';
+    container.querySelectorAll('input').forEach(i => i.disabled = false);
+  } else {
+    container.style.opacity = '0.5';
+    container.style.pointerEvents = 'none';
+    container.querySelectorAll('input').forEach(i => i.disabled = true);
   }
 }
 
@@ -65,8 +85,11 @@ async function updateSchedule() {
     showToast('Min Count must not exceed Max Count', 'error');
     return;
   }
+
+  const targetDistanceEnabled = document.getElementById('cfgTargetDistanceEnabled')?.checked || false;
+  const targetDistanceKm = parseFloat(document.getElementById('cfgTargetDistanceKm')?.value || '10.0');
   
-  const status = await api('/scheduler', { method: 'POST', body: { enabled, time, scheduleCount, time2, countMin, countMax } });
+  const status = await api('/scheduler', { method: 'POST', body: { enabled, time, scheduleCount, time2, countMin, countMax, targetDistanceEnabled, targetDistanceKm } });
   if (status.error) {
     showToast(status.error, 'error');
     return;
@@ -87,4 +110,5 @@ async function updateSchedule() {
 // Export to window
 window.loadSchedule = loadSchedule;
 window.updateScheduleDisplay = updateScheduleDisplay;
+window.toggleTargetDistanceInputs = toggleTargetDistanceInputs;
 window.updateSchedule = updateSchedule;

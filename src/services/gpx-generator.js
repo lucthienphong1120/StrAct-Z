@@ -338,8 +338,16 @@ async function generateActivity(config = {}) {
     chosenDistrictKeys = [allowedDistricts[r] || 'hoan_kiem'];
   }
 
-  // Randomize distance and pace
-  const distanceKm = Math.round(randomInRange(finalMinDist, finalMaxDist) * 10) / 10;
+  // Target distance or randomized distance
+  let distanceKm;
+  if (config.targetDistanceKm && parseFloat(config.targetDistanceKm) > 0) {
+    const rawTarget = parseFloat(config.targetDistanceKm);
+    const finalTarget = Math.max(finalMinDist, Math.min(finalMaxDist, rawTarget));
+    distanceKm = Math.round(finalTarget * 10) / 10;
+    console.log(`[Generator] Target distance active: Raw Target = ${rawTarget.toFixed(2)}km, Snapped Target (respecting limits for ${finalActivityType}) = ${distanceKm.toFixed(2)}km`);
+  } else {
+    distanceKm = Math.round(randomInRange(finalMinDist, finalMaxDist) * 10) / 10;
+  }
   const avgPace = randomInRange(finalMinPace, finalMaxPace, true);
 
   // Handle Random Time Generation if startTime is not explicitly provided

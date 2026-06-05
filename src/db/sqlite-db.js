@@ -47,6 +47,8 @@ const DEFAULT_CONFIG = {
   schedule_time_2: systemLimits.schedule_time_2.default,
   schedule_count_min: String(systemLimits.schedule_count_min.default),
   schedule_count_max: String(systemLimits.schedule_count_max.default),
+  target_distance_enabled: String(systemLimits.target_distance_enabled.default),
+  target_distance_km: String(systemLimits.target_distance_km.default),
   activity_areas: '[]',
   map_lat: String(systemLimits.map_lat.default),
   map_lng: String(systemLimits.map_lng.default),

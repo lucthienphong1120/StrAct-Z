@@ -586,14 +586,17 @@ router.post('/scheduler', async (req, res) => {
     const updates = req.body;
     const role = req.user.role || 'normal';
 
-    const validation = validateConfig({
-      schedule_enabled: updates.enabled,
-      schedule_time: updates.time,
-      schedule_count: updates.scheduleCount,
-      schedule_time_2: updates.time2,
-      schedule_count_min: updates.countMin,
-      schedule_count_max: updates.countMax
-    }, role);
+    const configToValidate = {};
+    if (updates.enabled !== undefined) configToValidate.schedule_enabled = updates.enabled;
+    if (updates.time !== undefined) configToValidate.schedule_time = updates.time;
+    if (updates.scheduleCount !== undefined) configToValidate.schedule_count = updates.scheduleCount;
+    if (updates.time2 !== undefined) configToValidate.schedule_time_2 = updates.time2;
+    if (updates.countMin !== undefined) configToValidate.schedule_count_min = updates.countMin;
+    if (updates.countMax !== undefined) configToValidate.schedule_count_max = updates.countMax;
+    if (updates.targetDistanceEnabled !== undefined) configToValidate.target_distance_enabled = updates.targetDistanceEnabled;
+    if (updates.targetDistanceKm !== undefined) configToValidate.target_distance_km = updates.targetDistanceKm;
+
+    const validation = validateConfig(configToValidate, role);
 
     if (!validation.success) {
       return res.status(400).json({ error: validation.error });
@@ -602,12 +605,14 @@ router.post('/scheduler', async (req, res) => {
     const s = validation.sanitized;
     await scheduler.updateSchedule(
       req.user.id, 
-      s.schedule_enabled === 'true', 
+      s.schedule_enabled !== undefined ? s.schedule_enabled === 'true' : undefined, 
       s.schedule_time,
       s.schedule_count,
       s.schedule_time_2,
-      parseInt(s.schedule_count_min), 
-      parseInt(s.schedule_count_max)
+      s.schedule_count_min !== undefined ? parseInt(s.schedule_count_min) : undefined, 
+      s.schedule_count_max !== undefined ? parseInt(s.schedule_count_max) : undefined,
+      s.target_distance_enabled !== undefined ? s.target_distance_enabled === 'true' : undefined,
+      s.target_distance_km !== undefined ? parseFloat(s.target_distance_km) : undefined
     );
     
     res.json(await scheduler.getStatus(req.user.id));

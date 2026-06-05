@@ -30,6 +30,7 @@ function applyLimitsToUI() {
   syncRange('cfgMaxDist', 'max_distance_km');
   syncRange('scheduleCountMin', 'schedule_count_min');
   syncRange('scheduleCountMax', 'schedule_count_max');
+  syncRange('cfgTargetDistanceKm', 'target_distance_km');
   syncRange('cfgUserAge', 'user_age');
   syncRange('cfgMinPace', 'min_pace');
   syncRange('cfgMaxPace', 'max_pace');
@@ -135,6 +136,8 @@ function updateDynamicTooltips() {
     schedule_time: 'tipScheduleTime',
     schedule_count_min: 'tipScheduleMin',
     schedule_count_max: 'tipScheduleMax',
+    target_distance_enabled: 'tipTargetDistanceEnabled',
+    target_distance_km: 'tipTargetDistanceKm',
     heart_rate_zones: 'tipHeartRateZones',
     dist_multipliers: 'tipDistMultipliers',
     pace_multipliers: 'tipPaceMultipliers',

@@ -508,6 +508,26 @@
                     onchange="updateSchedule()">
                 </div>
               </div>
+
+              <!-- Target Distance Settings -->
+              <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
+                <div class="form-group" style="margin-bottom:12px;">
+                  <label class="toggle">
+                    <input type="checkbox" id="cfgTargetDistanceEnabled" onchange="toggleTargetDistanceInputs(); updateSchedule();">
+                    <div class="toggle-track"></div>
+                    <span class="toggle-label" style="font-size: 0.85rem;">🎯 Đặt mục tiêu cự ly ngày <span class="tooltip-icon tooltip-right" id="tipTargetDistanceEnabled">?</span></span>
+                  </label>
+                </div>
+                
+                <div id="targetDistanceInputs" style="transition: opacity 0.3s ease; opacity: 0.5; pointer-events: none;">
+                  <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
+                      <span>Cự ly mục tiêu (km) <span class="tooltip-icon tooltip-left" id="tipTargetDistanceKm">?</span></span>
+                    </label>
+                    <input type="number" step="0.1" id="cfgTargetDistanceKm" class="form-input" value="10.0" min="5.0" max="30.0" onchange="updateSchedule()">
+                  </div>
+                </div>
+              </div>
               <div class="schedule-display" id="scheduleDisplay" style="display:none;">
                 <div>
                   <div class="schedule-time" id="scheduleTimeDisplay">06:00</div>

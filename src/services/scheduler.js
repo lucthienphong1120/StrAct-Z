@@ -76,9 +76,56 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     for (let i = 0; i < taskCount; i++) {
       let activity;
       const lastUploaded = await db.getLastUploadedActivity(accountId);
+
+      // Target distance calculation for the last activity of the last schedule
+      let targetDistanceKmOverride = null;
+      const isLastSchedule = (parseInt(config.schedule_count) === 1) || (slotName === 'Schedule 2');
+      const targetDistanceEnabled = config.target_distance_enabled === 'true';
+
+      if (targetDistanceEnabled && isLastSchedule && (i === taskCount - 1)) {
+        let accumulatedDistanceForToday = 0;
+        const seenTimes = new Set();
+
+        for (const act of existingActivities) {
+          const startTime = act.start_date || act.route_start_time;
+          if (!startTime) continue;
+          const startTimeStr = new Date(startTime).toISOString();
+          if (seenTimes.has(startTimeStr)) continue;
+
+          let dist = 0;
+          if (act.distance_km !== undefined) {
+            if (act.upload_status === 'uploaded' || act.upload_status === 'generated') {
+              dist = parseFloat(act.distance_km);
+            }
+          } else if (act.distance !== undefined) {
+            dist = parseFloat(act.distance) / 1000;
+          }
+
+          if (dist > 0) {
+            accumulatedDistanceForToday += dist;
+            seenTimes.add(startTimeStr);
+          }
+        }
+
+        const dailyTarget = parseFloat(config.target_distance_km || '10.0');
+        let remainingDistance = dailyTarget - accumulatedDistanceForToday;
+
+        if (remainingDistance > 0) {
+          const sign = Math.random() < 0.5 ? -1 : 1;
+          const offsetKm = sign * (Math.random() * (0.20 - 0.05) + 0.05); // +/- (50m to 200m)
+          targetDistanceKmOverride = Math.max(0.1, remainingDistance + offsetKm);
+          console.log(`[Scheduler] Target distance active. Target: ${dailyTarget}km, Accumulated: ${accumulatedDistanceForToday.toFixed(2)}km, Remaining: ${remainingDistance.toFixed(2)}km, Offset: ${offsetKm.toFixed(3)}km, Target Override: ${targetDistanceKmOverride.toFixed(2)}km`);
+        } else {
+          console.log(`[Scheduler] Daily target distance of ${dailyTarget}km already achieved (${accumulatedDistanceForToday.toFixed(2)}km). Using normal random distance.`);
+        }
+      }
+
       try {
         const genConfig = buildGeneratorConfig(config, { target_date: targetDate }, lastUploaded, role);
         genConfig.existingActivities = existingActivities;
+        if (targetDistanceKmOverride !== null) {
+          genConfig.targetDistanceKm = targetDistanceKmOverride;
+        }
         activity = await generateActivity(genConfig);
       } catch (genErr) {
         if (genErr.code === 'NO_VALID_TIME_SLOT') {
@@ -122,7 +169,9 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       // Add to existingActivities for next iteration check
       existingActivities.push({
         start_date: activity.startTime.toISOString(),
-        duration_min: activity.durationMin
+        duration_min: activity.durationMin,
+        distance_km: activity.distanceKm,
+        upload_status: 'generated'
       });
 
       // Save to database
@@ -297,6 +346,8 @@ async function getStatus(accountId) {
     scheduleTime2: config.schedule_time_2 || systemLimits.schedule_time_2.default,
     scheduleCountMin: parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : systemLimits.schedule_count_min.default,
     scheduleCountMax: parseInt(config.schedule_count_max) >= 0 ? parseInt(config.schedule_count_max) : systemLimits.schedule_count_max.default,
+    targetDistanceEnabled: config.target_distance_enabled === 'true',
+    targetDistanceKm: parseFloat(config.target_distance_km || systemLimits.target_distance_km.default),
     isRunning: isRunning.get(accountId) || false,
     taskActive: scheduledTasks.has(accountId),
   };
@@ -305,8 +356,8 @@ async function getStatus(accountId) {
 /**
  * Update schedule for a specific account
  */
-async function updateSchedule(accountId, enabled1, time1, scheduleCount, time2, countMin, countMax) {
-  await db.setConfig(accountId, 'schedule_enabled', enabled1 ? 'true' : 'false');
+async function updateSchedule(accountId, enabled1, time1, scheduleCount, time2, countMin, countMax, targetDistanceEnabled, targetDistanceKm) {
+  if (enabled1 !== undefined) await db.setConfig(accountId, 'schedule_enabled', enabled1 ? 'true' : 'false');
   if (time1) await db.setConfig(accountId, 'schedule_time', time1);
   
   if (scheduleCount !== undefined) await db.setConfig(accountId, 'schedule_count', scheduleCount);
@@ -314,6 +365,13 @@ async function updateSchedule(accountId, enabled1, time1, scheduleCount, time2, 
   
   if (countMin !== undefined && countMin !== null) await db.setConfig(accountId, 'schedule_count_min', countMin);
   if (countMax !== undefined && countMax !== null) await db.setConfig(accountId, 'schedule_count_max', countMax);
+
+  if (targetDistanceEnabled !== undefined) {
+    await db.setConfig(accountId, 'target_distance_enabled', targetDistanceEnabled ? 'true' : 'false');
+  }
+  if (targetDistanceKm !== undefined && targetDistanceKm !== null) {
+    await db.setConfig(accountId, 'target_distance_km', String(targetDistanceKm));
+  }
 
   await startScheduler(accountId);
 }

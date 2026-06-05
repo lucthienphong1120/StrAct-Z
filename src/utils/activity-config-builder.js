@@ -37,6 +37,8 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
     boost_adjacent: String(ov.boost_adjacent !== undefined ? ov.boost_adjacent : config.boost_adjacent) !== 'false',
     last_district_keys: lastUploaded ? lastUploaded.district_keys : null,
     deviceName: ov.device_name || config.device_name || systemLimits.device_name.default,
+    target_distance_enabled: String(ov.target_distance_enabled !== undefined ? ov.target_distance_enabled : config.target_distance_enabled) === 'true',
+    target_distance_km: parseFloat(ov.target_distance_km || config.target_distance_km || '10.0'),
   };
 }
 

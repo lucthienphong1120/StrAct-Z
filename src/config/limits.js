@@ -347,6 +347,20 @@ const LIMITS = {
     min: 1,
     max: 2
   },
+  target_distance_enabled: {
+    label: 'Đặt mục tiêu cự ly hàng ngày.',
+    desc_extra: 'Tác dụng: Khi được bật, hoạt động tự động cuối cùng trong ngày sẽ được điều chỉnh cự ly để đạt tổng mục tiêu ngày.',
+    type: 'bool',
+    default: false
+  },
+  target_distance_km: {
+    label: 'Mục tiêu cự ly chạy ngày (Target Distance).',
+    type: 'float',
+    default: 10.0,
+    min: 5.0,
+    max: 30.0,
+    unit: 'km'
+  },
 
   // ─── 🛡️ Hidden / System / Other UI Info ─────────────────────────────────────
   daily_upload_limit: {
