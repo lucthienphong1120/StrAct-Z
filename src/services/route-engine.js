@@ -18,70 +18,133 @@ DISTRICTS.forEach(d => {
 const RUNNING_POIS = {
   hoan_kiem: [
     { name: 'Hồ Hoàn Kiếm', lat: 21.0285, lng: 105.8542 },
-    { name: 'Nhà hát Lớn Hà Nội', lat: 21.0245, lng: 105.8588 }
+    { name: 'Nhà hát Lớn Hà Nội', lat: 21.0245, lng: 105.8588 },
+    { name: 'Vườn hoa Lý Thái Tổ', lat: 21.0274, lng: 105.8562 },
+    { name: 'Quảng trường Đông Kinh Nghĩa Thục', lat: 21.0306, lng: 105.8524 },
+    { name: 'Trường THPT Việt Đức', lat: 21.0227, lng: 105.8525 }
   ],
   hai_ba_trung: [
     { name: 'Công viên Thống Nhất', lat: 21.0163, lng: 105.8458 },
-    { name: 'Công viên Tuổi Trẻ', lat: 21.0068, lng: 105.8601 }
+    { name: 'Công viên Tuổi Trẻ', lat: 21.0068, lng: 105.8601 },
+    { name: 'Đại học Bách Khoa Hà Nội', lat: 21.0062, lng: 105.8431 },
+    { name: 'Đại học Kinh tế Quốc dân (NEU)', lat: 21.0016, lng: 105.8423 },
+    { name: 'Hồ Thiền Quang', lat: 21.0185, lng: 105.8475 },
+    { name: 'Đại học Xây dựng', lat: 21.0035, lng: 105.8428 },
+    { name: 'Sân vận động Bách Khoa', lat: 21.0055, lng: 105.8465 }
   ],
   ba_dinh: [
     { name: 'Công viên Bách Thảo', lat: 21.0425, lng: 105.8285 },
     { name: 'Hồ Trúc Bạch', lat: 21.0416, lng: 105.8385 },
-    { name: 'Quảng trường Ba Đình', lat: 21.0360, lng: 105.8347 }
+    { name: 'Quảng trường Ba Đình', lat: 21.0360, lng: 105.8347 },
+    { name: 'Hồ Giảng Võ', lat: 21.0270, lng: 105.8166 },
+    { name: 'Hồ Ngọc Khánh', lat: 21.0276, lng: 105.8095 },
+    { name: 'Hồ Thành Công', lat: 21.0195, lng: 105.8130 },
+    { name: 'Công viên Thủ Lệ', lat: 21.0322, lng: 105.8080 },
+    { name: 'Trường THPT Chu Văn An', lat: 21.0441, lng: 105.8315 }
   ],
   tay_ho: [
-    { name: 'Đường ven Hồ Tây', lat: 21.0558, lng: 105.8083 },
+    { name: 'Đường ven Hồ Tây (Trích Sài)', lat: 21.0558, lng: 105.8083 },
+    { name: 'Đường ven Hồ Tây (Nguyễn Đình Thi)', lat: 21.0478, lng: 105.8236 },
     { name: 'Công viên Nước Hồ Tây', lat: 21.0762, lng: 105.8175 },
-    { name: 'Đường Thanh Niên', lat: 21.0436, lng: 105.8372 }
+    { name: 'Đường Thanh Niên', lat: 21.0436, lng: 105.8372 },
+    { name: 'Đường ven Hồ Tây (Vệ Hồ)', lat: 21.0725, lng: 105.8288 },
+    { name: 'Hồ Quảng Bá', lat: 21.0664, lng: 105.8260 },
+    { name: 'Thung lũng hoa Hồ Tây', lat: 21.0745, lng: 105.8210 }
   ],
   cau_giay: [
     { name: 'Công viên Cầu Giấy', lat: 21.0205, lng: 105.7905 },
-    { name: 'Công viên Nghĩa Đô', lat: 21.0415, lng: 105.7985 }
+    { name: 'Công viên Nghĩa Đô', lat: 21.0415, lng: 105.7985 },
+    { name: 'Đại học Quốc gia Hà Nội (VNU)', lat: 21.0375, lng: 105.7820 },
+    { name: 'Trường THPT Chuyên Hà Nội - Amsterdam', lat: 21.0099, lng: 105.7985 },
+    { name: 'Đại học Sư phạm Hà Nội', lat: 21.0365, lng: 105.7850 },
+    { name: 'Hồ Nghĩa Tân', lat: 21.0410, lng: 105.7930 },
+    { name: 'Đại học Thương mại', lat: 21.0366, lng: 105.7745 }
   ],
   dong_da: [
     { name: 'Văn Miếu Quốc Tử Giám', lat: 21.0285, lng: 105.8355 },
     { name: 'Hồ Xã Đàn', lat: 21.0132, lng: 105.8327 },
-    { name: 'Công viên Gò Đống Đa', lat: 21.0130, lng: 105.8238 }
+    { name: 'Công viên Gò Đống Đa', lat: 21.0130, lng: 105.8238 },
+    { name: 'Hồ Ba Mẫu', lat: 21.0160, lng: 105.8415 },
+    { name: 'Hồ Đống Đa (Hoàng Cầu)', lat: 21.0195, lng: 105.8210 },
+    { name: 'Hồ Láng (Chùa Láng)', lat: 21.0215, lng: 105.8035 },
+    { name: 'Đại học Ngoại thương (FTU)', lat: 21.0225, lng: 105.8048 },
+    { name: 'Đại học Y Hà Nội', lat: 21.0038, lng: 105.8285 },
+    { name: 'Học viện Ngoại giao', lat: 21.0232, lng: 105.8045 },
+    { name: 'Sân vận động Hàng Đẫy', lat: 21.0290, lng: 105.8315 }
   ],
   thanh_xuan: [
-    { name: 'Công viên Thanh Xuân', lat: 20.9982, lng: 105.8008 }
+    { name: 'Công viên Thanh Xuân', lat: 20.9982, lng: 105.8008 },
+    { name: 'Hồ Đầm Hồng', lat: 20.9950, lng: 105.8235 },
+    { name: 'Hồ Khương Đình', lat: 20.9858, lng: 105.8190 },
+    { name: 'Đại học Hà Nội (HANU)', lat: 20.9845, lng: 105.7955 },
+    { name: 'Đại học Khoa học Tự nhiên', lat: 20.9995, lng: 105.8090 },
+    { name: 'Hồ Hạ Đình', lat: 20.9865, lng: 105.8095 }
   ],
   hoang_mai: [
     { name: 'Công viên Yên Sở', lat: 20.9664, lng: 105.8521 },
-    { name: 'Bán đảo Linh Đàm', lat: 20.9658, lng: 105.8290 }
+    { name: 'Bán đảo Linh Đàm', lat: 20.9658, lng: 105.8290 },
+    { name: 'Hồ Đền Lừ', lat: 20.9882, lng: 105.8565 },
+    { name: 'Hồ Vĩnh Hoàng', lat: 20.9835, lng: 105.8640 },
+    { name: 'Trường Đại học Thăng Long', lat: 20.9760, lng: 105.8160 },
+    { name: 'Hồ Định Công', lat: 20.9785, lng: 105.8250 }
   ],
   long_bien: [
     { name: 'Khu đô thị Vinhomes Riverside', lat: 21.0395, lng: 105.9080 },
-    { name: 'Công viên Ngọc Lâm', lat: 21.0438, lng: 105.8755 }
+    { name: 'Công viên Ngọc Lâm', lat: 21.0438, lng: 105.8755 },
+    { name: 'Hồ Thạch Bàn', lat: 21.0185, lng: 105.8980 },
+    { name: 'Hồ Cầu Tình', lat: 21.0505, lng: 105.8750 },
+    { name: 'Đê sông Hồng (Long Biên)', lat: 21.0360, lng: 105.8710 },
+    { name: 'Trường THPT Nguyễn Gia Thiều', lat: 21.0465, lng: 105.8785 }
   ],
   ha_dong: [
     { name: 'Công viên hồ Phùng Hưng', lat: 20.9652, lng: 105.7901 },
-    { name: 'Làng lụa Vạn Phúc', lat: 20.9782, lng: 105.7760 }
+    { name: 'Làng lụa Vạn Phúc', lat: 20.9782, lng: 105.7760 },
+    { name: 'Hồ Văn Quán', lat: 20.9792, lng: 105.7915 },
+    { name: 'Học viện Công nghệ Bưu chính Viễn thông (PTIT)', lat: 20.9808, lng: 105.7885 },
+    { name: 'Học viện An ninh Nhân dân', lat: 20.9840, lng: 105.7870 },
+    { name: 'Hồ Đầm Khê', lat: 20.9675, lng: 105.7760 },
+    { name: 'Công viên thể thao Hà Đông', lat: 20.9570, lng: 105.7710 }
   ],
   bac_tu_liem: [
-    { name: 'Công viên Hòa Bình', lat: 21.0694, lng: 105.7915 }
+    { name: 'Công viên Hòa Bình', lat: 21.0694, lng: 105.7915 },
+    { name: 'Đại học Mỏ - Địa chất', lat: 21.0722, lng: 105.7740 },
+    { name: 'Học viện Tài chính', lat: 21.0760, lng: 105.7785 },
+    { name: 'Đại học Công nghiệp Hà Nội', lat: 21.0535, lng: 105.7350 },
+    { name: 'Công viên hồ điều hòa Ngoại Giao Đoàn', lat: 21.0665, lng: 105.7985 }
   ],
   nam_tu_liem: [
     { name: 'Sân vận động Quốc gia Mỹ Đình', lat: 21.0205, lng: 105.7635 },
-    { name: 'Khu vực Landmark 72', lat: 21.0168, lng: 105.7838 }
+    { name: 'Khu vực Landmark 72', lat: 21.0168, lng: 105.7838 },
+    { name: 'Công viên Mễ Trì', lat: 21.0125, lng: 105.7815 },
+    { name: 'Cung điền kinh trong nhà Mỹ Đình', lat: 21.0225, lng: 105.7605 },
+    { name: 'Đại học Quốc gia Hà Nội (Kí túc xá Mỹ Đình)', lat: 21.0275, lng: 105.7695 },
+    { name: 'Trường đua F1 Mỹ Đình', lat: 21.0175, lng: 105.7610 }
   ],
   thanh_tri: [
-    { name: 'Công viên Chu Văn An', lat: 20.9725, lng: 105.8115 }
+    { name: 'Công viên Chu Văn An', lat: 20.9725, lng: 105.8115 },
+    { name: 'Hồ Triều Khúc', lat: 20.9818, lng: 105.8075 },
+    { name: 'Sân vận động huyện Thanh Trì', lat: 20.9535, lng: 105.8450 }
   ],
   gia_lam: [
-    { name: 'Vinhomes Ocean Park', lat: 20.9930, lng: 105.9520 }
+    { name: 'Vinhomes Ocean Park', lat: 20.9930, lng: 105.9520 },
+    { name: 'Hồ Sài Đồng', lat: 21.0255, lng: 105.9220 },
+    { name: 'Trường Đại học Nông nghiệp Việt Nam (VNUA)', lat: 21.0045, lng: 105.9335 }
   ],
   dong_anh: [
-    { name: 'Công viên Thị trấn Đông Anh', lat: 21.1390, lng: 105.8455 }
+    { name: 'Công viên Thị trấn Đông Anh', lat: 21.1390, lng: 105.8455 },
+    { name: 'Sân vận động Đông Anh', lat: 21.1365, lng: 105.8485 },
+    { name: 'Hồ Đầm Vân Trì', lat: 21.1445, lng: 105.7950 }
   ],
   hoai_duc: [
-    { name: 'Khu đô thị Splendora An Khánh', lat: 21.0090, lng: 105.7220 }
+    { name: 'Khu đô thị Splendora An Khánh', lat: 21.0090, lng: 105.7220 },
+    { name: 'Đại học Thành Đô', lat: 21.0610, lng: 105.7255 }
   ],
   dan_phuong: [
     { name: 'Khu đô thị sinh thái The Phoenix Garden', lat: 21.1070, lng: 105.6790 }
   ],
   chuong_my: [
-    { name: 'Trung tâm Thị trấn Xuân Mai', lat: 20.9030, lng: 105.5870 }
+    { name: 'Trung tâm Thị trấn Xuân Mai', lat: 20.9030, lng: 105.5870 },
+    { name: 'Đại học Lâm nghiệp', lat: 20.9045, lng: 105.5785 }
   ],
   thanh_oai: [
     { name: 'Công viên Thanh Hà Mường Thanh', lat: 20.9380, lng: 105.7940 }
@@ -96,7 +159,7 @@ function getDistrictTargetCenter(districtKey) {
   if (!d) return null;
   
   const pois = RUNNING_POIS[districtKey];
-  if (pois && pois.length > 0 && Math.random() < 0.85) {
+  if (pois && pois.length > 0 && Math.random() < 0.70) {
     const poi = pois[Math.floor(Math.random() * pois.length)];
     const r = randomInRange(150, 450); // tight search radius around scenic spot (150m - 450m)
     console.log(`[Route Engine] Prioritizing scenic POI: "${poi.name}" in district "${d.name}" with radius ${Math.round(r)}m`);

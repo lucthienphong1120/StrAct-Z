@@ -504,7 +504,7 @@ function validateInputs(config, isRealTime = false) {
     isValid = false;
   }
 
-  // 3. Custom validation for device_name (VIP vs Normal)
+  // 3. Custom validation for device_name
   if (config.device_name !== undefined) {
     const devVal = config.device_name.trim();
     const devEl = document.getElementById('cfgDeviceName');
@@ -524,18 +524,6 @@ function validateInputs(config, isRealTime = false) {
         return false;
       }
       isValid = false;
-    } else if (sysL._role !== 'vip') {
-      const presets = sysL.device_name?.choices || [];
-      if (!presets.includes(devVal)) {
-        if (devEl) devEl.classList.add('invalid');
-        if (!isRealTime) {
-          showToast('Tính năng thiết bị tùy chỉnh chỉ dành cho tài khoản VIP.', 'warning');
-          // Revert to default
-          devEl.value = sysL.device_name?.default || 'Garmin Forerunner 975';
-          return false;
-        }
-        isValid = false;
-      }
     }
   }
 
