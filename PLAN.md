@@ -165,3 +165,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] troubleshoot nguyên nhân đặt count 1-1 và 2 schedule nhưng vẫn tạo ra 1 hoạt động/ngày và luôn là 8km (max distance theo Target Distance) (v1.58.2)
 + [x] thêm log khoảng cách đã chạy trong ngày và loại trừ target distance cho hoạt động sinh thủ công (v1.58.3)
 + [x] thêm log khoảng cách đã chạy trong ngày hiển thị ở console trình duyệt (v1.58.4)
++ [x] bỏ log đếm khoảng cách tích lũy trong ngày ở backend scheduler (v1.58.5)

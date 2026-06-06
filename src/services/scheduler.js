@@ -66,39 +66,6 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     
     let existingActivities = [...localActivities, ...stravaActivities];
 
-    // Calculate and log total distance covered today
-    let totalDistanceToday = 0;
-    const seenTimesLog = [];
-    for (const act of existingActivities) {
-      const startTime = act.start_date || act.route_start_time;
-      if (!startTime) continue;
-      const startMs = new Date(startTime).getTime();
-      
-      let isDuplicate = false;
-      for (const seenMs of seenTimesLog) {
-        if (Math.abs(seenMs - startMs) < 10 * 60 * 1000) {
-          isDuplicate = true;
-          break;
-        }
-      }
-      if (isDuplicate) continue;
-
-      let dist = 0;
-      if (act.distance_km !== undefined) {
-        if (act.upload_status === 'uploaded') {
-          dist = parseFloat(act.distance_km);
-        }
-      } else if (act.distance !== undefined) {
-        dist = parseFloat(act.distance) / 1000;
-      }
-
-      if (dist > 0) {
-        totalDistanceToday += dist;
-        seenTimesLog.push(startMs);
-      }
-    }
-    console.log(`[Scheduler] Distance covered today: ${totalDistanceToday.toFixed(2)} km`);
-
     const sysL = limits;
     console.log(`[Scheduler] Account ${accountId} will generate ${taskCount} activities...`);
     

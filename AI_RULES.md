@@ -84,13 +84,16 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.58.5 (2026-06-06)
+- **Feature: Remove Backend Distance Logging**:
+  - Removed the redundant daily distance calculation and logging from the server-side auto-scheduler (`scheduler.js`) to keep logs clean, keeping it exclusively in the browser console.
+
 ### v1.58.4 (2026-06-06)
 - **Feature: Browser-side Daily Distance Logging**:
   - Added total daily distance calculation and logging to the browser developer console (`[Scheduler] Distance covered today: X.XX km`) on page load and refresh within `dashboard.js`.
 
 ### v1.58.3 (2026-06-06)
 - **Feature: Distance Logging & Manual Exclusions & Version Bump**:
-  - Added scheduler console logging of the total distance covered today at the start of each execution.
   - Cleaned up the temporary diagnostics helper file `diag.js` (committing deletion).
   - Explicitly documented that target distance rules are only evaluated for the last cron scheduled run of the day, and never apply to manual generate actions.
 
