@@ -84,6 +84,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.58.4 (2026-06-06)
+- **Feature: Browser-side Daily Distance Logging**:
+  - Added total daily distance calculation and logging to the browser developer console (`[Scheduler] Distance covered today: X.XX km`) on page load and refresh within `dashboard.js`.
+
 ### v1.58.3 (2026-06-06)
 - **Feature: Distance Logging & Manual Exclusions & Version Bump**:
   - Added scheduler console logging of the total distance covered today at the start of each execution.

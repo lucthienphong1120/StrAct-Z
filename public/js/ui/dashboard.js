@@ -138,6 +138,56 @@ async function loadActivities() {
       : (Array.isArray(window.latestStravaActivities) ? window.latestStravaActivities : []);
     const cloudBuffer = Array.isArray(rawCloudBuffer) ? rawCloudBuffer : [];
 
+    // Calculate and log total distance covered today to browser console (F12)
+    let totalDistanceToday = 0;
+    const seenTimesLog = [];
+    const targetDateStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+    
+    const todayLocal = allActivities.filter(a => {
+      const actualTime = a.route_start_time || a.created_at;
+      const dateStr = actualTime.endsWith('Z') ? actualTime : actualTime + 'Z';
+      return new Date(dateStr).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }) === targetDateStr;
+    });
+
+    const todayCloud = cloudBuffer.filter(a => {
+      const startDate = a.start_date || a.created_at;
+      if (!startDate) return false;
+      return new Date(startDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }) === targetDateStr;
+    });
+
+    const combinedToday = [...todayLocal, ...todayCloud];
+
+    for (const act of combinedToday) {
+      const startTime = act.start_date || act.route_start_time;
+      if (!startTime) continue;
+      const startMs = new Date(startTime).getTime();
+      
+      let isDuplicate = false;
+      for (const seenMs of seenTimesLog) {
+        if (Math.abs(seenMs - startMs) < 10 * 60 * 1000) {
+          isDuplicate = true;
+          break;
+        }
+      }
+      if (isDuplicate) continue;
+
+      let dist = 0;
+      if (act.distance_km !== undefined) {
+        if (act.upload_status === 'uploaded') {
+          dist = parseFloat(act.distance_km);
+        }
+      } else if (act.distance !== undefined) {
+        dist = parseFloat(act.distance) / 1000;
+      }
+
+      if (dist > 0) {
+        totalDistanceToday += dist;
+        seenTimesLog.push(startMs);
+      }
+    }
+    console.log(`%c[Scheduler] Distance covered today: ${totalDistanceToday.toFixed(2)} km`, 
+      'font-weight: bold; color: #fb923c; font-size: 1.1em;');
+
     // 1. Detect oldest cloud time to handle out-of-range vs removed activities safely
     let oldestCloudTime = Date.now();
     if (cloudBuffer.length > 0) {
