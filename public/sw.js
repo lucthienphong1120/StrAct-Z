@@ -46,6 +46,11 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
+
+  // Skip non-http(s) requests (e.g. chrome-extension://) — Cache API doesn't support them
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    return;
+  }
   
   // We only intercept caching for resources listed in ASSETS_TO_CACHE
   const isCachedAsset = ASSETS_TO_CACHE.some(asset => url.includes(asset));
