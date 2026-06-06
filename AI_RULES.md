@@ -77,11 +77,18 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Rules**:
   - Only active when target distance is enabled, and the last activity of the last schedule of the day is running.
   - The last schedule is determined as Schedule 1 if schedule count is 1, or Schedule 2 if schedule count is 2.
+  - Strictly not applicable to manual generate actions (either from the dashboard's manual trigger buttons or API endpoints), ensuring manual runs behave normally based on the user's explicit manual inputs.
   - Computes the remaining distance by subtracting the total accumulated activity distance today (both local DB activities and Strava Cloud activities) from the target distance. Uses a 10-minute time-tolerance window to robustly deduplicate identical activities that exist in both the local SQLite DB and Strava Cloud.
   - If remaining distance is positive, it sets the generated activity's distance to the remaining distance +/- 50m to 200m random variation.
   - The generated target distance is capped between the activity type's minimum and maximum constraints, and strictly capped by the user-configured random max distance (without being affected by the activity's distance multiplier itself) to ensure valid route generation.
 
 ## 🛠️ Developer Rules
+
+### v1.58.3 (2026-06-06)
+- **Feature: Distance Logging & Manual Exclusions & Version Bump**:
+  - Added scheduler console logging of the total distance covered today at the start of each execution.
+  - Cleaned up the temporary diagnostics helper file `diag.js` (committing deletion).
+  - Explicitly documented that target distance rules are only evaluated for the last cron scheduled run of the day, and never apply to manual generate actions.
 
 ### v1.58.2 (2026-06-06)
 - **Feature: Robust Deduplication with Time Tolerance**:
