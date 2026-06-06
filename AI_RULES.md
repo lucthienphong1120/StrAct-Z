@@ -84,6 +84,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.58.6 (2026-06-06)
+- **Feature: Sửa lỗi hiển thị log daily distance 2 lần**:
+  - Thêm tham số `logDistance` cho hàm `loadActivities()` (mặc định là `false`) trong `dashboard.js`.
+  - Chỉ gọi `loadActivities(true)` tại các luồng khởi tạo chính của `loadDashboard()` hoặc sau khi tạo/xóa/cập nhật hoạt động mới, các luồng cập nhật ngầm (như `loadStravaActivities`) sẽ gọi `loadActivities(false)`.
+  - Giúp loại bỏ việc in log duplicate `[Scheduler] Distance covered today` 2 lần khi tải trang.
+
 ### v1.58.5 (2026-06-06)
 - **Feature: Remove Backend Distance Logging**:
   - Removed the redundant daily distance calculation and logging from the server-side auto-scheduler (`scheduler.js`) to keep logs clean, keeping it exclusively in the browser console.

@@ -16,7 +16,7 @@ async function loadDashboard(forceRefresh = false) {
   ]);
   
   // loadActivities depends on latestStravaActivities
-  await loadActivities();
+  await loadActivities(true);
 
   if (forceRefresh) {
     showToast('All data refreshed!', 'success');
@@ -118,7 +118,7 @@ async function loadDistricts() {
   }
 }
 
-async function loadActivities() {
+async function loadActivities(logDistance = false) {
   try {
     const allActivities = await api('/activities?limit=10000');
     const container = document.getElementById('activityList');
@@ -185,8 +185,10 @@ async function loadActivities() {
         seenTimesLog.push(startMs);
       }
     }
-    console.log(`%c[Scheduler] Distance covered today: ${totalDistanceToday.toFixed(2)} km`, 
-      'font-weight: bold; color: #fb923c; font-size: 1.1em;');
+    if (logDistance) {
+      console.log(`%c[Scheduler] Distance covered today: ${totalDistanceToday.toFixed(2)} km`, 
+        'font-weight: bold; color: #fb923c; font-size: 1.1em;');
+    }
 
     // 1. Detect oldest cloud time to handle out-of-range vs removed activities safely
     let oldestCloudTime = Date.now();
@@ -705,7 +707,7 @@ async function generateOnly() {
     const result = await api('/generate', { method: 'POST', body: overrideConfig });
     if (result.success) {
       showToast(`Generated: ${result.activity.name} (${result.activity.distanceKm}km)`, 'success');
-      loadActivities();
+      loadActivities(true);
       loadStats();
     } else if (result.code === 'NO_VALID_TIME_SLOT') {
       showToast('⏰ ' + result.error, 'warning');
