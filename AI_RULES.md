@@ -77,11 +77,22 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Rules**:
   - Only active when target distance is enabled, and the last activity of the last schedule of the day is running.
   - The last schedule is determined as Schedule 1 if schedule count is 1, or Schedule 2 if schedule count is 2.
-  - Computes the remaining distance by subtracting the total accumulated activity distance today (both local DB activities and Strava Cloud activities) from the target distance.
+  - Computes the remaining distance by subtracting the total accumulated activity distance today (both local DB activities and Strava Cloud activities) from the target distance. Uses a 10-minute time-tolerance window to robustly deduplicate identical activities that exist in both the local SQLite DB and Strava Cloud.
   - If remaining distance is positive, it sets the generated activity's distance to the remaining distance +/- 50m to 200m random variation.
   - The generated target distance is capped between the activity type's minimum and maximum constraints, and strictly capped by the user-configured random max distance (without being affected by the activity's distance multiplier itself) to ensure valid route generation.
 
 ## 🛠️ Developer Rules
+
+### v1.58.2 (2026-06-06)
+- **Feature: Robust Deduplication with Time Tolerance**:
+  - Replaced exact ISO timestamp matching in the scheduler's daily target distance calculation with a 10-minute time-tolerance window.
+  - This prevents minor second/millisecond adjustments from Strava's GPX parsing or cropping from causing deduplication failures (which led to double-counting activities and disabling the remaining target distance calculations).
+  - Added a server-side diagnostic script `diag.js` to assist in querying configuration, target date activities, and validating deduplication logic directly on production database environments.
+
+### v1.58.1 (2026-06-05)
+- **Feature: Service Worker Skip Cache & UI version badge**:
+  - Added service worker exclusions for non-http(s) browser extensions.
+  - Cleaned up console log checks and centered target version checker popup.
 
 ### v1.58.0 (2026-06-05)
 - **Feature: Layout Positioning, Premium VIP Badge UI, Centered Update Popup & Responsive Overflows**:

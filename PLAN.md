@@ -162,4 +162,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] làm lại UI nhận diện chữ VIP cạnh tên user và cả mobile (v1.58.0)
 + [x] mobile responsive fit layout overflow để không bị tràn ngoài màn hình, hiện đang bị với thông báo nâng ver, thông báo sự kiện tít dưới màn hình,... (v1.58.0)
 + [x] chuyển thông báo nâng ver fit với màn hình thay vì thông báo ngang góc dưới, đặt ngay giữa màn hình và hình chữ nhật ngắn (v1.58.0)
-+ [ ] troubleshoot nguyên nhân đặt count 1-1 và 2 schedule nhưng vẫn tạo ra 1 hoạt động/ngày
++ [x] troubleshoot nguyên nhân đặt count 1-1 và 2 schedule nhưng vẫn tạo ra 1 hoạt động/ngày và luôn là 8km (max distance theo Target Distance) (v1.58.2)

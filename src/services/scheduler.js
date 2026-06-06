@@ -87,13 +87,21 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       if (targetDistanceEnabled && isLastSchedule && (i === taskCount - 1)) {
         let accumulatedDistanceForToday = 0;
         // seenTimes deduplicates activities that exist in both local DB (uploaded) and Strava Cloud
-        const seenTimes = new Set();
+        const seenTimes = [];
 
         for (const act of existingActivities) {
           const startTime = act.start_date || act.route_start_time;
           if (!startTime) continue;
-          const startTimeStr = new Date(startTime).toISOString();
-          if (seenTimes.has(startTimeStr)) continue;
+          const startMs = new Date(startTime).getTime();
+          
+          let isDuplicate = false;
+          for (const seenMs of seenTimes) {
+            if (Math.abs(seenMs - startMs) < 10 * 60 * 1000) { // 10 minutes tolerance
+              isDuplicate = true;
+              break;
+            }
+          }
+          if (isDuplicate) continue;
 
           let dist = 0;
           if (act.distance_km !== undefined) {
@@ -108,7 +116,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
 
           if (dist > 0) {
             accumulatedDistanceForToday += dist;
-            seenTimes.add(startTimeStr);
+            seenTimes.push(startMs);
           }
         }
 
