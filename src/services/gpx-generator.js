@@ -26,7 +26,7 @@ function getShortDescription(deviceName) {
   if (name.includes('garmin')) return 'Garmin Connect';
   if (name.includes('huawei')) return 'Huawei Health';
   if (name.includes('samsung')) return 'Samsung Health';
-  if (name.includes('apple')) return 'Apple Health';
+  if (name.includes('apple')) return 'Apple Sport';
   if (name.includes('coros')) return 'COROS';
   if (name.includes('amazfit')) return 'Zepp App';
   if (name.includes('strava')) return 'Strava Android App';
@@ -86,7 +86,7 @@ function getCircleIntersectionArea(r1, r2, d) {
 }
 
 function buildGPX(points, options = {}) {
-  const { activityName = 'Morning Run', activityType = 'running', includeHeartRate = true, includeCadence = true, deviceName = 'Garmin Connect' } = options;
+  const { activityName = 'Morning Run', activityType = 'running', includeHeartRate = true, includeCadence = true, deviceName = 'Garmin Connect', description = '' } = options;
 
   let gpx = `<?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="${escapeXml(deviceName)}"
@@ -97,10 +97,12 @@ function buildGPX(points, options = {}) {
                       http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd">
   <metadata>
     <name>${escapeXml(activityName)}</name>
+    ${description ? `    <desc>${escapeXml(description)}</desc>` : ''}
     <time>${formatGPXTime(points[0].time)}</time>
   </metadata>
   <trk>
     <name>${escapeXml(activityName)}</name>
+    ${description ? `    <desc>${escapeXml(description)}</desc>` : ''}
     <type>${activityType}</type>
     <trkseg>`;
 
@@ -555,7 +557,8 @@ async function generateActivity(config = {}) {
     activityType: finalActivityType.toLowerCase(),
     includeHeartRate: heartRateEnabled,
     includeCadence: true,
-    deviceName: getShortDescription(deviceName), // Use mapped app name (e.g. Garmin Connect, Huawei Health) as creator
+    deviceName: deviceName, // Use full device name as creator
+    description: getShortDescription(deviceName), // Use mapped app name (e.g. Garmin Connect, Zepp App) as description
   });
 
   // Save GPX file
@@ -582,4 +585,4 @@ async function generateActivity(config = {}) {
   };
 }
 
-module.exports = { generateActivity, buildGPX, GPX_DIR, HANOI_DISTRICTS };
+module.exports = { generateActivity, buildGPX, GPX_DIR, HANOI_DISTRICTS, getShortDescription };

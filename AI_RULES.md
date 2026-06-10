@@ -84,6 +84,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.59.0 (2026-06-10)
+- **Feature: Swapped GPX Creator and Upload Description for Devices & Fixed Amazfit Badging**:
+  - Swapped device name (e.g. Amazfit Active 3 Premium) and short app source (e.g. Zepp App) in GPX creator attribute and Strava activity upload description payload.
+  - GPX creator now receives the full watch model name, while the Strava activity description receives the short app source.
+  - Updated Apple Watch short source mapping from 'Apple Health' to 'Apple Sport' as requested.
+
 ### v1.58.6 (2026-06-06)
 - **Feature: Sửa lỗi hiển thị log daily distance 2 lần**:
   - Thêm tham số `logDistance` cho hàm `loadActivities()` (mặc định là `false`) trong `dashboard.js`.

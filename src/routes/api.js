@@ -8,7 +8,7 @@ const path = require('path');
 const fs = require('fs');
 const db = require('../db/database');
 const scheduler = require('../services/scheduler');
-const { generateActivity } = require('../services/gpx-generator');
+const { generateActivity, getShortDescription } = require('../services/gpx-generator');
 const stravaApi = require('../services/strava-api');
 const googleFit = require('../services/google-fit');
 const systemLimits = require('../config/limits');
@@ -418,7 +418,7 @@ router.post('/generate-and-upload', async (req, res) => {
     const deviceName = ov.device_name || config.device_name || systemLimits.device_name.default;
     const uploadResult = await stravaApi.uploadActivity(req.user.id, activity.filepath, {
       name: activity.activityName,
-      description: deviceName,
+      description: getShortDescription(deviceName),
       sportType: activity.activityType || 'Run',
     });
 
@@ -497,7 +497,7 @@ router.post('/upload/:id', async (req, res) => {
 
     const uploadResult = await stravaApi.uploadActivity(req.user.id, gpxPath, {
       name: activity.activity_name,
-      description: deviceName,
+      description: getShortDescription(deviceName),
       sportType: sportType,
     });
 
