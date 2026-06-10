@@ -8,7 +8,7 @@ const path = require('path');
 const fs = require('fs');
 const db = require('../db/database');
 const scheduler = require('../services/scheduler');
-const { generateActivity, getShortDescription } = require('../services/gpx-generator');
+const { generateActivity, getShortDescription } = require('../services/fit-generator');
 const stravaApi = require('../services/strava-api');
 const googleFit = require('../services/google-fit');
 const systemLimits = require('../config/limits');
@@ -276,7 +276,7 @@ router.get('/strava-activities', async (req, res) => {
 
 
 
-// Generate GPX only (no upload)
+// Generate FIT only (no upload)
 router.post('/generate', async (req, res) => {
   try {
     const ov = req.body || {};
@@ -310,7 +310,7 @@ router.post('/generate', async (req, res) => {
       distance_km: activity.distanceKm,
       duration_min: activity.durationMin,
       pace_min_km: activity.paceMinKm,
-      gpx_file: activity.filename,
+      fit_file: activity.filename,
       upload_status: 'generated',
       route_start_lat: activity.startLat,
       route_start_lng: activity.startLng,
@@ -342,7 +342,7 @@ router.post('/generate', async (req, res) => {
           distance_km: 0,
           duration_min: 0,
           pace_min_km: 0,
-          gpx_file: null,
+          fit_file: null,
           upload_status: 'failed',
           route_start_lat: null,
           route_start_lng: null,
@@ -395,7 +395,7 @@ router.post('/generate-and-upload', async (req, res) => {
         distance_km: activity.distanceKm,
         duration_min: activity.durationMin,
         pace_min_km: activity.paceMinKm,
-        gpx_file: activity.filename,
+        fit_file: activity.filename,
         upload_status: 'failed',
         route_start_lat: activity.startLat,
         route_start_lng: activity.startLng,
@@ -412,7 +412,7 @@ router.post('/generate-and-upload', async (req, res) => {
       distance_km: activity.distanceKm,
       duration_min: activity.durationMin,
       pace_min_km: activity.paceMinKm,
-      gpx_file: activity.filename,
+      fit_file: activity.filename,
       upload_status: 'generated',
       route_start_lat: activity.startLat,
       route_start_lng: activity.startLng,
@@ -457,7 +457,7 @@ router.post('/generate-and-upload', async (req, res) => {
           distance_km: 0,
           duration_min: 0,
           pace_min_km: 0,
-          gpx_file: null,
+          fit_file: null,
           upload_status: 'failed',
           route_start_lat: null,
           route_start_lng: null,
@@ -496,15 +496,15 @@ router.post('/upload/:id', async (req, res) => {
       return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${dailyMaxActivity}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
     }
 
-    const gpxPath = path.join(__dirname, '..', '..', 'data', 'gpx', activity.gpx_file);
-    if (!fs.existsSync(gpxPath)) return res.status(404).json({ error: 'GPX file not found' });
+    const fitPath = path.join(__dirname, '..', '..', 'data', 'fit', activity.fit_file || activity.gpx_file || '');
+    if (!fs.existsSync(fitPath)) return res.status(404).json({ error: 'FIT file not found' });
 
     const deviceName = await db.getConfig(req.user.id, 'device_name') || systemLimits.device_name.default;
     let sportType = 'Run';
     if (activity.activity_name.includes('Đi bộ')) sportType = 'Walk';
     else if (activity.activity_name.includes('Đạp xe')) sportType = 'Ride';
 
-    const uploadResult = await stravaApi.uploadActivity(req.user.id, gpxPath, {
+    const uploadResult = await stravaApi.uploadActivity(req.user.id, fitPath, {
       name: activity.activity_name,
       description: getShortDescription(deviceName), // Swapped: Use app name as description
       sportType: sportType,
@@ -559,10 +559,10 @@ router.delete('/activities/:id', async (req, res) => {
     }
   }
 
-  // Delete GPX file
+  // Delete FIT file
   try {
-    const gpxPath = path.join(__dirname, '..', '..', 'data', 'gpx', activity.gpx_file);
-    if (fs.existsSync(gpxPath)) fs.unlinkSync(gpxPath);
+    const fitPath = path.join(__dirname, '..', '..', 'data', 'fit', activity.fit_file || activity.gpx_file || '');
+    if (fs.existsSync(fitPath)) fs.unlinkSync(fitPath);
   } catch (e) { /* ignore */ }
 
   // Soft delete from local DB
@@ -644,19 +644,19 @@ router.post('/scheduler/trigger', async (req, res) => {
   }
 });
 
-// ─── GPX Download ────────────────────────────────────────────────────────────
+// ─── FIT Download ────────────────────────────────────────────────────────────
 
-router.get('/gpx/:filename', async (req, res) => {
+router.get('/fit/:filename', async (req, res) => {
   try {
     const dbInstance = await db.getDb();
-    const activity = await dbInstance.get('SELECT id FROM activities WHERE account_id = ? AND gpx_file = ?', [req.user.id, req.params.filename]);
+    const activity = await dbInstance.get('SELECT id FROM activities WHERE account_id = ? AND (fit_file = ? OR gpx_file = ?)', [req.user.id, req.params.filename, req.params.filename]);
     if (!activity) {
-      return res.status(403).json({ error: 'Access denied. You do not own this GPX file.' });
+      return res.status(403).json({ error: 'Access denied. You do not own this FIT file.' });
     }
 
-    const gpxPath = path.join(__dirname, '..', '..', 'data', 'gpx', req.params.filename);
-    if (!fs.existsSync(gpxPath)) return res.status(404).json({ error: 'GPX file not found' });
-    res.download(gpxPath, req.params.filename);
+    const fitPath = path.join(__dirname, '..', '..', 'data', 'fit', req.params.filename);
+    if (!fs.existsSync(fitPath)) return res.status(404).json({ error: 'FIT file not found' });
+    res.download(fitPath, req.params.filename);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

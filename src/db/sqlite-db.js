@@ -110,7 +110,7 @@ async function getDb() {
           distance_km REAL,
           duration_min REAL,
           pace_min_km REAL,
-          gpx_file TEXT,
+          fit_file TEXT,
           strava_activity_id TEXT,
           upload_status TEXT,
           error_message TEXT,
@@ -179,6 +179,34 @@ async function getDb() {
         console.log('[SQLite] Added account_id to users');
       } catch (e) {}
 
+      // Safe migration: rename activities.gpx_file to fit_file
+      try {
+        const tableInfo = await db.all("PRAGMA table_info(activities)");
+        const hasGpxFile = tableInfo.some(col => col.name === 'gpx_file');
+        const hasFitFile = tableInfo.some(col => col.name === 'fit_file');
+        if (hasGpxFile && !hasFitFile) {
+          await db.exec('ALTER TABLE activities RENAME COLUMN gpx_file TO fit_file');
+          console.log('[SQLite] Renamed activities.gpx_file column to fit_file');
+        } else if (!hasFitFile) {
+          await db.exec('ALTER TABLE activities ADD COLUMN fit_file TEXT');
+          console.log('[SQLite] Added activities.fit_file column');
+        }
+      } catch (e) {
+        console.error('[SQLite] Migration of activities column failed:', e.message);
+      }
+
+      // Safe migration: rename data/gpx folder to data/fit
+      try {
+        const oldGpxDir = path.join(__dirname, '..', '..', 'data', 'gpx');
+        const newFitDir = path.join(__dirname, '..', '..', 'data', 'fit');
+        if (fs.existsSync(oldGpxDir) && !fs.existsSync(newFitDir)) {
+          fs.renameSync(oldGpxDir, newFitDir);
+          console.log('[SQLite/Migration] Renamed data/gpx folder to data/fit');
+        }
+      } catch (e) {
+        console.error('[SQLite/Migration] Failed to rename data/gpx folder:', e.message);
+      }
+
       // Migrate global config to user_config for account 1
       const uConfCount = await db.get('SELECT COUNT(*) as c FROM user_config');
       if (uConfCount.c === 0) {
@@ -207,8 +235,8 @@ async function getDb() {
             if (oldDb.activities) {
               const acts = [...oldDb.activities].reverse();
               for (const a of acts) {
-                await db.run(`INSERT INTO activities (id, created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                  [a.id, a.created_at, a.activity_name, a.distance_km, a.duration_min, a.pace_min_km, a.gpx_file, a.strava_activity_id, a.upload_status, a.error_message, a.route_start_lat, a.route_start_lng]);
+                await db.run(`INSERT INTO activities (id, created_at, activity_name, distance_km, duration_min, pace_min_km, fit_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                  [a.id, a.created_at, a.activity_name, a.distance_km, a.duration_min, a.pace_min_km, a.fit_file || a.gpx_file, a.strava_activity_id, a.upload_status, a.error_message, a.route_start_lat, a.route_start_lng]);
               }
             }
             console.log('[SQLite] Migrated db.json to SQLite');
@@ -311,8 +339,8 @@ async function deleteTokens(accountId) {
 async function saveActivity(accountId, data) {
   const db = await getDb();
   const now = new Date().toISOString();
-  const result = await db.run(`INSERT INTO activities (account_id, created_at, activity_name, distance_km, duration_min, pace_min_km, gpx_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng, route_start_time, district_keys, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [accountId, now, data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.gpx_file, data.strava_activity_id || null, data.upload_status || 'pending', data.error_message || null, data.route_start_lat, data.route_start_lng, data.route_start_time, data.district_keys, data.created_by]);
+  const result = await db.run(`INSERT INTO activities (account_id, created_at, activity_name, distance_km, duration_min, pace_min_km, fit_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng, route_start_time, district_keys, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [accountId, now, data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.fit_file || data.gpx_file, data.strava_activity_id || null, data.upload_status || 'pending', data.error_message || null, data.route_start_lat, data.route_start_lng, data.route_start_time, data.district_keys, data.created_by]);
   return result.lastID;
 }
 
@@ -322,7 +350,7 @@ async function updateActivity(accountId, id, data) {
   const vals = [];
   const ALLOWED_COLUMNS = [
     'activity_name', 'distance_km', 'duration_min', 'pace_min_km',
-    'gpx_file', 'strava_activity_id', 'upload_status', 'error_message',
+    'fit_file', 'strava_activity_id', 'upload_status', 'error_message',
     'route_start_lat', 'route_start_lng', 'route_start_time',
     'district_keys', 'deleted_at', 'created_by'
   ];

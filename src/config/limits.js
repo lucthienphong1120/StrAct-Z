@@ -388,7 +388,7 @@ const LIMITS = {
   },
   local_history: {
     label: 'Lịch sử hoạt động đã tạo (Local Generated History).',
-    desc_extra: 'Trạng thái hoạt động:\n• UPLOADED: Đã tải lên Strava thành công.\n• GENERATED: Mới chỉ tạo file GPX local, chưa tải lên.\n• DELETED: Đã xóa cục bộ trước khi tải lên.\n• REMOVED: Đã tải lên nhưng sau đó bị xóa khỏi Strava Cloud.\n• FAILED: Không thể tạo hoạt động do lỗi cấu hình hoặc không tìm thấy khung giờ trống.',
+    desc_extra: 'Trạng thái hoạt động:\n• UPLOADED: Đã tải lên Strava thành công.\n• GENERATED: Mới chỉ tạo file FIT local, chưa tải lên.\n• DELETED: Đã xóa cục bộ trước khi tải lên.\n• REMOVED: Đã tải lên nhưng sau đó bị xóa khỏi Strava Cloud.\n• FAILED: Không thể tạo hoạt động do lỗi cấu hình hoặc không tìm thấy khung giờ trống.',
     type: 'info'
   },
   strava_cloud: {

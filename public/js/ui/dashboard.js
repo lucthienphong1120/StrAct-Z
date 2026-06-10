@@ -696,7 +696,7 @@ async function generateOnly() {
   const btn = document.getElementById('btnGenerate');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Generating...';
-  showToast('Generating GPX...', 'info');
+  showToast('Generating FIT...', 'info');
 
   try {
     const overrideConfig = getOverrideConfig();
@@ -726,7 +726,7 @@ async function generateOnly() {
     }
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '📝 Generate GPX Only';
+    btn.innerHTML = '📝 Generate FIT Only';
   }
 }
 

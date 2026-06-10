@@ -209,7 +209,7 @@ async function refreshToken(accountId) {
   return response.access_token;
 }
 
-async function uploadActivity(accountId, gpxFilepath, options = {}) {
+async function uploadActivity(accountId, fitFilepath, options = {}) {
   const {
     name = 'Morning Run',
     description = '',
@@ -219,8 +219,8 @@ async function uploadActivity(accountId, gpxFilepath, options = {}) {
   const accessToken = await refreshToken(accountId);
 
   const form = new FormData();
-  form.append('file', fs.createReadStream(gpxFilepath));
-  form.append('data_type', 'gpx');
+  form.append('file', fs.createReadStream(fitFilepath));
+  form.append('data_type', 'fit');
   form.append('name', name);
   form.append('description', description);
   form.append('sport_type', sportType);

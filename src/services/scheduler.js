@@ -4,7 +4,7 @@
 
 const cron = require('node-cron');
 const db = require('../db/database');
-const { generateActivity, getShortDescription } = require('./gpx-generator');
+const { generateActivity, getShortDescription } = require('./fit-generator');
 const stravaApi = require('./strava-api');
 const googleFit = require('./google-fit');
 const systemLimits = require('../config/limits');
@@ -152,7 +152,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
           await db.saveActivity(accountId, {
             activity_name: 'Không thể tạo hoạt động',
             distance_km: 0, duration_min: 0, pace_min_km: 0,
-            gpx_file: null, upload_status: 'failed',
+            fit_file: null, upload_status: 'failed',
             route_start_lat: null, route_start_lng: null,
             route_start_time: new Date().toISOString(),
             district_keys: null, created_by: slotName,
@@ -174,7 +174,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
           distance_km: activity.distanceKm,
           duration_min: activity.durationMin,
           pace_min_km: activity.paceMinKm,
-          gpx_file: activity.filename,
+          fit_file: activity.filename,
           upload_status: 'failed',
           route_start_lat: activity.startLat,
           route_start_lng: activity.startLng,
@@ -200,7 +200,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         distance_km: activity.distanceKm,
         duration_min: activity.durationMin,
         pace_min_km: activity.paceMinKm,
-        gpx_file: activity.filename,
+        fit_file: activity.filename,
         upload_status: 'generated',
         route_start_lat: activity.startLat,
         route_start_lng: activity.startLng,
@@ -402,10 +402,10 @@ async function updateSchedule(accountId, enabled1, time1, scheduleCount, time2, 
 }
 
 /**
- * Cleanup GPX files of uploaded activities older than 30 days
+ * Cleanup FIT files of uploaded activities older than 30 days
  */
-async function cleanupOldGPXFiles() {
-  console.log('[Scheduler] Starting GPX cleanup job...');
+async function cleanupOldFITFiles() {
+  console.log('[Scheduler] Starting FIT cleanup job...');
   try {
     const dbInstance = await db.getDb();
     const cutoffDate = new Date();
@@ -413,36 +413,36 @@ async function cleanupOldGPXFiles() {
     const cutoffStr = cutoffDate.toISOString();
     
     const activities = await dbInstance.all(
-      `SELECT id, gpx_file FROM activities 
+      `SELECT id, fit_file FROM activities 
        WHERE upload_status = 'uploaded' 
-         AND gpx_file IS NOT NULL 
+         AND fit_file IS NOT NULL 
          AND created_at < ?`,
       [cutoffStr]
     );
 
-    console.log(`[Scheduler] Found ${activities.length} GPX files older than 30 days to clean up`);
+    console.log(`[Scheduler] Found ${activities.length} FIT files older than 30 days to clean up`);
     let deletedCount = 0;
     
     for (const activity of activities) {
-      if (activity.gpx_file) {
-        const gpxPath = path.join(__dirname, '..', '..', 'data', 'gpx', activity.gpx_file);
+      if (activity.fit_file) {
+        const fitPath = path.join(__dirname, '..', '..', 'data', 'fit', activity.fit_file);
         try {
-          if (fs.existsSync(gpxPath)) {
-            fs.unlinkSync(gpxPath);
+          if (fs.existsSync(fitPath)) {
+            fs.unlinkSync(fitPath);
             deletedCount++;
           }
           await dbInstance.run(
-            `UPDATE activities SET gpx_file = NULL WHERE id = ?`,
+            `UPDATE activities SET fit_file = NULL WHERE id = ?`,
             [activity.id]
           );
         } catch (e) {
-          console.error(`[Scheduler] Failed to delete GPX file ${activity.gpx_file}:`, e.message);
+          console.error(`[Scheduler] Failed to delete FIT file ${activity.fit_file}:`, e.message);
         }
       }
     }
-    console.log(`[Scheduler] Successfully deleted ${deletedCount} GPX files`);
+    console.log(`[Scheduler] Successfully deleted ${deletedCount} FIT files`);
   } catch (err) {
-    console.error('[Scheduler] Error during GPX cleanup:', err.message);
+    console.error('[Scheduler] Error during FIT cleanup:', err.message);
   }
 }
 
@@ -469,9 +469,9 @@ async function stopAll() {
   }
 }
 
-// Schedule GPX file cleanup to run once a week on Sunday at 03:00 AM
+// Schedule FIT file cleanup to run once a week on Sunday at 03:00 AM
 cron.schedule('0 3 * * 0', async () => {
-  await cleanupOldGPXFiles();
+  await cleanupOldFITFiles();
 }, { timezone: 'Asia/Ho_Chi_Minh' });
 
 module.exports = {
@@ -481,6 +481,6 @@ module.exports = {
   stopScheduler,
   getStatus,
   updateSchedule,
-  cleanupOldGPXFiles,
+  cleanupOldFITFiles,
   stopAll,
 };
