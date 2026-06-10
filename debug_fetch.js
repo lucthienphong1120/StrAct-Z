@@ -98,17 +98,12 @@ async function main() {
     console.log(`Đang chạy truy vấn bằng tài khoản: ${user.athlete_name}`);
     const accessToken = await getAccessToken(user.account_id);
     const activityIds = [
-      '18737074484', // Huawei
-      '18421904355', // Generated 1
-      '18811494196', // Generated 2
-      '18864757554', // Apple Watch Series 5
-      '18864751973', // Strava App
-      '18864751850', // COROS PACE 3
-      '18865043228', // Garmin Connect
+      '18737074484', // Huawei (Thật)
+      '18421904355', // Generated 1 (Garmin Connect)
+      '18811494196', // Generated 2 (Amazfit)
       '18221159624', // Real - Strava App
-      '18851617193', // Trước update
-      '18865582717', // Sau update, ko nhận device name
-      '18865572186'  // Sau update, có nhận device name
+      '18865572186', // Sau update, có nhận device
+      '18865582717'  // Sau update, không nhận device name
     ];
     const outputDir = path.join(__dirname, 'data', 'debug_json');
     fs.mkdirSync(outputDir, { recursive: true });
