@@ -84,6 +84,17 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.60.5 (2026-06-10)
+- **Feature: Clean Configuration and UI-Only Star Indicators**:
+  - Filtered device choices to keep only verified/OK models and untested models, removing failed ones.
+  - Device values are stored as clean strings (without `★`) in `limits.js` and database configurations.
+  - Added visual star `★` suffixes purely in the HTML datalist options for UI suggestions.
+- **Feature: Global Empty Upload Description**:
+  - Forced activity upload `description` parameter to be empty (`""`) globally to comply with user preference.
+- **Feature: Allowed Devices & Verification Tracking Documentation**:
+  - Added `docs/ALLOWED_DEVICES.md` detailing verified/unverified lists and GPX parsing.
+  - Added `docs/DEVICE_TESTCASES.md` test verification log.
+
 ### v1.60.4 (2026-06-10)
 - **Feature: Centralized Caching and Activity Sync Layer**:
   - Implemented centralized in-memory caching of the latest 50 activities with a 30-minute TTL to optimize API load.

@@ -176,7 +176,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] đồng bộ tự động trạng thái REMOVED của hoạt động từ Strava Cloud về database local để không bị khóa lầm khung giờ (v1.60.3)
 + [x] tối ưu hóa cache layer tập trung (50 hoạt động gần nhất, cache 30 phút), tự động đồng bộ DB local khi lấy hoạt động từ Strava và clear cache khi reset/refresh/upload/generate-and-upload/delete (v1.60.4)
 + [x] swap lại GPX creator (tên thiết bị) và Strava description (tên app kết nối), đổi tên app thiết bị Amazfit thành 'Zepp App' thay vì 'Amazfit' (v1.60.4)
++ [x] thêm docs về allow device và test để ra danh sách device chuẩn, bao gồm thêm cả app connect cũng được tính, bỏ phần mô tả cũng được (v1.60.5)
++ [x] cập nhật danh sách thiết bị cho phép trong config/limits và index.html; hỗ trợ hiển thị sao ★ trên UI trong khi lưu giá trị sạch ở backend; cấu hình upload description trống toàn cục (v1.60.5)
 + [ ] swap vị trí thẻ Google Fit Account và Strava Account, thêm trường Daily Max Activity (editable, int, min = 1, max = daily upload limit) ở dưới Daily Upload Limit, cho phép user điều chỉnh giới hạn hoạt động upload mỗi ngày (giống Daily Upload Limit nhưng được custom, còn Daily Upload Limit là theo cấp độ VIP/Normal tài khoản - readonly)
-+ [ ] thêm docs về allow device và test để ra danh sách device chuẩn, bao gồm thêm cả app connect cũng được tính, bỏ phần mô tả cũng được
-+ [ ] 
 

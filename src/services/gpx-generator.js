@@ -21,17 +21,7 @@ const GPX_DIR = path.join(__dirname, '..', '..', 'data', 'gpx');
 fs.mkdirSync(GPX_DIR, { recursive: true });
 
 function getShortDescription(deviceName) {
-  if (!deviceName) return 'Garmin Connect';
-  const name = deviceName.toLowerCase();
-  if (name.includes('garmin')) return 'Garmin Connect';
-  if (name.includes('huawei')) return 'Huawei Health';
-  if (name.includes('samsung')) return 'Samsung Health';
-  if (name.includes('apple')) return 'Apple Sport';
-  if (name.includes('coros')) return 'COROS';
-  if (name.includes('amazfit')) return 'Zepp App';
-  if (name.includes('iphone')) return 'Strava iPhone App';
-  if (name.includes('strava')) return 'Strava Android App';
-  return 'Garmin Connect';
+  return '';
 }
 
 function generateActivityName(activityType, date) {
@@ -155,7 +145,7 @@ async function generateActivity(config = {}) {
     startTime = null,
     useOSRM = true,
     userRole = 'normal',
-    deviceName = 'Garmin Forerunner 975',
+    deviceName = 'Garmin fēnix 7x Pro',
     simWeather = true,
     simRedLights = true,
   } = config;
@@ -565,8 +555,8 @@ async function generateActivity(config = {}) {
     activityType: finalActivityType.toLowerCase(),
     includeHeartRate: heartRateEnabled,
     includeCadence: true,
-    deviceName: deviceName, // Use full device name as creator/sync source
-    description: getShortDescription(deviceName), // Use mapped app name (e.g. Garmin Connect, Zepp App) as description
+    deviceName: deviceName ? deviceName.replace(/\s*★$/, '') : '', // Strip trailing star if any
+    description: '', // Globally empty description
   });
 
   // Save GPX file
