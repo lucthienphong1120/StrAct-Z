@@ -208,7 +208,7 @@ const LIMITS = {
   min_distance_km: {
     label: 'Khoảng cách tối thiểu của hoạt động.',
     type: 'float',
-    default: 0.5,
+    default: 1.0,
     min: { normal: 0.5, vip: 0.2 },
     max: { normal: 2.0, vip: 5.0 },
     unit: 'km'
