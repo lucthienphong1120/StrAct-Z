@@ -40,6 +40,8 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Samsung Galaxy Watch Ultra** | ⏳ Untested | - | - |
 | **Samsung Galaxy Watch 8** | ⏳ Untested | - | - |
 | **Samsung Galaxy Watch 7** | ⏳ Untested | - | - |
+| **COROS PACE 3** | ⏳ Untested | - | - |
+| **COROS APEX 2** | ⏳ Untested | - | - |
 
 ---
 
