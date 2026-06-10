@@ -183,4 +183,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] sửa tính năng Custom Time hoạt động với cả Generate and Upload hoặc Generate -> bây h tính năng này chủ yếu dùng để chỉ định gen hoạt động theo ngày cụ thể, phục vụ dev/test là chính
 + [ ] khi login, logout cũng phải clear cache browser (Ctrl+Shift+R), giống với lúc version mismatch
 + [ ] debug frontend restrict normal account
++ [ ] dùng api debug get thử xem format hoạt động thật trả về có khác j hoạt động đc gen và sửa
 
