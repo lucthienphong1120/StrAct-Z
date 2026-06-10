@@ -384,7 +384,14 @@ async function generateActivity(config = {}) {
     const restMultiplier = restPercent / 100;
     const estimatedDurationMs = (avgPace * distanceKm) * 60000;
 
-    const blockedRanges = (config.existingActivities || []).map(a => {
+    const activeActivities = (config.existingActivities || []).filter(a => {
+      if (a.upload_status !== undefined) {
+        return a.upload_status === 'uploaded' || a.upload_status === 'generated';
+      }
+      return true;
+    });
+
+    const blockedRanges = activeActivities.map(a => {
       const start = new Date(a.start_date || a.route_start_time).getTime();
       const durationMs = (a.elapsed_time || (a.duration_min * 60)) * 1000;
       const dayStart = targetDateObj.getTime();
@@ -400,7 +407,7 @@ async function generateActivity(config = {}) {
       const restMsOfNew = newDurationMs * restMultiplier;
       const msEnd = ms + newDurationMs;
 
-      for (const a of config.existingActivities || []) {
+      for (const a of activeActivities) {
         const aStart = new Date(a.start_date || a.route_start_time).getTime() - targetDateObj.getTime();
         const aDurationMs = (a.elapsed_time || (a.duration_min * 60)) * 1000;
         const aEnd = aStart + aDurationMs;

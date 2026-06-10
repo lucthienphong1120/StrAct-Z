@@ -84,6 +84,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.60.2 (2026-06-10)
+- **Fix: Ignore Inactive Activities in GPX Overlap Protection Check**:
+  - Filtered `existingActivities` inside `gpx-generator.js` so that local database records with `upload_status` equal to `'failed'`, `'deleted'`, or `'removed'` are excluded from the overlap checks.
+  - This prevents failed generation attempts (which store a `failed` record) or deleted/removed activities from locking out subsequent manual generation attempts for the safe-time period.
+
 ### v1.60.1 (2026-06-10)
 - **Feature: Restored GPX Creator and Mapped Amazfit for Strava Badge**:
   - Reverted the GPX Creator and Upload Description metadata swap to ensure Strava can parse the creator field properly to show the sync source badge.
