@@ -84,6 +84,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.60.6 (2026-06-10)
+- **Fix: Respect Disabled Auto Schedule on All Time Slots**:
+  - Fixed a critical scheduler bug where the second schedule slot (`Schedule 2`) would be registered via `cron.schedule` even if the global `schedule_enabled` was turned off. Now immediately exits and schedules no tasks if `schedule_enabled` is false.
+
 ### v1.60.5 (2026-06-10)
 - **Feature: Clean Configuration and UI-Only Star Indicators**:
   - Filtered device choices to keep only verified/OK models and untested models, removing failed ones.

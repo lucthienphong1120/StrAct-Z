@@ -291,19 +291,22 @@ async function startScheduler(accountId) {
   const slotA = min1 <= min2 ? { time: time1, label: 'Schedule 1' } : { time: time1, label: 'Schedule 2' };
   const slotB = min1 <= min2 ? { time: time2, label: 'Schedule 2' } : { time: time2, label: 'Schedule 1' };
 
+  if (config.schedule_enabled !== 'true') {
+    console.log(`[Scheduler] Auto schedule is disabled for account ${accountId}.`);
+    return false;
+  }
+
   // First schedule
-  if (config.schedule_enabled === 'true') {
-    const [hA, mA] = slotA.time.split(':');
-    const cronA = `${parseInt(mA)} ${parseInt(hA)} * * *`;
-    
-    if (cron.validate(cronA)) {
-      const taskA = cron.schedule(cronA, async () => {
-        console.log(`[Scheduler] ${slotA.label} triggered for account ${accountId}`);
-        await executeJob(accountId, slotA.label);
-      }, { timezone: 'Asia/Ho_Chi_Minh' });
-      tasks.push(taskA);
-      console.log(`[Scheduler] ${slotA.label} started for ${accountId}: ${cronA}`);
-    }
+  const [hA, mA] = slotA.time.split(':');
+  const cronA = `${parseInt(mA)} ${parseInt(hA)} * * *`;
+  
+  if (cron.validate(cronA)) {
+    const taskA = cron.schedule(cronA, async () => {
+      console.log(`[Scheduler] ${slotA.label} triggered for account ${accountId}`);
+      await executeJob(accountId, slotA.label);
+    }, { timezone: 'Asia/Ho_Chi_Minh' });
+    tasks.push(taskA);
+    console.log(`[Scheduler] ${slotA.label} started for ${accountId}: ${cronA}`);
   }
 
   // Second schedule
