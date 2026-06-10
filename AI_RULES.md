@@ -13,9 +13,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 ## 🚀 Workflow & Deployment
 - **Repository**: The `StrAct-Z` workspace is a public Git repository.
   - `.gitignore` is used to exclude secrets (`.env`), data (`data/`), and database files.
-- **Update Process**:
-  - After completing every feature or update, **COMMIT** and **PUSH** to the Git repo. (Lưu ý: Luôn nhớ thực hiện việc này để đồng bộ hóa mã nguồn).
-  - Ensure versioning is bumped correctly (see Developer Rules).
+- **Rules for AI Assistant**:
+  - **MANDATORY**: At the start of EVERY session, the AI assistant MUST read `AI_RULES.md` and `PLAN.md` to align on project context, progress, and rules.
+  - **COMMIT & PUSH**: Whenever ANY changes or updates are made, the AI assistant MUST run `git add`, `git commit` and `git push` to synchronize the repository immediately. (Lưu ý: Luôn nhớ thực hiện việc này để đồng bộ hóa mã nguồn).
+  - **VERSIONING**: Ensure versioning in `package.json`, `AI_RULES.md`, `PLAN.md`, and `public/index.html` is updated in sync.
 - **Production Deployment**:
   - Code is deployed to the production server via `git pull` in the SSH terminal.
 
