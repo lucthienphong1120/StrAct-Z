@@ -7,9 +7,11 @@ Use this file to track testing of various devices and applications on Strava. Up
 | Source Name | Tested Status | Result |
 | :--- | :--- | :--- |
 | **Garmin Forerunner 945** | ✅ OK | - |
+| **Garmin Forerunner 935** | ⏳ Untested | - |
 | **Garmin fēnix 7x Pro** | ✅ OK | - |
 | **Garmin fēnix 8** | ⏳ Untested | - |
 | **Garmin Forerunner 255S** | ⏳ Untested | - |
+| **Garmin Forerunner 255** | ⏳ Untested | - |
 | **Garmin Venu 2** | ⏳ Untested | - |
 | **Amazfit T-Rex 3** | ⏳ Untested | - |
 | **Garmin Connect** | ✅ OK | - |
@@ -25,6 +27,10 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Garmin Instinct 2X Solar** | ⏳ Untested | - |
 | **Garmin Epix Pro (Gen 2)** | ⏳ Untested | - |
 | **Garmin epix Pro (Gen 2) 47mm** | ⏳ Untested | - |
+| **Garmin Venu Sq 2** | ⏳ Untested | - |
+| **Garmin Forerunner 770XT** | ⏳ Untested | - |
+| **COROS APEX 2** | ⏳ Untested | - |
+| **COROS APEX 4** | ⏳ Untested | - |
 | **Coros Pace 3** | ⏳ Untested | - |
 | **Coros Apex 2 Pro** | ⏳ Untested | - |
 | **Coros Vertix 2S** | ⏳ Untested | - |
@@ -43,7 +49,7 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **COROS PACE 3** | ⏳ Untested | - |
 | **COROS APEX 2** | ⏳ Untested | - |
 | **Garmin Forerunner 975** | ❌ Fail | - |
-| **Garmin Forerunner 965** | ❌ Fail | - |
+| **Garmin Forerunner 965** | ⏳ Untested | - |
 | **Garmin Forerunner 265** | ❌ Fail | - |
 | **Garmin fēnix 8 Solar** | ❌ Fail | - |
 | **Apple Watch Ultra 3** | ❌ Fail | - |
