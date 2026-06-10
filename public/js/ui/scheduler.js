@@ -7,7 +7,8 @@ async function loadSchedule() {
     
     const slot2 = document.getElementById('scheduleSlot2');
     const btnAdd = document.getElementById('btnAddSchedule');
-    if (status.scheduleCount >= 2) {
+    const isVip = window.userRole === 'vip';
+    if (status.scheduleCount >= 2 && isVip) {
       slot2.style.display = 'block';
       btnAdd.style.display = 'none';
       document.getElementById('scheduleTime2').value = status.scheduleTime2 || (sysL?.schedule_time_2?.default) || '14:00';
@@ -63,7 +64,12 @@ async function updateSchedule() {
   const enabled = document.getElementById('scheduleEnabled').checked;
   const time = document.getElementById('scheduleTime').value;
   
-  const scheduleCount = document.getElementById('scheduleSlot2').style.display === 'block' ? 2 : 1;
+  let scheduleCount = document.getElementById('scheduleSlot2').style.display === 'block' ? 2 : 1;
+  if (window.userRole !== 'vip' && scheduleCount > 1) {
+    scheduleCount = 1;
+    document.getElementById('scheduleSlot2').style.display = 'none';
+    document.getElementById('btnAddSchedule').style.display = 'block';
+  }
   const time2 = document.getElementById('scheduleTime2').value;
 
   const countMin = parseInt(document.getElementById('scheduleCountMin').value);

@@ -84,6 +84,20 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.60.7 (2026-06-10)
+- **Feature: Custom Upload Limit & Normal Username Badge**:
+  - Swapped positioning of Google Fit Account (move to Left Column) and Strava Account (move to Right Column) cards.
+  - Added editable `Daily Max Activity` setting (editable integer from `1` to account's `daily_upload_limit`) directly under `Daily Upload Limit`.
+  - Extended Custom Time (date/time override) functionality to both GPX Generation and GPX Upload manual flows.
+  - Rendered standard pulsing orange `.normal-badge-standard` badge next to athlete name in header and settings panel for normal/standard accounts.
+  - Added frontend and backend validations to enforce normal accounts strictly choosing preset device name choices.
+  - Skips validation checks against time ranges when target time input is exactly `'00:00'`.
+- **Feature: Cache Clearing & Load Optimization**:
+  - Implemented service worker unregistration and browser cache purge on both login and logout flows to resolve version mismatch.
+  - Reduced default query parameter limit in `loadActivities()` from `10000` to `200` items.
+  - Shared fetched local activities globally as `window.localActivities` and reused it in `debugDistrictWeightRatios()`.
+  - Prevented parallel redundant API fetches by passing `triggerUpdate = false` to `loadStravaActivities()` on startup.
+
 ### v1.60.6 (2026-06-10)
 - **Fix: Respect Disabled Auto Schedule on All Time Slots**:
   - Fixed a critical scheduler bug where the second schedule slot (`Schedule 2`) would be registered via `cron.schedule` even if the global `schedule_enabled` was turned off. Now immediately exits and schedules no tasks if `schedule_enabled` is false.

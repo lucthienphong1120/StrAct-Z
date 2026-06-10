@@ -325,6 +325,27 @@ body.is-vip:not(.theme-preview-normal) .schedule-label {
   50% { box-shadow: 0 0 12px rgba(245, 158, 11, 0.8); }
   100% { box-shadow: 0 0 4px rgba(245, 158, 11, 0.4); }
 }
+.normal-badge-standard {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, #fc4c02, #e24302);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  box-shadow: 0 0 10px rgba(252, 76, 2, 0.4);
+  vertical-align: middle;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(252, 76, 2, 0.5);
+  animation: normalPulse 2s infinite ease-in-out;
+}
+@keyframes normalPulse {
+  0% { box-shadow: 0 0 4px rgba(252, 76, 2, 0.4); }
+  50% { box-shadow: 0 0 12px rgba(252, 76, 2, 0.8); }
+  100% { box-shadow: 0 0 4px rgba(252, 76, 2, 0.4); }
+}
 
 /* ─── Map Styles ────────────────────────────────────────── */
 #activityMap {

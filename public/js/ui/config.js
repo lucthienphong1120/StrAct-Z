@@ -34,6 +34,7 @@ function applyLimitsToUI() {
   syncRange('cfgUserAge', 'user_age');
   syncRange('cfgMinPace', 'min_pace');
   syncRange('cfgMaxPace', 'max_pace');
+  syncRange('cfgDailyMaxActivity', 'daily_max_activity');
 
   const dailyLimit = document.getElementById('cfgDailyLimit');
   if (dailyLimit) dailyLimit.value = sysL.daily_upload_limit.max;
@@ -325,6 +326,7 @@ async function loadConfig() {
     setChecked('cfgHeartRate', config.heart_rate_enabled === 'true');
     setVal('cfgUserAge', config.user_age || (sysL?.user_age?.default ? String(sysL.user_age.default) : '25'));
     updateMHR();
+    setVal('cfgDailyMaxActivity', config.daily_max_activity || (sysL?.daily_max_activity?.default ? String(sysL.daily_max_activity.default) : '2'));
 
     setChecked('cfgSimWeather', config.sim_weather !== 'false');
     setChecked('cfgSimRedLights', config.sim_redlights !== 'false');
@@ -390,9 +392,11 @@ function validateTimeBounds(minTimeStr, maxTimeStr, targetDateStr, isCustomTime)
       const cMin = cMinH * 60 + cMinM;
       const cMax = cMaxH * 60 + cMaxM;
 
-      if (cMin < rMin || cMax > rMax) {
-        showToast(`Target Time phải nằm trong khoảng ${randMinStr} - ${randMaxStr}`, 'error');
-        return false;
+      if (minTimeStr !== '00:00' && maxTimeStr !== '00:00') {
+        if (cMin < rMin || cMax > rMax) {
+          showToast(`Target Time phải nằm trong khoảng ${randMinStr} - ${randMaxStr}`, 'error');
+          return false;
+        }
       }
     }
   } else if (!isCustomTime && minTimeStr) {
@@ -419,7 +423,8 @@ function validateInputs(config, isRealTime = false) {
     max_pace: 'cfgMaxPace',
     user_age: 'cfgUserAge',
     overlap_protection_minutes: 'cfgOverlapProtection',
-    rest_time_percent: 'cfgRestTime'
+    rest_time_percent: 'cfgRestTime',
+    daily_max_activity: 'cfgDailyMaxActivity'
   };
 
   const keyMap = {
@@ -431,7 +436,8 @@ function validateInputs(config, isRealTime = false) {
     user_age: 'user_age',
     overlap_protection_minutes: 'overlap_protection_minutes',
     rest_time_percent: 'rest_time_percent',
-    selected_districts: 'selected_districts'
+    selected_districts: 'selected_districts',
+    daily_max_activity: 'daily_max_activity'
   };
 
   let isValid = true;
@@ -527,6 +533,16 @@ function validateInputs(config, isRealTime = false) {
         return false;
       }
       isValid = false;
+    } else if (window.userRole !== 'vip') {
+      const presets = sysL.device_name?.choices || [];
+      if (!presets.includes(devVal)) {
+        if (devEl) devEl.classList.add('invalid');
+        if (!isRealTime) {
+          showToast('Tài khoản thường chỉ được phép chọn thiết bị có sẵn trong danh sách.', 'error');
+          return false;
+        }
+        isValid = false;
+      }
     }
   }
 
@@ -536,7 +552,7 @@ function validateInputs(config, isRealTime = false) {
 function attachRealTimeValidation() {
   const inputs = [
     'cfgMaxSpan', 'cfgOverlapProtection', 'cfgRestTime', 'cfgMinDist', 'cfgMaxDist',
-    'cfgMinPace', 'cfgMaxPace', 'cfgUserAge', 'cfgDeviceName'
+    'cfgMinPace', 'cfgMaxPace', 'cfgUserAge', 'cfgDeviceName', 'cfgDailyMaxActivity'
   ];
 
   inputs.forEach(id => {
@@ -554,6 +570,7 @@ function attachRealTimeValidation() {
         max_pace: document.getElementById('cfgMaxPace').value,
         user_age: document.getElementById('cfgUserAge').value,
         device_name: document.getElementById('cfgDeviceName')?.value || '',
+        daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || '2',
         selected_districts: Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value).join(',')
       };
       validateInputs(config, true);
@@ -598,6 +615,7 @@ async function saveConfig() {
     target_time_custom: document.getElementById('cfgCustomMinTime').value,
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || '30',
     rest_time_percent: document.getElementById('cfgRestTime')?.value || '50',
+    daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || '2',
   };
 
   if (!validateInputs(config)) return;
@@ -643,6 +661,7 @@ function getOverrideConfig() {
     sim_redlights: document.getElementById('cfgSimRedLights')?.checked ? 'true' : 'false',
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value,
     rest_time_percent: document.getElementById('cfgRestTime')?.value,
+    daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || '2',
   };
 
   if (!validateTimeBounds(overrideConfig.min_time, overrideConfig.max_time, overrideConfig.target_date, isCustomTime)) {

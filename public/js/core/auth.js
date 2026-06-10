@@ -16,10 +16,10 @@ async function checkAuth() {
       document.getElementById('dashboard').style.display = 'block';
       document.getElementById('btnLogout').style.display = 'block';
       
-      // Update header name with VIP indicator
+      // Update header name with VIP/NORMAL indicator
       const name = data.athlete?.name || 'Connected';
-      const vipTag = window.userRole === 'vip' ? '<span class="vip-badge-premium">VIP</span>' : '';
-      authText.innerHTML = `<span class="auth-username-text">${name}</span>${vipTag}`;
+      const roleTag = window.userRole === 'vip' ? '<span class="vip-badge-premium">VIP</span>' : '<span class="normal-badge-standard">NORMAL</span>';
+      authText.innerHTML = `<span class="auth-username-text">${name}</span>${roleTag}`;
       
       renderAccountInfo(data.athlete);
       loadDashboard();
@@ -37,7 +37,9 @@ async function checkAuth() {
 
 function renderAccountInfo(athlete) {
   const el = document.getElementById('accountProfile');
-  const roleBadge = window.userRole === 'vip' ? '<span class="status-badge" style="background:var(--gradient-vip); color:rgba(0,0,0,0.8); padding:2px 10px; font-size:0.65rem; border:none; margin-left:8px; box-shadow: 0 0 10px rgba(245,158,11,0.4); font-weight:800;">VIP GOLD</span>' : '';
+  const roleBadge = window.userRole === 'vip' 
+    ? '<span class="status-badge" style="background:var(--gradient-vip); color:rgba(0,0,0,0.8); padding:2px 10px; font-size:0.65rem; border:none; margin-left:8px; box-shadow: 0 0 10px rgba(245,158,11,0.4); font-weight:800;">VIP GOLD</span>' 
+    : '<span class="status-badge" style="background:linear-gradient(135deg, #fc4c02, #e24302); color:#fff; padding:2px 10px; font-size:0.65rem; border:none; margin-left:8px; box-shadow: 0 0 10px rgba(252,76,2,0.4); font-weight:800;">NORMAL</span>';
   el.innerHTML = `
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
       ${athlete?.avatar ? `<img src="${athlete.avatar}" style="width:48px;height:48px;border-radius:50%;border:2px solid var(--strava-orange);" alt="avatar">` : '<div style="width:48px;height:48px;border-radius:50%;background:var(--strava-orange);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🏃</div>'}
@@ -60,11 +62,28 @@ function renderAccountInfo(athlete) {
 
 async function systemLogout() {
   try {
+    if ('serviceWorker' in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (const registration of registrations) {
+        await registration.unregister();
+      }
+    }
+    if ('caches' in window) {
+      const cacheNames = await caches.keys();
+      for (const name of cacheNames) {
+        await caches.delete(name);
+      }
+    }
+  } catch (err) {
+    console.error('Cache clearing failed on logout:', err);
+  }
+
+  try {
     await fetch('/auth/system/logout', { method: 'POST' });
-    window.location.href = '/login.html';
   } catch (err) {
     console.error('Logout error:', err);
   }
+  window.location.href = '/login.html';
 }
 
 async function disconnect() {

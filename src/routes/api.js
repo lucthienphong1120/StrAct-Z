@@ -387,9 +387,9 @@ router.post('/generate-and-upload', async (req, res) => {
     genConfig.existingActivities = [...localActivities, ...stravaActivities];
     const activity = await generateActivity(genConfig);
 
-    const sysL = systemLimits.getLimits(req.user.role || 'normal');
-    if (stravaActivities.length >= sysL.daily_upload_limit.max) {
-      const errMsg = `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.`;
+    const dailyMaxActivity = parseInt(config.daily_max_activity || '2');
+    if (stravaActivities.length >= dailyMaxActivity) {
+      const errMsg = `Giới hạn upload hàng ngày là ${dailyMaxActivity}. Vui lòng xóa bớt trên Strava để tiếp tục.`;
       await db.saveActivity(req.user.id, {
         activity_name: activity.activityName,
         distance_km: activity.distanceKm,
@@ -490,9 +490,10 @@ router.post('/upload/:id', async (req, res) => {
       } catch (e) { console.warn('Strava fetch failed for limit check'); }
     }
 
-    const sysL = systemLimits.getLimits(req.user.role || 'normal');
-    if (stravaActivities.length >= sysL.daily_upload_limit.max) {
-      return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
+    const config = await db.getAllConfig(req.user.id);
+    const dailyMaxActivity = parseInt(config.daily_max_activity || '2');
+    if (stravaActivities.length >= dailyMaxActivity) {
+      return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${dailyMaxActivity}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
     }
 
     const gpxPath = path.join(__dirname, '..', '..', 'data', 'gpx', activity.gpx_file);

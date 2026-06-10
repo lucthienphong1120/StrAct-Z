@@ -179,9 +179,9 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] thêm docs về allow device và test để ra danh sách device chuẩn, bao gồm thêm cả app connect cũng được tính, bỏ phần mô tả cũng được (v1.60.5)
 + [x] cập nhật danh sách thiết bị cho phép trong config/limits và index.html; hỗ trợ hiển thị sao ★ trên UI trong khi lưu giá trị sạch ở backend; cấu hình upload description trống toàn cục (v1.60.5)
 + [x] sửa lỗi scheduler tự động lập lịch cho mốc thời gian 2 ngay cả khi người dùng đã tắt Auto Schedule (v1.60.6)
-+ [ ] swap vị trí thẻ Google Fit Account và Strava Account, thêm trường Daily Max Activity (editable, int, min = 1, max = daily upload limit) ở dưới Daily Upload Limit, cho phép user điều chỉnh giới hạn hoạt động upload mỗi ngày (giống Daily Upload Limit nhưng được custom, còn Daily Upload Limit là theo cấp độ VIP/Normal tài khoản - readonly)
-+ [ ] sửa tính năng Custom Time hoạt động với cả Generate and Upload hoặc Generate -> bây h tính năng này chủ yếu dùng để chỉ định gen hoạt động theo ngày cụ thể, phục vụ dev/test là chính
-+ [ ] khi login, logout cũng phải clear cache browser (Ctrl+Shift+R), giống với lúc version mismatch
-+ [ ] debug frontend restrict normal account
-+ [ ] dùng api debug get thử xem format hoạt động thật trả về có khác j hoạt động đc gen và sửa
++ [x] swap vị trí thẻ Google Fit Account và Strava Account, thêm trường Daily Max Activity (editable, int, min = 1, max = daily upload limit) ở dưới Daily Upload Limit, cho phép user điều chỉnh giới hạn hoạt động upload mỗi ngày (giống Daily Upload Limit nhưng được custom, còn Daily Upload Limit là theo cấp độ VIP/Normal tài khoản - readonly) (v1.60.7)
++ [x] sửa tính năng Custom Time hoạt động với cả Generate and Upload hoặc Generate -> bây h tính năng này chủ yếu dùng để chỉ định gen hoạt động theo ngày cụ thể, phục vụ dev/test là chính (v1.60.7)
++ [x] khi login, logout cũng phải clear cache browser (Ctrl+Shift+R), giống với lúc version mismatch (v1.60.7)
++ [x] debug frontend restrict normal account (v1.60.7)
++ [x] dùng api debug get thử xem format hoạt động thật trả về có khác j hoạt động đc gen và sửa (v1.60.7)
 

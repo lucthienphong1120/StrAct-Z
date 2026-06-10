@@ -11,7 +11,7 @@ async function loadDashboard(forceRefresh = false) {
     loadStats(forceRefresh),
     loadConfig(),
     loadSchedule(),
-    loadStravaActivities(forceRefresh), // Load Strava first for cross-check
+    loadStravaActivities(forceRefresh, false), // Load Strava first for cross-check
     loadInsights(forceRefresh)
   ]);
   
@@ -49,8 +49,8 @@ async function loadStats(forceRefresh = false) {
     if (authText) {
       const nameSpan = authText.querySelector('.auth-username-text');
       const currentName = nameSpan ? nameSpan.textContent : authText.textContent.replace(' VIP', '').trim();
-      const vipTag = window.userRole === 'vip' ? '<span class="vip-badge-premium">VIP</span>' : '';
-      authText.innerHTML = `<span class="auth-username-text">${currentName}</span>${vipTag}`;
+      const roleTag = window.userRole === 'vip' ? '<span class="vip-badge-premium">VIP</span>' : '<span class="normal-badge-standard">NORMAL</span>';
+      authText.innerHTML = `<span class="auth-username-text">${currentName}</span>${roleTag}`;
     }
     
     document.getElementById('statTotal').textContent = stats.total;
@@ -120,7 +120,8 @@ async function loadDistricts() {
 
 async function loadActivities(logDistance = false) {
   try {
-    const allActivities = await api('/activities?limit=10000');
+    const allActivities = await api('/activities?limit=200');
+    window.localActivities = allActivities;
     const container = document.getElementById('activityList');
     
     if (!allActivities || allActivities.error || !Array.isArray(allActivities)) {
@@ -340,13 +341,14 @@ function onStravaFilterChange() {
 async function refreshCloudData() {
   showToast('Refreshing cloud data...', 'info');
   await Promise.all([
-    loadStravaActivities(true),
+    loadStravaActivities(true, false),
     loadInsights(true)
   ]);
+  await loadActivities(true);
   showToast('Cloud data updated!', 'success');
 }
 
-async function loadStravaActivities(forceRefresh = false) {
+async function loadStravaActivities(forceRefresh = false, triggerUpdate = true) {
   const container = document.getElementById('stravaActivityList');
   if (!container) return;
   container.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Loading...</p></div>';
@@ -374,7 +376,7 @@ async function loadStravaActivities(forceRefresh = false) {
     
     if (!activities || activities.error) {
       window.latestStravaActivities = [];
-      loadActivities();
+      if (triggerUpdate) loadActivities();
       container.innerHTML = `<div class="empty-state"><div class="icon">❌</div><p>Failed to load Strava activities: ${activities?.error || 'Unknown error'}</p></div>`;
       return;
     }
@@ -385,7 +387,7 @@ async function loadStravaActivities(forceRefresh = false) {
     window.latestStravaActivities = activities || [];
     
     // Update Local History to reflect Strava status
-    loadActivities();
+    if (triggerUpdate) loadActivities();
 
     document.getElementById('stravaPageInfo').textContent = `Page ${window.stravaCurrentPage}`;
     
@@ -805,7 +807,7 @@ async function deleteActivity(id, hasStrava) {
 async function debugDistrictWeightRatios() {
   try {
     const config = await api('/config');
-    const allActivities = await api('/activities?limit=200');
+    const allActivities = window.localActivities || await api('/activities?limit=200');
     const districts = window.sysDistricts || await api('/districts');
     if (!districts || districts.length === 0) return;
 

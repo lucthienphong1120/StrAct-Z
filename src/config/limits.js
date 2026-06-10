@@ -378,6 +378,14 @@ const LIMITS = {
     min_range: { normal: 2, vip: 5 },
     max_range: { normal: 2, vip: 5 }
   },
+  daily_max_activity: {
+    label: 'Giới hạn hoạt động upload tùy chỉnh (Daily Max Activity).',
+    type: 'int',
+    desc_extra: 'Tác dụng: Tự điều chỉnh giới hạn số lượng hoạt động tải lên mỗi ngày (tối đa bằng Giới hạn tải lên mặc định của tài khoản).',
+    default: 2,
+    min: 1,
+    max: { normal: 2, vip: 5 }
+  },
   local_history: {
     label: 'Lịch sử hoạt động đã tạo (Local Generated History).',
     desc_extra: 'Trạng thái hoạt động:\n• UPLOADED: Đã tải lên Strava thành công.\n• GENERATED: Mới chỉ tạo file GPX local, chưa tải lên.\n• DELETED: Đã xóa cục bộ trước khi tải lên.\n• REMOVED: Đã tải lên nhưng sau đó bị xóa khỏi Strava Cloud.\n• FAILED: Không thể tạo hoạt động do lỗi cấu hình hoặc không tìm thấy khung giờ trống.',

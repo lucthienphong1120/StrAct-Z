@@ -41,6 +41,7 @@ const DEFAULT_CONFIG = {
   sim_weather: String(systemLimits.sim_weather.default),
   sim_redlights: String(systemLimits.sim_redlights.default),
   sync_google_fit: String(systemLimits.sync_google_fit.default),
+  daily_max_activity: String(systemLimits.daily_max_activity.default),
   schedule_enabled: String(systemLimits.schedule_enabled.default),
   schedule_time: systemLimits.schedule_time.default,
   schedule_count: String(systemLimits.schedule_count.default),
