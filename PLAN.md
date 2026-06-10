@@ -180,4 +180,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] cập nhật danh sách thiết bị cho phép trong config/limits và index.html; hỗ trợ hiển thị sao ★ trên UI trong khi lưu giá trị sạch ở backend; cấu hình upload description trống toàn cục (v1.60.5)
 + [x] sửa lỗi scheduler tự động lập lịch cho mốc thời gian 2 ngay cả khi người dùng đã tắt Auto Schedule (v1.60.6)
 + [ ] swap vị trí thẻ Google Fit Account và Strava Account, thêm trường Daily Max Activity (editable, int, min = 1, max = daily upload limit) ở dưới Daily Upload Limit, cho phép user điều chỉnh giới hạn hoạt động upload mỗi ngày (giống Daily Upload Limit nhưng được custom, còn Daily Upload Limit là theo cấp độ VIP/Normal tài khoản - readonly)
++ [ ] sửa tính năng Custom Time hoạt động với cả Generate and Upload hoặc Generate -> bây h tính năng này chủ yếu dùng để chỉ định gen hoạt động theo ngày cụ thể, phục vụ dev/test là chính
 
