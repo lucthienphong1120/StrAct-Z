@@ -4,8 +4,8 @@ Use this file to track testing of various devices and applications on Strava. Up
 
 ## 📋 Device Testcases
 
-| Device / Source Name | Tested Status | Result |
-| :--- | :--- | :--- | :--- |
+| Source Name | Tested Status | Result |
+| :--- | :--- | :--- |
 | **Garmin Forerunner 945** | ✅ OK | - |
 | **Garmin fēnix 7x Pro** | ✅ OK | - |
 | **Garmin fēnix 8** | ⏳ Untested | - |
