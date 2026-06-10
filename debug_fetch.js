@@ -107,8 +107,8 @@ async function main() {
       '18865043228', // Garmin Connect
       '18221159624', // Real - Strava App
       '18851617193', // Trước update
-      '18865536121', // Sau update, ko nhận device name
-      '18865551552'  // Sau update, có nhận device name
+      '18865582717', // Sau update, ko nhận device name
+      '18865572186'  // Sau update, có nhận device name
     ];
     const outputDir = path.join(__dirname, 'data', 'debug_json');
     fs.mkdirSync(outputDir, { recursive: true });
