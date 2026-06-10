@@ -46,6 +46,13 @@ For detailed information, please refer to our documentation guides:
 
 ## 📋 Changelog
 
+### v2.0.0 (2026-06-10)
+- **Big Update: GPX to FIT Migration**: Thay thế hoàn toàn công cụ tạo lộ trình GPX cũ bằng công cụ sinh tệp nhị phân `.fit` chuẩn Garmin FIT (sử dụng thư viện `@markw65/fit-file-writer`).
+- **Sync Badge & Calorie Calculation**: Hỗ trợ hiển thị huy hiệu đồng bộ (Sync Badge) tương ứng từ các hãng sản xuất và kích hoạt tính năng tự động tính calo của Strava.
+- **Auto-Migration**: Hệ thống tự động di chuyển dữ liệu khi khởi chạy (đổi tên cột `gpx_file` thành `fit_file` trong database và đổi tên thư mục từ `data/gpx` sang `data/fit`).
+- **Device Support**: Cấu hình chuẩn hóa ID nhà sản xuất (Manufacturer ID) cho Garmin, Apple, Samsung, Amazfit, Coros, Huawei, Suunto.
+- **Future Cleanup Plan**: Các cấu hình và tiến trình cũ liên quan đến GPX sẽ được dọn dẹp triệt để trong các bản cập nhật phiên bản kế tiếp sau khi hoàn tất kiểm thử trên môi trường Production.
+
 ### v1.52.0 (2026-06-01)
 - **Hardening**: Fixed 19 security vulnerabilities, bugs, cleanup, and feature issues identified in the code review. Added `ENCRYPTION_SALT` config variable, public `/health` endpoint, restricted CORS using `BASE_URL`, enabled SQLite WAL mode, and created a weekly GPX cleanup job.
 

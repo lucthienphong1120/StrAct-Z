@@ -20,12 +20,13 @@ Key tables:
 - **Rate Limiting:** The login endpoint is protected by `express-rate-limit` (max 5 failed attempts per 15 minutes per IP) to prevent brute-force attacks.
 - **Strava OAuth Flow:** Strava tokens are tied to the active user's session. The OAuth state parameter ensures the callback correctly identifies the originating system account.
 
-### 3. GPX Engine (`route-engine.js` & `gpx-generator.js`)
+### 3. FIT Engine (`route-engine.js` & `fit-generator.js`)
 The engine generates activities in two phases:
 1. **Spatial Generation:** Uses mathematical formulas and the public OSRM (Open Source Routing Machine) API to snap random waypoints to actual roads within defined Hanoi districts. If OSRM fails or is disabled, it falls back to a Manhattan-distance algorithm.
 2. **Temporal & Biometric Simulation:** 
    - Generates timestamps based on target pace, injecting natural human micro-fluctuations.
    - **Simulation Events:** Injects random pauses (simulating red lights or traffic) and alters heart rate dynamically based on simulated weather conditions, elevation changes, and exertion over time.
+   - **FIT Binary compilation:** Converts the simulated data into Garmin FIT binary format using `@markw65/fit-file-writer`, supporting manufacturer/product configuration (device mapping) to display Sync Badge on Strava.
 
 ### 4. Background Scheduler (`scheduler.js`)
 - Uses `node-cron` to manage background tasks.
