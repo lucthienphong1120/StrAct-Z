@@ -104,7 +104,8 @@ async function main() {
       '18864757554', // Apple Watch Series 5
       '18864751973', // Strava App
       '18864751850', // COROS PACE 3
-      '18865043228'  // Garmin Connect
+      '18865043228', // Garmin Connect
+      '18221159624'  // Real - Strava App
     ];
     const outputDir = path.join(__dirname, 'data', 'debug_json');
     fs.mkdirSync(outputDir, { recursive: true });
