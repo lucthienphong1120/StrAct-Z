@@ -52,7 +52,7 @@ router.post('/config', async (req, res) => {
   try {
     const updates = req.body;
     const role = req.user.role || 'normal';
-    
+
     const validation = validateConfig(updates, role);
     if (!validation.success) {
       return res.status(400).json({ error: validation.error });
@@ -191,15 +191,15 @@ router.get('/insights', async (req, res) => {
     const days = parseInt(req.query.days) || 14;
     const now = new Date();
     // 2 days buffer to handle timezones and late night uploads safely
-    const after = Math.floor((now.getTime() - (days + 2) * 24 * 60 * 60 * 1000) / 1000); 
-    
+    const after = Math.floor((now.getTime() - (days + 2) * 24 * 60 * 60 * 1000) / 1000);
+
     const forceRefresh = req.query.refresh === 'true';
     const activities = await stravaApi.getActivities(req.user.id, 1, 200, after, forceRefresh);
-    
+
     if (forceRefresh) {
-      console.log(`[Cloud Sync] Refreshed insights for user ${req.user.id}. Found ${activities.length} acts since ${new Date(after*1000).toISOString()}`);
+      console.log(`[Cloud Sync] Refreshed insights for user ${req.user.id}. Found ${activities.length} acts since ${new Date(after * 1000).toISOString()}`);
     }
-    
+
     // Enrich activities with is_stract_z flag
     const localActivities = await db.getActivities(req.user.id, 1000).catch(() => []);
     const localStravaIds = new Set(
@@ -210,7 +210,7 @@ router.get('/insights', async (req, res) => {
 
     const enrichedActivities = activities.map(a => {
       const isStrActZ = (a.external_id && (a.external_id.startsWith('stract-z') || a.external_id.includes('stract-z'))) ||
-                        localStravaIds.has(String(a.id));
+        localStravaIds.has(String(a.id));
       return {
         ...a,
         is_stract_z: !!isStrActZ
@@ -244,11 +244,11 @@ router.get('/strava-activities', async (req, res) => {
     const perPage = parseInt(req.query.per_page) || 10;
     const after = req.query.after ? parseInt(req.query.after) : null;
     const forceRefresh = req.query.refresh === 'true';
-    
+
     // Fetch WITHOUT 'after' to ensure Strava returns results in reverse-chronological order.
     // If 'after' is provided to the Strava API, it defaults to chronological (oldest first).
     let activities = await stravaApi.getActivities(req.user.id, page, perPage, null, forceRefresh);
-    
+
     // Filter by 'after' locally if needed
     if (after) {
       activities = activities.filter(a => {
@@ -259,14 +259,14 @@ router.get('/strava-activities', async (req, res) => {
 
     // Always sort descending (latest first)
     activities.sort((a, b) => new Date(b.start_date || b.start_date_local) - new Date(a.start_date || a.start_date_local));
-    
+
     if (forceRefresh || page === 1) {
       console.log(`[Strava API] User ${req.user.id} fetched ${activities.length} acts (Page ${page}, After: ${after})`);
       if (activities.length > 0) {
         console.log(`[Strava API] Newest act: ${activities[0].name} (${activities[0].start_date})`);
       }
     }
-    
+
     res.json(activities);
   } catch (err) {
     console.error(`[Strava API] Error getting activities for user ${req.user.id}:`, err);
@@ -278,12 +278,12 @@ async function syncLocalActivitiesWithStrava(userId, dateStr, stravaActivities) 
   try {
     const localActivities = await db.getActivitiesByDate(userId, dateStr);
     const stravaIds = new Set(stravaActivities.map(a => String(a.id)));
-    
+
     for (const a of localActivities) {
       if ((a.upload_status === 'uploaded' || a.strava_activity_id) && a.upload_status !== 'removed') {
         if (!stravaIds.has(String(a.strava_activity_id))) {
           console.log(`[Sync] Activity ${a.id} (Strava ID: ${a.strava_activity_id}) not found on Strava. Marking as 'removed'.`);
-          await db.deleteActivity(userId, a.id, false, 'removed').catch(() => {});
+          await db.deleteActivity(userId, a.id, false, 'removed').catch(() => { });
           a.upload_status = 'removed';
         }
       }
@@ -306,7 +306,7 @@ router.post('/generate', async (req, res) => {
 
     const config = await db.getAllConfig(req.user.id);
 
-    const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
+    const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
     let localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
     let stravaActivities = [];
     let stravaFetchSuccess = false;
@@ -374,7 +374,7 @@ router.post('/generate', async (req, res) => {
           created_by: 'Manual',
           error_message: err.message,
         });
-      } catch (_) {}
+      } catch (_) { }
       return res.status(409).json({ error: err.message, code: err.code });
     }
     res.status(500).json({ error: err.message });
@@ -392,7 +392,7 @@ router.post('/generate-and-upload', async (req, res) => {
 
     const config = await db.getAllConfig(req.user.id);
 
-    const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
+    const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
     let localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
     let stravaActivities = [];
     let stravaFetchSuccess = false;
@@ -491,7 +491,7 @@ router.post('/generate-and-upload', async (req, res) => {
           created_by: 'Manual',
           error_message: err.message,
         });
-      } catch (_) {}
+      } catch (_) { }
       return res.status(409).json({ error: err.message, code: err.code });
     }
     res.status(500).json({ error: err.message, message: err.message });
@@ -505,7 +505,7 @@ router.post('/upload/:id', async (req, res) => {
     const activity = activities.find(a => a.id === parseInt(req.params.id));
     if (!activity) return res.status(404).json({ error: 'Activity not found' });
 
-    const targetDate = new Date(activity.route_start_time || activity.created_at || Date.now()).toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
+    const targetDate = new Date(activity.route_start_time || activity.created_at || Date.now()).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
     let stravaActivities = [];
     if (await stravaApi.isAuthenticated(req.user.id)) {
       try {
@@ -517,7 +517,7 @@ router.post('/upload/:id', async (req, res) => {
 
     const sysL = systemLimits.getLimits(req.user.role || 'normal');
     if (stravaActivities.length >= sysL.daily_upload_limit.max) {
-       return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
+      return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${sysL.daily_upload_limit.max}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
     }
 
     const gpxPath = path.join(__dirname, '..', '..', 'data', 'gpx', activity.gpx_file);
@@ -637,17 +637,17 @@ router.post('/scheduler', async (req, res) => {
 
     const s = validation.sanitized;
     await scheduler.updateSchedule(
-      req.user.id, 
-      s.schedule_enabled !== undefined ? s.schedule_enabled === 'true' : undefined, 
+      req.user.id,
+      s.schedule_enabled !== undefined ? s.schedule_enabled === 'true' : undefined,
       s.schedule_time,
       s.schedule_count,
       s.schedule_time_2,
-      s.schedule_count_min !== undefined ? parseInt(s.schedule_count_min) : undefined, 
+      s.schedule_count_min !== undefined ? parseInt(s.schedule_count_min) : undefined,
       s.schedule_count_max !== undefined ? parseInt(s.schedule_count_max) : undefined,
       s.target_distance_enabled !== undefined ? s.target_distance_enabled === 'true' : undefined,
       s.target_distance_km !== undefined ? parseFloat(s.target_distance_km) : undefined
     );
-    
+
     res.json(await scheduler.getStatus(req.user.id));
   } catch (err) {
     console.error(`[Scheduler API] Error updating schedule for user ${req.user?.id}:`, err);
