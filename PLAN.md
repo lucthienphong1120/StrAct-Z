@@ -182,4 +182,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] swap vị trí thẻ Google Fit Account và Strava Account, thêm trường Daily Max Activity (editable, int, min = 1, max = daily upload limit) ở dưới Daily Upload Limit, cho phép user điều chỉnh giới hạn hoạt động upload mỗi ngày (giống Daily Upload Limit nhưng được custom, còn Daily Upload Limit là theo cấp độ VIP/Normal tài khoản - readonly)
 + [ ] sửa tính năng Custom Time hoạt động với cả Generate and Upload hoặc Generate -> bây h tính năng này chủ yếu dùng để chỉ định gen hoạt động theo ngày cụ thể, phục vụ dev/test là chính
 + [ ] khi login, logout cũng phải clear cache browser (Ctrl+Shift+R), giống với lúc version mismatch
++ [ ] debug frontend restrict normal account
 
