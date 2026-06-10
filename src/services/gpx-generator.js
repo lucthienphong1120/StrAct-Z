@@ -29,6 +29,7 @@ function getShortDescription(deviceName) {
   if (name.includes('apple')) return 'Apple Sport';
   if (name.includes('coros')) return 'COROS';
   if (name.includes('amazfit')) return 'Zepp App';
+  if (name.includes('iphone')) return 'Strava iPhone App';
   if (name.includes('strava')) return 'Strava Android App';
   return 'Garmin Connect';
 }
