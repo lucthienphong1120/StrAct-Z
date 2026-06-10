@@ -4,7 +4,7 @@
 
 const cron = require('node-cron');
 const db = require('../db/database');
-const { generateActivity, getShortDescription } = require('./gpx-generator');
+const { generateActivity } = require('./gpx-generator');
 const stravaApi = require('./strava-api');
 const googleFit = require('./google-fit');
 const systemLimits = require('../config/limits');
@@ -210,7 +210,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         const deviceName = config.device_name || 'Garmin Forerunner 975';
         const uploadResult = await stravaApi.uploadActivity(accountId, activity.filepath, {
           name: activity.activityName,
-          description: getShortDescription(deviceName),
+          description: deviceName,
           sportType: activity.activityType || 'Run',
         });
 

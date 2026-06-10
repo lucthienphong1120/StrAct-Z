@@ -171,4 +171,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] đổi swap vị trí desc (mô tả) và device name (nguồn) trong file gpx để khi hiện thị phần mô tả sẽ là (VD: Huawei Health/Zepp App/Garmin Connect/Apple Sport...) và device name sẽ là (VD: Amazfit Active 3 Premium/Huawei GT 4 Pro/...) để khi đẩy sang strava nó hiển thị đúng tên thiết bị (v1.59.0)
 + [x] troubleshoot và fix Lỗi Service Worker với phương thức POST (TypeError: Failed to execute 'put' on 'Cache': Request method 'POST' is unsupported)
 + [x] tăng độ biến động và gợn sóng nhỏ của nhịp độ (pace) bằng cách resample điểm lộ trình 10m đồng đều và bo tròn giây nguyên (v1.60.0)
-+ [ ] 
++ [x] revert swap gpx creator/description, cập nhật map Amazfit thành 'Amazfit' để hiển thị lại source badge (v1.60.1)
++ [ ] swap vị trí thẻ Google Fit Account và Strava Account, thêm trường Daily Max Activity (editable, int, min = 1, max = daily upload limit) ở dưới Daily Upload Limit, cho phép user điều chỉnh giới hạn hoạt động upload mỗi ngày (giống Daily Upload Limit nhưng được custom, còn Daily Upload Limit là theo cấp độ VIP/Normal tài khoản - readonly)

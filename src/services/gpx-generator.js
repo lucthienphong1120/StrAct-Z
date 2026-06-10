@@ -28,7 +28,7 @@ function getShortDescription(deviceName) {
   if (name.includes('samsung')) return 'Samsung Health';
   if (name.includes('apple')) return 'Apple Sport';
   if (name.includes('coros')) return 'COROS';
-  if (name.includes('amazfit')) return 'Zepp App';
+  if (name.includes('amazfit')) return 'Amazfit';
   if (name.includes('strava')) return 'Strava Android App';
   return 'Garmin Connect';
 }
@@ -557,8 +557,8 @@ async function generateActivity(config = {}) {
     activityType: finalActivityType.toLowerCase(),
     includeHeartRate: heartRateEnabled,
     includeCadence: true,
-    deviceName: deviceName, // Use full device name as creator
-    description: getShortDescription(deviceName), // Use mapped app name (e.g. Garmin Connect, Zepp App) as description
+    deviceName: getShortDescription(deviceName), // Use mapped app name (e.g. Garmin Connect, Amazfit) as creator/sync source
+    description: deviceName, // Use full device name as description
   });
 
   // Save GPX file

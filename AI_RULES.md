@@ -84,6 +84,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.60.1 (2026-06-10)
+- **Feature: Restored GPX Creator and Mapped Amazfit for Strava Badge**:
+  - Reverted the GPX Creator and Upload Description metadata swap to ensure Strava can parse the creator field properly to show the sync source badge.
+  - Set the GPX Creator attribute back to the application sync source (retrieved via `getShortDescription(deviceName)`).
+  - Set the Strava upload activity description payload back to the full device name (`deviceName`).
+  - Updated `getShortDescription` mapping for Amazfit devices to return `'Amazfit'` instead of `'Zepp App'`, allowing Strava's parser to successfully recognize and display the Amazfit sync source badge.
+
 ### v1.60.0 (2026-06-10)
 - **Feature: Improved GPX Pace Realism and Smoothness**:
   - Implemented `resampleRoute` to resample generated OSRM and fallback points to a uniform 10-meter spacing.
