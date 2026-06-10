@@ -23,6 +23,8 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Rules for AI Assistant**:
   - **MANDATORY**: At the start of EVERY session, the AI assistant MUST read `AI_RULES.md` and `PLAN.md` to align on project context, progress, and rules.
   - **COMMIT & PUSH**: Whenever ANY changes or updates are made, the AI assistant MUST run `git add`, `git commit` and `git push` to synchronize the repository immediately. (Lưu ý: Luôn nhớ thực hiện việc này để đồng bộ hóa mã nguồn).
+  - **NO LOCAL TESTING**: Code is local, but it is **not tested locally**. Do not assume database/user data exists locally. If any database queries, real activity logs, or verification needs to be performed, **ask the user** to get or execute them on the production environment.
+  - **NO SECRETS IN GIT**: Never push sensitive information, tokens, database files (`data/*.sqlite`), or credential configuration files (`.env`) to GitHub.
   - **VERSIONING**: Ensure versioning in `package.json`, `AI_RULES.md`, `PLAN.md`, and `public/index.html` is updated in sync.
 - **Production Deployment**:
   - Code is deployed to the production server via `git pull` in the SSH terminal.
