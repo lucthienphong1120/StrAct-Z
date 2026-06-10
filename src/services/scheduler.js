@@ -34,6 +34,9 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       throw new Error('Not authenticated with Strava. Please connect your account.');
     }
 
+    // Clear activities cache to ensure scheduled job starts with fresh data
+    stravaApi.clearActivityCache(accountId);
+
     // Note: Scheduled activities are NOT limited by daily_upload_limit.
     // They are only limited by schedule_count_min and schedule_count_max config.
     const config = await db.getAllConfig(accountId);
