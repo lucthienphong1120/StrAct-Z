@@ -2,6 +2,13 @@
 
 This file serves as a persistent memory and rulebook for AI coding assistants working on the **StrAct Z** platform. Follow these guidelines strictly.
 
+> [!IMPORTANT]
+> **AI CORE MANDATE (BẮT BUỘC):**
+> Hãy luôn đọc file `AI_RULES.md` trong thư mục gốc để nắm bắt kiến trúc dự án, các quy tắc logic vận hành, các tiêu chuẩn versioning của dự án, và file `PLAN.md` để nắm bắt tiến độ thực hiện các tính năng. Luôn tuân thủ các quy tắc trong đó khi bắt đầu phiên làm việc (session) mới và tiếp tục thực hiện các nhiệm vụ tiếp theo.
+>
+> **Lưu ý:** Mỗi khi thay đổi một logic cốt lõi nào đó, hãy cập nhật nó vào `AI_RULES.md` để "bộ nhớ" này luôn luôn mới nhất! Đồng thời cập nhật tiến độ hoàn thành các tính năng vào `PLAN.md` và thực hiện `git add`, `git commit`, `git push` để đồng bộ hóa kho mã nguồn lên GitHub immediately!
+
+
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
 - **Normal User**: Distinguished by the **Strava Orange** theme (`#fc4c02`). Applied via `document.body.classList.add('is-normal')`.

@@ -18,7 +18,7 @@ async function checkAuth() {
       
       // Update header name with VIP/NORMAL indicator
       const name = data.athlete?.name || 'Connected';
-      const roleTag = window.userRole === 'vip' ? '<span class="vip-badge-premium">VIP</span>' : '<span class="normal-badge-standard">NORMAL</span>';
+      const roleTag = window.userRole === 'vip' ? '<span class="vip-badge-premium">VIP</span>' : '<span class="normal-badge-standard">normal</span>';
       authText.innerHTML = `<span class="auth-username-text">${name}</span>${roleTag}`;
       
       renderAccountInfo(data.athlete);
@@ -37,14 +37,11 @@ async function checkAuth() {
 
 function renderAccountInfo(athlete) {
   const el = document.getElementById('accountProfile');
-  const roleBadge = window.userRole === 'vip' 
-    ? '<span class="status-badge" style="background:var(--gradient-vip); color:rgba(0,0,0,0.8); padding:2px 10px; font-size:0.65rem; border:none; margin-left:8px; box-shadow: 0 0 10px rgba(245,158,11,0.4); font-weight:800;">VIP GOLD</span>' 
-    : '<span class="status-badge" style="background:linear-gradient(135deg, #fc4c02, #e24302); color:#fff; padding:2px 10px; font-size:0.65rem; border:none; margin-left:8px; box-shadow: 0 0 10px rgba(252,76,2,0.4); font-weight:800;">NORMAL</span>';
   el.innerHTML = `
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
       ${athlete?.avatar ? `<img src="${athlete.avatar}" style="width:48px;height:48px;border-radius:50%;border:2px solid var(--strava-orange);" alt="avatar">` : '<div style="width:48px;height:48px;border-radius:50%;background:var(--strava-orange);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🏃</div>'}
       <div>
-        <div style="font-weight:600; display:flex; align-items:center;">${athlete?.name || 'Strava User'} ${roleBadge}</div>
+        <div style="font-weight:600; display:flex; align-items:center;">${athlete?.name || 'Strava User'}</div>
         <div style="font-size:0.8rem;color:var(--text-muted);">ID: ${athlete?.id || 'N/A'}</div>
       </div>
     </div>
