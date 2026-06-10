@@ -26,7 +26,7 @@ The engine generates activities in two phases:
 2. **Temporal & Biometric Simulation:** 
    - Generates timestamps based on target pace, injecting natural human micro-fluctuations.
    - **Simulation Events:** Injects random pauses (simulating red lights or traffic) and alters heart rate dynamically based on simulated weather conditions, elevation changes, and exertion over time.
-   - **FIT Binary compilation:** Converts the simulated data into Garmin FIT binary format using `@markw65/fit-file-writer`, supporting manufacturer/product configuration (device mapping) to display Sync Badge on Strava.
+   - **FIT Binary compilation:** Converts the simulated data into Garmin FIT binary format using `@markw65/fit-file-writer`, supporting manufacturer/product configuration (device mapping) to display Sync Badge on Strava. Files are saved locally and uploaded to Strava using randomized UUID filenames and `external_id` (e.g., `584be6ca-84ba-4b6e-b93e-23d5670aa53b-activity.fit`) to perfectly mimic real device syncs.
 
 ### 4. Background Scheduler (`scheduler.js`)
 - Uses `node-cron` to manage background tasks.

@@ -224,7 +224,7 @@ async function uploadActivity(accountId, fitFilepath, options = {}) {
   form.append('name', name);
   form.append('description', description);
   form.append('sport_type', sportType);
-  form.append('external_id', `stract-z_random_${Date.now()}`);
+  form.append('external_id', path.basename(fitFilepath));
 
   const requestOptions = {
     hostname: STRAVA_BASE_URL,

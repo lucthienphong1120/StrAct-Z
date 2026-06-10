@@ -5,6 +5,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { randomUUID } = require('crypto');
 const { FitWriter } = require('@markw65/fit-file-writer');
 const {
   HANOI_DISTRICTS,
@@ -688,8 +689,8 @@ async function generateActivity(config = {}) {
   const fitBuffer = Buffer.from(view.buffer, view.byteOffset, view.byteLength);
 
   // Save FIT file
-  const timestamp = activityStartTime.toISOString().replace(/[:.]/g, '-').slice(0, 19);
-  const filename = `run_${timestamp}.fit`;
+  const uuid = randomUUID();
+  const filename = `${uuid}-activity.fit`;
   const filepath = path.join(FIT_DIR, filename);
   fs.writeFileSync(filepath, fitBuffer);
 
