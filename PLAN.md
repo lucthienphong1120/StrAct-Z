@@ -170,4 +170,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] fix lại activity khi đẩy sang strava lại bị thiếu Source (tôi dùng Amazfit Active 3 Premium -> đang bị thiếu phần source, chỉ có phần mô tả so với Huawei Fit 5 Pro trước đó) (v1.59.0)
 + [x] đổi swap vị trí desc (mô tả) và device name (nguồn) trong file gpx để khi hiện thị phần mô tả sẽ là (VD: Huawei Health/Zepp App/Garmin Connect/Apple Sport...) và device name sẽ là (VD: Amazfit Active 3 Premium/Huawei GT 4 Pro/...) để khi đẩy sang strava nó hiển thị đúng tên thiết bị (v1.59.0)
 + [x] troubleshoot và fix Lỗi Service Worker với phương thức POST (TypeError: Failed to execute 'put' on 'Cache': Request method 'POST' is unsupported)
++ [x] tăng độ biến động và gợn sóng nhỏ của nhịp độ (pace) bằng cách resample điểm lộ trình 10m đồng đều và bo tròn giây nguyên (v1.60.0)
 + [ ] 

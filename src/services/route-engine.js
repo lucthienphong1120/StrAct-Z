@@ -383,6 +383,53 @@ function trimRouteToDistance(points, targetDistM) {
   return result;
 }
 
+/**
+ * Resamples route points to a uniform distance step (e.g. 10m)
+ * to prevent sparse coordinate segments from causing strange Strava pace chart humps.
+ */
+function resampleRoute(points, stepM = 10) {
+  if (points.length < 2) return points;
+  
+  const resampled = [];
+  resampled.push({ ...points[0] });
+  
+  let currentTargetDist = stepM;
+  let i = 1;
+  
+  while (i < points.length) {
+    const prev = points[i - 1];
+    const curr = points[i];
+    
+    if (curr.distance >= currentTargetDist) {
+      const segDist = curr.distance - prev.distance;
+      if (segDist === 0) {
+        i++;
+        continue;
+      }
+      const t = (currentTargetDist - prev.distance) / segDist;
+      const interpPt = {
+        lat: prev.lat + (curr.lat - prev.lat) * t,
+        lng: prev.lng + (curr.lng - prev.lng) * t,
+        distance: currentTargetDist
+      };
+      if (prev.elevation !== undefined && curr.elevation !== undefined) {
+        interpPt.elevation = prev.elevation + (curr.elevation - prev.elevation) * t;
+      }
+      resampled.push(interpPt);
+      currentTargetDist += stepM;
+    } else {
+      i++;
+    }
+  }
+  
+  const last = points[points.length - 1];
+  if (resampled[resampled.length - 1].distance < last.distance) {
+    resampled.push({ ...last });
+  }
+  
+  return resampled;
+}
+
 // ─── Main Route Generator ─────────────────────────────────────────────────────
 
 /**
@@ -484,6 +531,9 @@ async function generateRoute(options = {}) {
     points = fallbackRoute(waypoints, targetDistM);
   }
 
+  // Resample points to uniform 10m spacing for smooth, realistic pace graphs on Strava
+  points = resampleRoute(points, 10);
+
   return points;
 }
 
@@ -556,6 +606,9 @@ function generateTimestamps(points, options = {}) {
   const avgSpeed = 1000 / (avgPaceMinPerKm * 60);
 
   let cur = new Date(startTime);
+  // Round start time to nearest second
+  cur = new Date(Math.round(cur.getTime() / 1000) * 1000);
+
   const result = [];
   points[0].time = new Date(cur);
   result.push(points[0]);
@@ -573,12 +626,24 @@ function generateTimestamps(points, options = {}) {
 
     if (pt.elevation !== undefined && prevPt.elevation !== undefined && segDist > 0) {
       const grad = (pt.elevation - prevPt.elevation) / segDist;
-      paceFactor += grad * 4;
+      // Clamp gradient to prevent extreme spikes on tiny segments
+      const clampedGrad = Math.max(-0.08, Math.min(0.08, grad));
+      paceFactor += clampedGrad * 4;
     }
 
     const speed = avgSpeed / Math.max(0.5, paceFactor);
     const secs = segDist > 0 ? segDist / speed : 0;
-    cur = new Date(cur.getTime() + secs * 1000);
+    
+    // Add seconds and round next point's time to nearest second
+    let nextTimeMs = cur.getTime() + secs * 1000;
+    let nextTimeRounded = Math.round(nextTimeMs / 1000) * 1000;
+    
+    // Enforce that the time must advance by at least 1 second (1000ms)
+    if (nextTimeRounded <= cur.getTime()) {
+      nextTimeRounded = cur.getTime() + 1000;
+    }
+    
+    cur = new Date(nextTimeRounded);
     pt.time = new Date(cur);
     
     // Simulate Red Light / Pause (approx 1.5% chance per point if not near start/end)

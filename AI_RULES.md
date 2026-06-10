@@ -84,6 +84,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.60.0 (2026-06-10)
+- **Feature: Improved GPX Pace Realism and Smoothness**:
+  - Implemented `resampleRoute` to resample generated OSRM and fallback points to a uniform 10-meter spacing.
+  - This uniform density prevents Strava's parser from creating massive smooth pace "humps" and "valleys" caused by sparse OSRM segments.
+  - Clamped the elevation gradient calculation in `generateTimestamps` to max absolute grade of 0.08 to prevent extreme pace spikes on tiny segments.
+  - Rounded GPS point timestamps to the nearest second and enforced a minimum of 1-second interval progression between consecutive trackpoints.
+
 ### v1.59.0 (2026-06-10)
 - **Feature: Swapped GPX Creator and Upload Description for Devices & Fixed Amazfit Badging**:
   - Swapped device name (e.g. Amazfit Active 3 Premium) and short app source (e.g. Zepp App) in GPX creator attribute and Strava activity upload description payload.
