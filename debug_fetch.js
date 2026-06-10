@@ -75,6 +75,19 @@ async function getAccessToken(accountId) {
 }
 
 async function main() {
+  // Hỗ trợ in trực tiếp dữ liệu JSON thô ra màn hình
+  const args = process.argv.slice(2);
+  if (args[0] === 'print' && args[1]) {
+    const targetId = args[1];
+    const outPath = path.join(__dirname, 'data', 'debug_json', `${targetId}.json`);
+    if (fs.existsSync(outPath)) {
+      console.log(fs.readFileSync(outPath, 'utf-8'));
+    } else {
+      console.error(`Lỗi: Không tìm thấy file JSON của hoạt động ${targetId} tại ${outPath}. Vui lòng chạy kịch bản để tải về trước.`);
+    }
+    return;
+  }
+
   try {
     const database = await db.getDb();
     const user = await database.get('SELECT account_id, athlete_name FROM users ORDER BY id DESC LIMIT 1');
