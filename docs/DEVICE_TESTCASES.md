@@ -19,6 +19,7 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Apple Sport** | ✅ OK | 2026-06-10 | Brand source badge verified |
 | **COROS** | ✅ OK | 2026-06-10 | Brand source badge verified |
 | **Suunto** | ✅ OK | 2026-06-10 | Brand source badge verified |
+| **Garmin Forerunner 570** | ⏳ Untested | - | - |
 | **Garmin Forerunner 165** | ⏳ Untested | - | - |
 | **Garmin Instinct 3** | ⏳ Untested | - | - |
 | **Garmin Instinct 2X Solar** | ⏳ Untested | - | - |
