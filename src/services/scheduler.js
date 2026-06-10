@@ -54,14 +54,29 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
 
     // Get existing activities for today to avoid overlaps
     const targetDate = new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
-    const localActivities = await db.getActivitiesByDate(accountId, targetDate);
+    let localActivities = await db.getActivitiesByDate(accountId, targetDate);
     let stravaActivities = [];
+    let stravaFetchSuccess = false;
     if (await stravaApi.isAuthenticated(accountId)) {
       try {
         const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
         stravaActivities = await stravaApi.getActivities(accountId, 1, 50, after, true);
         stravaActivities = stravaActivities.filter(a => (a.start_date_local || a.start_date).startsWith(targetDate));
+        stravaFetchSuccess = true;
       } catch (e) { console.warn(`[Scheduler] Strava fetch failed for account ${accountId}`); }
+    }
+    
+    if (stravaFetchSuccess) {
+      const stravaIds = new Set(stravaActivities.map(a => String(a.id)));
+      for (const a of localActivities) {
+        if ((a.upload_status === 'uploaded' || a.strava_activity_id) && a.upload_status !== 'removed') {
+          if (!stravaIds.has(String(a.strava_activity_id))) {
+            console.log(`[Scheduler Sync] Activity ${a.id} (Strava ID: ${a.strava_activity_id}) not found on Strava for ${targetDate}. Marking as 'removed'.`);
+            await db.deleteActivity(accountId, a.id, false, 'removed').catch(() => {});
+            a.upload_status = 'removed';
+          }
+        }
+      }
     }
     
     let existingActivities = [...localActivities, ...stravaActivities];

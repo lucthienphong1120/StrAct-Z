@@ -274,6 +274,27 @@ router.get('/strava-activities', async (req, res) => {
   }
 });
 
+async function syncLocalActivitiesWithStrava(userId, dateStr, stravaActivities) {
+  try {
+    const localActivities = await db.getActivitiesByDate(userId, dateStr);
+    const stravaIds = new Set(stravaActivities.map(a => String(a.id)));
+    
+    for (const a of localActivities) {
+      if ((a.upload_status === 'uploaded' || a.strava_activity_id) && a.upload_status !== 'removed') {
+        if (!stravaIds.has(String(a.strava_activity_id))) {
+          console.log(`[Sync] Activity ${a.id} (Strava ID: ${a.strava_activity_id}) not found on Strava. Marking as 'removed'.`);
+          await db.deleteActivity(userId, a.id, false, 'removed').catch(() => {});
+          a.upload_status = 'removed';
+        }
+      }
+    }
+    return localActivities;
+  } catch (err) {
+    console.error('[Sync] Error syncing local activities:', err);
+    return [];
+  }
+}
+
 // Generate GPX only (no upload)
 router.post('/generate', async (req, res) => {
   try {
@@ -286,14 +307,20 @@ router.post('/generate', async (req, res) => {
     const config = await db.getAllConfig(req.user.id);
 
     const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
-    const localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
+    let localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
     let stravaActivities = [];
+    let stravaFetchSuccess = false;
     if (await stravaApi.isAuthenticated(req.user.id)) {
       try {
         const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
         stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after, true);
         stravaActivities = stravaActivities.filter(a => (a.start_date_local || a.start_date).startsWith(targetDate));
+        stravaFetchSuccess = true;
       } catch (e) { console.warn('Strava fetch failed for overlap check'); }
+    }
+
+    if (stravaFetchSuccess) {
+      localActivities = await syncLocalActivitiesWithStrava(req.user.id, targetDate, stravaActivities);
     }
 
     const lastUploaded = await db.getLastUploadedActivity(req.user.id);
@@ -366,14 +393,20 @@ router.post('/generate-and-upload', async (req, res) => {
     const config = await db.getAllConfig(req.user.id);
 
     const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
-    const localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
+    let localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
     let stravaActivities = [];
+    let stravaFetchSuccess = false;
     if (await stravaApi.isAuthenticated(req.user.id)) {
       try {
         const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
         stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after, true);
         stravaActivities = stravaActivities.filter(a => (a.start_date_local || a.start_date).startsWith(targetDate));
+        stravaFetchSuccess = true;
       } catch (e) { console.warn('Strava fetch failed for overlap check'); }
+    }
+
+    if (stravaFetchSuccess) {
+      localActivities = await syncLocalActivitiesWithStrava(req.user.id, targetDate, stravaActivities);
     }
 
     const lastUploaded = await db.getLastUploadedActivity(req.user.id);

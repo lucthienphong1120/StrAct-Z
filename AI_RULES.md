@@ -84,6 +84,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.60.3 (2026-06-10)
+- **Fix: Automated Deletion Sync from Strava Cloud**:
+  - Implemented dynamic database synchronization during generation and scheduler jobs.
+  - Automatically identifies local database activities marked as `uploaded` that are no longer present in Strava Cloud, and updates their status to `removed`.
+  - This prevents "ghost" activities (deleted on Strava) from remaining as active blockades in the local database and triggering incorrect `NO_VALID_TIME_SLOT` overlap conflicts.
+
 ### v1.60.2 (2026-06-10)
 - **Fix: Ignore Inactive Activities in GPX Overlap Protection Check**:
   - Filtered `existingActivities` inside `gpx-generator.js` so that local database records with `upload_status` equal to `'failed'`, `'deleted'`, or `'removed'` are excluded from the overlap checks.
