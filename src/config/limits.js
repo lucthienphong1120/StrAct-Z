@@ -172,9 +172,10 @@ const LIMITS = {
     label: 'Thiết bị ghi nhận (Device Name).',
     desc_extra: 'Tác dụng: Thiết bị hiển thị ghi nhận hoạt động trên Strava.',
     type: 'array',
-    default: 'Garmin Forerunner 975',
-    default_label: 'Garmin Forerunner 975',
+    default: 'Garmin fēnix 7x Pro',
+    default_label: 'Garmin fēnix 7x Pro',
     choices: [
+      'Garmin fēnix 7x Pro',
       'Garmin Forerunner 975',
       'Garmin Forerunner 965',
       'Garmin Forerunner 265',
