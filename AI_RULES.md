@@ -84,6 +84,15 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v1.60.4 (2026-06-10)
+- **Feature: Centralized Caching and Activity Sync Layer**:
+  - Implemented centralized in-memory caching of the latest 50 activities with a 30-minute TTL to optimize API load.
+  - Automatically runs database synchronization whenever fresh activities are fetched from Strava, marking deleted activities as `removed`.
+  - Clears the cache on successful uploads, generate-and-uploads, deletes, or configuration resets.
+- **Feature: Swapped GPX Creator & Upload Description**:
+  - Swapped metadata properties: GPX `creator` attribute (source) now maps to the full device name (e.g. `Amazfit Balance 2`), and Strava upload `description` maps to the connecting app name (e.g. `Zepp App`).
+  - Mapped Amazfit device app connection name to `'Zepp App'` instead of `'Amazfit'`.
+
 ### v1.60.3 (2026-06-10)
 - **Fix: Automated Deletion Sync from Strava Cloud**:
   - Implemented dynamic database synchronization during generation and scheduler jobs.

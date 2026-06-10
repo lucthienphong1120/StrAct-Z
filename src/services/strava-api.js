@@ -13,13 +13,48 @@ const STRAVA_BASE_URL = 'www.strava.com';
 
 // ─── Caching Layer ──────────────────────────────────────────────────────────
 const activityCache = new Map(); // accountId-page-perPage-after -> { data, expires }
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const userRecentActivities = new Map(); // accountId -> { data: Array, fetchedAt: number }
+const CENTRAL_CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
 function clearActivityCache(accountId) {
+  userRecentActivities.delete(accountId);
   for (const key of activityCache.keys()) {
     if (key.startsWith(`${accountId}-`)) {
       activityCache.delete(key);
     }
+  }
+}
+
+async function syncLocalActivitiesWithStrava(userId, stravaActivities) {
+  try {
+    if (!Array.isArray(stravaActivities) || stravaActivities.length === 0) return;
+
+    // Find the oldest start date in the retrieved activities
+    const sorted = [...stravaActivities].sort((a, b) => new Date(a.start_date || a.start_date_local) - new Date(b.start_date || b.start_date_local));
+    const oldestStartDateStr = sorted[0].start_date || sorted[0].start_date_local;
+    if (!oldestStartDateStr) return;
+
+    const oldestTime = new Date(oldestStartDateStr).getTime();
+
+    // Get all local activities
+    const localActivities = await db.getActivities(userId, 1000).catch(() => []);
+    const stravaIds = new Set(stravaActivities.map(a => String(a.id)));
+
+    for (const a of localActivities) {
+      if ((a.upload_status === 'uploaded' || a.strava_activity_id) && a.upload_status !== 'removed') {
+        const aTime = new Date(a.route_start_time || a.created_at).getTime();
+        // Check only local activities within the timeframe of fetched activities (with 24h timezone buffer)
+        if (aTime >= oldestTime - 24 * 60 * 60 * 1000) {
+          if (!stravaIds.has(String(a.strava_activity_id))) {
+            console.log(`[Central Sync] Activity ${a.id} (Strava ID: ${a.strava_activity_id}) not found on Strava. Marking as 'removed'.`);
+            await db.deleteActivity(userId, a.id, false, 'removed').catch(() => { });
+            a.upload_status = 'removed';
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.error('[Central Sync] Error syncing local activities with Strava:', err);
   }
 }
 
@@ -364,23 +399,35 @@ async function disconnect(accountId) {
  * Get athlete's past activities
  */
 async function getActivities(accountId, page = 1, perPage = 30, after = null, forceRefresh = false) {
-  const cacheKey = `${accountId}-${page}-${perPage}-${after}`;
   if (forceRefresh) {
     clearActivityCache(accountId);
-  } else {
-    const cached = activityCache.get(cacheKey);
-    if (cached && cached.expires > Date.now()) {
-      return cached.data;
+  }
+
+  const cached = userRecentActivities.get(accountId);
+  const isCacheValid = cached && (Date.now() - cached.fetchedAt < CENTRAL_CACHE_TTL_MS);
+
+  if (!forceRefresh && isCacheValid) {
+    const startIdx = (page - 1) * perPage;
+    if (startIdx < cached.data.length) {
+      console.log(`[Strava API Cache] Serving page ${page}, perPage ${perPage} for user ${accountId} from centralized cache.`);
+      let filtered = cached.data;
+      if (after) {
+        filtered = filtered.filter(a => {
+          const startTime = Math.floor(new Date(a.start_date || a.start_date_local).getTime() / 1000);
+          return startTime >= after;
+        });
+      }
+      return filtered.slice(startIdx, startIdx + perPage);
     }
   }
 
+  const fetchPage = 1;
+  const fetchPerPage = (page === 1 && perPage > 50) ? perPage : 50;
+
+  console.log(`[Strava API Cache] Fetching page ${fetchPage}, perPage ${fetchPerPage} from Strava for user ${accountId}.`);
   const token = await refreshToken(accountId);
   
-  let reqPath = `/api/v3/athlete/activities?page=${page}&per_page=${perPage}`;
-  if (after) {
-    reqPath += `&after=${after}`;
-  }
-
+  const reqPath = `/api/v3/athlete/activities?page=${fetchPage}&per_page=${fetchPerPage}`;
   const options = {
     hostname: STRAVA_BASE_URL,
     path: reqPath,
@@ -395,13 +442,26 @@ async function getActivities(accountId, page = 1, perPage = 30, after = null, fo
     throw new Error(response.message || 'Failed to fetch activities');
   }
 
-  activityCache.set(cacheKey, { data: response, expires: Date.now() + CACHE_TTL_MS });
-  if (activityCache.size > 500) {
-    const oldestKey = activityCache.keys().next().value;
-    activityCache.delete(oldestKey);
+  if (Array.isArray(response)) {
+    userRecentActivities.set(accountId, {
+      data: response,
+      fetchedAt: Date.now()
+    });
+
+    await syncLocalActivitiesWithStrava(accountId, response).catch(err => {
+      console.error('[Central Sync] Error running sync:', err);
+    });
   }
 
-  return response;
+  let filtered = response;
+  if (after) {
+    filtered = filtered.filter(a => {
+      const startTime = Math.floor(new Date(a.start_date || a.start_date_local).getTime() / 1000);
+      return startTime >= after;
+    });
+  }
+  const startIdx = (page - 1) * perPage;
+  return filtered.slice(startIdx, startIdx + perPage);
 }
 
 module.exports = {

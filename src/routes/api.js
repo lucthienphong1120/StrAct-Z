@@ -8,7 +8,7 @@ const path = require('path');
 const fs = require('fs');
 const db = require('../db/database');
 const scheduler = require('../services/scheduler');
-const { generateActivity } = require('../services/gpx-generator');
+const { generateActivity, getShortDescription } = require('../services/gpx-generator');
 const stravaApi = require('../services/strava-api');
 const googleFit = require('../services/google-fit');
 const systemLimits = require('../config/limits');
@@ -274,26 +274,7 @@ router.get('/strava-activities', async (req, res) => {
   }
 });
 
-async function syncLocalActivitiesWithStrava(userId, dateStr, stravaActivities) {
-  try {
-    const localActivities = await db.getActivitiesByDate(userId, dateStr);
-    const stravaIds = new Set(stravaActivities.map(a => String(a.id)));
 
-    for (const a of localActivities) {
-      if ((a.upload_status === 'uploaded' || a.strava_activity_id) && a.upload_status !== 'removed') {
-        if (!stravaIds.has(String(a.strava_activity_id))) {
-          console.log(`[Sync] Activity ${a.id} (Strava ID: ${a.strava_activity_id}) not found on Strava. Marking as 'removed'.`);
-          await db.deleteActivity(userId, a.id, false, 'removed').catch(() => { });
-          a.upload_status = 'removed';
-        }
-      }
-    }
-    return localActivities;
-  } catch (err) {
-    console.error('[Sync] Error syncing local activities:', err);
-    return [];
-  }
-}
 
 // Generate GPX only (no upload)
 router.post('/generate', async (req, res) => {
@@ -309,18 +290,14 @@ router.post('/generate', async (req, res) => {
     const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
     let localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
     let stravaActivities = [];
-    let stravaFetchSuccess = false;
     if (await stravaApi.isAuthenticated(req.user.id)) {
       try {
         const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
-        stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after, true);
+        stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after, false);
         stravaActivities = stravaActivities.filter(a => (a.start_date_local || a.start_date).startsWith(targetDate));
-        stravaFetchSuccess = true;
+        // Re-read local activities after getActivities automatically synced them
+        localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
       } catch (e) { console.warn('Strava fetch failed for overlap check'); }
-    }
-
-    if (stravaFetchSuccess) {
-      localActivities = await syncLocalActivitiesWithStrava(req.user.id, targetDate, stravaActivities);
     }
 
     const lastUploaded = await db.getLastUploadedActivity(req.user.id);
@@ -395,18 +372,14 @@ router.post('/generate-and-upload', async (req, res) => {
     const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
     let localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
     let stravaActivities = [];
-    let stravaFetchSuccess = false;
     if (await stravaApi.isAuthenticated(req.user.id)) {
       try {
         const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
-        stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after, true);
+        stravaActivities = await stravaApi.getActivities(req.user.id, 1, 50, after, false);
         stravaActivities = stravaActivities.filter(a => (a.start_date_local || a.start_date).startsWith(targetDate));
-        stravaFetchSuccess = true;
+        // Re-read local activities after getActivities automatically synced them
+        localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
       } catch (e) { console.warn('Strava fetch failed for overlap check'); }
-    }
-
-    if (stravaFetchSuccess) {
-      localActivities = await syncLocalActivitiesWithStrava(req.user.id, targetDate, stravaActivities);
     }
 
     const lastUploaded = await db.getLastUploadedActivity(req.user.id);
@@ -451,7 +424,7 @@ router.post('/generate-and-upload', async (req, res) => {
     const deviceName = ov.device_name || config.device_name || systemLimits.device_name.default;
     const uploadResult = await stravaApi.uploadActivity(req.user.id, activity.filepath, {
       name: activity.activityName,
-      description: deviceName,
+      description: getShortDescription(deviceName), // Swapped: Use app name as description
       sportType: activity.activityType || 'Run',
     });
 
@@ -461,6 +434,8 @@ router.post('/generate-and-upload', async (req, res) => {
       strava_activity_id: String(finalStatus.activity_id),
       upload_status: 'uploaded',
     });
+
+    stravaApi.clearActivityCache(req.user.id);
 
 
 
@@ -530,7 +505,7 @@ router.post('/upload/:id', async (req, res) => {
 
     const uploadResult = await stravaApi.uploadActivity(req.user.id, gpxPath, {
       name: activity.activity_name,
-      description: deviceName,
+      description: getShortDescription(deviceName), // Swapped: Use app name as description
       sportType: sportType,
     });
 
@@ -540,6 +515,8 @@ router.post('/upload/:id', async (req, res) => {
       strava_activity_id: String(finalStatus.activity_id),
       upload_status: 'uploaded',
     });
+
+    stravaApi.clearActivityCache(req.user.id);
 
     res.json({ success: true, stravaActivityId: finalStatus.activity_id });
   } catch (err) {
@@ -590,6 +567,8 @@ router.delete('/activities/:id', async (req, res) => {
   // Soft delete from local DB
   const status = stravaDeleted ? 'removed' : 'deleted';
   await db.deleteActivity(req.user.id, id, false, status);
+
+  stravaApi.clearActivityCache(req.user.id);
 
   res.json({
     success: true,
