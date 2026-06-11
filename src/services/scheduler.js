@@ -43,6 +43,11 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     const role = await db.getAccountRole(accountId);
     const limits = systemLimits[role] || systemLimits.basic;
 
+    if (config.custom_time_enabled === 'true') {
+      await db.setConfig(accountId, 'custom_time_enabled', 'false');
+      console.log(`[Scheduler] Disabled custom time database flag at startup for account ${accountId}`);
+    }
+
     const minCount = parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : systemLimits.schedule_count_min.default;
     const maxCount = parseInt(config.schedule_count_max) >= 1 ? parseInt(config.schedule_count_max) : systemLimits.schedule_count_max.default;
 
@@ -264,10 +269,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       }
     } // end for
 
-    if (config.custom_time_enabled === 'true') {
-      await db.setConfig(accountId, 'custom_time_enabled', 'false');
-      console.log(`[Scheduler] Disabled custom time after running custom schedule for account ${accountId}`);
-    }
+
 
     return {
       success: successCount > 0,

@@ -513,7 +513,8 @@ async function generateActivity(config = {}) {
       const dayOfWeek = targetDateObj.getDay();
       const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
 
-      if (isWeekday && isWorkOverlap(ms, msEnd)) return false;
+      const bypassWorkHours = (minMs === maxMs);
+      if (!bypassWorkHours && isWeekday && isWorkOverlap(ms, msEnd)) return false;
       if (isOverlap(ms)) return false;
       return true;
     };
