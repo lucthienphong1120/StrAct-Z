@@ -55,7 +55,7 @@ const DEFAULT_CONFIG = {
   map_lng: String(systemLimits.map_lng.default),
   map_zoom: String(systemLimits.map_zoom.default),
   map_locked: String(systemLimits.map_locked.default),
-  prioritize_centers: String(systemLimits.prioritize_centers.default),
+  start_near_favorite_place: String(systemLimits.start_near_favorite_place.default),
 };
 
 async function getDb() {
@@ -271,6 +271,69 @@ async function getDb() {
         await db.exec('ALTER TABLE activities ADD COLUMN created_by TEXT');
         console.log('[SQLite] Added created_by column');
       } catch (e) {}
+
+      // Migrate old prioritize_centers config key to start_near_favorite_place
+      try {
+        await db.run("UPDATE user_config SET key = 'start_near_favorite_place' WHERE key = 'prioritize_centers'");
+      } catch (e) {
+        console.error('[Migration] Failed to rename prioritize_centers key:', e.message);
+      }
+
+      // One-time initialization and district pre-computation for start_near_favorite_place
+      try {
+        const { getDistrictKeyForCoordinate } = require('../utils/geo');
+        const accounts = await db.all('SELECT id FROM accounts');
+        for (const account of accounts) {
+          const accId = account.id;
+          
+          // Check if key exists
+          const hasKey = await db.get(
+            "SELECT 1 FROM user_config WHERE account_id = ? AND key = 'start_near_favorite_place'",
+            [accId]
+          );
+          
+          if (!hasKey) {
+            // Set default to 'true'
+            await db.run(
+              "INSERT OR REPLACE INTO user_config (account_id, key, value) VALUES (?, 'start_near_favorite_place', 'true')",
+              [accId]
+            );
+            console.log(`[Migration] Set default start_near_favorite_place=true for account ${accId}`);
+
+            // Fetch and pre-calculate districts for existing activity_areas
+            const areasRow = await db.get(
+              "SELECT value FROM user_config WHERE account_id = ? AND key = 'activity_areas'",
+              [accId]
+            );
+            if (areasRow && areasRow.value) {
+              try {
+                const areas = JSON.parse(areasRow.value);
+                if (Array.isArray(areas) && areas.length > 0) {
+                  let updated = false;
+                  for (const area of areas) {
+                    if (typeof area.lat === 'number' && typeof area.lng === 'number') {
+                      const distKey = getDistrictKeyForCoordinate(area.lat, area.lng);
+                      area.district = distKey || '';
+                      updated = true;
+                    }
+                  }
+                  if (updated) {
+                    await db.run(
+                      "UPDATE user_config SET value = ? WHERE account_id = ? AND key = 'activity_areas'",
+                      [JSON.stringify(areas), accId]
+                    );
+                    console.log(`[Migration] Pre-computed districts for account ${accId} activity_areas`);
+                  }
+                }
+              } catch (parseErr) {
+                console.error(`[Migration] Error parsing activity_areas for account ${accId}:`, parseErr.message);
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.error('[Migration] Error running start_near_favorite_place initialization:', err.message);
+      }
 
 
 

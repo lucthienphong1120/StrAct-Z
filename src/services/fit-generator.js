@@ -512,7 +512,7 @@ async function generateActivity(config = {}) {
     districtKeys: chosenDistrictKeys,
     useOSRM,
     activityAreas: config.activity_areas ? JSON.parse(config.activity_areas) : [],
-    prioritizeCenters: config.prioritize_centers !== false && config.prioritize_centers !== 'false',
+    startNearFavoritePlace: config.start_near_favorite_place !== false && config.start_near_favorite_place !== 'false',
   });
 
   if (!points || points.length < 2) {

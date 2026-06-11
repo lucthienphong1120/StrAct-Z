@@ -38,9 +38,9 @@ const LIMITS = {
     adjacent_weight: 1.4,
     same_weight: 2.1
   },
-  prioritize_centers: {
-    label: 'Khởi động quanh tâm Home/Work (60%).',
-    desc_extra: 'Tác dụng: Nếu quận được chọn chứa tâm vòng tròn Home/Work, có 60% tỉ lệ hoạt động sẽ bắt đầu quanh tâm vòng tròn (+ random từ 200m - 500m). Tắt đi để xuất phát ngẫu nhiên quanh các POI hoặc tâm quận.',
+  start_near_favorite_place: {
+    label: 'Khởi động gần địa điểm yêu thích (Start near favorite place).',
+    desc_extra: 'Tác dụng: Khi được bật, hệ thống tự động chọn điểm xuất phát: 60%/35%/5% (nếu có cả Home và Work), 40%/50%/10% (nếu chỉ có Home hoặc Work), và 0%/75%/25% (nếu không có Home lẫn Work hoặc khi tắt tính năng này).',
     type: 'bool',
     default: true
   },

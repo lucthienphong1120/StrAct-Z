@@ -100,6 +100,26 @@ function validateConfig(updates, role = 'normal') {
         if (diffDays < 0) return { success: false, error: `${label} cannot be in the future.` };
     }
 
+    // Special handling for activity_areas to pre-compute districts
+    if (key === 'activity_areas') {
+      try {
+        const areas = JSON.parse(value);
+        if (Array.isArray(areas)) {
+          const { getDistrictKeyForCoordinate } = require('./geo');
+          for (const area of areas) {
+            if (typeof area.lat === 'number' && typeof area.lng === 'number') {
+              const districtKey = getDistrictKeyForCoordinate(area.lat, area.lng);
+              area.district = districtKey || '';
+            }
+          }
+          sanitized[key] = JSON.stringify(areas);
+          continue;
+        }
+      } catch (err) {
+        return { success: false, error: 'Invalid activity areas format.' };
+      }
+    }
+
     // Success - store sanitized value (back to string for DB if needed)
     sanitized[key] = rule.type === 'array' ? val.join(',') : String(val);
   }

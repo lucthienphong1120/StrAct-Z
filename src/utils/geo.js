@@ -94,6 +94,70 @@ function getDistrictKeyForCoordinate(lat, lng) {
   return null;
 }
 
+/**
+ * Get the bounding box of a GeoJSON feature
+ */
+function getFeatureBoundingBox(feature) {
+  const geom = feature.geometry;
+  if (!geom) return null;
+
+  let coords = [];
+  if (geom.type === 'Polygon') {
+    coords = geom.coordinates.flat();
+  } else if (geom.type === 'MultiPolygon') {
+    coords = geom.coordinates.flat(2);
+  }
+
+  if (coords.length === 0) return null;
+
+  let minLng = coords[0][0], maxLng = coords[0][0];
+  let minLat = coords[0][1], maxLat = coords[0][1];
+
+  for (const [lng, lat] of coords) {
+    if (lng < minLng) minLng = lng;
+    if (lng > maxLng) maxLng = lng;
+    if (lat < minLat) minLat = lat;
+    if (lat > maxLat) maxLat = lat;
+  }
+
+  return { minLat, maxLat, minLng, maxLng };
+}
+
+/**
+ * Generate a random point inside the actual district polygon using ray-casting
+ */
+function getRandomPointInDistrict(districtKey) {
+  const d = DISTRICTS.find(dist => dist.key === districtKey);
+  if (!d) return null;
+
+  const geojson = loadGeoJson();
+  if (!geojson || !geojson.features) return null;
+
+  // Find matching feature
+  const feature = geojson.features.find(f => {
+    const name = f.properties && f.properties.name;
+    return name && name.includes(d.name);
+  });
+
+  if (!feature) return null;
+
+  const bbox = getFeatureBoundingBox(feature);
+  if (!bbox) return null;
+
+  // Try up to 50 times to find a point inside the polygon
+  for (let attempt = 0; attempt < 50; attempt++) {
+    const lat = bbox.minLat + Math.random() * (bbox.maxLat - bbox.minLat);
+    const lng = bbox.minLng + Math.random() * (bbox.maxLng - bbox.minLng);
+    if (isPointInFeature(lat, lng, feature)) {
+      return { lat, lng };
+    }
+  }
+
+  // Fallback to null if all attempts fail
+  return null;
+}
+
 module.exports = {
-  getDistrictKeyForCoordinate
+  getDistrictKeyForCoordinate,
+  getRandomPointInDistrict
 };

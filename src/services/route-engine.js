@@ -8,6 +8,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { DISTRICTS } = require('../config/districts');
+const { getDistrictKeyForCoordinate, getRandomPointInDistrict } = require('../utils/geo');
 
 // ─── Hanoi Inner Districts ────────────────────────────────────────────────────
 // Dynamically build lookup object from registry for backward compatibility
@@ -156,95 +157,43 @@ const RUNNING_POIS = {
   ]
 };
 
-let cachedGeoJson = null;
-
-function loadGeoJson() {
-  if (cachedGeoJson) return cachedGeoJson;
-  try {
-    const geojsonPath = path.join(__dirname, '..', '..', 'public', 'geo', 'hanoi_full_districts.geojson');
-    if (fs.existsSync(geojsonPath)) {
-      cachedGeoJson = JSON.parse(fs.readFileSync(geojsonPath, 'utf8'));
-      console.log('[GeoJSON] Loaded Hanoi full districts boundaries successfully.');
-    }
-  } catch (err) {
-    console.error('[GeoJSON] Failed to load district boundaries GeoJSON:', err.message);
-  }
-  return cachedGeoJson;
-}
-
-function isPointInPolygon(latitude, longitude, polygon) {
-  const x = longitude;
-  const y = latitude;
-  let inside = false;
-  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-    const xi = polygon[i][0], yi = polygon[i][1];
-    const xj = polygon[j][0], yj = polygon[j][1];
-    const intersect = ((yi > y) !== (yj > y))
-        && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-    if (intersect) inside = !inside;
-  }
-  return inside;
-}
-
-function isPointInFeature(lat, lng, feature) {
-  const geom = feature.geometry;
-  if (!geom) return false;
-
-  if (geom.type === 'Polygon') {
-    const rings = geom.coordinates;
-    if (rings.length === 0) return false;
-    if (!isPointInPolygon(lat, lng, rings[0])) return false;
-    for (let i = 1; i < rings.length; i++) {
-      if (isPointInPolygon(lat, lng, rings[i])) return false;
-    }
-    return true;
-  } else if (geom.type === 'MultiPolygon') {
-    for (const polygon of geom.coordinates) {
-      if (polygon.length === 0) continue;
-      if (isPointInPolygon(lat, lng, polygon[0])) {
-        let insideHole = false;
-        for (let i = 1; i < polygon.length; i++) {
-          if (isPointInPolygon(lat, lng, polygon[i])) {
-            insideHole = true;
-            break;
-          }
-        }
-        if (!insideHole) return true;
-      }
-    }
-  }
-  return false;
-}
-
-function getDistrictKeyForCoordinate(lat, lng) {
-  const geojson = loadGeoJson();
-  if (!geojson || !geojson.features) return null;
-
-  for (const feature of geojson.features) {
-    if (isPointInFeature(lat, lng, feature)) {
-      const name = feature.properties && feature.properties.name;
-      if (name) {
-        const found = DISTRICTS.find(d => name.includes(d.name));
-        if (found) return found.key;
-      }
-    }
-  }
-  return null;
-}
-
-function getDistrictTargetCenter(districtKey, activityAreas = [], prioritizeCenters = true) {
+function getDistrictTargetCenter(districtKey, activityAreas = [], startNearFavoritePlace = true) {
   const d = HANOI_DISTRICTS[districtKey];
   if (!d) return null;
   
   // 1. Filter activity areas whose center coordinates lie inside this district polygon
   const containingAreas = (activityAreas || []).filter(area => {
-    const areaDistrictKey = getDistrictKeyForCoordinate(area.lat, area.lng);
+    const areaDistrictKey = area.district || getDistrictKeyForCoordinate(area.lat, area.lng);
     return areaDistrictKey === districtKey;
   });
 
-  // 2. If prioritization is enabled, containing areas exist, and the 60% roll is met
-  if (prioritizeCenters && containingAreas.length > 0 && Math.random() < 0.60) {
-    // Sort to prioritize 'home' first, then 'work'
+  const hasHome = containingAreas.some(a => a.type === 'home');
+  const hasWork = containingAreas.some(a => a.type === 'work');
+
+  let pCenter = 0;
+  let pPoi = 0.75;
+  let pRandom = 0.25;
+
+  if (startNearFavoritePlace && containingAreas.length > 0) {
+    if (hasHome && hasWork) {
+      pCenter = 0.60;
+      pPoi = 0.35;
+      pRandom = 0.05;
+    } else if (hasHome || hasWork) {
+      pCenter = 0.40;
+      pPoi = 0.50;
+      pRandom = 0.10;
+    }
+  } else {
+    pCenter = 0;
+    pPoi = 0.75;
+    pRandom = 0.25;
+  }
+
+  const roll = Math.random();
+
+  if (roll < pCenter) {
+    // Sort containing areas to prioritize 'home' first, then 'work'
     const sortedAreas = [...containingAreas].sort((a, b) => {
       if (a.type === 'home' && b.type !== 'home') return -1;
       if (a.type !== 'home' && b.type === 'home') return 1;
@@ -253,22 +202,29 @@ function getDistrictTargetCenter(districtKey, activityAreas = [], prioritizeCent
 
     const chosenArea = sortedAreas[0];
     const searchRadiusM = randomInRange(200, 500); // Random offset between 200m and 500m
-    console.log(`[Route Engine] Prioritizing activity area center: "${chosenArea.type}" with radius ${Math.round(searchRadiusM)}m`);
+    console.log(`[Route Engine] Start near favorite place - Home/Work center: "${chosenArea.type}" in district "${d.name}" with radius ${Math.round(searchRadiusM)}m`);
     return { lat: chosenArea.lat, lng: chosenArea.lng, radiusM: searchRadiusM };
+  } else if (roll < pCenter + pPoi) {
+    const pois = RUNNING_POIS[districtKey];
+    if (pois && pois.length > 0) {
+      const poi = pois[Math.floor(Math.random() * pois.length)];
+      const r = randomInRange(150, 450); // tight search radius around scenic spot (150m - 450m)
+      console.log(`[Route Engine] Start near favorite place - Scenic POI: "${poi.name}" in district "${d.name}" with radius ${Math.round(r)}m`);
+      return { lat: poi.lat, lng: poi.lng, radiusM: r };
+    }
   }
 
-  // 3. Fallback to scenic POI
-  const pois = RUNNING_POIS[districtKey];
-  if (pois && pois.length > 0 && Math.random() < 0.70) {
-    const poi = pois[Math.floor(Math.random() * pois.length)];
-    const r = randomInRange(150, 450); // tight search radius around scenic spot (150m - 450m)
-    console.log(`[Route Engine] Prioritizing scenic POI: "${poi.name}" in district "${d.name}" with radius ${Math.round(r)}m`);
-    return { lat: poi.lat, lng: poi.lng, radiusM: r };
+  // Fallback to true random coordinates in district (avoiding exact district center)
+  const pt = getRandomPointInDistrict(districtKey);
+  if (pt) {
+    const r = randomInRange(5, 50); // slight variance
+    console.log(`[Route Engine] Start near favorite place - True random inside district polygon "${d.name}" with radius ${Math.round(r)}m`);
+    return { lat: pt.lat, lng: pt.lng, radiusM: r };
   }
-  
-  // Fallback to district center
-  const r = d.radiusKm * 1000 * 0.6;
-  console.log(`[Route Engine] Fallback to center of district "${d.name}" with radius ${Math.round(r)}m`);
+
+  // Ultimate fallback to randomized offset from district center
+  const r = d.radiusKm * 1000 * randomInRange(0.1, 0.6);
+  console.log(`[Route Engine] Start near favorite place - Fallback to center of district "${d.name}" with radius ${Math.round(r)}m`);
   return { lat: d.lat, lng: d.lng, radiusM: r };
 }
 
@@ -544,7 +500,7 @@ async function generateRoute(options = {}) {
     districtKeys = [], // Now accepts an array of district keys
     useOSRM = true,
     activityAreas = [], // Custom home/work circles
-    prioritizeCenters = true, // Priority toggle
+    startNearFavoritePlace = true, // Priority toggle
   } = options;
 
   // Determine center point
@@ -553,7 +509,7 @@ async function generateRoute(options = {}) {
   const routeType = distanceKm < 2 ? 'out-back' : (Math.random() > 0.35 ? 'loop' : 'out-back');
 
   if (districtKeys && districtKeys.length > 0) {
-    const startTarget = getDistrictTargetCenter(districtKeys[0], activityAreas, prioritizeCenters);
+    const startTarget = getDistrictTargetCenter(districtKeys[0], activityAreas, startNearFavoritePlace);
     if (startTarget) {
       // Randomize start within the selected target bounds
       const b = randomInRange(0, 360);
@@ -573,7 +529,7 @@ async function generateRoute(options = {}) {
       
       // Traverse initial sequence of districts
       for (let i = 1; i < districtKeys.length; i++) {
-        const target = getDistrictTargetCenter(districtKeys[i], activityAreas, prioritizeCenters);
+        const target = getDistrictTargetCenter(districtKeys[i], activityAreas, startNearFavoritePlace);
         if (target) {
           const b = randomInRange(0, 360);
           waypoints.push(destinationPoint(target.lat, target.lng, b, target.radiusM));
@@ -596,7 +552,7 @@ async function generateRoute(options = {}) {
           direction = -1;
         }
         
-        const target = getDistrictTargetCenter(districtKeys[currentIdx], activityAreas, prioritizeCenters);
+        const target = getDistrictTargetCenter(districtKeys[currentIdx], activityAreas, startNearFavoritePlace);
         if (target) {
           const b = randomInRange(0, 360);
           waypoints.push(destinationPoint(target.lat, target.lng, b, target.radiusM));
