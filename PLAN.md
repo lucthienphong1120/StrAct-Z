@@ -215,3 +215,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] viết docs sử dụng mindmap markdown, mô tả luồng khi gen 1 hoạt động sẽ qua những flow nào để chọn, tỉ lệ bao nhiêu, điều kiện rẽ nhánh, step by step, cái nào chạy trước chạy sau,... (v2.1.4)
 + [x] refact toàn bộ keyword, chức năng liên quan đến "normal account" đổi tên thành "basic account" trong DB và UI (v2.1.4)
 + [ ] tại sao có hoạt động ghi gen chỉ chạy trong khu vực 1 quận nhưng lại hiện tag của 2 quận, lại còn quận Long Biên với Thanh Xuân nữa chứ, 2 cái xa nhau mà
++ [ ] [quan trọng] khôi phục tính năng tạo với gfx, song song với fit, do fit lỗi ko nhận diện các thiết bị non-garmin
