@@ -1,0 +1,1473 @@
+111 (sub 0): eMap
+128 (sub 0): GPSMAP 295
+130 (sub 0): eTrex
+136 (sub 0): GPSMAP 176
+141 (sub 0): eTrex Summit
+144 (sub 0): GPSMAP 176C
+145 (sub 0): GPSMAP 196
+151 (sub 0): StreetPilot III
+154 (sub 0): eTrex Venture/Mariner
+155 (sub 0): GPS V
+156 (sub 0): eTrex Camo/Euro
+168 (sub 0): Navtalk GSM
+169 (sub 0): eTrex Vista, rev A
+173 (sub 0): GPS 76 Rev A
+177 (sub 0): GPSMAP 76 Rev. A
+179 (sub 0): eTrex Legend Rev A
+194 (sub 0): GPSMAP 76S Rev. A
+197 (sub 0): Rino 110
+209 (sub 0): Rino 120
+210 (sub 0): StreetPilot 26xx
+231 (sub 0): Quest
+247 (sub 0): GPS 72 Rev A
+248 (sub 0): Geko 201
+256 (sub 0): Geko 301
+260 (sub 0): GPSMAP 296
+264 (sub 0): Rino 130/120/110
+273 (sub 0): GPS 18
+282 (sub 0): Forerunner 201
+283 (sub 0): Forerunner 301
+285 (sub 0): GPSMAP 276C
+289 (sub 0): GPS 60
+291 (sub 0): GPSMAP 60C/60CS/76C/76CS
+292 (sub 0): GPSMAP 60Cx/60CSx/76Cx/76CSx
+308 (sub 0): GPSMAP 60
+314 (sub 0): Foretrex 101/201
+315 (sub 0): eTrex Legend C/Vista C
+381 (sub 0): Rino 520/530
+382 (sub 0): StreetPilot c320/c330
+402 (sub 0): GPSMAP 396
+404 (sub 0): StreetPilot 27xx
+406 (sub 0): GPSMAP 376C
+410 (sub 0): GPSMAP 276C Plus
+411 (sub 0): eTrex Legend Rev B
+412 (sub 0): StreetPilot 7200/7500
+420 (sub 0): eTrex Vista, rev B
+421 (sub 0): eTrex Legend Cx/Vista Cx/Venture Cx
+426 (sub 0): Firmware Update for GXM30 Receiver
+429 (sub 0): StreetPilot i3
+430 (sub 0): GPS 72 Rev B
+439 (sub 0): GPSMAP 76 Rev. B
+444 (sub 0): GPS 76 Rev B
+450 (sub 0): Edge 205/305
+463 (sub 0): Quest2
+476 (sub 0): nuvi 300/350
+478 (sub 0): GPS Chipset Type G
+481 (sub 0): StreetPilot c340
+482 (sub 1): Firmware Update for GTMxx Traffic Receiver
+484 (sub 0): Forerunner 205/305
+497 (sub 0): StreetPilot c310/c320/c330
+505 (sub 0): StreetPilot i3/i5
+520 (sub 0): StreetPilot 2820
+532 (sub 0): StreetPilot i2
+539 (sub 0): StreetPilot c5xx
+553 (sub 0): Firmware Update for c550 Bluetooth Module
+553 (sub 1): nuvi Bluetooth Firmware
+553 (sub 2): Firmware Update for c5xx/Mercedes Bluetooth Module
+553 (sub 3): Firmware Update for zumo Bluetooth Module
+557 (sub 0): GPSMAP 378
+558 (sub 0): GPSMAP 478
+566 (sub 0): nuvi 310/360/370
+570 (sub 0): Astro 220
+574 (sub 0): Geko 201/301
+577 (sub 0): Rino 520HCx/530HCx
+580 (sub 0): zumo 4xx/5xx
+583 (sub 0): Firmware Update for STP2820 / BMW Navigator III Bluetooth Module
+584 (sub 0): GPSMAP 76S Rev. B
+585 (sub 0): GPSMAP 278
+595 (sub 0): GPSMAP 496
+596 (sub 0): nuvi 6xx
+601 (sub 0): StreetPilot c5xx, Smart
+602 (sub 0): StreetPilot c5xx, Mopar
+603 (sub 0): StreetPilot c5xx, Mercedes
+609 (sub 0): Rino 520 Australia
+617 (sub 0): GPS Chipset Type G2
+625 (sub 0): Edge 605/705
+660 (sub 0): nuvi 2xx
+661 (sub 0): Colorado
+672 (sub 0): nuvi 350 Toyota DIO
+673 (sub 0): nuvi 360 MINI
+675 (sub 0): nuvi 360 BMW3
+680 (sub 0): GPS Chipset Type B
+681 (sub 0): nuvi 350 Honda Access
+682 (sub 0): nuvi 360 Honda Access
+683 (sub 0): nuvi 350 Toyota PIO
+689 (sub 0): DC20, DC30, DC40
+694 (sub 0): eTrex Legend HCx/Vista HCx
+695 (sub 0): eTrex Summit HC/Venture HC
+696 (sub 0): eTrex H
+697 (sub 0): BMW Motorrad Navigator III plus
+698 (sub 0): Zumo BMW
+711 (sub 0): Zumo Honda
+723 (sub 0): nuvi 5xx
+726 (sub 0): nuvi 8xx
+732 (sub 0): StreetPilot c5xx, Mercedes Phase2
+733 (sub 0): GPS Chipset Type M
+737 (sub 0): nuvi 2xxW
+739 (sub 0): GPS Chipset Type M2
+743 (sub 0): Nuvi 5000
+745 (sub 0): GPSMAP 695/696
+754 (sub 0): nuvi 7xx
+775 (sub 0): GPS Chipset Type B
+781 (sub 0): GPS 17x HVS
+786 (sub 0): eTrex Venture HC/Summit HC
+788 (sub 0): nuvi 7x0, Mercedes/Smart
+795 (sub 0): Oregon
+796 (sub 0): GPS 18x PC/LVC, GPS 16x
+798 (sub 0): eTrex H,China
+811 (sub 0): GPS 18x USB, GPS 20x USB
+814 (sub 0): nuvi 900T
+823 (sub 2): SCM
+827 (sub 0): nuvi 2x5W
+832 (sub 0): GPSMAP 6x0
+834 (sub 0): nuvi 2xx
+835 (sub 0): nuvi 2xxWide
+836 (sub 0): nuvi 760 TWN
+851 (sub 0): nuvi 2x5
+852 (sub 0): eTrex H,Taiwan
+853 (sub 0): StreetPilot C5XX Cendant-Avis Australia
+855 (sub 0): nuvi 300/350 (MLC)
+856 (sub 0): nuvi 310/360/370 (MLC)
+861 (sub 0): GolfLogix Black
+862 (sub 0): GXM40 Software
+865 (sub 0): GPS 18x 5Hz
+870 (sub 0): nuvi 7x5
+887 (sub 0): GPSMAP 495
+896 (sub 0): Oregon x50
+897 (sub 0): Colorado TWN
+901 (sub 0): Firmware Update for GTMxx Traffic Receiver Type 3
+904 (sub 2): G60 nuvifone - Sunrise
+904 (sub 4): G60 nuvifone - Atlantic
+913 (sub 0): Aera GPS Software
+924 (sub 0): zumo 660
+932 (sub 0): nuvi 2x5W TWN
+941 (sub 0): eTrex HC,Japan
+943 (sub 0): nuvi 465T
+956 (sub 0): Honda Navi Gen 3
+956 (sub 1): Honda Navi Gen 3
+956 (sub 2): Honda Navi Gen 3
+957 (sub 0): eTrex Legend/Vista H
+960 (sub 0): Dakota
+969 (sub 0): Firmware Update for FMI Cables with Traffic
+970 (sub 0): Mount Software
+971 (sub 0): nuvi 12xx
+972 (sub 0): nuvi 13xx and 14xx series
+977 (sub 0): Firmware Update for Bluetooth
+978 (sub 0): nuvi 7x5 DSP Software
+979 (sub 0): GPS Chipset Type M3
+983 (sub 0): Oregon TWN
+988 (sub 0): FR60
+992 (sub 2): Modem Firmware, G60 nuvifone - Atlantic
+992 (sub 5): Modem Firmware, G60 nuvifone - Sunrise
+1005 (sub 0): Approach G5
+1007 (sub 0): nuvi 765 TWN
+1018 (sub 0): Forerunner 310XT
+1020 (sub 0): Foretrex 301/401
+1036 (sub 0): Edge 500
+1037 (sub 0): eTrex Legend/Vista H China
+1038 (sub 0): eTrex HC China
+1046 (sub 0): nuvi 16xx NA
+1049 (sub 0): eTrex Legend H China military
+1050 (sub 0): eTrex H China military
+1058 (sub 0): Nuvi 5xx TWN
+1059 (sub 0): GPS Chipset Type M3
+1063 (sub 1): aera 5xx
+1073 (sub 0): Firmware Update for ecoRoute HD
+1074 (sub 0): nuvi 2x5
+1091 (sub 0): nuvi 2x5W
+1095 (sub 0): GPS 72H
+1101 (sub 0): nuvi 37xx
+1103 (sub 0): Nuvi 13xx, TWN
+1104 (sub 0): nuvi 13xx and 14xx series
+1106 (sub 0): nuvi 12xx
+1113 (sub 0): GPSMAP 62/78
+1120 (sub 0): Oregon x50 TWN
+1124 (sub 0): Forerunner 110
+1128 (sub 0): Aera DSP Software
+1136 (sub 0): Approach G3
+1137 (sub 0): Nuvi 1480 TWN
+1138 (sub 0): zumo 2x0
+1142 (sub 0): Oregon 550,Thai
+1147 (sub 0): zumo 665
+1156 (sub 0): nuvi 16xx AU
+1157 (sub 0): nuvi 16xx CA
+1158 (sub 0): GPS 72H,Arabic
+1161 (sub 0): Nuvi 16xx TWN
+1169 (sub 0): Edge 800
+1186 (sub 0): nuvi 22xx
+1187 (sub 0): nuvi 23xx
+1188 (sub 0): nuLink 1695
+1196 (sub 0): nuvi 1490TV
+1201 (sub 0): GTU 10 US
+1204 (sub 0): Dakota TWN
+1209 (sub 0): Oregon 550,Korea
+1211 (sub 0): Firmware Update for Touchscreen Module - Nuvi 37xx
+1213 (sub 0): Edge 500, JPN
+1247 (sub 0): Rino6xx
+1252 (sub 0): Oregon 450tc, Japan
+1254 (sub 0): nuLink 23xx
+1258 (sub 0): nuvi 35xx
+1259 (sub 0): Nuvi 37xx, Taiwan
+1264 (sub 0): Forerunner 210
+1266 (sub 0): Nuvi 2585 TWN
+1269 (sub 0): dezl 560
+1271 (sub 0): Approach S1
+1273 (sub 0): nuvi 24xx
+1275 (sub 0): Montana
+1301 (sub 0): GPSMAP 62SJ, Japan
+1304 (sub 0): eTrex 10
+1305 (sub 0): eTrex 20/30
+1325 (sub 0): Edge 200
+1328 (sub 0): Forerunner 910XT
+1331 (sub 0): GTU 10 EU
+1334 (sub 0): Edge 800,JPN
+1339 (sub 0): Astro 320
+1340 (sub 0): GPSMAP 62sc/62stc
+1343 (sub 0): GDL 39
+1344 (sub 0): GTU 10 CA
+1345 (sub 0): Forerunner 610
+1349 (sub 0): nuvi 30
+1350 (sub 0): nuvi 40 and 50
+1353 (sub 0): GPSMAP 62S, Korea
+1354 (sub 0): GPSMAP 62S/78S, Thai/Indonesia
+1364 (sub 1): aera 7xx
+1371 (sub 0): nuvi 24x5 and 25x5
+1376 (sub 0): nuvi 34xx
+1379 (sub 0): GPS Chipset Type M3 (Aviation)
+1381 (sub 0): Vector
+1381 (sub 2): Vector – 02
+1384 (sub 0): GPS 72H SEA
+1389 (sub 0): Nuvi 2585LT EU
+1392 (sub 0): GPS 19x HVS
+1400 (sub 0): DC20, DC30, DC40
+1405 (sub 0): Approach G10
+1422 (sub 0): Edge 500, Korea
+1429 (sub 0): Montana 650t, Taiwan
+1431 (sub 0): Montana Korea
+1441 (sub 0): nuvi 3595,JPN
+1443 (sub 0): Nuvi 40/50 CHN
+1445 (sub 0): nuvi 2495 LT GLONASS
+1446 (sub 0): Forerunner 310XT
+1452 (sub 0): Approach G6
+1461 (sub 0): UAT 163
+1463 (sub 0): Nuvi 2585 Russia
+1468 (sub 1): Fuji MY13 Maintenance
+1469 (sub 0): Approach S3
+1471 (sub 0): eTrex 20/30 JPN, System
+1472 (sub 0): eTrex 10 JPN, System
+1473 (sub 0): zumo 3x0
+1475 (sub 0): fleet 590 U.S.
+1482 (sub 0): Forerunner 10
+1484 (sub 0): GPS Chipset Type M4
+1485 (sub 0): GPS Chipset Type M4 (Fitness)
+1490 (sub 0): GLO
+1497 (sub 0): Edge 800,KOR
+1498 (sub 0): eTrex 20/30 SEA, System
+1499 (sub 0): Garmin Swim
+1504 (sub 0): eTrex 10 SEA, System
+1506 (sub 0): Nordic Rino650
+1510 (sub 0): Nuvi 40/50, Taiwan
+1516 (sub 0): dezl 760
+1517 (sub 0): nuvi 27x7 and 27x8
+1525 (sub 0): Oregon 550 CHN Recreation
+1532 (sub 0): GPSMAP62sc CHN Recreation
+1533 (sub 0): GPSMAP62sc Japan, System
+1535 (sub 0): Nuvi2580 South America
+1536 (sub 0): Oregon550tc, Japan
+1537 (sub 0): Forerunner 910XT, China
+1541 (sub 0): BMW Motorrad Navigator V
+1545 (sub 0): TT 10
+1546 (sub 0): Firmware Update for GTM60/70
+1546 (sub 1): Firmware Update for embedded digital traffic
+1550 (sub 0): Zumo 660 Taiwan
+1551 (sub 0): fenix/D2/tactix
+1556 (sub 0): eTrex 20/30 China
+1561 (sub 0): Edge 510
+1562 (sub 0): Alpha 100
+1563 (sub 0): Nuvi 3595 TWN
+1566 (sub 0): Garmin Swim Strings
+1567 (sub 0): Edge 810
+1582 (sub 0): nuvi 2xx7 and 2xx8
+1587 (sub 0): Rino6xx, China
+1594 (sub 0): eTrex 20/30 Taiwan
+1595 (sub 0): nuvi 140/150
+1597 (sub 0): Approach S3, APAC
+1599 (sub 0): GPSmap 62stc System, Taiwan
+1600 (sub 0): ForeAthlete 910XTJ, Japan
+1603 (sub 0): nuvi 35x7 and 35x8
+1613 (sub 0): nuvi x2 and x4
+1617 (sub 0): Nuvi c155/c165/c175, China
+1619 (sub 0): GPS Chipset Type M5
+1620 (sub 0): GPS Chipset Type M5 (Fitness)
+1621 (sub 0): GPS Chipset Type M5
+1623 (sub 0): Forerunner 620
+1624 (sub 0): GPS Chipset Type M426 (Rec)
+1628 (sub 0): Garmin HUD
+1630 (sub 0): Forerunner 620/920, Wi-Fi
+1632 (sub 0): Forerunner 220
+1635 (sub 0): Montana 650t, China
+1649 (sub 0): Approach S2
+1651 (sub 0): Oregon 6x0
+1664 (sub 0): Forerunner 910XT, Korea
+1676 (sub 0): Fenix China
+1677 (sub 0): Fenix System, Japan
+1678 (sub 0): Fenix System, Korea
+1679 (sub 0): Fenix Taiwan
+1688 (sub 0): ForeAthlete10J
+1689 (sub 0): GPS Chipset Type M426 (Fitness)
+1692 (sub 0): quatix
+1696 (sub 0): DC 50
+1697 (sub 0): nuvi 55/56
+1708 (sub 0): fleet 590 EU
+1711 (sub 0): Nuvi2795 South America
+1712 (sub 0): Nuvi 42/52, SGMY
+1714 (sub 0): Nuvi 42/52, Taiwan
+1716 (sub 0): Monterra
+1719 (sub 0): GPSMAP 62sc System, SEA
+1721 (sub 0): Edge 810, Japan
+1723 (sub 0): Nuvi 3590 CHN
+1724 (sub 0): Nuvi 3592,SG/MY
+1725 (sub 0): Nuvi 3592 THAI
+1726 (sub 0): Monterra Outdoor Software
+1730 (sub 0): RV and Camper 760
+1731 (sub 0): Nuvi 3590 TWN
+1735 (sub 0): VIRB
+1736 (sub 0): Edge Touring
+1739 (sub 0): GPSMAP 629sc System, CHN
+1740 (sub 0): Nuvi 1690 lite, Taiwan
+1741 (sub 0): eTrex 20S, System, SG
+1742 (sub 0): Edge 510, Japan
+1743 (sub 1): HRM-Tri
+1743 (sub 2): HRM-Tri
+1749 (sub 0): nuvi 65/66
+1752 (sub 1): HRM-Run
+1758 (sub 0): nuvi 25x9
+1765 (sub 0): Forerunner 920XT
+1766 (sub 0): Nuvi 42/52, India
+1769 (sub 0): SIRIUS/XM Weather Support File
+1772 (sub 0): nuvi 26x9
+1779 (sub 10): Flight Stream 110/210 v2.30
+1779 (sub 11): Flight Stream 110/210 v2.40
+1779 (sub 20): Flight Stream 110/210 v2.50
+1786 (sub 0): GPS 18x PC/LVC, GPS 18x 5Hz, GPS 16x
+1796 (sub 0): zumo 590
+1811 (sub 0): Approach S4
+1817 (sub 0): UAT-1817
+1820 (sub 0): eTrex 209/309 System, China
+1821 (sub 0): Edge 510 China & Taiwan
+1822 (sub 0): Edge 810 China
+1823 (sub 0): Edge 810, Taiwan
+1836 (sub 0): Edge 1000
+1837 (sub 0): vivofit
+1842 (sub 0): Approach G7
+1843 (sub 0): Oregon6xx System, SEA
+1850 (sub 0): Forerunner 620/220, Display
+1851 (sub 0): Forerunner 620/220, ANT
+1857 (sub 0): Oregon6xx System, JPN
+1859 (sub 0): GPSMAP 64
+1876 (sub 0): Rino6xx, Korea
+1884 (sub 0): nuvi 2798
+1885 (sub 0): vivoki
+1891 (sub 0): Approach S2J
+1895 (sub 0): Monterra, GPS/BeiDou, CHN
+1903 (sub 0): Forerunner 15
+1907 (sub 0): vivoactive
+1908 (sub 0): vivoactive, Display
+1909 (sub 0): ANT/BLE N4 Firmware
+1917 (sub 0): Approach G8
+1918 (sub 0): Edge 510, Korea
+1925 (sub 0): Approach S6, Display
+1928 (sub 0): ForeAthlete 620J
+1929 (sub 0): Forerunner 620 China
+1930 (sub 0): ForeAthlete 220J
+1931 (sub 0): Forerunner 220 China
+1932 (sub 0): nuvi 27x9
+1936 (sub 0): Approach S6
+1939 (sub 0): Virb CHN
+1940 (sub 0): Virb System ASIA
+1942 (sub 0): Forerunner 920XT, Display
+1947 (sub 0): nuvi 25x9 C4
+1948 (sub 0): nuvi 26x9 C4
+1955 (sub 0): vivosmart, ANT
+1956 (sub 0): vivosmart
+1966 (sub 0): nuvi 55TV, Brazil
+1967 (sub 0): fenix2
+1969 (sub 0): Forerunner 15, ANT
+1987 (sub 0): Epix, Display
+1988 (sub 0): Epix System
+1999 (sub 0): Approach S2 APAC
+2002 (sub 0): dezl 770
+2003 (sub 0): dezl 570
+2005 (sub 0): vivosmart, PSOC
+2021 (sub 3): Flight Stream 510 v2.03
+2021 (sub 10): Flight Stream 510 v2.10
+2021 (sub 30): Flight Stream 510 v2.30
+2024 (sub 0): Quatix China
+2032 (sub 0): T 5, TT 15
+2035 (sub 0): Approach S4 APAC
+2043 (sub 0): nuviCam
+2044 (sub 0): nuviCam Camera Firmware
+2047 (sub 0): ANT/BLE N1 Firmware
+2050 (sub 0): fenix 3/tactix Bravo/quatix 3
+2051 (sub 0): fenix 3/tactix Bravo/quatix 3, Display
+2052 (sub 0): Edge 1000, Taiwan
+2053 (sub 0): Edge 1000, Japan
+2054 (sub 0): Fenix2 China
+2061 (sub 0): ForeAthlete 15J
+2062 (sub 0): fleet 660, GPS
+2063 (sub 0): fleet 670, GPS
+2067 (sub 0): Edge 520
+2070 (sub 0): Edge 1000, China
+2077 (sub 0): nuvi 2xx7 and 2xx8 C4
+2079 (sub 0): Vector S
+2079 (sub 2): Vector S - 02
+2087 (sub 0): nuvi 57/58
+2088 (sub 0): nuvi 67/68
+2094 (sub 0): fenix2J
+2100 (sub 0): Edge 1000, Korea
+2108 (sub 0): fenix 3/tactix Bravo/quatix 3, Wi-Fi
+2112 (sub 0): Firmware Update for the BC30 RX
+2123 (sub 0): GPSMAP64S, SEA
+2124 (sub 0): GPSMAP64SJ, Japan
+2127 (sub 0): Touchscreen E1 Firmware
+2130 (sub 0): Forerunner 920XT Taiwan
+2131 (sub 0): Forerunner 920XT China
+2132 (sub 0): Forerunner 920XT Japan
+2134 (sub 0): VIRB X
+2135 (sub 0): vivosmart APAC
+2140 (sub 0): eTrex Touch 25/35
+2141 (sub 0): dezlCam
+2147 (sub 0): Edge 25
+2148 (sub 0): Forerunner 25
+2150 (sub 0): vivofit2
+2151 (sub 0): Forerunner 225, OHR
+2153 (sub 0): Forerunner 225
+2156 (sub 0): Forerunner 630
+2157 (sub 0): Forerunner 230
+2158 (sub 0): Forerunner 735XT
+2159 (sub 0): Forerunner Display A1 Firmware
+2160 (sub 0): vivoactive APAC
+2161 (sub 0): Vector 2 (Firmware is identical to Vector2S, VectorS and Vector, HWID=?)
+2161 (sub 2): Vector 2 - 02
+2162 (sub 0): Vector 2S
+2162 (sub 2): Vector 2S - 02
+2172 (sub 0): VIRB XE
+2173 (sub 0): Forerunner 620, Taiwan
+2175 (sub 0): TruSwing
+2182 (sub 0): Approach S5
+2187 (sub 0): D2 Air
+2188 (sub 0): fenix 3, K65, China
+2189 (sub 0): fenix 3, Taiwan
+2190 (sub 0): T5/TT15 Mini
+2192 (sub 0): Varia Headlight
+2194 (sub 0): Approach S6 APAC
+2196 (sub 0): vivoactive 4 Wi-Fi
+2196 (sub 1): Wifi software for FR935/FR630/Fenix 5/Quatix 5/Descent Mk1/D2 Charlie/Edge 820
+2196 (sub 2): Wifi software for FR645
+2196 (sub 3): Wi-Fi Software for FR245 & FR945
+2196 (sub 4): Wifi software for FR945LTE, Venu 2 Plus, and Bounce
+2196 (sub 5): Bounce Wi-Fi
+2196 (sub 7): WINC1500 firmware. Wi-Fi software used for Venu 2, Venu 2 Plus.
+2196 (sub 8): Wi-Fi Software for FR245M, FR745, and FR945.
+2196 (sub 9): Wi-Fi software for MARQ/Fenix 6S/6/6X Pro
+2196 (sub 10): Wi-Fi software for Fenix 5 Plus series
+2197 (sub 0): Forerunner 630 Touchscreen
+2198 (sub 0): Dash Cam 30
+2199 (sub 0): Dash Cam 35
+2200 (sub 0): GPS 73
+2201 (sub 0): GPS 12H
+2204 (sub 0): Edge Explore 1000
+2219 (sub 0): Forerunner 225 Asia
+2220 (sub 0): ForeAthlete 225J
+2225 (sub 0): Varia Radar Tail Light
+2226 (sub 0): Varia Radar Display Unit
+2228 (sub 0): Forerunner 225, Display
+2231 (sub 0): Oregon650TCJ2, JPN
+2237 (sub 0): Camper/RV 660
+2238 (sub 0): Edge 20
+2250 (sub 0): eTrex 20x/30x
+2260 (sub 0): Edge 520 Asia
+2261 (sub 0): Edge 520 Japan
+2262 (sub 0): D2 Bravo
+2266 (sub 0): Approach S20
+2267 (sub 0): Drive and DriveSmart 40/50
+2268 (sub 0): Drive, DriveSmart 60/70, and DriveTrack 70
+2269 (sub 0): DriveLuxe 50
+2270 (sub 0): DriveAssist 50
+2273 (sub 0): ANT/BLE N2 Firmware
+2274 (sub 0): Edge 1000, Thai
+2281 (sub 0): GPSMAP 64s,KOR
+2285 (sub 0): GPSMAP 64st, TWN
+2288 (sub 0): Edge 25 Asia
+2289 (sub 0): Edge 25 Japan
+2290 (sub 0): Edge 20 Asia
+2292 (sub 0): Approach X40
+2293 (sub 0): fenix 3, K65, Japan
+2296 (sub 0): nuviCam, APAC
+2297 (sub 0): nuvi 57, APAC
+2298 (sub 0): nuvi67, APAC
+2299 (sub 0): Montana 610/680
+2302 (sub 0): eTrex 20x/30x China OPM & TWN
+2310 (sub 0): Forerunner 630 APAC
+2311 (sub 0): ForeAthlete 630J
+2313 (sub 0): ForeAthlete 230J
+2315 (sub 0): eTrex 209x/309x CHN
+2316 (sub 0): eTrex 20x/30x JPN, System
+2317 (sub 0): eTrex 20x/30x SEA
+2325 (sub 0): UAT-B2325-00
+2327 (sub 1): HRM4-Run
+2327 (sub 2): HRM4-Run
+2329 (sub 0): VIRBXE APAC System
+2332 (sub 0): Epix JPN
+2337 (sub 0): vivoactive HR
+2338 (sub 0): vivoactive HR Sensor Hub
+2339 (sub 0): vivoactive HR Cap Touch
+2340 (sub 0): vivoactive HR Display
+2347 (sub 0): vivosmart HR+
+2348 (sub 0): vivosmart HR
+2361 (sub 0): vivosmart HR APAC
+2362 (sub 0): vivosmart HR plus APAC
+2368 (sub 0): Vivomove
+2369 (sub 0): Forerunner 235 Sensor Hub
+2379 (sub 0): Varia Tail Light
+2392 (sub 0): fenix Chronos, Display
+2393 (sub 0): Fenix Chronos Sensor Hub
+2396 (sub 0): Forerunner 235 APAC
+2397 (sub 0): Forerunner 235 JPN
+2398 (sub 0): Varia Vision
+2400 (sub 1): aera 660
+2403 (sub 0): Approach S20 nRF51
+2405 (sub 0): Approach X40 BLE Firmware
+2406 (sub 0): vivofit3
+2407 (sub 0): fenix 3, K65, Korea
+2408 (sub 0): fenix 3, K65, SEA
+2413 (sub 0): fenix 3 HR
+2414 (sub 0): fenix 3 HR, Display
+2415 (sub 0): fenix 3 HR, Sensor Hub
+2417 (sub 0): Virb Ultra 30
+2423 (sub 0): ANT/BLE N3 Firmware
+2429 (sub 0): Index Smart Scale
+2431 (sub 0): Forerunner 235
+2432 (sub 0): Fenix Chronos
+2435 (sub 0): Zumo 3x5
+2436 (sub 0): Zumo 595
+2440 (sub 0): GDR E350/C300
+2442 (sub 0): Astro 430/Alpha 50
+2444 (sub 0): Rino 7xx FRS/GMRS
+2449 (sub 0): PRO Control 2 RR
+2450 (sub 0): Delta Smart
+2467 (sub 0): D2 Bravo, K65, China
+2470 (sub 0): GDR C530
+2471 (sub 0): Varia Vision, APAC
+2473 (sub 0): fenix 3 HR, K26, CHN
+2478 (sub 0): zumo590, APAC
+2479 (sub 0): GPSMAP 276Cx
+2485 (sub 0): GDR E350 Japan
+2488 (sub 0): RV-IN801
+2495 (sub 0): DriveAssist 50 Camera FW
+2496 (sub 0): Garmin Nautix
+2497 (sub 0): vivoactive HR APAC
+2503 (sub 0): Forerunner 35
+2510 (sub 0): Forerunner 735XT, Sensor Hub
+2512 (sub 0): Oregon 7xx
+2513 (sub 0): GDL 5X
+2517 (sub 0): zumo590, JPN
+2530 (sub 0): Edge 820
+2531 (sub 0): Edge Explore 820
+2533 (sub 0): Forerunner 735XT APAC
+2534 (sub 0): ForeAthlete 735XTJ
+2544 (sub 0): Fenix 5S
+2545 (sub 0): Dash Cam 30
+2546 (sub 0): Dash Cam 35
+2547 (sub 0): D2 Bravo Titanium
+2559 (sub 0): Approach S20 APAC
+2560 (sub 0): D2 Bravo Titanium, Sensor Hub
+2561 (sub 0): DriveSmart 50, APAC
+2563 (sub 0): eTrex Touch 35 APAC
+2567 (sub 0): Varia UT800 - Part 1
+2567 (sub 3): Varia UT800 - Part 2
+2569 (sub 0): fleet 660 8G, GPS
+2570 (sub 0): fleet 670 8G, GPS
+2583 (sub 0): Delta Smart nRF51
+2584 (sub 0): BMW Motorrad Navigator VI
+2586 (sub 0): Drive and DriveSmart 51
+2587 (sub 0): Drive 61
+2588 (sub 0): DriveSmart 61
+2589 (sub 0): DriveLuxe 51
+2590 (sub 0): DriveAssist 51
+2593 (sub 3): Running Dynamics Pod
+2596 (sub 0): DriveAssist 50, APAC
+2599 (sub 0): Edge 820 China
+2600 (sub 0): Edge 820 Japan
+2604 (sub 0): Fenix 5X
+2605 (sub 0): Fenix 5X Display
+2606 (sub 0): vivofit jr
+2614 (sub 0): GPSMAP 64sc
+2622 (sub 0): vivosmart 3
+2623 (sub 0): vivosport
+2624 (sub 0): fenix 3 HR APAC, Sensor Hub
+2628 (sub 0): Edge 820 Taiwan
+2629 (sub 0): Edge 820 Korea
+2630 (sub 0): Edge 820 SEA
+2635 (sub 0): Dash Cam 45 - S
+2636 (sub 0): Dash Cam 55
+2639 (sub 0): vivosmart HR+ (Hebrew)
+2641 (sub 0): Xero A1i
+2650 (sub 0): Forerunner 35 Hebrew
+2652 (sub 0): Approach G30
+2653 (sub 0): FR235, NFC CIB
+2655 (sub 0): FR235 Sensor Hub
+2656 (sub 0): Approach S60
+2657 (sub 0): Approach S60 Display
+2659 (sub 0): vivosmart 3 Sensor Hub
+2660 (sub 0): vivosport Sensor Hub
+2661 (sub 0): Fenix 5 Sensor Hub
+2662 (sub 0): Fenix 5S Sensor Hub
+2663 (sub 0): Fenix 5X Sensor Hub
+2664 (sub 0): Descent Mk1 Sensor Hub
+2665 (sub 0): Forerunner 935 Sensor Hub
+2666 (sub 0): Vivoactive 3 Sensor Hub
+2667 (sub 0): Forerunner 35 APAC
+2668 (sub 0): Forerunner 35 JPN
+2675 (sub 0): fenix CHRONOS APAC
+2680 (sub 0): vivosmart 3 Cap Touch Panel
+2681 (sub 0): Oregon7xx APAC
+2684 (sub 0): RV/Camper 770
+2687 (sub 0): VIRB 360
+2689 (sub 0): SW, CAN uC, APGC18, AOER
+2691 (sub 0): Forerunner 935
+2697 (sub 0): Fenix 5
+2699 (sub 0): Vivoactive 3 CTP
+2700 (sub 0): vivoactive 3
+2702 (sub 0): fenix Chronos APAC Sensor Hub
+2705 (sub 0): Avtex Tourer One Plus
+2713 (sub 0): Edge 1030
+2725 (sub 1): aera 79x China
+2726 (sub 1): aera 660 China
+2727 (sub 0): Forerunner 35 SEA
+2729 (sub 0): Delta Inbounds Dog Device, Comm.
+2730 (sub 0): Delta Inbounds Dog Device, Host
+2731 (sub 0): Delta Inbounds Base Unit, Comm.
+2731 (sub 1): Delta Inbounds Base Unit, Worldwide, Comm.
+2732 (sub 0): Delta Inbounds Base Unit, Host
+2733 (sub 0): FR235, NFC, ExpressPay
+2735 (sub 0): fleet 770, GPS
+2736 (sub 0): fleet 780, GPS
+2738 (sub 0): fleet 790 ATT, GPS
+2739 (sub 0): fleet 790 EU, GPS
+2752 (sub 0): Approach S60 Sensor Hub
+2760 (sub 2): RV-BBT600 RV HUB Dock
+2760 (sub 3): RV-BBT600 RV HUB Dock Update Index
+2763 (sub 0): GPSMAP 64sc JPN
+2764 (sub 0): GPSMAP 64sc SEA
+2769 (sub 0): Foretrex 601/701
+2771 (sub 0): Impact baseball and softball swing analyzer
+2772 (sub 0): vivomove HR
+2773 (sub 0): vivomove HR Sensor Hub
+2774 (sub 0): vivomove HR Sport - Cap Touch Panel
+2774 (sub 1): vivomove HR Premium - Cap Touch Panel
+2776 (sub 0): Approach G30 Touchscreen Firmware
+2777 (sub 0): Rino 700
+2778 (sub 0): GPS Chipset Type M4
+2779 (sub 0): GPS Chipset Type M426
+2781 (sub 0): vivosport CTP
+2786 (sub 0): RV-BBT600 RV HUB Remote
+2787 (sub 3): Vector 3
+2796 (sub 0): Fenix 5 APAC
+2797 (sub 0): Fenix 5S APAC
+2798 (sub 0): Fenix 5X APAC
+2803 (sub 0): Drive 51 APAC
+2806 (sub 0): Approach Z80
+2814 (sub 0): Forerunner 35 KOR
+2816 (sub 0): SW, CAN uC, ALSA18, AOER
+2817 (sub 0): SW, ALSA18, System Code, AOER
+2818 (sub 0): Xero A1(i), Sensor Hub
+2819 (sub 0): D2 Charlie
+2820 (sub 0): D2 Charlie Display
+2822 (sub 0): PN80T NFC applets
+2822 (sub 1): Fenix 5 Plus NFC applets
+2822 (sub 3): Approach S62 NFC applets
+2822 (sub 6): PN81T NFC Applets Asia
+2825 (sub 0): SW, APSA18, System Code, AOER
+2826 (sub 0): dezl 580
+2830 (sub 0): SW, CAN uC, APSA18, AutoOEM
+2831 (sub 0): Vivosmart3, APAC
+2832 (sub 0): Vivosport, APAC
+2833 (sub 0): Forerunner 935 APAC
+2835 (sub 0): Vivosmart3, Sensor Hub, APAC
+2836 (sub 0): Vivosport, Sensor Hub, APAC
+2838 (sub 0): Dash Cam 65W
+2841 (sub 0): nuviCam APAC Camera Firmware
+2842 (sub 0): SW, BMW NAV VI, Japan, AOER
+2858 (sub 0): Dash Cam 45 - O
+2859 (sub 0): Descent Mk1
+2862 (sub 0): Speak
+2864 (sub 0): Approach Z80 Aux
+2866 (sub 0): fenix 5, Sensor Hub, APAC
+2867 (sub 0): fenix 5S, Sensor Hub, APAC
+2868 (sub 0): fenix 5X, Sensor Hub, APAC
+2869 (sub 0): Descent Mk1 Display
+2872 (sub 0): Forerunner 935 APAC, Sensor Hub
+2878 (sub 0): Vivofit 4
+2886 (sub 0): Forerunner 645
+2887 (sub 0): Forerunner 645 Music ANT/BLE/BT
+2888 (sub 0): Forerunner 645 Music
+2890 (sub 0): BarkLimiter 2
+2890 (sub 10): BarkLimiter 2VT
+2891 (sub 0): Forerunner 30
+2893 (sub 0): Atemos 50
+2894 (sub 0): Atemos 100
+2895 (sub 0): Atemos K5/KT15
+2896 (sub 0): Forerunner 645 Sensor Hub
+2897 (sub 0): Forerunner 645 Music Sensor Hub
+2900 (sub 0): fenix 5S+
+2907 (sub 0): Approach S60 APAC
+2909 (sub 0): Edge 130
+2910 (sub 0): dezl 780
+2911 (sub 0): dezlCam 785
+2924 (sub 0): Edge1030 APAC
+2925 (sub 0): GPS 12H India
+2927 (sub 0): vivosmart 4
+2930 (sub 0): vivosmart 4 Sensor Hub
+2931 (sub 0): vivosmart 4 CTP
+2934 (sub 0): Fusion MS-RA770
+2944 (sub 0): vivofit jr. 2
+2945 (sub 0): vivomove HR, APAC
+2946 (sub 0): vivomove HR, Sensor Hub, APAC
+2947 (sub 0): eTrex 20x/30x MN
+2952 (sub 0): fleet 790 AUNZ, GPS
+2953 (sub 0): inReach Mini
+2954 (sub 3): Varia RTL510, Light
+2954 (sub 7): Varia RTL510, System
+2955 (sub 6): Varia RTL510, Radar
+2956 (sub 0): Alpha 50 CHN
+2957 (sub 0): GPS Chipset Type M5
+2960 (sub 0): GPS Chipset Type M426 (Fitness)
+2962 (sub 0): Approach X10
+2976 (sub 0): vivoactive 3 APAC
+2977 (sub 0): Forerunner 30 APAC
+2983 (sub 0): vivoactive 3 Sensor Hub APAC
+2988 (sub 0): vivoactive 3M WiFi
+2989 (sub 0): Vivoactive 3M (WiFi and LTE) Sensor Hub
+2990 (sub 0): Vivoactive 3M Touch Screen
+2991 (sub 0): Descent APAC
+2993 (sub 0): Descent APAC Sensor Hub
+2994 (sub 0): D2 Charlie, APAC
+2996 (sub 0): DriveSmart 61, APAC
+2997 (sub 0): eTrex 302 CHN
+3003 (sub 0): Forerunner 645 APAC
+3004 (sub 0): Forerunner 645M APAC
+3008 (sub 0): Forerunner 645 APAC, Sensor Hub
+3009 (sub 0): Forerunner 645M APAC, Sensor Hub
+3011 (sub 0): Edge Explore
+3013 (sub 0): Fenix 5S+ Sensor Hub
+3014 (sub 0): Fenix 5+ Sensor Hub
+3015 (sub 0): Fenix 5X+ Sensor Hub
+3018 (sub 0): Edge 130 Nordic Software
+3028 (sub 0): GPSMAP 66st
+3029 (sub 0): zumo590 TPMS Firmware, APAC
+3031 (sub 0): Fusion MS-SRX400
+3033 (sub 0): zumo 396
+3034 (sub 0): sensor-hub
+3044 (sub 0): Approach CT10
+3049 (sub 0): Approach S10
+3059 (sub 0): Garmin Speak Plus
+3061 (sub 0): Drive 52
+3065 (sub 0): DriveSmart x5
+3066 (sub 0): vivoactive 3M LTE
+3067 (sub 0): Vivoactive 3M ANT/BT/BLE
+3076 (sub 0): Forerunner 245
+3077 (sub 0): Forerunner 245 Music
+3078 (sub 0): Forerunner 245 Sensor Hub
+3078 (sub 1): Forerunner 245 Sensor Hub (NRF52)
+3079 (sub 0): Forerunner 245 Music Sensor Hub
+3079 (sub 1): Forerunner 245 Music Sensor Hub (NRF52)
+3085 (sub 0): Approach G80
+3089 (sub 0): Fenix5 Plus APAC
+3091 (sub 0): PRO 550 Plus Sensor Hub
+3092 (sub 0): Edge 130 APAC
+3095 (sub 0): Edge 1030 Bontrager
+3098 (sub 0): Astro 900
+3099 (sub 0): T9 GPS Collar
+3104 (sub 0): Dash Cam Mini
+3107 (sub 0): GPS Software, E530/830, FR45, VVA4, MARQ, Fenix 6, S40, S62
+3107 (sub 1): GPS Software, Fenix 6 Series WW
+3107 (sub 2): GPS Software, MARQ Series WW
+3107 (sub 3): GPS Software, Approach S40
+3107 (sub 4): GPS Software, Approach S62
+3107 (sub 5): GPS SW (CPE), FR Series MS WW (945) – Old
+3107 (sub 6): GPS Software, Edge WW
+3107 (sub 7): GPS Software VVA4/Venu
+3107 (sub 8): GPS SW (CPE), FR Series Mid-Level WW (245/M etc)
+3107 (sub 9): SW, Sony CXD5603GF GNSS Module, Forerunner Entry WW
+3107 (sub 10): GPS Software, Descent Mk2 Series
+3107 (sub 11): GPS Software, Instinct Solar
+3107 (sub 13): GPS Software, Approach S12/G12
+3107 (sub 14): GPS Software, Enduro WW
+3107 (sub 15): GPS Software, Approach S42
+3109 (sub 0): DriveAssist 51, APAC
+3110 (sub 0): Fenix 5+ (identical to Fenix 5S+ and uses HWID 2900)
+3111 (sub 0): Fenix 5x+ (identical to Fenix 5S+ and uses HWID 2900)
+3112 (sub 0): Edge 520 Plus
+3113 (sub 0): Forerunner 945
+3114 (sub 0): Forerunner 945 Sensor Hub
+3115 (sub 0): GPSMAP 64sc SiteSurvey
+3116 (sub 0): PRO 550 Plus
+3121 (sub 0): Edge 530
+3122 (sub 0): Edge 830
+3126 (sub 0): Instinct
+3126 (sub 0): Instinct Solar (uses HWID 3466)
+3127 (sub 0): Instinct Sensor Hub
+3130 (sub 0): Approach Z80, APAC
+3134 (sub 0): Fenix5S Plus APAC (uses HWID 3089)
+3135 (sub 0): Fenix5X Plus APAC (uses HWID 3089)
+3139 (sub 0): zumo 396, APAC
+3142 (sub 0): Edge520Plus, APAC
+3143 (sub 3): Descent T1 Tank Pod
+3144 (sub 0): Forerunner 235 Lite APAC
+3153 (sub 0): fenix 5 Plus Series BT/ANT/BLE
+3163 (sub 0): vivoactive 3 Music APAC
+3164 (sub 0): vivoactive 3 Music Sensor Hub APAC
+3165 (sub 0): SW, ACIN19, Indonesia, AOER
+3166 (sub 0): SW, CAN uC, ACIN19, Indonesia, AOER
+3183 (sub 0): vivosmart 4 Network SW
+3187 (sub 0): Rino 75x GMRS ONLY
+3192 (sub 0): Speed Sensor 2
+3192 (sub 8): Speed Sensor 2
+3196 (sub 0): D2 Delta/S
+3197 (sub 0): D2 Delta (uses HWID 3196)
+3198 (sub 0): D2 Delta/PX (uses HWID 3196)
+3199 (sub 0): CYW20719 APAC
+3204 (sub 0): Forerunner 245 ANT/BLE
+3205 (sub 0): Forerunner 245 Music ANT/BLE/BT
+3206 (sub 0): GLO 2
+3211 (sub 0): ALT1160 LTE Modem Firmware
+3216 (sub 0): Xero S1 Trapshooting Trainer
+3218 (sub 0): Vivosmart 4 APAC
+3220 (sub 0): NFC Third Party Applets
+3224 (sub 0): vivoactive 4 Small
+3225 (sub 0): vivoactive 4 Large
+3226 (sub 0): Venu
+3227 (sub 0): vivoactive 4 ANT/BT/BLE
+3227 (sub 1): vivoactive 4 ANT/BT/BLE Cypress B2
+3229 (sub 0): vivoactive 4 Small CTP
+3230 (sub 0): vivoactive 4 Large CTP
+3231 (sub 0): Venu  CTP
+3232 (sub 0): Fenix5S Plus APAC, Sensor Hub (Firmware is identical to Fenix5 Plus APAC, Sensor Hub and
+3233 (sub 0): Fenix5 Plus APAC, Sensor Hub
+3234 (sub 0): Fenix5X Plus APAC, Sensor Hub (Firmware is identical to Fenix5 Plus APAC, Sensor Hub and
+3238 (sub 0): Forerunner 45 (uses HWID 3282)
+3241 (sub 0): Vivosmart 4, Sensor Hub, APAC
+3246 (sub 0): MARQ Driver (all MARQxx firmwares except Aviator are identical and use HWID 3246)
+3247 (sub 0): MARQ - Aviator
+3248 (sub 0): MARQ - Captain (all MARQxx firmwares except Aviator are identical and use HWID 3246)
+3249 (sub 0): MARQ - Commander (all MARQxx firmwares except Aviator are identical and use HWID
+3250 (sub 0): MARQ - Expedition (all MARQxx firmwares except Aviator are identical and use HWID 3246)
+3251 (sub 0): MARQ - Athlete (all MARQxx firmwares except Aviator are identical and use HWID 3246)
+3252 (sub 0): MARQ Sensor Hub
+3253 (sub 0): MARQ BT/BLE/ANT
+3258 (sub 0): Descent Mk2 and Mk2i
+3260 (sub 0): D2 Delta Series BT/BLE/ANT
+3262 (sub 0): GPSMAP276Cx APAC
+3271 (sub 0): Fusion MS-RA670 Initial Mass Production Software
+3272 (sub 1): RV-IN1501 Software Update
+3273 (sub 0): Instinct APAC
+3281 (sub 0): STRIKERT Cast
+3282 (sub 0): Forerunner 45
+3284 (sub 0): GPSMAP 66i
+3286 (sub 0): Garmin DriveSmart 65 with Amazon Alexa
+3287 (sub 0): Fenix 6S/6S Solar
+3288 (sub 0): Fenix 6S Pro/6S Pro Solar
+3289 (sub 0): Fenix 6/6 Solar
+3290 (sub 0): Fenix 6 Pro/6 Pro Solar
+3291 (sub 0): Fenix 6X Pro/6X Pro Solar
+3292 (sub 0): Fenix 6S/6 ANT/BLE
+3293 (sub 0): Fenix 6S/6/6X Pro ANT/BLE/BT
+3294 (sub 0): Fenix 6S Sensor Hub
+3295 (sub 0): Fenix 6 Sensor Hub
+3296 (sub 0): Fenix 6X Sensor Hub
+3299 (sub 3): HRM-Dual
+3300 (sub 0): HRM-Pro
+3300 (sub 3): HRM-Pro
+3303 (sub 0): Forerunner 945 ANT/BLE/BT
+3307 (sub 0): Cannondale Wheel Sensor
+3307 (sub 3): Cannondale Wheel Sensor
+3307 (sub 8): Cannondale Wheel Sensor
+3308 (sub 0): Vivomove 3 Classic/Premium
+3309 (sub 0): Forerunner 45 Sensor Hub
+3310 (sub 0): Forerunner 45 Network Processor
+3310 (sub 1): Forerunner 45 Network Processor v2
+3312 (sub 0): Edge 130 APAC, Sensor Hub
+3313 (sub 0): GPS Chipset Type M5
+3314 (sub 0): Approach S40
+3315 (sub 0): Approach S40 Sensor Hub
+3315 (sub 1): Approach S42 Sensor Hub
+3316 (sub 0): Approach S40 Touchscreen
+3317 (sub 0): ForeTrex 601 Japan
+3318 (sub 0): Overlander
+3321 (sub 0): Forerunner 245M, APAC
+3324 (sub 0): D2 Delta PX, Host, APAC
+3330 (sub 0): GPS Software for FR245/245M (APAC)
+3339 (sub 6): Varia RVR315 Radar
+3340 (sub 3): Varia RVR315 System
+3340 (sub 7): Varia RVR315
+3341 (sub 0): Drive 52, APAC
+3349 (sub 0): Edge 530 ASIA
+3350 (sub 0): Edge 830 ASIA
+3354 (sub 0): DriveSmart x5, Asia
+3356 (sub 0): vivoactive 4 Small Sensor Hub
+3357 (sub 0): vivoactive 4 Large Sensor Hub
+3358 (sub 0): Venu Sensor Hub
+3366 (sub 0): Descent Mk2/Mk2i Sensor Hub
+3368 (sub 0): Vivomove 3 Classic, Sensor Hub
+3370 (sub 0): Vivomove 3 Sport, Sensor Hub
+3378 (sub 0): Vivomove 3 Sport
+3379 (sub 0): Camper/RV 780
+3380 (sub 0): Camper/RV 785
+3381 (sub 0): SW, ACSG19, SGMY , AOER
+3382 (sub 0): SW, CAN uC, ACSG19, SGMY , AOER
+3387 (sub 0): Vivoactive 4 Small APAC
+3388 (sub 0): Vivoactive 4 Large APAC
+3389 (sub 0): Venu Asia
+3390 (sub 0): Fusion MS-RA210
+3391 (sub 0): Fusion MS-ERX400
+3393 (sub 0): Approach S62
+3394 (sub 0): Approach S62 Touchscreen
+3396 (sub 0): Approach S62 ANT/BLE
+3399 (sub 0): Approach S62 Sensor Hub
+3405 (sub 0): Swim 2
+3406 (sub 0): Swim 2 Sensor Hub
+3407 (sub 0): Swim 2 Network Processor - Deprecated
+3407 (sub 1): Swim 2 Network Processor - New
+3408 (sub 0): Dash Cam 46
+3409 (sub 0): Dash Cam 56
+3410 (sub 0): Dash Cam 66W
+3411 (sub 0): GPS Chipset Type M5
+3412 (sub 0): GPS Chipset Type M5 (Fitness)
+3413 (sub 0): GPS Chipset Type M5
+3416 (sub 0): Forerunner 245, APAC Sensor Hub
+3417 (sub 0): Forerunner 245M, APAC Sensor Hub
+3420 (sub 0): MARQ Driver APAC
+3421 (sub 0): MARQ Aviator APAC
+3422 (sub 0): Vivomove 3 Sport NFC, APAC
+3428 (sub 0): Vivolife
+3429 (sub 0): vivomove 3, CTP controller, Classic
+3429 (sub 1): vivomove 3, CTP controller, Premium
+3429 (sub 2): vivomove 3, CTP controller, Sport 39mm
+3429 (sub 3): vivomove 3, CTP controller, Sport 44mm
+3431 (sub 0): GPSMAP 64sx
+3432 (sub 0): GPSMAP 64csx
+3433 (sub 0): Alpha 200i
+3441 (sub 0): Forerunner 945 ASIA
+3445 (sub 0): eTrex 22X/32x
+3446 (sub 0): Vivoactive 3t
+3447 (sub 0): Approach S40, ASIA
+3448 (sub 0): MARQ Captain APAC
+3449 (sub 0): MARQ Commander APAC
+3450 (sub 0): MARQ Expedition APAC
+3451 (sub 0): MARQ Athlete APAC
+3452 (sub 0): GPSMAP 86s
+3453 (sub 0): GPSMAP 86sc
+3454 (sub 0): GPSMAP 86i
+3455 (sub 0): GPSMAP 86sci
+3458 (sub 0): XERO X1i
+3459 (sub 0): Montana 700/700i/750i
+3461 (sub 0): Index S2 Smart Scale
+3461 (sub 1): Index S2 Smart Scale
+3463 (sub 0): RV-70x/RV-75x
+3465 (sub 0): Dash Cam Tandem
+3466 (sub 0): Instinct Solar
+3467 (sub 0): Instinct Solar, Sensor Hub
+3468 (sub 0): Instinct Solar, BLE/ANT
+3469 (sub 0): Forerunner 45 Asia
+3472 (sub 0): Forerunner 45 Asia Sensor Hub
+3473 (sub 0): vivoactive 3 Daimler
+3476 (sub 0): Bounce
+3477 (sub 0): Vivoactive 3 Daimler APAC
+3480 (sub 0): Dash Cam 56
+3481 (sub 0): Dash Cam 66W
+3484 (sub 0): zumo XT
+3488 (sub 0): Pro 550 Plus, EL & FR
+3489 (sub 0): Pro 550 Plus, EH
+3491 (sub 0): dezl 700
+3492 (sub 0): dezl 800/1000
+3494 (sub 0): MARQ ASIA Series, Sensor Hub
+3497 (sub 0): Bounce Network Processor
+3498 (sub 0): Rey
+3499 (sub 0): Darth Vader
+3500 (sub 0): Captain Marvel
+3501 (sub 0): First Avenger
+3506 (sub 0): GPS Software MARQ (China), Fenix 6 (China)
+3506 (sub 1): GPS Software Fenix 6 APAC
+3506 (sub 2): GPS Software MARQ APAC
+3506 (sub 10): GPS Software
+3506 (sub 11): GPS Software Instinct Solar APAC
+3506 (sub 14): GPS Software ENDURO ASIA
+3507 (sub 0): Alpha 200i WW (all Alpha200i* firmwares are identical and use HWID 3433)
+3508 (sub 0): Alpha 200i EU Harmonized (all Alpha200i* firmwares are identical and use HWID 3433)
+3509 (sub 0): Alpha 200i France (all Alpha200i* firmwares are identical and use HWID 3433)
+3510 (sub 0): Alpha 200i Nordics (all Alpha200i* firmwares are identical and use HWID 3433)
+3511 (sub 0): Forerunner 945 ASIA Sensor Hub
+3512 (sub 0): Fenix 6S Sport ASIA
+3513 (sub 0): Fenix 6S ASIA
+3514 (sub 0): Fenix 6 Sport ASIA
+3515 (sub 0): Fenix 6 ASIA
+3516 (sub 0): Fenix 6X ASIA
+3517 (sub 0): Approach Z82 Sensor Hub
+3519 (sub 0): Approach G80, ASIA
+3525 (sub 1): vivomove 3, Network Processor
+3526 (sub 0): Approach Z82
+3527 (sub 0): Approach Z82 Aux
+3528 (sub 0): Alpha 10
+3534 (sub 0): Alpha Dog Collar
+3535 (sub 0): Captain Marvel APAC
+3536 (sub 0): First Avenger APAC
+3537 (sub 0): Rey APAC
+3538 (sub 0): Darth Vader APAC
+3542 (sub 0): Descent Mk2s
+3543 (sub 1): Descent Mk2s Sensor Hub
+3549 (sub 0): Montana 7xx Display
+3550 (sub 0): Fenix 6S ASIA Sensor Hub
+3551 (sub 0): Fenix 6 ASIA Sensor Hub
+3552 (sub 0): Fenix 6X ASIA, Sensor Hub
+3553 (sub 0): Garmin Catalyst
+3558 (sub 0): Edge 130 Plus
+3559 (sub 0): Edge 130 Plus Nordic
+3560 (sub 0): Vivoactive 4 Asia Small Sensor Hub
+3561 (sub 0): Vivoactive 4 Asia Large Sensor Hub
+3562 (sub 0): Venu Asia Sensor Hub
+3566 (sub 0): Quectel EG25-G Modem Firmware
+3570 (sub 0): Edge 1030 Plus
+3572 (sub 0): Vivomove 3 Style/Luxe, ASIA
+3573 (sub 0): Vivomove 3 Sport, APAC
+3576 (sub 0): Fusion MS-WB670
+3578 (sub 3): Rally 100/200
+3579 (sub 10): Vieo RV-85x/RV-105x
+3589 (sub 0): Forerunner 745
+3590 (sub 0): Forerunner 745 Sensor Hub
+3591 (sub 0): Forerunner 745 ANT/BLE/BT
+3592 (sub 3): Varia RTL515 System
+3592 (sub 7): Varia RTL515
+3593 (sub 6): Varia RTL515 Radar
+3594 (sub 0): Alpha 200i Display
+3596 (sub 0): Venu SQ MUSIC
+3597 (sub 0): Elf Music ANT/BLE/BT
+3597 (sub 1): Elf Music ANT/BLE/BT
+3598 (sub 0): Elf Music CTP Controller
+3599 (sub 0): Venu SQ  MUSIC
+3600 (sub 0): Venu SQ
+3601 (sub 1): Elf ANT/BLE/BT
+3602 (sub 0): Elf Sensor Hub
+3603 (sub 0): Venu SQ
+3608 (sub 1): aera 760
+3609 (sub 0): Bounce LTE
+3609 (sub 2): Alpha LTE, Modem
+3612 (sub 0): SW, AAIN20, Indonesia, AOER
+3615 (sub 0): Lily
+3616 (sub 0): Lily Sensor Hub
+3620 (sub 0): Fusion Boat Builder Configuration (OEM) Tool
+3621 (sub 0): Alpha 10 Sensor Hub
+3622 (sub 0): Approach R10
+3624 (sub 0): MARQ - Adventurer (all MARQxx firmwares except Aviator are identical and use HWID 3246)
+3629 (sub 0): SW, LFIN20, System Code, AOER
+3638 (sub 0): Enduro
+3639 (sub 0): Swim 2 ASIA
+3642 (sub 0): Swim 2 Asia Sensor Hub
+3648 (sub 0): MARQ Adventure APAC
+3649 (sub 0): GPS Software GPSMAP66 APAC
+3652 (sub 0): Forerunner 945 LTE
+3653 (sub 0): Forerunner 945 LTE ANT/BLE/BT
+3657 (sub 0): GPSMAP 66s ASIA
+3658 (sub 0): GPSMAP 66i ASIA
+3660 (sub 0): GPSMAP 64sx SEA
+3661 (sub 0): GPSMAP 64sx India
+3663 (sub 0): GPSMAP 63csx CHN_OPM
+3666 (sub 0): GPSMAP 64csx SEA
+3667 (sub 0): GPSMAP 64csx JPN
+3669 (sub 0): Vivomove 3 Classic Asia Sensor Hub
+3670 (sub 0): Vivomove 3/3S, Asia, Sensor Hub
+3671 (sub 0): RV/Camper 890 and RV/Camper 1090
+3686 (sub 0): eTrex 221x CHN
+3687 (sub 0): eTrex 32x CHN
+3689 (sub 0): eTrex 22x/32x JPN
+3690 (sub 0): eTrex 22x/32x SEA
+3691 (sub 0): eTrex 22x/32x MN
+3694 (sub 0): GPSMAP 66sr
+3695 (sub 0): fleet 790 EU LTE, GPS
+3698 (sub 0): Bounce CTP
+3700 (sub 0): Approach S62 ASIA
+3702 (sub 0): Descent Mk2i APAC
+3703 (sub 0): Venu 2
+3704 (sub 0): Venu 2S
+3705 (sub 0): Venu 2 CTP
+3706 (sub 0): Venu 2S CTP
+3707 (sub 0): Venu 2 Sensor Hub
+3708 (sub 0): Venu 2 ANT/BLE/BT
+3709 (sub 0): Forerunner 945 LTE Sensor Hub
+3710 (sub 0): Approach Z82
+3711 (sub 0): Group Ride Radio
+3715 (sub 0): fleet 790 SA, GPS
+3717 (sub 0): STRIKERT Cast GPS
+3720 (sub 0): Lily CTP Controller
+3725 (sub 0): GPSMAP 65/65s
+3737 (sub 0): Venu Daimler Asia
+3738 (sub 0): Tread
+3739 (sub 0): MARQ - Golfer
+3740 (sub 0): Venu Daimler
+3742 (sub 0): GPS Software Alpha 10 APAC
+3747 (sub 0): vivofit jr. 3
+3749 (sub 0): GPS Software Pro 550 Plus
+3750 (sub 0): GPS Software Fenix 5+ / FR 935 / Instinct
+3757 (sub 0): Garmin Catalyst Remote Cam
+3758 (sub 0): Alpha Dog Collar Sensor Hub
+3764 (sub 0): fenix 6S Sport Solar ASIA
+3765 (sub 0): fenix 6S Solar  ASIA
+3766 (sub 0): fenix 6 Sport Solar ASIA
+3767 (sub 0): fenix 6 Solar ASIA
+3769 (sub 0): fenix 6S Solar JPN
+3771 (sub 0): fenix 6 Solar JPN
+3778 (sub 0): Instinct Solar APAC
+3779 (sub 0): Instinct Solar JPN
+3782 (sub 0): Quatix 6 Sapphire
+3783 (sub 0): Quatix 6X Dual Power
+3784 (sub 0): ALT1250 LTE Modem Firmware
+3785 (sub 0): Garmin PowerSwitch
+3786 (sub 0): Fusion MS-RA60
+3791 (sub 0): Descent Mk2(i) ASIA Sensor Hub
+3794 (sub 0): Forerunner 745 ASIA
+3799 (sub 5): GPS SW, FR Series MS WW
+3799 (sub 6): GPS Software, Edge Explore 2
+3799 (sub 7): GPS Software, Venu 2 WW
+3799 (sub 11): Instinct 2/2S GPS Software
+3799 (sub 12): GPS Software, Venu Sq
+3799 (sub 14): Bounce GPS
+3799 (sub 15): Descent G1 GPS Software
+3799 (sub 16): GPS SW, FR 945 LTE
+3800 (sub 11): GPS Software, Instinct APAC
+3800 (sub 15): GPS Software, Descent G1 APAC
+3802 (sub 0): SW, LYIN20, System Code, AOER
+3808 (sub 0): Varia RCT715
+3809 (sub 0): Lily Asia
+3810 (sub 0): Lily Asia Sensor Hub
+3812 (sub 0): Edge 1030 Plus ASIA
+3813 (sub 0): Edge 130 Plus ASIA
+3817 (sub 0): DriveSmart x6
+3819 (sub 0): Approach R10 BLE
+3823 (sub 0): Approach S12/G12
+3824 (sub 0): Approach S12/G12 BLE
+3827 (sub 0): Mercury BPM
+3828 (sub 0): Dash Cam 47
+3829 (sub 0): Dash Cam 57
+3830 (sub 0): Dash Cam 67W
+3831 (sub 0): Dash Cam Mini 2
+3836 (sub 0): SW, GDL 60 LTE Firmware
+3837 (sub 0): Venu SQ ASIA
+3838 (sub 0): Venu SQ ASIA MUSIC
+3843 (sub 0): Edge 1040
+3847 (sub 0): Forerunner 45 Plus
+3850 (sub 0): MARQ Golfer ASIA
+3851 (sub 0): Venu 2 Plus
+3852 (sub 0): Descent S1 Buoy
+3856 (sub 0): SW, LCMY20, System Code, AOER
+3857 (sub 0): Xero Ali Pro
+3863 (sub 0): Forerunner 45 Plus Sensor Hub
+3864 (sub 0): Forerunner 45 Plus Network Processor
+3864 (sub 1): Forerunner 45 Plus Network Processor v2
+3865 (sub 5): Gnss receiver firmware
+3865 (sub 6): SW, AG3335M, GNSS, L1/L5, Edge WW
+3865 (sub 21): Instinct 2X GPS Software
+3865 (sub 29): GNSS Firmware for 590-00108-04: Airoha AG3335M
+3865 (sub 30): GNSS Firmware for 590-00108-04: Airoha AG3335M
+3866 (sub 0): GPS Software
+3866 (sub 5): inReach Mini 2 GPS Software
+3866 (sub 7): Gnss receiver firmware
+3866 (sub 8): Instinct Crossover GPS Software
+3866 (sub 11): GPS Software, iR Messenger
+3866 (sub 21): GNSS Software, Lily 2 Athlete
+3866 (sub 28): GPS Software, Alpha LTE
+3869 (sub 0): Forerunner 55
+3870 (sub 0): SW, Parade Touchpanel, Edge 1040
+3872 (sub 0): ENDURO ASIA
+3877 (sub 0): FR745 Asia Sensor Hub
+3888 (sub 0): Instinct 2
+3889 (sub 0): Instinct 2S
+3890 (sub 0): Instinct 2 Sensor Hub
+3890 (sub 1): Instinct 2S Sensor Hub
+3890 (sub 2): Instinct 2X Sensor Hub
+3891 (sub 0): Instinct 2/2S/Descent G1 ANT/BLE
+3905 (sub 10): Fenix 7S
+3906 (sub 10): Fenix 7 and Quatix 7
+3907 (sub 10): Fenix 7X and Enduro 2
+3908 (sub 10): Fenix 7S APAC
+3909 (sub 10): Fenix 7 APAC
+3910 (sub 10): Fenix 7X APAC
+3912 (sub 0): Venu 2 Plus CTP
+3913 (sub 0): Forerunner 245M APAC
+3914 (sub 0): Forerunner 245 APAC
+3915 (sub 0): Venu 2 Plus Sensor Hub
+3917 (sub 0): Tread
+3925 (sub 0): Forerunner 55 Sensor Hub
+3926 (sub 0): Forerunner 55 Network Processor
+3927 (sub 0): Approach G12
+3930 (sub 0): Descent Mk2s APAC
+3931 (sub 1): Descent Mk2s Asia Sensor Hub
+3934 (sub 0): Approach S42
+3943 (sub 10): EPIX (Gen 2)
+3944 (sub 10): EPIX (Gen 2) APAC
+3946 (sub 0): SW, LTDM20, System Code, AOER
+3946 (sub 1): SW, LTDM20, UMWT, System Code, AOER
+3946 (sub 3): SW, LTDM20, TAM, System Code, AOER
+3949 (sub 0): Venu 2S Asia
+3950 (sub 0): Venu 2 Asia
+3962 (sub 0): dezl headset
+3964 (sub 0): Venu SQ Asia Sensor Hub
+3966 (sub 1): aera 760 China
+3968 (sub 0): inReach Mini 2
+3969 (sub 0): vivomove Sport Sensor Hub
+3970 (sub 1): vivomove Sport Network Processor
+3971 (sub 0): Quartz CTP Controller
+3972 (sub 0): Vivomove Trend Sensor Hub Firmware
+3975 (sub 0): Venu 2 Plus ANT/BT/BLE
+3982 (sub 0): vivomove Sport
+3983 (sub 0): vivomove Trend
+3986 (sub 0): Approach S12 Asia
+3990 (sub 10): Forerunner 255 Music Large
+3991 (sub 10): Forerunner 255 Music Small
+3992 (sub 10): Forerunner 255 Basic Large
+3993 (sub 10): Forerunner 255 Basic Small
+3999 (sub 0): Venu 2/2S Asia Sensor Hub
+4001 (sub 0): Approach G12 Asia
+4002 (sub 0): Approach S42, Asia
+4003 (sub 0): GPSMAP 65s SEA
+4004 (sub 0): Fusion RV-RA770
+4005 (sub 0): Descent G1
+4006 (sub 0): Descent G1 Sensor Hub
+4012 (sub 0): dezl 500
+4017 (sub 0): Venu 2 Plus Asia
+4018 (sub 0): Venu 2 Plus Asia Sensor Hub
+4021 (sub 0): GarminFit jr. 3
+4023 (sub 0): Fusion Replicator
+4024 (sub 10): Forerunner 955
+4033 (sub 0): Forerunner55 / Forerunner158 / ForeAthlete55
+4036 (sub 2): GPS Software, MARQ golfer JPN
+4036 (sub 4): GPS Software, Approach S62 Japan
+4036 (sub 15): GPS Software, Approach S40/S42, ASIA
+4037 (sub 0): inReach Mini 2 Network Processor Software
+4044 (sub 0): SW, NAV VI REFRESH
+4045 (sub 0): SW, NAV VI CAP TOUCH
+4047 (sub 0): Alpha 200 (all Alpha200* firmwares are identical and use HWID 3433)
+4048 (sub 0): Alpha 200 Aus/NZ (all Alpha200* firmwares are identical and use HWID 3433)
+4049 (sub 0): Alpha 200 EU Harmonized (all Alpha200* firmwares are identical and use HWID 3433)
+4050 (sub 0): Alpha 200 France (all Alpha200* firmwares are identical and use HWID 3433)
+4051 (sub 0): Alpha 200 Nordics (all Alpha200* firmwares are identical and use HWID 3433)
+4052 (sub 0): Alpha 200 Russia
+4053 (sub 0): Xero C1 Chronograph
+4056 (sub 0): GPSMAP 79
+4058 (sub 9): GPS SW, Forerunner Entry Level
+4060 (sub 0): CamperVan
+4061 (sub 0): Edge 540
+4062 (sub 0): Edge 840
+4063 (sub 0): vivosmart 5
+4064 (sub 0): vivosmart 5 Sensor Hub
+4068 (sub 1): SW, LTDM21, TAM, System Code, AOER
+4069 (sub 0): SW, LAIN21, TAM, System Code, AOER
+4071 (sub 0): Instinct 2 ASIA
+4073 (sub 0): Instinct 2 Sensor Hub ASIA
+4073 (sub 1): Instinct 2s Sensor Hub ASIA
+4079 (sub 10): D2 Mach 1
+4080 (sub 0): GPS Software, GPSMAP 79
+4087 (sub 0): SERV RV Fixed Display
+4090 (sub 0): Fusion MS-WB675
+4091 (sub 0): Instinct 2s ASIA
+4094 (sub 0): SW, LWIN21, TAM, System Code, AOER
+4095 (sub 0): Delta SE
+4096 (sub 0): R50
+4098 (sub 0): Venu 2 Plus DSP
+4103 (sub 0): Alpha Dog Collar GPS
+4105 (sub 10): MARQ (Gen 2)
+4109 (sub 0): Lily Network Processor
+4113 (sub 4): Tread Audio
+4113 (sub 5): Tread Audio
+4115 (sub 0): Venu Sq 2
+4116 (sub 0): Venu Sq 2 Music
+4117 (sub 0): Venu Sq 2 Sensor Hub
+4118 (sub 0): Venu SQ ASIA
+4119 (sub 0): Venu SQ ASIA MUSIC
+4120 (sub 0): Forerunner55 / Forerunner158 / ForeAthlete55 Sensor Hub
+4124 (sub 10): MARQ 2 - Aviator
+4125 (sub 0): D2 Air X10
+4130 (sub 0): HRM-Pro Plus
+4130 (sub 3): HRM-Pro Plus
+4132 (sub 0): Descent G1 Asia
+4133 (sub 0): Descent G1 Asia Sensor Hub
+4134 (sub 0): inReach Messenger
+4134 (sub 1): iR Messenger ANT/BLE
+4135 (sub 10): Tactix 7
+4140 (sub 0): DriveSmart x6 Asia
+4143 (sub 0): Dash Cam Live
+4145 (sub 0): inReach Mini 2 Asia
+4155 (sub 0): Instinct Crossover
+4156 (sub 0): Instinct Crossover Sensor Hub
+4161 (sub 0): dezl OTR 610/710
+4162 (sub 0): dezl OTR 810/1010
+4165 (sub 0): dezlCam 710
+4166 (sub 0): RV/CamperCam 795
+4167 (sub 0): DriveCam 76
+4169 (sub 0): Edge Explore 2
+4171 (sub 0): Daimler Venu 2
+4173 (sub 0): T 5, TT 15 OnSemi
+4175 (sub 0): Daimler Venu 2S
+4176 (sub 0): SW, LYIN20, TAM 965B, System Code, AOER
+4177 (sub 0): SW, LTDM21, TAM D26B, System Code, AOER
+4178 (sub 0): SW, LFIN20, TAM 655B, System Code, AOER
+4179 (sub 0): Edge Explore 2, nRF52 ANT/BLE
+4180 (sub 0): Venu 2 Daimler Asia
+4181 (sub 0): Venu 2S Daimler Asia
+4183 (sub 0): T5/ TT15 Mini OnSemi
+4197 (sub 0): Alternate GPS Software, Forerunner 45/45+
+4197 (sub 1): Alternate GPS Software, Fenix 6 Series WW
+4197 (sub 2): Alternate GPS Software, MARQ Series WW
+4197 (sub 3): Alternate GPS Software, Approach S40
+4197 (sub 4): Alternate GPS Software, Approach S62
+4197 (sub 5): GPS SW (LLE), Forerunner 945, Alternate - New
+4197 (sub 6): Alternate GPS Software, Edge WW
+4197 (sub 7): GPS Software VVA4/S Alternate
+4197 (sub 8): GPS SW (LLE), Forerunner 245/M, Alternate
+4197 (sub 9): Alternate GPS Software, Forerunner 45
+4197 (sub 11): Alternate GPS Software, Instinct Solar
+4197 (sub 13): Alternate GPS Software, Approach S12/G12
+4197 (sub 14): Alternate GPS Software, Enduro WW
+4197 (sub 15): Alternate GPS Software, Approach S42
+4198 (sub 1): GPS Software, Fenix 6 APAC
+4198 (sub 2): GPS Software, Marq APAC
+4198 (sub 3): GPS Software, Approach S40
+4198 (sub 11): GPS Software, Instinct Solar APAC
+4198 (sub 14): GPS Software, Enduro APAC
+4200 (sub 0): T5X/TT15X
+4201 (sub 10): eTrex SE
+4202 (sub 10): eTrex Solar
+4209 (sub 0): RV/Camper 795
+4210 (sub 0): RV/Camper 895/1095 - Android
+4213 (sub 0): Rocket Camera
+4221 (sub 1): Venu Sq 2 Network Processor
+4222 (sub 10): Descent Mk3 43mm
+4223 (sub 10): Descent Mk3 51mm
+4233 (sub 10): S70 (42mm)
+4234 (sub 10): S70 (47mm)
+4239 (sub 4): GPS Software, Approach S62
+4239 (sub 15): GPS Software, Approach S42
+4256 (sub 0): Venu Sq 2 Touch Controller
+4256 (sub 1): Venu Sq 2 Touch Controller
+4257 (sub 10): Forerunner 265
+4258 (sub 10): Forerunner 265s
+4260 (sub 10): Venu 3
+4261 (sub 10): Venu 3S
+4285 (sub 0): SW, LIIN22, TAM, System Code, AOER
+4292 (sub 0): Varia eRTL615
+4298 (sub 0): SW, LWIN21, TMV, System Code, AOER
+4299 (sub 0): zumo XT2
+4305 (sub 0): Edge 1040 ASIA
+4312 (sub 10): Epix Pro 42mm
+4313 (sub 10): Epix Pro 47mm
+4314 (sub 10): Epix Pro 51mm
+4315 (sub 10): Forerunner 965
+4333 (sub 0): eTrex 22X/32X 2022 Redesign
+4335 (sub 1): Alpha 300/300i
+4336 (sub 1): GPSMAP 67
+4337 (sub 0): WD eMMC
+4347 (sub 0): Tread OEM
+4353 (sub 0): Edge Explore 2, ELAN Touchpanel
+4354 (sub 0): NEO 3M Radio
+4355 (sub 0): NEO 3M Brake
+4362 (sub 10): Foretrex 801/901
+4367 (sub 10): eTrex SE Asia
+4368 (sub 10): eTrex Solar ASIA
+4374 (sub 10): Fenix 7s Pro
+4375 (sub 10): Fenix 7 Pro
+4376 (sub 10): Fenix 7x Pro
+4380 (sub 0): Lily 2
+4381 (sub 0): Lily 2 Sensor Hub
+4382 (sub 0): Lily 2 BLE
+4383 (sub 0): Lily 2 CTP
+4385 (sub 0): Alpha LTE
+4387 (sub 0): Alpha LTE Sensor Hub
+4389 (sub 0): CAN coprocessor for Tread OEM, Kawasaki
+4389 (sub 1): CAN coprocessor for Tread OEM, Textron
+4394 (sub 0): Instinct 2X
+4411 (sub 1): SW, TWIN23 OTA, TAM, AOER
+4412 (sub 0): SW, LWIN21, UMWT, System Code, AOER
+4422 (sub 0): dezl Headset 2
+4426 (sub 10): Vivoactive 5 Music
+4431 (sub 0): Fusion MS-RA800
+4432 (sub 10): Forerunner 165 Basic
+4433 (sub 10): Forerunner 165 Music
+4434 (sub 0): Dash Cam X210
+4435 (sub 0): Dash Cam X310
+4442 (sub 0): Descent T2
+4443 (sub 0): Stelvio, Network Accessory
+4446 (sub 0): HRM-Fit
+4446 (sub 3): HRM-Fit
+4449 (sub 0): Drive 53
+4450 (sub 0): Tread 8 Textron w/CAN
+4452 (sub 0): Drive 53 Asia
+4470 (sub 0): Varia Vue
+4472 (sub 10): Marq2 Carbon Commander
+4473 (sub 1): GPSMAP 67 / 67i
+4477 (sub 0): Lily 2 Active
+4478 (sub 0): Lily Athlete Sensor Hub
+4479 (sub 0): Lily Athlete Network Processor
+4485 (sub 0): zumo XT2 Asia
+4495 (sub 0): dezl OTR 720/820/1020
+4501 (sub 0): Dash Cam Mini-3
+4502 (sub 0): Dash Cam X110
+4503 (sub 0): NFC Firmware
+4507 (sub 0): zumo R1 Radar
+4523 (sub 0): SW, LWIN21, UMWT, Yaris 046D, System Code, AOER
+4525 (sub 0): Rally 110/210
+4525 (sub 3): Rally 110/210 - Garmin Display Update File
+4526 (sub 0): dezl OTR 620
+4527 (sub 0): dezlCam 725
+4532 (sub 0): Fenix 8 47mm solar
+4533 (sub 0): Fenix 8 51mm solar
+4534 (sub 0): Fenix 8 43mm AMOLED
+4536 (sub 0): Fenix 8 47mm and 51mm AMOLED
+4537 (sub 0): R50 GLM App
+4542 (sub 10): Tactix 7 AMOLED
+4543 (sub 0): Approach Z30
+4549 (sub 1): Gnss receiver firmware for 2024+ PND products
+4556 (sub 10): D2 Mach 1 Pro
+4557 (sub 0): Tread 2
+4561 (sub 0): Spiral Radio
+4562 (sub 0): Spiral Motor
+4575 (sub 0): Enduro 3
+4577 (sub 0): SW, LXMY24, SEA, System Code, AOER
+4578 (sub 10): Foretrex 801/901 Asia
+4595 (sub 10): Fenix 7 (No Wifi)
+4596 (sub 10): Fenix 7x (No Wifi)
+4606 (sub 0): HRM 200
+4606 (sub 3): HRM 200
+4607 (sub 0): HRM 600
+4607 (sub 3): HRM 600
+4608 (sub 0): dezl DualView Camera System
+4609 (sub 10): Blaze
+4610 (sub 0): Venu 2 Plus Asia Sensor Hub
+4616 (sub 0): SW, LWIN24, SEA, System Code, AOER
+4631 (sub 30): ALT1250 LTE Modem Firmware
+4652 (sub 0): Alpha XL
+4662 (sub 0): Index Sleep Monitor
+4663 (sub 0): Index Sleep Monitor Sensor Hub
+4666 (sub 0): Fenix E
+4667 (sub 0): Beeper Battery Pack
+4684 (sub 0): RearVue 820
+4718 (sub 0): Firmware for Dog Tracking VHF Dock
+4720 (sub 0): GPSMAP 86s Asia
+4731 (sub 1): SW, THTW26 OTA, TW, AOER
+4738 (sub 0): Catalyst 2
+4761 (sub 1): SW, TWIN25 OTA, AOER
+4761 (sub 3): SW, TWIN25 12 OTA, AOER
+4775 (sub 0): Tactix 8 47mm and 51mm AMOLED
+4776 (sub 0): Tactix 8 51mm solar
+4782 (sub 0): zumo XT3
+4961 (sub 1): Alpha Dog Collar, RED
+5015 (sub 0): Montana 710/760i ASIA
+5021 (sub 0): DriveTrack 72
