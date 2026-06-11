@@ -206,5 +206,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Khảo sát tài liệu tương thích Strava Live Segments (Garmin, Coros, Suunto), loại bỏ các thiết bị fictional (giả tưởng), bổ sung các dòng mới (Forerunner 745/245, Venu 3/3S, Enduro 3, Fenix E) và cập nhật Product ID chuẩn từ FIT SDK (v2.1.1)
 + [x] Loại bỏ các nhãn (Source) / (App) khỏi danh sách thiết bị để tránh sai lệch tên, đồng thời khôi phục Instinct 3, Forerunner 570/970 sau khi xác minh ra mắt thực tế năm 2025 (v2.1.2)
 + [x] Dọn dẹp danh sách thiết bị, loại bỏ các dòng Garmin Forerunner 945 và 245 ra mắt trước năm 2020 theo yêu cầu người dùng (v2.1.3)
++ [ ] dùng gotoes fit-file-viewer và fitfileviewer debug ra được thông tin chưa thực tế: (serial number: 1234567, software version: 200) -> s/n thì random chữ thường và số hợp lý (số nhiều hơn - defined theo thiết bị vào database/config hardcode), software version thì search thông tin và chọn 1 version lts uy tín chung cho cùng 1 hãng thiết bị
 
 
