@@ -6,17 +6,17 @@ Use this file to track testing of various devices and applications on Strava. Up
 
 | Source / Device Name | Manufacturer ID | Product ID | Tested Status |
 | :--- | :--- | :--- | :--- |
-| **Garmin Forerunner 965** | 1 | 4315 | ⏳ Untested |
-| **Garmin Forerunner 955** | 1 | 4024 | ⏳ Untested |
-| **Garmin Forerunner 745** | 1 | 3589 | ⏳ Untested |
-| **Garmin Forerunner 265** | 1 | 4257 | ⏳ Untested |
-| **Garmin Forerunner 255** | 1 | 3992 | ⏳ Untested |
+| **Garmin Forerunner 965** | 1 | 4315 | ✅ OK |
+| **Garmin Forerunner 955** | 1 | 4024 | ✅ OK |
+| **Garmin Forerunner 745** | 1 | 3589 | ✅ OK |
+| **Garmin Forerunner 265** | 1 | 4257 | ✅ OK |
+| **Garmin Forerunner 255** | 1 | 3992 | ✅ OK |
 | **Garmin Forerunner 255S** | 1 | 3993 | ⏳ Untested |
 | **Garmin Forerunner 165** | 1 | 4432 | ⏳ Untested |
 | **Garmin Forerunner 970** | 1 | ? | ⏳ Untested |
 | **Garmin Forerunner 570** | 1 | ? | ⏳ Untested |
 | **Garmin Instinct 3** | 1 | ? | ⏳ Untested |
-| **Garmin fēnix 7x Pro** | 1 | 4376 | ✅ OK |
+| **Garmin fēnix 7x Pro** | 1 | 4376 | ⏳ Untested |
 | **Garmin fēnix 8** | 1 | 4536 | ⏳ Untested |
 | **Garmin fēnix 8 Solar** | 1 | 4533 | ⏳ Untested |
 | **Garmin fēnix E** | 1 | 4666 | ⏳ Untested |
@@ -30,7 +30,7 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Garmin Instinct 2X Solar** | 1 | 4394 | ⏳ Untested |
 | **Garmin Epix Pro (Gen 2)** | 1 | 4313 | ⏳ Untested |
 | **Garmin epix Pro (Gen 2) 47mm** | 1 | 4313 | ⏳ Untested |
-| **Garmin Connect** | 1 | ? | ✅ OK |
+| **Garmin Connect** | 1 | ? | ⏳ Untested |
 | **Coros Pace 3** | 294 | ? | ⏳ Untested |
 | **Coros Apex 2 Pro** | 294 | ? | ⏳ Untested |
 | **Coros Vertix 2S** | 294 | ? | ⏳ Untested |
@@ -47,7 +47,7 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Huawei Watch Fit 4** | 348 | ? | ⏳ Untested |
 | **Huawei Watch GT 4 Pro** | 348 | ? | ⏳ Untested |
 | **Huawei Watch Ultimate** | 348 | ? | ⏳ Untested |
-| **Huawei Health** | 348 | ? | ✅ OK |
+| **Huawei Health** | 348 | ? | ⏳ Untested |
 | **Samsung Galaxy Watch Ultra** | 258 | ? | ⏳ Untested |
 | **Samsung Galaxy Watch 8** | 258 | ? | ⏳ Untested |
 | **Samsung Galaxy Watch 7** | 258 | ? | ⏳ Untested |
