@@ -1,4 +1,4 @@
-const CACHE_NAME = 'stract-z-v2.1.4';
+const CACHE_NAME = 'stract-z-v2.1.5';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -52,8 +52,21 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // We only intercept caching for resources listed in ASSETS_TO_CACHE
-  const isCachedAsset = ASSETS_TO_CACHE.some(asset => url.includes(asset));
+  // We only intercept caching for resources listed in ASSETS_TO_CACHE (checking exact path)
+  let urlObj;
+  try {
+    urlObj = new URL(url);
+  } catch (e) {
+    return;
+  }
+  const pathname = urlObj.pathname;
+  const isCachedAsset = ASSETS_TO_CACHE.some(asset => {
+    if (asset.startsWith('http')) {
+      return url === asset;
+    }
+    return pathname === asset || (asset === '/' && pathname === '/');
+  });
+
   if (!isCachedAsset) {
     event.respondWith(
       fetch(event.request).catch(() => {

@@ -53,11 +53,11 @@ function applyLimitsToUI() {
   // Build Dynamic Tooltips from Metadata
   updateDynamicTooltips();
 
-  // Populate HR Zones Display (using 'basic' values as requested)
-  const hrZones = sysL.heart_rate_zones.basic;
+  // Populate HR Zones Display (using current role-specific resolved values or fallback)
+  const hrZones = sysL.hr_zones || sysL.heart_rate_zones?.basic || sysL.heart_rate_zones?.normal || {};
   const setZone = (id, zone) => {
     const el = document.getElementById(id);
-    if (el) el.textContent = `${Math.round(zone.min * 100)}-${Math.round(zone.max * 100)}%`;
+    if (el && zone) el.textContent = `${Math.round(zone.min * 100)}-${Math.round(zone.max * 100)}%`;
   };
   setZone('hrZoneWalk', hrZones.Walk);
   setZone('hrZoneRide', hrZones.Ride);
