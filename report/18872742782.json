@@ -1,0 +1,182 @@
+{
+    "resource_state": 3,
+    "athlete": {
+        "id": 694793012,
+        "resource_state": 1
+    },
+    "name": "Đi bộ buổi sáng",
+    "distance": 2500,
+    "moving_time": 2882,
+    "elapsed_time": 2997,
+    "total_elevation_gain": 4.4,
+    "type": "Walk",
+    "sport_type": "Walk",
+    "device_name": "Garmin Venu 2",
+    "id": 18872742782,
+    "start_date": "2026-06-10T22:59:56Z",
+    "start_date_local": "2026-06-11T05:59:56Z",
+    "timezone": "(GMT+07:00) Asia/Bangkok",
+    "utc_offset": 25200,
+    "location_city": null,
+    "location_state": null,
+    "location_country": null,
+    "achievement_count": 0,
+    "kudos_count": 0,
+    "comment_count": 0,
+    "athlete_count": 1,
+    "photo_count": 0,
+    "map": {
+        "id": "a18872742782",
+        "polyline": "obn_CgfeeSbCxJmObHEJFN~XkMLIgFqL_AsBq@qAPiAh@}BpAaEfA{Cf@uAj@qA|KvYfBhE",
+        "resource_state": 3,
+        "summary_polyline": "obn_CgfeeSbCxJmObHEJFN~XkMLIgFqL_AsBq@qAPiAh@}BpAaEfA{Cf@uAj@qA|KvYfBhE"
+    },
+    "trainer": false,
+    "commute": false,
+    "manual": false,
+    "private": false,
+    "visibility": "everyone",
+    "flagged": false,
+    "gear_id": null,
+    "start_latlng": [
+        21.048881,
+        105.872522
+    ],
+    "end_latlng": [
+        21.044266,
+        105.87284
+    ],
+    "average_speed": 0.867,
+    "max_speed": 1,
+    "average_cadence": 165.3,
+    "has_heartrate": false,
+    "heartrate_opt_out": false,
+    "display_hide_heartrate_option": false,
+    "elev_high": 7,
+    "elev_low": 4.4,
+    "upload_id": 19984523272,
+    "upload_id_str": "19984523272",
+    "external_id": "stripped_23609a40-f163-4dbb-9677-41f23360876f-activity.fit",
+    "from_accepted_tag": false,
+    "pr_count": 0,
+    "total_photo_count": 0,
+    "has_kudoed": false,
+    "description": "",
+    "calories": 125,
+    "perceived_exertion": null,
+    "prefer_perceived_exertion": null,
+    "segment_efforts": [],
+    "splits_metric": [
+        {
+            "distance": 1000,
+            "elapsed_time": 1192,
+            "elevation_difference": 0.8,
+            "moving_time": 1172,
+            "split": 1,
+            "average_speed": 0.85,
+            "average_grade_adjusted_speed": 0.85,
+            "pace_zone": 0
+        },
+        {
+            "distance": 1000,
+            "elapsed_time": 1173,
+            "elevation_difference": -0.6,
+            "moving_time": 1118,
+            "split": 2,
+            "average_speed": 0.89,
+            "average_grade_adjusted_speed": 0.89,
+            "pace_zone": 0
+        },
+        {
+            "distance": 500,
+            "elapsed_time": 632,
+            "elevation_difference": -0.8,
+            "moving_time": 592,
+            "split": 3,
+            "average_speed": 0.84,
+            "average_grade_adjusted_speed": 0.84,
+            "pace_zone": 0
+        }
+    ],
+    "splits_standard": [
+        {
+            "distance": 1610,
+            "elapsed_time": 1871,
+            "elevation_difference": -0.8,
+            "moving_time": 1851,
+            "split": 1,
+            "average_speed": 0.87,
+            "average_grade_adjusted_speed": 0.87,
+            "pace_zone": 0
+        },
+        {
+            "distance": 890,
+            "elapsed_time": 1126,
+            "elevation_difference": 0.2,
+            "moving_time": 1031,
+            "split": 2,
+            "average_speed": 0.86,
+            "average_grade_adjusted_speed": 0.86,
+            "pace_zone": 0
+        }
+    ],
+    "laps": [
+        {
+            "id": 67488019033,
+            "resource_state": 2,
+            "name": "Lap 1",
+            "activity": {
+                "id": 18872742782,
+                "visibility": "everyone",
+                "resource_state": 1
+            },
+            "athlete": {
+                "id": 694793012,
+                "resource_state": 1
+            },
+            "elapsed_time": 2997,
+            "moving_time": 2997,
+            "start_date": "2026-06-10T22:59:56Z",
+            "start_date_local": "2026-06-11T05:59:56Z",
+            "distance": 2500,
+            "average_speed": 0.83,
+            "max_speed": 1,
+            "lap_index": 1,
+            "split": 1,
+            "start_index": 0,
+            "end_index": 273,
+            "total_elevation_gain": 4.4,
+            "average_cadence": 165.3,
+            "device_watts": false
+        }
+    ],
+    "photos": {
+        "primary": null,
+        "count": 0
+    },
+    "stats_visibility": [
+        {
+            "type": "heart_rate",
+            "visibility": "everyone"
+        },
+        {
+            "type": "pace",
+            "visibility": "everyone"
+        },
+        {
+            "type": "power",
+            "visibility": "everyone"
+        },
+        {
+            "type": "speed",
+            "visibility": "everyone"
+        },
+        {
+            "type": "calories",
+            "visibility": "everyone"
+        }
+    ],
+    "hide_from_home": false,
+    "embed_token": "a98247bedf8da784480823221cfa7a1458de5584",
+    "available_zones": []
+}
