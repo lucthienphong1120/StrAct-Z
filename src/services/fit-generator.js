@@ -74,14 +74,12 @@ function resolveDeviceParams(deviceName) {
   let productName = deviceName || 'Garmin fēnix 7x Pro';
 
   // Specific Garmin models
-  if (nameLower.includes('forerunner 945')) {
-    manufacturer = 1; product = 3113; productName = 'Forerunner 945';
-  } else if (nameLower.includes('forerunner 935')) {
-    manufacturer = 1; product = 2691; productName = 'Forerunner 935';
-  } else if (nameLower.includes('forerunner 965')) {
+  if (nameLower.includes('forerunner 965')) {
     manufacturer = 1; product = 4315; productName = 'Forerunner 965';
   } else if (nameLower.includes('forerunner 955')) {
     manufacturer = 1; product = 4024; productName = 'Forerunner 955';
+  } else if (nameLower.includes('forerunner 745')) {
+    manufacturer = 1; product = 3589; productName = 'Forerunner 745';
   } else if (nameLower.includes('forerunner 265')) {
     manufacturer = 1; product = 4257; productName = 'Forerunner 265';
   } else if (nameLower.includes('forerunner 255s')) {
@@ -98,6 +96,14 @@ function resolveDeviceParams(deviceName) {
     manufacturer = 1; product = 4533; productName = 'fēnix 8 Solar';
   } else if (nameLower.includes('fenix 8') || nameLower.includes('fēnix 8')) {
     manufacturer = 1; product = 4536; productName = 'fēnix 8';
+  } else if (nameLower.includes('fenix e') || nameLower.includes('fēnix e')) {
+    manufacturer = 1; product = 4666; productName = 'fēnix E';
+  } else if (nameLower.includes('enduro 3')) {
+    manufacturer = 1; product = 4575; productName = 'Enduro 3';
+  } else if (nameLower.includes('venu 3 plus') || nameLower.includes('venu 3s')) {
+    manufacturer = 1; product = 4261; productName = 'Venu 3S';
+  } else if (nameLower.includes('venu 3')) {
+    manufacturer = 1; product = 4260; productName = 'Venu 3';
   } else if (nameLower.includes('venu 2 plus')) {
     manufacturer = 1; product = 3851; productName = 'Venu 2 Plus';
   } else if (nameLower.includes('venu 2s')) {
@@ -115,8 +121,8 @@ function resolveDeviceParams(deviceName) {
   else if (nameLower === 'garmin connect') {
     manufacturer = 1; product = undefined; productName = 'Garmin Connect';
   }
-  // Unknown or Fictional Garmin devices
-  else if (nameLower.includes('forerunner 570') || nameLower.includes('forerunner 770') || nameLower.includes('forerunner 975') || nameLower.includes('instinct 3')) {
+  // Unknown, Fictional or New Garmin devices (with undefined product to use fallback)
+  else if (nameLower.includes('forerunner 570') || nameLower.includes('forerunner 970') || nameLower.includes('forerunner 975') || nameLower.includes('instinct 3')) {
     manufacturer = 1; product = undefined; productName = deviceName;
   }
   

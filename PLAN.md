@@ -201,4 +201,10 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Min Distance chuyển default về 0.5 km (v2.0.7)
 + [x] Di chuyển toggle Start near favorite place sang card Map & Priority Areas (v2.0.7)
 + [x] Sửa đổi toàn bộ mã Product ID (BIN) cho Garmin và Manufacturer ID cho Huawei, Coros, Amazfit/Zepp, Polar, Strava theo tài liệu Garmin_BIN_Format và ANT+ SDK (v2.0.8)
++ [x] Khảo sát tài liệu Strava Device Mapping, đối chiếu tính đầy đủ và chuẩn xác của các trường dữ liệu FIT (đặc biệt là các trường thời gian như local_timestamp, start_time...) (v2.0.9)
++ [x] Nghiên cứu tài liệu chính thống Garmin FIT SDK và ANT+ Alliance, phân tích cơ chế map thiết bị phi-Garmin bằng fallback product_name, cập nhật tài liệu testcase thiết bị (v2.1.0)
++ [x] Khảo sát tài liệu tương thích Strava Live Segments (Garmin, Coros, Suunto), loại bỏ các thiết bị fictional (giả tưởng), bổ sung các dòng mới (Forerunner 745/245, Venu 3/3S, Enduro 3, Fenix E) và cập nhật Product ID chuẩn từ FIT SDK (v2.1.1)
++ [x] Loại bỏ các nhãn (Source) / (App) khỏi danh sách thiết bị để tránh sai lệch tên, đồng thời khôi phục Instinct 3, Forerunner 570/970 sau khi xác minh ra mắt thực tế năm 2025 (v2.1.2)
++ [x] Dọn dẹp danh sách thiết bị, loại bỏ các dòng Garmin Forerunner 945 và 245 ra mắt trước năm 2020 theo yêu cầu người dùng (v2.1.3)
+
 
