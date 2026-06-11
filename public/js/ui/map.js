@@ -257,6 +257,9 @@ async function saveActivityAreas() {
   const zoom = window.map.getZoom();
 
   try {
+    const startNearFavoriteEl = document.getElementById('cfgStartNearFavoritePlace');
+    const start_near_favorite_place = startNearFavoriteEl ? (startNearFavoriteEl.checked ? 'true' : 'false') : 'true';
+
     const res = await api('/config', {
       method: 'POST',
       body: { 
@@ -264,7 +267,8 @@ async function saveActivityAreas() {
         map_lat: center.lat.toString(),
         map_lng: center.lng.toString(),
         map_zoom: zoom.toString(),
-        map_locked: 'true'
+        map_locked: 'true',
+        start_near_favorite_place
       }
     });
     

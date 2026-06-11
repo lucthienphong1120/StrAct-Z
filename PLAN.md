@@ -198,5 +198,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] về tính năng "Fallback tự nhiên: Nếu quận được chọn không chứa tâm vòng tròn, roll trượt (rơi vào 40% còn lại), hoặc tính năng này bị tắt đi, lộ trình sẽ sinh ngẫu nhiên quanh các POI hoặc tâm quận như bình thường." -> đổi tên thành Start near favorite place
 + [x] tính năng Start near favorite place: 55% là start tại tâm home/work, 35% là start tại POI nổi tiếng/khu tập luyện/cảnh đẹp/ao hồ/công viên, 5% còn lại là ngẫu nhiên, bỏ option tâm quận đi -> ko ai tự nhiên lại chạy ở tâm quận cả (đồng thời update lại phần tooltip chú thích)
 + [x] thuật toán Ray-Casting: Tôi đã viết thêm một bộ kiểm tra điểm-trong-đa-giác (Point-in-Polygon) thuần túy dạng Ray-Casting sử dụng dữ liệu ranh giới thật, thay vì vòng tròn ước lượng -> đồng ý, nhưng cái này không cần tính thường xuyên đâu, chỉ cần khi user thay đổi liên quan đến di chuyển vòng tròn home/work trong activity map là tính toán lại được (thậm chí bật tắt quận hay scale radius cũng ko cần chạy lại), lưu thông tin vào db là home thuộc quận này, work thuộc quận này là đủ thông tin rồi
-+ [x] Min Distance chuyển default về 0.5 km (v2.0.6)
++ [x] Min Distance chuyển default về 0.5 km (v2.0.7)
++ [x] Di chuyển toggle Start near favorite place sang card Map & Priority Areas (v2.0.7)
 
