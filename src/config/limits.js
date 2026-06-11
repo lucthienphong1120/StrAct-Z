@@ -39,8 +39,8 @@ const LIMITS = {
     same_weight: 2.1
   },
   start_near_favorite_place: {
-    label: 'Khởi động gần địa điểm yêu thích.',
-    desc_extra: 'Tác dụng: Tự động chọn điểm xuất phát gần Priority Areas (nếu có) hoặc các POI nổi tiếng (công viên, hồ, đường chạy,...): 60%/35%/5% (nếu có cả Home và Work), 40%/50%/10% (nếu chỉ có Home hoặc Work), và 0%/75%/25% (nếu không có Priority Areas).',
+    label: 'Tự động chọn điểm xuất phát gần Priority Areas (nếu có) hoặc các POI nổi tiếng (công viên, hồ, đường chạy,...) thay vì ngẫu nhiên.',
+    desc_extra: 'Tác dụng: Tỉ lệ chọn điểm xuất phát: 60%/35%/5% (nếu có cả Home và Work), 40%/50%/10% (nếu chỉ có Home hoặc Work), và 0%/75%/25% (nếu không có Priority Areas).',
     type: 'bool',
     default: true
   },
