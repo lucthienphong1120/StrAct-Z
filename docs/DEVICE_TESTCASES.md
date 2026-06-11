@@ -4,61 +4,58 @@ Use this file to track testing of various devices and applications on Strava. Up
 
 ## 📋 Device Testcases
 
-| Source Name | Tested Status |
-| :--- | :--- |
-| **Garmin Forerunner 945** | ✅ OK |
-| **Garmin Forerunner 935** | ⏳ Untested |
-| **Garmin fēnix 7x Pro** | ✅ OK |
-| **Garmin fēnix 8** | ⏳ Untested |
-| **Garmin Forerunner 255S** | ⏳ Untested |
-| **Garmin Forerunner 255** | ⏳ Untested |
-| **Garmin Venu 2** | ⏳ Untested |
-| **Amazfit T-Rex 3** | ⏳ Untested |
-| **Garmin Connect** | ✅ OK |
-| **Zepp App** | ⏳ Untested |
-| **Huawei Health** | ✅ OK |
-| **Samsung Health** | ⏳ Untested |
-| **Apple Sport** | ⏳ Untested |
-| **COROS** | ⏳ Untested |
-| **Suunto** | ⏳ Untested |
-| **Garmin Forerunner 570** | ⏳ Untested |
-| **Garmin Forerunner 165** | ❌ Fail |
-| **Garmin Instinct 3** | ⏳ Untested |
-| **Garmin Instinct 2X Solar** | ⏳ Untested |
-| **Garmin Epix Pro (Gen 2)** | ⏳ Untested |
-| **Garmin epix Pro (Gen 2) 47mm** | ⏳ Untested |
-| **Garmin Venu Sq 2** | ⏳ Untested |
-| **Garmin Forerunner 770XT** | ⏳ Untested |
-| **COROS APEX 2** | ⏳ Untested |
-| **COROS APEX 4** | ⏳ Untested |
-| **Coros Pace 3** | ⏳ Untested |
-| **Coros Apex 2 Pro** | ⏳ Untested |
-| **Coros Vertix 2S** | ⏳ Untested |
-| **Suunto Race S** | ⏳ Untested |
-| **Suunto Vertical** | ⏳ Untested |
-| **Amazfit Balance 2** | ⏳ Untested |
-| **Amazfit Active 3 Premium** | ⏳ Untested |
-| **Huawei Watch GT 6 Pro** | ⏳ Untested |
-| **Huawei Watch Fit 5 Pro** | ⏳ Untested |
-| **Huawei Watch GT 4 Pro** | ⏳ Untested |
-| **Huawei Watch Fit 3** | ⏳ Untested |
-| **Huawei Watch Ultimate** | ⏳ Untested |
-| **Samsung Galaxy Watch Ultra** | ⏳ Untested |
-| **Samsung Galaxy Watch 8** | ⏳ Untested |
-| **Samsung Galaxy Watch 7** | ⏳ Untested |
-| **COROS PACE 3** | ⏳ Untested |
-| **COROS APEX 2** | ⏳ Untested |
-| **Garmin Forerunner 975** | ❌ Fail |
-| **Garmin Forerunner 965** | ⏳ Untested |
-| **Garmin Forerunner 265** | ❌ Fail |
-| **Garmin fēnix 8 Solar** | ❌ Fail |
-| **Apple Watch Ultra 3** | ❌ Fail |
-| **Apple Watch Ultra 2** | ❌ Fail |
-| **Apple Watch Series 11** | ❌ Fail |
-| **Apple Watch Series 10** | ❌ Fail |
-| **Strava Android App** | ❌ Fail |
-| **Strava iPhone App** | ❌ Fail |
-| **Strava App** | ✅ OK |
+| Source / Device Name | Manufacturer ID | Product ID | Tested Status |
+| :--- | :--- | :--- | :--- |
+| **Garmin Forerunner 945** | 1 | 3113 | ✅ OK |
+| **Garmin Forerunner 935** | 1 | 2697 (fallback) | ⏳ Untested |
+| **Garmin fēnix 7x Pro** | 1 | 3907 | ✅ OK |
+| **Garmin fēnix 8** | 1 | 4543 | ⏳ Untested |
+| **Garmin Forerunner 255S** | 1 | 4024 | ⏳ Untested |
+| **Garmin Forerunner 255** | 1 | 4024 (255S ID) | ⏳ Untested |
+| **Garmin Venu 2** | 1 | 3703 | ⏳ Untested |
+| **Garmin Venu 2S** | 1 | 3704 | ⏳ Untested |
+| **Garmin Venu 2 Plus** | 1 | 3851 | ⏳ Untested |
+| **Amazfit T-Rex 3** | 292 | 292 | ⏳ Untested |
+| **Garmin Connect** | 1 | 3907 (fallback) | ✅ OK |
+| **Zepp App** | 292 | 292 (fallback) | ⏳ Untested |
+| **Huawei Health** | 201 | 292 (fallback) | ✅ OK |
+| **Samsung Health** | 258 | 258 (fallback) | ⏳ Untested |
+| **Apple Sport** | 263 | 263 (fallback) | ⏳ Untested |
+| **COROS** | 125 | 125 (fallback) | ⏳ Untested |
+| **Suunto** | 23 | 23 (fallback) | ⏳ Untested |
+| **Garmin Forerunner 570** | 1 | 3907 (fallback) | ⏳ Untested |
+| **Garmin Forerunner 165** | 1 | 4533 | ⏳ Untested |
+| **Garmin Instinct 3** | 1 | 4600 | ⏳ Untested |
+| **Garmin Instinct 2X Solar** | 1 | 4125 | ⏳ Untested |
+| **Garmin Epix Pro (Gen 2)** | 1 | 4312 | ⏳ Untested |
+| **Garmin epix Pro (Gen 2) 47mm** | 1 | 4312 | ⏳ Untested |
+| **Garmin Venu Sq 2** | 1 | 4305 (fallback) | ⏳ Untested |
+| **Garmin Forerunner 770XT** | 1 | 3907 (fallback) | ⏳ Untested |
+| **Coros Pace 3** | 125 | 125 | ⏳ Untested |
+| **Coros Apex 2 Pro** | 125 | 126 | ⏳ Untested |
+| **Coros Vertix 2S** | 125 | 127 | ⏳ Untested |
+| **Suunto Race S** | 23 | 23 | ⏳ Untested |
+| **Suunto Vertical** | 23 | 24 | ⏳ Untested |
+| **Amazfit Balance 2** | 292 | 293 | ⏳ Untested |
+| **Amazfit Active 3 Premium** | 292 | 294 | ⏳ Untested |
+| **Huawei Watch GT 6 Pro** | 201 | 292 | ⏳ Untested |
+| **Huawei Watch Fit 5 Pro** | 201 | 293 | ⏳ Untested |
+| **Huawei Watch GT 4 Pro** | 201 | 294 | ⏳ Untested |
+| **Huawei Watch Fit 3** | 201 | 295 | ⏳ Untested |
+| **Huawei Watch Ultimate** | 201 | 296 | ⏳ Untested |
+| **Samsung Galaxy Watch Ultra** | 258 | 258 | ⏳ Untested |
+| **Samsung Galaxy Watch 8** | 258 | 259 | ⏳ Untested |
+| **Samsung Galaxy Watch 7** | 258 | 260 | ⏳ Untested |
+| **Garmin Forerunner 975** | 1 | 4543 (fallback) | ⏳ Untested |
+| **Garmin Forerunner 965** | 1 | 4314 | ⏳ Untested |
+| **Garmin Forerunner 265** | 1 | 4305 | ⏳ Untested |
+| **Garmin fēnix 8 Solar** | 1 | 4543 | ⏳ Untested |
+| **Apple Watch Ultra 3** | 263 | 263 | ⏳ Untested |
+| **Apple Watch Ultra 2** | 263 | 263 | ⏳ Untested |
+| **Apple Watch Series 11** | 263 | 263 | ⏳ Untested |
+| **Apple Watch Series 10** | 263 | 263 | ⏳ Untested |
+| **Strava App** | 255 | 255 | ⏳ Untested |
+
 
 ## 🧪 Hướng dẫn chạy thử và xác minh (Verification Guide)
 

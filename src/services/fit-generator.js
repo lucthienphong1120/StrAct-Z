@@ -75,16 +75,30 @@ function resolveDeviceParams(deviceName) {
 
   if (nameLower.includes('forerunner 945')) {
     manufacturer = 1; product = 3113; productName = 'Forerunner 945';
+  } else if (nameLower.includes('forerunner 965')) {
+    manufacturer = 1; product = 4314; productName = 'Forerunner 965';
+  } else if (nameLower.includes('forerunner 955')) {
+    manufacturer = 1; product = 3986; productName = 'Forerunner 955';
+  } else if (nameLower.includes('forerunner 265')) {
+    manufacturer = 1; product = 4305; productName = 'Forerunner 265';
   } else if (nameLower.includes('forerunner 165')) {
     manufacturer = 1; product = 4533; productName = 'Forerunner 165';
   } else if (nameLower.includes('fenix 7') || nameLower.includes('fēnix 7')) {
     manufacturer = 1; product = 3907; productName = 'fēnix 7x Pro';
+  } else if (nameLower.includes('fenix 8 solar') || nameLower.includes('fēnix 8 solar')) {
+    manufacturer = 1; product = 4543; productName = 'fēnix 8 Solar';
   } else if (nameLower.includes('fenix 8') || nameLower.includes('fēnix 8')) {
     manufacturer = 1; product = 4543; productName = 'fēnix 8';
   } else if (nameLower.includes('forerunner 255')) {
     manufacturer = 1; product = 4024; productName = 'Forerunner 255S';
+  } else if (nameLower.includes('forerunner 975')) {
+    manufacturer = 1; product = 4543; productName = 'Forerunner 975';
+  } else if (nameLower.includes('venu 2 plus')) {
+    manufacturer = 1; product = 3851; productName = 'Venu 2 Plus';
+  } else if (nameLower.includes('venu 2s')) {
+    manufacturer = 1; product = 3704; productName = 'Venu 2S';
   } else if (nameLower.includes('venu 2')) {
-    manufacturer = 1; product = 3850; productName = 'Venu 2';
+    manufacturer = 1; product = 3703; productName = 'Venu 2';
   } else if (nameLower.includes('instinct 3')) {
     manufacturer = 1; product = 4600; productName = 'Instinct 3';
   } else if (nameLower.includes('instinct 2x')) {
@@ -126,7 +140,9 @@ function resolveDeviceParams(deviceName) {
   } else if (nameLower.includes('zepp')) {
     manufacturer = 292; product = 292; productName = 'Zepp App';
   } else if (nameLower.includes('apple') || nameLower.includes('sport')) {
-    manufacturer = 263; product = 263; productName = 'Apple Watch';
+    manufacturer = 263; product = 263; productName = deviceName || 'Apple Watch';
+  } else if (nameLower.includes('strava')) {
+    manufacturer = 255; product = 255; productName = deviceName || 'Strava App';
   } else if (nameLower.includes('garmin')) {
     manufacturer = 1; product = 3907; productName = deviceName;
   } else if (nameLower.includes('coros')) {
@@ -259,8 +275,8 @@ async function generateActivity(config = {}) {
         
         if (ratio > 0) {
           const areaWeights = limits.activity_areas?.weights || {
-            home: { fully: 7.0, mostly: 4.2, partially: 2.8 },
-            work: { fully: 5.2, mostly: 3.0, partially: 1.5 }
+            home: { fully: 20.0, mostly: 14.0, partially: 7.0 },
+            work: { fully: 12.0, mostly: 7.5, partially: 3.0 }
           };
           if (area.type === 'home') {
             if (ratio >= 0.85) weight += areaWeights.home.fully;

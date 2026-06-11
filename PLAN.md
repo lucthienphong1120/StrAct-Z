@@ -373,4 +373,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Bổ sung tài liệu hướng dẫn kiểm thử các test case chi tiết cho người dùng và cập nhật tài liệu hướng dẫn sử dụng (v2.0.0)
 + [x] Đổi tên file FIT và external_id sang UUID ngẫu nhiên (dạng `uuid-activity.fit`) để giống với các hoạt động thật (v2.0.0)
 + [x] Dọn dẹp triệt để các cấu hình cũ không sử dụng liên quan đến GPX (như cron job dọn dẹp GPX hàng tuần) và sửa lỗi Version Mismatch trên UI (v2.0.1)
++ [x] Sửa lỗi ánh xạ Garmin Venu 2 bị nhận nhầm trên Strava (đưa về đúng Product ID 3703/3704/3851 cho dòng Venu 2/2S/2 Plus), bổ sung Strava App và các mẫu đồng hồ mới vào Preset, điều chỉnh trọng số vùng Nhà/Công ty theo yêu cầu của user và đưa danh sách thiết bị lỗi về Untested để test lại trên Production (v2.0.2)
 + [ ] sửa các console log debug hiện tại chỉ chạy 1 lần mỗi khi tải trang hoặc ấn nút refresh, không cần lặp lại mỗi khi sinh hoạt động mới, trừ error, warning, lỗi,...
+

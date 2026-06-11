@@ -44,8 +44,8 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ### 3. Priority Areas, Adjacent Boosts & Scenic POIs (v1.56.0+)
 - **Priority Area Weights**:
-  - Home: `+7.0 (Fully) / +4.2 (Mostly) / +2.8 (Partially)`
-  - Work: `+5.2 (Fully) / +3.0 (Mostly) / +1.5 (Partially)`
+  - Home: `+20.0 (Fully) / +14.0 (Mostly) / +7.0 (Partially)`
+  - Work: `+12.0 (Fully) / +7.5 (Mostly) / +3.0 (Partially)`
 - **Adjacent Boost Split**:
   - Same district (the district of the last activity itself): `+2.1` boost.
   - Neighboring (adjacent) districts: `+1.4` boost.
@@ -93,6 +93,17 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - The generated target distance is capped between the activity type's minimum and maximum constraints, and strictly capped by the user-configured random max distance (without being affected by the activity's distance multiplier itself) to ensure valid route generation.
 
 ## 🛠️ Developer Rules
+
+### v2.0.2 (2026-06-11)
+- **Fix: Garmin Venu 2 product mapping**:
+  - Remapped Garmin Venu 2 product code to `3703`, Venu 2S to `3704`, and Venu 2 Plus to `3851`.
+- **Feature: Strava App support**:
+  - Added `'Strava App'` to the presets list, mapping it to manufacturer/product ID `255`.
+- **Feature: Presets Datalist expansion**:
+  - Expanded `<datalist id="devicePresets">` to support Forerunner 965, 265, 975, fēnix 8 Solar, and Apple Watch models.
+- **Feature: Target Random Weights Adjustment**:
+  - Adjusted 🏠 Home weights to `+20 / +14 / +7` and 💼 Work weights to `+12 / +7.5 / +3`.
+  - Reset all device verification test cases status in `docs/DEVICE_TESTCASES.md` to `⏳ Untested`.
 
 ### v2.0.1 (2026-06-11)
 - **Cleanup: Unused GPX references**:

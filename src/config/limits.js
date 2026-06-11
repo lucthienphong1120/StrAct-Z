@@ -92,8 +92,8 @@ const LIMITS = {
     desc_extra: 'Tác dụng: Tỉ lệ chọn các quận mặc định là 1:1, các quận giao với vùng phủ sóng của Nhà/Công ty sẽ được cộng thêm trọng số boost dựa trên tỷ lệ diện tích giao nhau (Ratio = Giao nhau / Diện tích hình nhỏ hơn).',
     example: 'Ratio >= 0.85 (Fully), Ratio >= 0.35 (Mostly), Ratio > 0 (Partially).',
     weights: {
-      home: { fully: 7.0, mostly: 4.2, partially: 2.8 },
-      work: { fully: 5.2, mostly: 3.0, partially: 1.5 }
+      home: { fully: 20.0, mostly: 14.0, partially: 7.0 },
+      work: { fully: 12.0, mostly: 7.5, partially: 3.0 }
     }
   },
 
@@ -176,10 +176,14 @@ const LIMITS = {
     default_label: 'Garmin fēnix 7x Pro',
     choices: [
       'Garmin Forerunner 945',
+      'Garmin Forerunner 965',
+      'Garmin Forerunner 265',
       'Garmin Forerunner 165',
       'Garmin fēnix 7x Pro',
       'Garmin fēnix 8',
+      'Garmin fēnix 8 Solar',
       'Garmin Forerunner 255S',
+      'Garmin Forerunner 975',
       'Garmin Venu 2',
       'Garmin Instinct 3',
       'Garmin Instinct 2X Solar',
@@ -201,6 +205,11 @@ const LIMITS = {
       'Samsung Galaxy Watch Ultra',
       'Samsung Galaxy Watch 8',
       'Samsung Galaxy Watch 7',
+      'Apple Watch Ultra 3',
+      'Apple Watch Ultra 2',
+      'Apple Watch Series 11',
+      'Apple Watch Series 10',
+      'Strava App',
       'Garmin Connect',
       'Zepp App',
       'Huawei Health',
