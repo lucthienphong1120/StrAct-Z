@@ -208,5 +208,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Dọn dẹp danh sách thiết bị, loại bỏ các dòng Garmin Forerunner 945 và 245 ra mắt trước năm 2020 theo yêu cầu người dùng (v2.1.3)
 + [ ] dùng gotoes fit-file-viewer và fitfileviewer debug ra được thông tin chưa thực tế: (serial number: 1234567, software version: 200) -> s/n thì random chữ thường và số hợp lý (số nhiều hơn - defined theo thiết bị vào database/config hardcode), software version thì search thông tin và chọn 1 version lts uy tín chung cho cùng 1 hãng thiết bị
 + [ ] cho phép cấu hình custom time áp dụng cho shedule (hiện chỉ áp dụng với generate, generate và upload), nhưng tự động tắt sau 1 lần thực thi schedule -> tức người dùng có thể cài đặt custom time để chạy trong next schedule tiếp theo (nếu activity count random ra lớn hơn 0), thì tính activity đầu tiên random ra sẽ ăn theo giờ của custom time, sau đó toggle custom time được đặt về tắt (default), các activity count sau (2,3) thì vẫn random bình thường, vẫn có thể fail nếu không có khung giờ phù hợp
-
-
++ [ ] tiếp tục edit script test_devices.js để xuất và parse toàn bộ thông tin danh sách thiết bị cần test xuất ra folder ./tmp/fit-testcase/ để tôi check manual trên các trang web preview fit file
