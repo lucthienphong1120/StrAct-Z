@@ -373,3 +373,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Bổ sung tài liệu hướng dẫn kiểm thử các test case chi tiết cho người dùng và cập nhật tài liệu hướng dẫn sử dụng (v2.0.0)
 + [x] Đổi tên file FIT và external_id sang UUID ngẫu nhiên (dạng `uuid-activity.fit`) để giống với các hoạt động thật (v2.0.0)
 + [x] Dọn dẹp triệt để các cấu hình cũ không sử dụng liên quan đến GPX (như cron job dọn dẹp GPX hàng tuần) và sửa lỗi Version Mismatch trên UI (v2.0.1)
++ [ ] sửa các console log debug hiện tại chỉ chạy 1 lần mỗi khi tải trang hoặc ấn nút refresh, không cần lặp lại mỗi khi sinh hoạt động mới, trừ error, warning, lỗi,...
