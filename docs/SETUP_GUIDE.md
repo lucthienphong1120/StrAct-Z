@@ -75,3 +75,11 @@ WantedBy=multi-user.target
 2. Because the database is empty, you will be redirected to the **Setup Wizard**.
 3. Create your Admin account by providing a username and secure password.
 4. You will be logged in automatically. Proceed to link your Strava account in the dashboard.
+
+## Database Migration (Legacy Upgrades)
+
+If you are upgrading from an older version of StrAct Z (pre-1.15.0) that used `db.json` or older SQLite schema formats:
+- On startup, the system automatically checks for legacy global databases (`db.json` or old SQLite tables).
+- It will automatically migrate your data and config settings to the new multi-tenant database structure under the default account (`account_id = 1`).
+- The original files are kept as backup (`db.json.bak` or legacy tables renamed) to prevent data loss.
+

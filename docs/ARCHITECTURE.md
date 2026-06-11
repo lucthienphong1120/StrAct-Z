@@ -1,45 +1,204 @@
-# 🏗️ System Architecture
+# 🏗️ StrAct Z - System Architecture
 
-StrAct Z utilizes a lightweight, secure, multi-tenant architecture designed to run on a single Node.js instance backed by SQLite.
+This document presents the system components, database schema, and core algorithms of StrAct Z in a fully visualized format.
 
-## Core Components
+---
 
-### 1. Multi-Tenant Database (SQLite)
-The data layer is managed via a local `database.sqlite` file, providing low-latency persistence without external database dependencies. 
-Key tables:
-- `accounts`: Stores system users (`id`, `username`, `password_hash`, `role`).
-- `users`: Stores Strava OAuth tokens mapped to an `account_id`.
-- `user_config`: Stores individual settings (schedule time, pace, heart rate preferences) via a composite primary key (`account_id`, `key`).
-- `activities`: Logs all generated and uploaded activities, linked to an `account_id`.
+## 🗺️ High-Level System Architecture
 
-*Migration:* On startup, the system automatically checks for legacy global databases (`db.json` or pre-1.15.0 SQLite tables) and migrates them to the new multi-tenant structure under `account_id = 1`.
+This diagram shows how the client browser, Node.js server components, SQLite database, and external APIs interact.
 
-### 2. Authentication & Security
-- **JWT & HttpOnly Cookies:** User sessions are managed via JSON Web Tokens stored in secure, `HttpOnly` cookies, preventing XSS attacks.
-- **Bcrypt Hashing:** All passwords are hashed using `bcryptjs` with a cost factor of 10.
-- **Rate Limiting:** The login endpoint is protected by `express-rate-limit` (max 5 failed attempts per 15 minutes per IP) to prevent brute-force attacks.
-- **Strava OAuth Flow:** Strava tokens are tied to the active user's session. The OAuth state parameter ensures the callback correctly identifies the originating system account.
+```mermaid
+graph TB
+    subgraph Client ["🌐 Client Interface (Browser)"]
+        UI[Dashboard / Setup UI]
+        Storage[HttpOnly JWT Cookie]
+    end
 
-### 3. FIT Engine (`route-engine.js` & `fit-generator.js`)
-The engine generates activities in two phases:
-1. **Spatial Generation:** Uses mathematical formulas and the public OSRM (Open Source Routing Machine) API to snap random waypoints to actual roads within defined Hanoi districts. If OSRM fails or is disabled, it falls back to a Manhattan-distance algorithm.
-2. **Temporal & Biometric Simulation:** 
-   - Generates timestamps based on target pace, injecting natural human micro-fluctuations.
-   - **Simulation Events:** Injects random pauses (simulating red lights or traffic) and alters heart rate dynamically based on simulated weather conditions, elevation changes, and exertion over time.
-   - **FIT Binary compilation:** Converts the simulated data into Garmin FIT binary format using `@markw65/fit-file-writer`, supporting manufacturer/product configuration (device mapping) to display Sync Badge on Strava. Files are saved locally and uploaded to Strava using randomized UUID filenames and `external_id` (e.g., `584be6ca-84ba-4b6e-b93e-23d5670aa53b-activity.fit`) to perfectly mimic real device syncs.
+    subgraph Server ["💻 StrAct Z Server (Node.js)"]
+        Router[Express Router & Auth Middleware]
+        Engine[FIT Generation Engine]
+        Scheduler[Background Scheduler]
+    end
 
-### 4. Background Scheduler (`scheduler.js`)
-- Uses `node-cron` to manage background tasks.
-- On server boot, it queries all active accounts and spawns independent cron jobs for any user with `schedule_enabled = 'true'`.
-- The jobs execute silently in the background, validating Strava limits (max 2 uploads per day) before generating and uploading routes.
+    subgraph DB ["💾 Database Layer"]
+        SQLite[(SQLite Database)]
+    end
 
-### 5. Map State & Activity Area Persistence (v1.51.5+)
-- **Map View:** The system persists the map's center coordinates (`map_lat`, `map_lng`) and zoom level (`map_zoom`) whenever "Activity Areas" are saved. This ensures a consistent user experience across sessions.
-- **Activity Areas:** Stores user-defined circular zones (Home/Work) as JSON in the `activity_areas` key. 
-- **Persistence Rules:**
-  - **Refresh:** Restores all saved settings, including map view and activity areas.
-  - **Reset:** Resets all general configuration and map view (position/zoom) to defaults, but **preserves** the user's saved Home and Work locations (`activity_areas`).
-- **Additive Boost System & Coverage Ratio**: Each activity area provides a mathematical "boost" to nearby districts during route generation based on the **Intersection Area** of the two circles (the district and the activity area). The overlap ratio is calculated as `Ratio = IntersectionArea / min(Area_District, Area_User)`.
-  - **Fully (Bao trọn / Nằm trọn)**: `Ratio >= 0.85` (Giao nhau từ 85% trở lên diện tích của hình nhỏ hơn).
-  - **Mostly (Phần lớn)**: `Ratio >= 0.35` (Giao nhau từ 35% đến dưới 85%).
-  - **Partially (Một phần)**: `Ratio > 0` (Có giao nhau, dưới 35%).
+    subgraph External ["☁️ External Services"]
+        OSRM[OSRM API - Map Matching]
+        Strava[Strava API - OAuth & Upload]
+    end
+
+    %% Client to Server
+    UI -->|HTTP Requests| Router
+    Storage -->|JWT Authentication| Router
+    
+    %% Server Components
+    Router -->|Read/Write User Settings & History| SQLite
+    Router -->|Manual Generate / Upload| Engine
+    Scheduler -->|Read Active Schedules| SQLite
+    Scheduler -->|Auto Generate / Upload| Engine
+    
+    %% FIT Engine Actions
+    Engine -->|Request Road Matching| OSRM
+    Engine -->|Save Activity History| SQLite
+    Engine -->|OAuth Token Exchange & Upload FIT| Strava
+```
+
+---
+
+## 💾 Database ER Diagram
+
+StrAct Z uses a multi-tenant SQLite database structure configured as follows:
+
+```mermaid
+erDiagram
+    ACCOUNTS ||--o{ USERS : "links one"
+    ACCOUNTS ||--o{ USER_CONFIG : "defines configs"
+    ACCOUNTS ||--o{ ACTIVITIES : "owns activities"
+    
+    ACCOUNTS {
+        int id PK
+        string username
+        string password_hash
+        string role
+    }
+    USERS {
+        int id PK
+        int account_id FK
+        string strava_athlete_id
+        string access_token
+        string refresh_token
+        int expires_at
+    }
+    USER_CONFIG {
+        int account_id PK, FK
+        string key PK
+        string value
+    }
+    ACTIVITIES {
+        int id PK
+        int account_id FK
+        string external_id
+        string activity_type
+        float distance
+        int moving_time
+        string start_date_local
+        string upload_status
+        string fit_filename
+    }
+```
+
+---
+
+## 🚀 Activity Generation Flowchart
+
+The execution flow of the generation engine from trigger to the final output of a signed Garmin `.fit` activity file.
+
+```mermaid
+graph TD
+    %% Trigger Phase
+    Start([⚡ Trigger Activity Generation]) --> InputCheck{Manual or Scheduler?}
+    
+    %% Setup & Custom Time Phase
+    InputCheck -->|Manual| BuildManualConfig[Read UI parameters / Overrides]
+    InputCheck -->|Scheduler| BuildSchedulerConfig[Fetch DB User Settings & Check Slots]
+    
+    BuildManualConfig --> TimingCheck{Custom Time Active?}
+    BuildSchedulerConfig --> TimingCheck
+    
+    TimingCheck -->|Yes| SetCustomTime[Use Custom Date & Time<br/>Bypass random bounds]
+    TimingCheck -->|No| SetRandomTime[Select random time within bounds<br/>Check Avoid Workhours]
+    
+    %% Target Distance Phase
+    SetCustomTime --> TargetDistCheck{Scheduler & Last Run of Day?}
+    SetRandomTime --> TargetDistCheck
+    
+    TargetDistCheck -->|Yes| CheckTargetDistance[Calculate distance done today<br/>Set target override +/- random variance]
+    TargetDistCheck -->|No| StandardDistance[Select random distance & pace<br/>Scale by activity type multiplier]
+
+    %% Overlap Protection Phase
+    CheckTargetDistance --> OverlapCheck{Overlap Protection Enabled?}
+    StandardDistance --> OverlapCheck
+    
+    OverlapCheck -->|Yes| QueryOverlap[Check conflict range:<br/>[Start - SafeTime - RestTime, End + SafeTime + RestTime]]
+    OverlapCheck -->|No| RoutingInit
+    
+    QueryOverlap --> OverlapConflict{Conflict found?}
+    OverlapConflict -->|Yes| ErrorExit([❌ Failed: Overlap Conflict])
+    OverlapConflict -->|No| RoutingInit
+    
+    %% Geography Phase
+    RoutingInit[🎯 Determine Starting Coordinates] --> FavorPOI{Start Near Favorite POI?}
+    FavorPOI -->|Yes (70%)| PickPOI[Select coordinate from Scenic POIs in Hanoi]
+    FavorPOI -->|No (30%)| WeightedDistrict[Weighted Random District Selection]
+    
+    PickPOI --> RouteGen
+    WeightedDistrict --> PickRandomInPolygon[Select random coordinate inside district polygon]
+    PickRandomInPolygon --> RouteGen
+    
+    %% Routing Engine Phase
+    RouteGen[🚲 Generate Route] --> OSRMRoute{Use OSRM Routing?}
+    OSRMRoute -->|Yes| CallOSRM[Fetch real road points from OSRM API]
+    OSRMRoute -->|No| FallbackGPS[Generate straight-line fallback nodes]
+    
+    CallOSRM --> Resampling[Resample route coordinates to uniform 10m segments]
+    FallbackGPS --> Resampling
+    
+    %% Generation Phase
+    Resampling --> SpeedCalcs[Determine pace & elevation grade]
+    SpeedCalcs --> TimestampGen[Generate timestamps rounded to nearest second<br/>Clamp grade slope to max 8%]
+    
+    %% Device & Serialization Phase
+    TimestampGen --> DeviceSelection[Resolve Watch Preset and Brand]
+    DeviceSelection --> SerialHash[Generate serial string & hash to uint32 via DJB2]
+    SerialHash --> LTSVersion[Lookup brand LTS software version]
+    LTSVersion --> WriteFIT[Write binary FIT file via @markw65/fit-file-writer]
+    
+    %% Save Phase
+    WriteFIT --> SaveDB[Save local activity to DB as generated]
+    SaveDB --> DisableCustom[Turn off Custom Time in DB if enabled]
+    DisableCustom --> SuccessExit([🎉 Output FIT File Ready])
+```
+
+---
+
+## 🏡 Weighted District Selection & Boost Logic
+
+When selecting random starting coordinates outside Scenic POIs, districts are chosen using weights calculated from Home/Work coverage overlays and adjacent previous activity history.
+
+```mermaid
+graph TD
+    Start([Start District Selection]) --> BaseWeight[Set base weight for all districts = 1.0]
+    
+    BaseWeight --> HomeCheck{Has Home Area?}
+    HomeCheck -->|Yes| ApplyHome[Calculate Home Overlap Ratio<br/>Fully (>=85%): +20.0<br/>Mostly (>=35%): +14.0<br/>Partially (>0%): +7.0]
+    HomeCheck -->|No| WorkCheck{Has Work Area?}
+    
+    ApplyHome --> WorkCheck
+    WorkCheck -->|Yes| ApplyWork[Calculate Work Overlap Ratio<br/>Fully (>=85%): +12.0<br/>Mostly (>=35%): +7.5<br/>Partially (>0%): +3.0]
+    WorkCheck -->|No| AdjacentCheck{Adjacent to last activity?}
+    
+    ApplyWork --> AdjacentCheck
+    AdjacentCheck -->|Same District| BoostSame[Add boost +2.1]
+    AdjacentCheck -->|Neighbor District| BoostNeigh[Add boost +1.4]
+    AdjacentCheck -->|Otherwise| WeightedRandom[Run Weighted Random Choice]
+    
+    BoostSame --> WeightedRandom
+    BoostNeigh --> WeightedRandom
+    WeightedRandom --> End([District Selected])
+```
+
+---
+
+## ⚙️ Device Metadata Hashing
+
+String serial numbers are converted to 32-bit unsigned integers using the DJB2 hashing algorithm to comply with Garmin FIT binary requirements.
+
+```mermaid
+flowchart LR
+    StringSerial[String Serial:<br/>'grmn_sn_4982_xxxxxx'] --> DJB2[DJB2 Hashing Algorithm]
+    DJB2 --> UInt32Serial[Unsigned 32-bit Integer Serial]
+    UInt32Serial --> FITHeader[Embedded into FIT File Header]
+```
