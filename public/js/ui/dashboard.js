@@ -1,6 +1,4 @@
-/**
- * StrAct Z - Dashboard, Stats, and Activities
- */
+window.allowDebugLogs = true;
 
 async function loadDashboard(forceRefresh = false) {
   window.latestStravaActivities = []; // Store for cross-check
@@ -26,9 +24,12 @@ async function loadDashboard(forceRefresh = false) {
   resetMapView();
   
   // Log district weight ratios on page load/refresh
-  if (window.debugDistrictWeightRatios) {
+  if (window.debugDistrictWeightRatios && window.allowDebugLogs) {
     window.debugDistrictWeightRatios();
   }
+  
+  // Turn off debug logging until the next page load or manual refresh
+  window.allowDebugLogs = false;
 }
 
 async function loadStats(forceRefresh = false) {
@@ -186,7 +187,7 @@ async function loadActivities(logDistance = false) {
         seenTimesLog.push(startMs);
       }
     }
-    if (logDistance) {
+    if (logDistance && window.allowDebugLogs) {
       console.log(`%c[Scheduler] Distance covered today: ${totalDistanceToday.toFixed(2)} km`, 
         'font-weight: bold; color: #fb923c; font-size: 1.1em;');
     }
@@ -693,6 +694,7 @@ async function initTheme() {
 // ─── Actions (Moved here for proximity to activities) ───
 
 async function generateOnly() {
+  window.allowDebugLogs = false;
   const btn = document.getElementById('btnGenerate');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Generating...';
@@ -731,6 +733,7 @@ async function generateOnly() {
 }
 
 async function generateAndUpload() {
+  window.allowDebugLogs = false;
   const btn = document.getElementById('btnGenerateUpload');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Generating & Uploading...';
@@ -771,6 +774,7 @@ async function generateAndUpload() {
 }
 
 async function uploadActivity(id) {
+  window.allowDebugLogs = false;
   showToast('Uploading to Strava...', 'info');
   try {
     const result = await api(`/upload/${id}`, { method: 'POST' });
@@ -786,6 +790,7 @@ async function uploadActivity(id) {
 }
 
 async function deleteActivity(id, hasStrava) {
+  window.allowDebugLogs = false;
   showToast('Deleting activity...', 'info');
   try {
     const result = await api(`/activities/${id}?strava=${hasStrava}`, { method: 'DELETE' });
@@ -805,6 +810,7 @@ async function deleteActivity(id, hasStrava) {
 }
 
 async function debugDistrictWeightRatios() {
+  if (!window.allowDebugLogs) return;
   try {
     const config = await api('/config');
     const allActivities = window.localActivities || await api('/activities?limit=200');
@@ -996,3 +1002,10 @@ window.generateAndUpload = generateAndUpload;
 window.uploadActivity = uploadActivity;
 window.deleteActivity = deleteActivity;
 window.debugDistrictWeightRatios = debugDistrictWeightRatios;
+
+async function userRefresh() {
+  window.allowDebugLogs = true;
+  console.clear();
+  await loadDashboard(true);
+}
+window.userRefresh = userRefresh;

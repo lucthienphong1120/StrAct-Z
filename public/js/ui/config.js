@@ -684,6 +684,8 @@ async function resetToDefault() {
     if (res.success) {
       showToast('Configuration reset successfully', 'success');
       window.savedMapState = { lat: 21.0285, lng: 105.8542, zoom: 12 };
+      window.allowDebugLogs = true;
+      console.clear();
       await loadDashboard(true);
     } else {
       showToast(res.error || 'Reset failed', 'error');
