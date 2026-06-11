@@ -95,6 +95,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.1.8 (2026-06-11)
+- **Fix: Actual Route District Tags**:
+  - Local Generated History district tags now use the districts actually crossed by the final trimmed route points, instead of the preselected route plan.
+  - Multi-district route selection now constrains each additional district to an adjacent district of the previous selected district when adjacency data is available, preventing unrealistic far-apart pairs such as Long Bien + Thanh Xuan on a short route.
+  - Actual route districts are resolved using GeoJSON point-in-polygon checks sampled from the generated track after distance trimming.
+
 ### v2.1.4 (2026-06-11)
 - **Refactor: Normal to Basic Role**:
   - Renamed all backend and frontend occurrences of `'normal'` user role and theme classes to `'basic'` / `'is-basic'` / `'theme-preview-basic'`.

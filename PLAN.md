@@ -214,5 +214,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] làm manual guide hướng dẫn sử dụng và sổ tay mô tả tính năng trong UI các phần config (v2.1.4)
 + [x] viết docs sử dụng mindmap markdown, mô tả luồng khi gen 1 hoạt động sẽ qua những flow nào để chọn, tỉ lệ bao nhiêu, điều kiện rẽ nhánh, step by step, cái nào chạy trước chạy sau,... (v2.1.4)
 + [x] refact toàn bộ keyword, chức năng liên quan đến "normal account" đổi tên thành "basic account" trong DB và UI (v2.1.4)
-+ [ ] tại sao có hoạt động ghi gen chỉ chạy trong khu vực 1 quận nhưng lại hiện tag của 2 quận, lại còn quận Long Biên với Thanh Xuân nữa chứ, 2 cái xa nhau mà
++ [x] Sửa lỗi Local Generated History hiển thị tag 2 quận xa nhau dù route thực tế chỉ chạy trong 1 quận: lưu tag theo quận thực sự đi qua sau khi route đã trim theo distance, đồng thời ràng buộc multi-district chỉ chọn quận liền kề (v2.1.8)
 + [ ] [quan trọng] khôi phục tính năng tạo với gfx, song song với fit, do fit lỗi ko nhận diện các thiết bị non-garmin

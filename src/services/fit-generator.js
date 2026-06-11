@@ -19,6 +19,7 @@ const {
 } = require('./route-engine');
 const systemLimits = require('../config/limits');
 const { ADJACENT_DISTRICTS } = require('../config/districts');
+const { getDistrictKeyForCoordinate } = require('../utils/geo');
 
 const FIT_DIR = path.join(__dirname, '..', '..', 'data', 'fit');
 fs.mkdirSync(FIT_DIR, { recursive: true });
@@ -64,6 +65,30 @@ function generateDeviceSerial(baseSn) {
     string: fullSnStr,
     number: hash >>> 0
   };
+}
+
+function getActualDistrictKeysForRoute(points, fallbackKeys = []) {
+  if (!Array.isArray(points) || points.length === 0) {
+    return fallbackKeys;
+  }
+
+  const actualKeys = [];
+  const addKey = (key) => {
+    if (key && HANOI_DISTRICTS[key] && !actualKeys.includes(key)) {
+      actualKeys.push(key);
+    }
+  };
+
+  // Sampling keeps GeoJSON ray-casting cheap while still covering route changes.
+  const step = Math.max(1, Math.floor(points.length / 200));
+  for (let i = 0; i < points.length; i += step) {
+    addKey(getDistrictKeyForCoordinate(points[i].lat, points[i].lng));
+  }
+
+  const lastPoint = points[points.length - 1];
+  addKey(getDistrictKeyForCoordinate(lastPoint.lat, lastPoint.lng));
+
+  return actualKeys.length > 0 ? actualKeys : fallbackKeys;
 }
 
 function getShortDescription(deviceName) {
@@ -396,10 +421,21 @@ async function generateActivity(config = {}) {
     const span = Math.min(actualSpan, available.length);
     
     for (let i = 0; i < span && available.length > 0; i++) {
-      const totalWeight = availableWeights.reduce((a, b) => a + b, 0);
+      const previousKey = chosenDistrictKeys[chosenDistrictKeys.length - 1];
+      let candidateIndexes = available.map((_, index) => index);
+
+      if (previousKey) {
+        const adjacentKeys = ADJACENT_DISTRICTS[previousKey] || [];
+        const adjacentIndexes = candidateIndexes.filter(index => adjacentKeys.includes(available[index]));
+        if (adjacentIndexes.length > 0) {
+          candidateIndexes = adjacentIndexes;
+        }
+      }
+
+      const totalWeight = candidateIndexes.reduce((total, index) => total + availableWeights[index], 0);
       let r = Math.random() * totalWeight;
       let sum = 0;
-      for (let j = 0; j < available.length; j++) {
+      for (const j of candidateIndexes) {
         sum += availableWeights[j];
         if (r <= sum) {
           chosenDistrictKeys.push(available[j]);
@@ -791,6 +827,7 @@ async function generateActivity(config = {}) {
 
   const actualDuration = (points[points.length - 1].time - points[0].time) / 60000;
   const actualDistance = points[points.length - 1].distance / 1000;
+  const actualDistrictKeys = getActualDistrictKeysForRoute(points, chosenDistrictKeys);
 
   return {
     filename, filepath, activityName,
@@ -802,7 +839,7 @@ async function generateActivity(config = {}) {
     startLat: points[0].lat,
     startLng: points[0].lng,
     numPoints: points.length,
-    districtKey: chosenDistrictKeys.join(','),
+    districtKey: actualDistrictKeys.join(','),
     fitBuffer,
   };
 }
