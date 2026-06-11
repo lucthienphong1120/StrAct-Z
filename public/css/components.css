@@ -163,27 +163,27 @@
 }
 .schedule-label { font-size: 0.8rem; color: var(--text-secondary); opacity: 0.9; }
 
-/* Normal user theme & Normal theme preview */
-body.is-normal .schedule-display,
-body.theme-preview-normal.is-vip .schedule-display {
+/* Basic user theme & Basic theme preview */
+body.is-basic .schedule-display,
+body.theme-preview-basic.is-vip .schedule-display {
   background: rgba(252, 76, 2, 0.05);
   border: 1px solid rgba(252, 76, 2, 0.2);
 }
-body.is-normal .schedule-label,
-body.theme-preview-normal.is-vip .schedule-label {
+body.is-basic .schedule-label,
+body.theme-preview-basic.is-vip .schedule-label {
   color: var(--strava-orange);
 }
 
-/* VIP user theme (only when not previewing normal theme) */
-body.is-vip:not(.theme-preview-normal) .schedule-display {
+/* VIP user theme (only when not previewing basic theme) */
+body.is-vip:not(.theme-preview-basic) .schedule-display {
   background: rgba(245, 158, 11, 0.05);
   border: 1px solid rgba(245, 158, 11, 0.2);
 }
-body.is-vip:not(.theme-preview-normal) .schedule-time {
+body.is-vip:not(.theme-preview-basic) .schedule-time {
   background: var(--gradient-vip);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
-body.is-vip:not(.theme-preview-normal) .schedule-label {
+body.is-vip:not(.theme-preview-basic) .schedule-label {
   color: var(--vip-gold);
 }
 
@@ -325,7 +325,7 @@ body.is-vip:not(.theme-preview-normal) .schedule-label {
   50% { box-shadow: 0 0 12px rgba(245, 158, 11, 0.8); }
   100% { box-shadow: 0 0 4px rgba(245, 158, 11, 0.4); }
 }
-.normal-badge-standard {
+.basic-badge-standard {
   display: inline-flex;
   align-items: center;
   background: linear-gradient(135deg, #fc4c02, #e24302);
@@ -339,9 +339,9 @@ body.is-vip:not(.theme-preview-normal) .schedule-label {
   vertical-align: middle;
   letter-spacing: 0.05em;
   border: 1px solid rgba(252, 76, 2, 0.5);
-  animation: normalPulse 2s infinite ease-in-out;
+  animation: basicPulse 2s infinite ease-in-out;
 }
-@keyframes normalPulse {
+@keyframes basicPulse {
   0% { box-shadow: 0 0 4px rgba(252, 76, 2, 0.4); }
   50% { box-shadow: 0 0 12px rgba(252, 76, 2, 0.8); }
   100% { box-shadow: 0 0 4px rgba(252, 76, 2, 0.4); }

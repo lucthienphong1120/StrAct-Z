@@ -5,17 +5,37 @@
 
 const systemLimits = require('../config/limits');
 
-function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role = 'normal') {
+function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role = 'basic') {
   const ov = overrides;
-  const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+  
+  const customTimeEnabled = String(ov.custom_time_enabled !== undefined ? ov.custom_time_enabled : config.custom_time_enabled) === 'true';
+  const targetTimeCustom = ov.target_time_custom || config.target_time_custom || '00:00';
+  
+  let minTime = config.min_time;
+  let maxTime = config.max_time;
+  
+  if (customTimeEnabled) {
+    if (targetTimeCustom !== '00:00') {
+      minTime = targetTimeCustom;
+      maxTime = targetTimeCustom;
+    }
+  } else {
+    minTime = ov.min_time || config.min_time;
+    maxTime = ov.max_time || config.max_time;
+  }
+  
+  const rawTargetDate = ov.target_date || (customTimeEnabled ? config.target_date : null);
+  const targetDate = (rawTargetDate && rawTargetDate !== 'Hôm nay') 
+    ? rawTargetDate 
+    : new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
   
   return {
     districtKey: null,
     selected_districts: ov.selected_districts || config.selected_districts,
     max_district_span: ov.max_district_span || config.max_district_span,
     targetDate: targetDate,
-    minTime: (ov.min_time === '00:00') ? config.min_time : (ov.min_time || config.min_time),
-    maxTime: (ov.min_time === '00:00') ? config.max_time : (ov.max_time || config.max_time),
+    minTime: minTime,
+    maxTime: maxTime,
     workStart1: ov.work_start1 || config.work_start1,
     workEnd1: ov.work_end1 || config.work_end1,
     workStart2: ov.work_start2 || config.work_start2,

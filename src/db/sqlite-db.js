@@ -126,7 +126,7 @@ async function getDb() {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           username TEXT UNIQUE NOT NULL,
           password_hash TEXT NOT NULL,
-          role TEXT DEFAULT 'normal',
+          role TEXT DEFAULT 'basic',
           created_at TEXT
         );
         CREATE TABLE IF NOT EXISTS vip_codes (
@@ -286,6 +286,14 @@ async function getDb() {
         console.log("[Migration] Updated default min_distance_km from 1.0 to 0.5");
       } catch (e) {
         console.error('[Migration] Failed to update min_distance_km value:', e.message);
+      }
+
+      // Migrate role 'normal' to 'basic'
+      try {
+        await db.run("UPDATE accounts SET role = 'basic' WHERE role = 'normal'");
+        console.log("[Migration] Migrated user roles 'normal' to 'basic'");
+      } catch (e) {
+        console.error('[Migration] Failed to migrate user roles:', e.message);
       }
 
       // One-time initialization and district pre-computation for start_near_favorite_place
@@ -517,7 +525,7 @@ async function createAccount(username, plainPassword) {
   const hash = bcrypt.hashSync(plainPassword, 10);
   const res = await db.run(
     'INSERT INTO accounts (username, password_hash, role, created_at) VALUES (?, ?, ?, ?)',
-    [username, hash, 'normal', new Date().toISOString()]
+    [username, hash, 'basic', new Date().toISOString()]
   );
   
   // Seed default configs for new account
@@ -547,7 +555,7 @@ async function getAllAccounts() {
 async function getAccountRole(accountId) {
   const db = await getDb();
   const row = await db.get('SELECT role FROM accounts WHERE id = ?', [accountId]);
-  return row ? row.role : 'normal';
+  return row ? row.role : 'basic';
 }
 
 async function activateVip(accountId, code) {

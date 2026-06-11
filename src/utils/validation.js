@@ -7,10 +7,10 @@ const systemLimits = require('../config/limits');
 /**
  * Validate a configuration object against system limits
  * @param {Object} updates - The partial or full config object to validate
- * @param {string} role - User role (normal, vip, admin)
+ * @param {string} role - User role (basic, vip, admin)
  * @returns {Object} { success: boolean, error: string|null, sanitized: Object }
  */
-function validateConfig(updates, role = 'normal') {
+function validateConfig(updates, role = 'basic') {
   const limits = systemLimits.getLimits(role);
   const sanitized = {};
   
@@ -37,7 +37,7 @@ function validateConfig(updates, role = 'normal') {
       if (role !== 'vip') {
         const presets = rule.choices || [];
         if (!presets.includes(strVal)) {
-          return { success: false, error: 'Tài khoản thường chỉ được phép chọn thiết bị có sẵn trong danh sách.' };
+          return { success: false, error: 'Tài khoản basic chỉ được phép chọn thiết bị có sẵn trong danh sách.' };
         }
       }
       sanitized[key] = strVal;

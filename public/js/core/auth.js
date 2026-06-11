@@ -16,9 +16,9 @@ async function checkAuth() {
       document.getElementById('dashboard').style.display = 'block';
       document.getElementById('btnLogout').style.display = 'block';
       
-      // Update header name with VIP/NORMAL indicator
+      // Update header name with VIP/BASIC indicator
       const name = data.athlete?.name || 'Connected';
-      const roleTag = window.userRole === 'vip' ? '<span class="vip-badge-premium">VIP</span>' : '<span class="normal-badge-standard">normal</span>';
+      const roleTag = window.userRole === 'vip' ? '<span class="vip-badge-premium">VIP</span>' : '<span class="basic-badge-standard">basic</span>';
       authText.innerHTML = `<span class="auth-username-text">${name}</span>${roleTag}`;
       
       renderAccountInfo(data.athlete);

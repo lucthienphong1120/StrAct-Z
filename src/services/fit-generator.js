@@ -23,6 +23,49 @@ const { ADJACENT_DISTRICTS } = require('../config/districts');
 const FIT_DIR = path.join(__dirname, '..', '..', 'data', 'fit');
 fs.mkdirSync(FIT_DIR, { recursive: true });
 
+const DEVICE_INFO_MAP = {
+  garmin: { softwareVersion: 19.18, baseSn: 'grmn_sn_4982' },
+  coros: { softwareVersion: 3.13, baseSn: 'coros_sn_3201' },
+  suunto: { softwareVersion: 2.33, baseSn: 'suunto_sn_7741' },
+  amazfit: { softwareVersion: 3.22, baseSn: 'amazfit_sn_5192' },
+  zepp: { softwareVersion: 3.22, baseSn: 'zepp_sn_9124' },
+  huawei: { softwareVersion: 4.10, baseSn: 'huawei_sn_8204' },
+  samsung: { softwareVersion: 13.00, baseSn: 'samsung_sn_3841' },
+  apple: { softwareVersion: 11.00, baseSn: 'apple_sn_2910' },
+  strava: { softwareVersion: 350.00, baseSn: 'strava_sn_6120' }
+};
+
+function getDeviceBrand(deviceName) {
+  const nameLower = (deviceName || '').toLowerCase();
+  if (nameLower.includes('garmin')) return 'garmin';
+  if (nameLower.includes('coros')) return 'coros';
+  if (nameLower.includes('suunto')) return 'suunto';
+  if (nameLower.includes('amazfit')) return 'amazfit';
+  if (nameLower.includes('zepp')) return 'zepp';
+  if (nameLower.includes('huawei')) return 'huawei';
+  if (nameLower.includes('samsung')) return 'samsung';
+  if (nameLower.includes('apple') || nameLower.includes('sport')) return 'apple';
+  if (nameLower.includes('strava')) return 'strava';
+  return 'garmin';
+}
+
+function generateDeviceSerial(baseSn) {
+  const chars = '01234567890123456789abcdef';
+  let suffix = '';
+  for (let i = 0; i < 6; i++) {
+    suffix += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  const fullSnStr = `${baseSn}_${suffix}`;
+  let hash = 5381;
+  for (let i = 0; i < fullSnStr.length; i++) {
+    hash = ((hash << 5) + hash) + fullSnStr.charCodeAt(i);
+  }
+  return {
+    string: fullSnStr,
+    number: hash >>> 0
+  };
+}
+
 function getShortDescription(deviceName) {
   return '';
 }
@@ -205,14 +248,14 @@ async function generateActivity(config = {}) {
     maxHeartRate = 165,
     startTime = null,
     useOSRM = true,
-    userRole = 'normal',
+    userRole = 'basic',
     deviceName = 'Garmin fēnix 7x Pro',
     simWeather = true,
     simRedLights = true,
   } = config;
 
   let { activityType = 'Random' } = config;
-  const limits = systemLimits[userRole] || systemLimits.normal;
+  const limits = systemLimits[userRole] || systemLimits.basic;
 
   // Determine Activity Type
   let finalActivityType = activityType;
@@ -588,7 +631,11 @@ async function generateActivity(config = {}) {
   
   // Resolve device parameters
   const devParams = resolveDeviceParams(deviceName);
-  const serialNumber = 1234567; // Simulated
+  const brand = getDeviceBrand(deviceName);
+  const brandInfo = DEVICE_INFO_MAP[brand] || DEVICE_INFO_MAP.garmin;
+  const snInfo = generateDeviceSerial(brandInfo.baseSn);
+  const serialNumber = snInfo.number;
+  const softwareVer = brandInfo.softwareVersion;
 
   // 1. file_id
   fitWriter.writeMessage(
@@ -614,7 +661,7 @@ async function generateActivity(config = {}) {
       product: devParams.product,
       serial_number: serialNumber,
       product_name: devParams.productName,
-      software_version: 2.0
+      software_version: softwareVer
     },
     null,
     true

@@ -5,7 +5,7 @@
 
 // ─── Global State ───────────────────────────────────────
 
-window.userRole = 'normal';
+window.userRole = 'basic';
 window.sysLimits = null;
 window.sysDistricts = [];
 

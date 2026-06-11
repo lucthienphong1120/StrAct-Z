@@ -53,8 +53,8 @@ function applyLimitsToUI() {
   // Build Dynamic Tooltips from Metadata
   updateDynamicTooltips();
 
-  // Populate HR Zones Display (using 'normal' values as requested)
-  const hrZones = sysL.heart_rate_zones.normal;
+  // Populate HR Zones Display (using 'basic' values as requested)
+  const hrZones = sysL.heart_rate_zones.basic;
   const setZone = (id, zone) => {
     const el = document.getElementById(id);
     if (el) el.textContent = `${Math.round(zone.min * 100)}-${Math.round(zone.max * 100)}%`;
@@ -177,7 +177,7 @@ function buildTooltipText(cfg) {
     if (cfg.desc_extra) lines.push(cfg.desc_extra);
     if (cfg.example) lines.push(cfg.example);
 
-    const role = window.sysLimits?._role || 'normal';
+    const role = window.sysLimits?._role || 'basic';
     const mapping = cfg[role];
     if (mapping) {
       lines.push('');
@@ -223,7 +223,7 @@ function buildTooltipText(cfg) {
 function buildRangeString(cfg) {
   const min = cfg.full_min !== undefined ? cfg.full_min : cfg.full_min_range;
   const max = cfg.full_max !== undefined ? cfg.full_max : cfg.full_max_range;
-  const isVarying = (v) => v && typeof v === 'object' && ('normal' in v || 'vip' in v);
+  const isVarying = (v) => v && typeof v === 'object' && ('basic' in v || 'vip' in v);
 
   if (isVarying(min) || isVarying(max)) {
     const getVal = (v, r) => (v && typeof v === 'object' ? v[r] : v) ?? 0;
@@ -232,7 +232,7 @@ function buildRangeString(cfg) {
       const mx = getVal(max, r);
       return mn === mx ? mn : `${mn}-${mx}`;
     };
-    return `Normal: ${format('normal')}${cfg.unit ? ' ' + cfg.unit : ''}, VIP: ${format('vip')}${cfg.unit ? ' ' + cfg.unit : ''}`;
+    return `Basic: ${format('basic')}${cfg.unit ? ' ' + cfg.unit : ''}, VIP: ${format('vip')}${cfg.unit ? ' ' + cfg.unit : ''}`;
   } else if (min !== undefined && max !== undefined) {
     if (min === max) return `${min}${cfg.unit ? ' ' + cfg.unit : ''}`;
     return `${min} - ${max}${cfg.unit ? ' ' + cfg.unit : ''}`;
@@ -542,7 +542,7 @@ function validateInputs(config, isRealTime = false) {
       if (!presets.includes(devVal)) {
         if (devEl) devEl.classList.add('invalid');
         if (!isRealTime) {
-          showToast('Tài khoản thường chỉ được phép chọn thiết bị có sẵn trong danh sách.', 'error');
+          showToast('Tài khoản basic chỉ được phép chọn thiết bị có sẵn trong danh sách.', 'error');
           return false;
         }
         isValid = false;

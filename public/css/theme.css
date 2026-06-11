@@ -44,7 +44,7 @@
   --map-highlight: #22d3ee;
 }
 
-.is-normal {
+.is-basic {
   --strava-orange: #fc4c02;
   --strava-orange-dark: #d43d00;
   --strava-orange-glow: rgba(252, 76, 2, 0.3);
@@ -75,7 +75,7 @@
 }
 
 /* Theme Preview Override for VIP */
-body.theme-preview-normal.is-vip {
+body.theme-preview-basic.is-vip {
   --strava-orange: #fc4c02;
   --strava-orange-dark: #d43d00;
   --strava-orange-glow: rgba(252, 76, 2, 0.3);
@@ -89,8 +89,8 @@ body.theme-preview-normal.is-vip {
   --shadow-glow: 0 0 30px rgba(255, 255, 255, 0.08);
 }
 
-body.theme-preview-normal.is-vip .logo,
-body.theme-preview-normal.is-vip .stat-value {
+body.theme-preview-basic.is-vip .logo,
+body.theme-preview-basic.is-vip .stat-value {
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   background-clip: text;
@@ -98,15 +98,15 @@ body.theme-preview-normal.is-vip .stat-value {
   text-shadow: none;
 }
 
-body.theme-preview-normal.is-vip .stat-label {
+body.theme-preview-basic.is-vip .stat-label {
   color: var(--text-secondary);
 }
 
-body.theme-preview-normal.is-vip .card {
+body.theme-preview-basic.is-vip .card {
   border-color: var(--border);
 }
 
-body.theme-preview-normal.is-vip .btn-primary {
+body.theme-preview-basic.is-vip .btn-primary {
   background: var(--gradient-primary);
   color: white;
 }
@@ -148,8 +148,8 @@ body.theme-preview-normal.is-vip .btn-primary {
   transform: none;
 }
 
-body.theme-preview-normal.is-vip .stat-card:hover, 
-body.theme-preview-normal.is-vip .card:hover {
+body.theme-preview-basic.is-vip .stat-card:hover, 
+body.theme-preview-basic.is-vip .card:hover {
   border-color: var(--strava-orange) !important;
   box-shadow: var(--shadow-glow) !important;
   transform: translateY(-2px);

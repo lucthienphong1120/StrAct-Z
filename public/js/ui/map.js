@@ -101,7 +101,7 @@ async function renderDistrictBorders() {
 }
 
 function getDistrictStyle(feature) {
-  const isVipTheme = document.body.classList.contains('is-vip') && !document.body.classList.contains('theme-preview-normal');
+  const isVipTheme = document.body.classList.contains('is-vip') && !document.body.classList.contains('theme-preview-basic');
   const borderColor = isVipTheme ? '#fbbf24' : '#22d3ee';
   
   const name = feature.properties.name;

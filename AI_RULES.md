@@ -95,6 +95,21 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.1.4 (2026-06-11)
+- **Refactor: Normal to Basic Role**:
+  - Renamed all backend and frontend occurrences of `'normal'` user role and theme classes to `'basic'` / `'is-basic'` / `'theme-preview-basic'`.
+  - Migrated database role values in `accounts` table on startup to convert `'normal'` to `'basic'`.
+  - VIP role, activation endpoints, and badges remain intact.
+- **Feature: FIT Generator Software and Serials**:
+  - Added realistic alphanumeric serial templates and LTS software versions per watch manufacturer.
+  - Implemented DJB2 hashing to encode serial strings into valid numeric uint32 primitives inside FIT structures.
+- **Feature: Scheduler Custom Time Support**:
+  - Auto Scheduler now evaluates `custom_time_enabled` config. If active, the first activity run uses the target date/time, after which custom time is reset to `false` in the database.
+- **Feature: Device Preset Verification**:
+  - Updated `test_devices.js` script to dynamically test and save FIT files for all 47 presets into `./tmp/fit-testcase`.
+- **Feature: Documentation**:
+  - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
+
 ### v2.0.2 (2026-06-11)
 - **Fix: Garmin Venu 2 product mapping**:
   - Remapped Garmin Venu 2 product code to `3703`, Venu 2S to `3704`, and Venu 2 Plus to `3851`.

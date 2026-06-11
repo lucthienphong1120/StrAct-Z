@@ -51,7 +51,7 @@ const { validateConfig } = require('../utils/validation');
 router.post('/config', async (req, res) => {
   try {
     const updates = req.body;
-    const role = req.user.role || 'normal';
+    const role = req.user.role || 'basic';
 
     const validation = validateConfig(updates, role);
     if (!validation.success) {
@@ -80,7 +80,7 @@ router.post('/config/reset', async (req, res) => {
 });
 
 router.get('/system-limits', (req, res) => {
-  const role = req.user.role || 'normal';
+  const role = req.user.role || 'basic';
   res.json(systemLimits.getLimits(role));
 });
 
@@ -280,7 +280,7 @@ router.get('/strava-activities', async (req, res) => {
 router.post('/generate', async (req, res) => {
   try {
     const ov = req.body || {};
-    const validation = validateConfig(ov, req.user.role || 'normal');
+    const validation = validateConfig(ov, req.user.role || 'basic');
     if (!validation.success) {
       return res.status(400).json({ error: validation.error });
     }
@@ -301,7 +301,7 @@ router.post('/generate', async (req, res) => {
     }
 
     const lastUploaded = await db.getLastUploadedActivity(req.user.id);
-    const genConfig = buildGeneratorConfig(config, { ...ov, target_date: targetDate }, lastUploaded, req.user.role || 'normal');
+    const genConfig = buildGeneratorConfig(config, { ...ov, target_date: targetDate }, lastUploaded, req.user.role || 'basic');
     genConfig.existingActivities = [...localActivities, ...stravaActivities];
     genConfig.isManual = true;
     const activity = await generateActivity(genConfig);
@@ -363,7 +363,7 @@ router.post('/generate', async (req, res) => {
 router.post('/generate-and-upload', async (req, res) => {
   try {
     const ov = req.body || {};
-    const validation = validateConfig(ov, req.user.role || 'normal');
+    const validation = validateConfig(ov, req.user.role || 'basic');
     if (!validation.success) {
       return res.status(400).json({ error: validation.error });
     }
@@ -384,7 +384,7 @@ router.post('/generate-and-upload', async (req, res) => {
     }
 
     const lastUploaded = await db.getLastUploadedActivity(req.user.id);
-    const genConfig = buildGeneratorConfig(config, { ...ov, target_date: targetDate }, lastUploaded, req.user.role || 'normal');
+    const genConfig = buildGeneratorConfig(config, { ...ov, target_date: targetDate }, lastUploaded, req.user.role || 'basic');
     genConfig.existingActivities = [...localActivities, ...stravaActivities];
     genConfig.isManual = true;
     const activity = await generateActivity(genConfig);
@@ -599,7 +599,7 @@ router.get('/scheduler', async (req, res) => {
 router.post('/scheduler', async (req, res) => {
   try {
     const updates = req.body;
-    const role = req.user.role || 'normal';
+    const role = req.user.role || 'basic';
 
     const configToValidate = {};
     if (updates.enabled !== undefined) configToValidate.schedule_enabled = updates.enabled;

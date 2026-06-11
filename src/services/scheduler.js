@@ -41,7 +41,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     // They are only limited by schedule_count_min and schedule_count_max config.
     const config = await db.getAllConfig(accountId);
     const role = await db.getAccountRole(accountId);
-    const limits = systemLimits[role] || systemLimits.normal;
+    const limits = systemLimits[role] || systemLimits.basic;
 
     const minCount = parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : systemLimits.schedule_count_min.default;
     const maxCount = parseInt(config.schedule_count_max) >= 1 ? parseInt(config.schedule_count_max) : systemLimits.schedule_count_max.default;
@@ -83,7 +83,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
 
       // Target distance calculation for the last activity of the last schedule.
       // Counts Strava Cloud activities + StrAct-Z uploaded activities only (not generated/failed).
-      // Only applies when target not yet met; if already exceeded, uses normal random.
+      // Only applies when target not yet met; if already exceeded, uses basic random.
       let targetDistanceKmOverride = null;
       const isLastSchedule = (parseInt(config.schedule_count) === 1) || (slotName === 'Schedule 2');
       const targetDistanceEnabled = config.target_distance_enabled === 'true';
@@ -135,12 +135,21 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
           targetDistanceKmOverride = Math.min(maxDist, rawOverride);
           console.log(`[Scheduler] Target distance: ${dailyTarget}km, Done: ${accumulatedDistanceForToday.toFixed(2)}km, Remaining: ${remainingDistance.toFixed(2)}km → Override: ${targetDistanceKmOverride.toFixed(2)}km (max: ${maxDist}km)`);
         } else {
-          console.log(`[Scheduler] Daily target ${dailyTarget}km already met (${accumulatedDistanceForToday.toFixed(2)}km). Normal random.`);
+          console.log(`[Scheduler] Daily target ${dailyTarget}km already met (${accumulatedDistanceForToday.toFixed(2)}km). Basic random.`);
         }
       }
 
       try {
-        const genConfig = buildGeneratorConfig(config, { target_date: targetDate }, lastUploaded, role);
+        const isCustomTimeActive = (i === 0 && config.custom_time_enabled === 'true');
+        const overrides = {};
+        if (isCustomTimeActive) {
+          // Let buildGeneratorConfig resolve target_date and custom_time from config
+        } else {
+          overrides.target_date = targetDate;
+          overrides.custom_time_enabled = 'false';
+        }
+
+        const genConfig = buildGeneratorConfig(config, overrides, lastUploaded, role);
         genConfig.existingActivities = existingActivities;
         if (targetDistanceKmOverride !== null) {
           genConfig.targetDistanceKm = targetDistanceKmOverride;
@@ -254,6 +263,11 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         await new Promise(r => setTimeout(r, 2000));
       }
     } // end for
+
+    if (config.custom_time_enabled === 'true') {
+      await db.setConfig(accountId, 'custom_time_enabled', 'false');
+      console.log(`[Scheduler] Disabled custom time after running custom schedule for account ${accountId}`);
+    }
 
     return {
       success: successCount > 0,

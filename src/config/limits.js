@@ -14,15 +14,15 @@ const LIMITS = {
     // Default: Dynamically resolved from districts registry
     default: getDefaultKeys(),
     default_label: 'Các quận nội thành mặc định',
-    min: { normal: 4, vip: 2 },
-    max: { normal: 10, vip: 15 }
+    min: { basic: 4, vip: 2 },
+    max: { basic: 10, vip: 15 }
   },
   max_district_span: {
     label: 'Số lượng quận tối đa một lộ trình có thể đi qua.',
     type: 'int',
     default: 1,
     min: 1,
-    max: { normal: 2, vip: 3 }
+    max: { basic: 2, vip: 3 }
   },
   use_osrm: {
     label: 'Lộ trình đi theo đường thực tế qua OSRM.',
@@ -81,7 +81,7 @@ const LIMITS = {
     type: 'int',
     default: 0,
     min: 0,
-    max: { normal: 1, vip: 2 }
+    max: { basic: 1, vip: 2 }
   },
   scale_radius: {
     label: 'Giới hạn bán kính vùng ưu tiên.',
@@ -89,7 +89,7 @@ const LIMITS = {
     type: 'int',
     default: 2000,
     min: 2000,
-    max: { normal: 3000, vip: 4000 },
+    max: { basic: 3000, vip: 4000 },
     unit: 'm'
   },
   activity_areas: {
@@ -109,7 +109,7 @@ const LIMITS = {
     type: 'int',
     default: 30,
     min: 15,
-    max: { normal: 45, vip: 90 },
+    max: { basic: 45, vip: 90 },
     unit: 'phút'
   },
   rest_time_percent: {
@@ -146,7 +146,7 @@ const LIMITS = {
     type: 'date',
     default: 'Hôm nay',
     min: 'today',
-    max: { normal: 7, vip: 30 }, // days ago
+    max: { basic: 7, vip: 30 }, // days ago
     unit: 'ngày'
   },
   target_time_custom: {
@@ -236,8 +236,8 @@ const LIMITS = {
     label: 'Khoảng cách tối thiểu của hoạt động.',
     type: 'float',
     default: 0.5,
-    min: { normal: 0.5, vip: 0.2 },
-    max: { normal: 2.0, vip: 5.0 },
+    min: { basic: 0.5, vip: 0.2 },
+    max: { basic: 2.0, vip: 5.0 },
     unit: 'km'
   },
   max_distance_km: {
@@ -245,7 +245,7 @@ const LIMITS = {
     type: 'float',
     default: 8.0,
     min: 2.0,
-    max: { normal: 10.0, vip: 15.0 },
+    max: { basic: 10.0, vip: 15.0 },
     unit: 'km'
   },
   dist_multipliers: {
@@ -282,7 +282,7 @@ const LIMITS = {
     type: 'map',
     desc_extra: 'Tác dụng: Xác định giới hạn vùng nhịp tim dựa trên MHR theo từng loại hoạt động.',
     example: 'Ví dụ: một người 30 tuổi có MHR khoảng 190 bpm, khi đi bộ sẽ có nhịp tim từ 95-114 bpm (vùng Khởi động).',
-    normal: {
+    basic: {
       Walk: { min: 0.50, max: 0.60 },
       Ride: { min: 0.60, max: 0.70 },
       Run: { min: 0.70, max: 0.85 }
@@ -352,7 +352,7 @@ const LIMITS = {
     type: 'int',
     default: 1,
     min: 1,
-    max: { normal: 1, vip: 2 }
+    max: { basic: 1, vip: 2 }
   },
   schedule_time_2: {
     label: 'Mốc thời gian 2 (24h).',
@@ -395,8 +395,8 @@ const LIMITS = {
     type: 'int',
     desc_extra: 'Tác dụng: Giới hạn số lượng hoạt động tải lên Strava mỗi ngày.',
     default: 2,
-    min_range: { normal: 2, vip: 5 },
-    max_range: { normal: 2, vip: 5 }
+    min_range: { basic: 2, vip: 5 },
+    max_range: { basic: 2, vip: 5 }
   },
   daily_max_activity: {
     label: 'Giới hạn hoạt động upload tùy chỉnh (Daily Max Activity).',
@@ -404,7 +404,7 @@ const LIMITS = {
     desc_extra: 'Tác dụng: Tự điều chỉnh giới hạn số lượng hoạt động tải lên mỗi ngày (tối đa bằng Giới hạn tải lên mặc định của tài khoản).',
     default: 2,
     min: 1,
-    max: { normal: 2, vip: 5 }
+    max: { basic: 2, vip: 5 }
   },
   local_history: {
     label: 'Lịch sử hoạt động đã tạo (Local Generated History).',
@@ -426,7 +426,7 @@ const LIMITS = {
 /**
  * Helper to get role-specific limits
  */
-function getLimits(role = 'normal') {
+function getLimits(role = 'basic') {
   const result = {
     _role: role
   };
@@ -482,6 +482,6 @@ function getLimits(role = 'normal') {
 module.exports = {
   ...LIMITS,
   getLimits,
-  normal: getLimits('normal'),
+  basic: getLimits('basic'),
   vip: getLimits('vip')
 };

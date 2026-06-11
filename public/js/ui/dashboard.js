@@ -35,12 +35,12 @@ async function loadDashboard(forceRefresh = false) {
 async function loadStats(forceRefresh = false) {
   try {
     const stats = await api('/stats');
-    window.userRole = stats.role || 'normal';
+    window.userRole = stats.role || 'basic';
     if (window.userRole === 'vip') {
       document.body.classList.add('is-vip');
-      document.body.classList.remove('is-normal');
+      document.body.classList.remove('is-basic');
     } else {
-      document.body.classList.add('is-normal');
+      document.body.classList.add('is-basic');
       document.body.classList.remove('is-vip');
     }
     // Sync Leaflet map colors (hardcoded inline styles don't respond to CSS vars)
@@ -49,8 +49,8 @@ async function loadStats(forceRefresh = false) {
     const authText = document.getElementById('authText');
     if (authText) {
       const nameSpan = authText.querySelector('.auth-username-text');
-      const currentName = nameSpan ? nameSpan.textContent : authText.textContent.replace(/(\sVIP|\sNORMAL)/gi, '').trim();
-      const roleTag = window.userRole === 'vip' ? '<span class="vip-badge-premium">VIP</span>' : '<span class="normal-badge-standard">normal</span>';
+      const currentName = nameSpan ? nameSpan.textContent : authText.textContent.replace(/(\sVIP|\sBASIC|\sNORMAL)/gi, '').trim();
+      const roleTag = window.userRole === 'vip' ? '<span class="vip-badge-premium">VIP</span>' : '<span class="basic-badge-standard">basic</span>';
       authText.innerHTML = `<span class="auth-username-text">${currentName}</span>${roleTag}`;
     }
     
@@ -85,7 +85,7 @@ async function loadStats(forceRefresh = false) {
           </div>
           <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
             <button id="btnThemeToggle" class="btn btn-sm btn-outline-gold btn-block" onclick="toggleThemePreview()">
-              ${document.body.classList.contains('theme-preview-normal') ? '✨ Restore VIP Gold Theme' : '👁️ Preview Normal Theme'}
+              ${document.body.classList.contains('theme-preview-basic') ? '✨ Restore VIP Gold Theme' : '👁️ Preview Basic Theme'}
             </button>
           </div>
           <div style="margin-top:10px; font-size:0.75rem; color:var(--text-muted); text-align:right;">
@@ -100,7 +100,7 @@ async function loadStats(forceRefresh = false) {
           </div>
           <div style="margin-top:12px;">
             <button id="btnThemeToggle" class="btn btn-sm btn-secondary btn-block" onclick="toggleThemePreview()">
-              ${document.body.classList.contains('is-vip') ? '🔙 Switch Back to Normal' : '👁️ Preview VIP Gold Theme'}
+              ${document.body.classList.contains('is-vip') ? '🔙 Switch Back to Basic' : '👁️ Preview VIP Gold Theme'}
             </button>
           </div>
           <div style="margin-top:10px; font-size:0.75rem; color:var(--text-muted); text-align:right;">
@@ -650,22 +650,22 @@ function toggleThemePreview() {
   const btn = document.getElementById('btnThemeToggle');
   
   if (window.userRole === 'vip') {
-    const isNormal = document.body.classList.toggle('theme-preview-normal');
-    if (isNormal) {
-      document.body.classList.add('is-normal');
+    const isBasic = document.body.classList.toggle('theme-preview-basic');
+    if (isBasic) {
+      document.body.classList.add('is-basic');
       document.body.classList.remove('is-vip');
     } else {
-      document.body.classList.remove('is-normal');
+      document.body.classList.remove('is-basic');
       document.body.classList.add('is-vip');
     }
-    localStorage.setItem('stractz_theme_preview', isNormal ? 'normal' : 'vip');
-    if (btn) btn.innerHTML = isNormal ? '✨ Restore VIP Gold Theme' : '👁️ Preview Normal Theme';
-    showToast(isNormal ? 'Switched to Normal Theme (Preview)' : 'Restored VIP Gold Theme', 'success');
+    localStorage.setItem('stractz_theme_preview', isBasic ? 'basic' : 'vip');
+    if (btn) btn.innerHTML = isBasic ? '✨ Restore VIP Gold Theme' : '👁️ Preview Basic Theme';
+    showToast(isBasic ? 'Switched to Basic Theme (Preview)' : 'Restored VIP Gold Theme', 'success');
   } else {
     const isVipPreview = document.body.classList.toggle('is-vip');
-    document.body.classList.toggle('is-normal', !isVipPreview);
-    if (btn) btn.innerHTML = isVipPreview ? '🔙 Switch Back to Normal' : '👁️ Preview VIP Gold Theme';
-    showToast(isVipPreview ? 'Previewing VIP Gold Theme' : 'Switched back to Normal Theme', 'info');
+    document.body.classList.toggle('is-basic', !isVipPreview);
+    if (btn) btn.innerHTML = isVipPreview ? '🔙 Switch Back to Basic' : '👁️ Preview VIP Gold Theme';
+    showToast(isVipPreview ? 'Previewing VIP Gold Theme' : 'Switched back to Basic Theme', 'info');
   }
   // Sync Leaflet map polygon colors after theme switch
   if (window.updateDistrictHighlights) window.updateDistrictHighlights();
@@ -673,21 +673,21 @@ function toggleThemePreview() {
 
 async function initTheme() {
   try {
-    const stats = await api('/stats').catch(() => ({ role: 'normal' }));
+    const stats = await api('/stats').catch(() => ({ role: 'basic' }));
     if (stats.role === 'vip') {
-      if (localStorage.getItem('stractz_theme_preview') === 'normal') {
-        document.body.classList.add('is-normal');
-        document.body.classList.add('theme-preview-normal');
+      if (localStorage.getItem('stractz_theme_preview') === 'basic') {
+        document.body.classList.add('is-basic');
+        document.body.classList.add('theme-preview-basic');
       } else {
         document.body.classList.add('is-vip');
       }
     } else {
-      document.body.classList.add('is-normal');
+      document.body.classList.add('is-basic');
     }
     // Ensure map polygon colors reflect the correct theme
     if (window.updateDistrictHighlights) window.updateDistrictHighlights();
   } catch (e) {
-    document.body.classList.add('is-normal');
+    document.body.classList.add('is-basic');
   }
 }
 
