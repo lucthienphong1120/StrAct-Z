@@ -496,7 +496,7 @@ router.post('/upload/:id', async (req, res) => {
       return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${dailyMaxActivity}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
     }
 
-    const fitPath = path.join(__dirname, '..', '..', 'data', 'fit', activity.fit_file || activity.gpx_file || '');
+    const fitPath = path.join(__dirname, '..', '..', 'data', 'fit', activity.fit_file || '');
     if (!fs.existsSync(fitPath)) return res.status(404).json({ error: 'FIT file not found' });
 
     const deviceName = await db.getConfig(req.user.id, 'device_name') || systemLimits.device_name.default;
@@ -561,7 +561,7 @@ router.delete('/activities/:id', async (req, res) => {
 
   // Delete FIT file
   try {
-    const fitPath = path.join(__dirname, '..', '..', 'data', 'fit', activity.fit_file || activity.gpx_file || '');
+    const fitPath = path.join(__dirname, '..', '..', 'data', 'fit', activity.fit_file || '');
     if (fs.existsSync(fitPath)) fs.unlinkSync(fitPath);
   } catch (e) { /* ignore */ }
 
@@ -649,7 +649,7 @@ router.post('/scheduler/trigger', async (req, res) => {
 router.get('/fit/:filename', async (req, res) => {
   try {
     const dbInstance = await db.getDb();
-    const activity = await dbInstance.get('SELECT id FROM activities WHERE account_id = ? AND (fit_file = ? OR gpx_file = ?)', [req.user.id, req.params.filename, req.params.filename]);
+    const activity = await dbInstance.get('SELECT id FROM activities WHERE account_id = ? AND fit_file = ?', [req.user.id, req.params.filename]);
     if (!activity) {
       return res.status(403).json({ error: 'Access denied. You do not own this FIT file.' });
     }

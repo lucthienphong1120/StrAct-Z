@@ -236,7 +236,7 @@ async function getDb() {
               const acts = [...oldDb.activities].reverse();
               for (const a of acts) {
                 await db.run(`INSERT INTO activities (id, created_at, activity_name, distance_km, duration_min, pace_min_km, fit_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                  [a.id, a.created_at, a.activity_name, a.distance_km, a.duration_min, a.pace_min_km, a.fit_file || a.gpx_file, a.strava_activity_id, a.upload_status, a.error_message, a.route_start_lat, a.route_start_lng]);
+                  [a.id, a.created_at, a.activity_name, a.distance_km, a.duration_min, a.pace_min_km, a.fit_file, a.strava_activity_id, a.upload_status, a.error_message, a.route_start_lat, a.route_start_lng]);
               }
             }
             console.log('[SQLite] Migrated db.json to SQLite');
@@ -340,7 +340,7 @@ async function saveActivity(accountId, data) {
   const db = await getDb();
   const now = new Date().toISOString();
   const result = await db.run(`INSERT INTO activities (account_id, created_at, activity_name, distance_km, duration_min, pace_min_km, fit_file, strava_activity_id, upload_status, error_message, route_start_lat, route_start_lng, route_start_time, district_keys, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [accountId, now, data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.fit_file || data.gpx_file, data.strava_activity_id || null, data.upload_status || 'pending', data.error_message || null, data.route_start_lat, data.route_start_lng, data.route_start_time, data.district_keys, data.created_by]);
+    [accountId, now, data.activity_name, data.distance_km, data.duration_min, data.pace_min_km, data.fit_file, data.strava_activity_id || null, data.upload_status || 'pending', data.error_message || null, data.route_start_lat, data.route_start_lng, data.route_start_time, data.district_keys, data.created_by]);
   return result.lastID;
 }
 

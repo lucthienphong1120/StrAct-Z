@@ -372,4 +372,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Tự động hóa quá trình di chuyển cơ sở dữ liệu (migration gpx_file -> fit_file) và thư mục lưu trữ (data/gpx -> data/fit) để tránh lỗi trên Production (v2.0.0)
 + [x] Bổ sung tài liệu hướng dẫn kiểm thử các test case chi tiết cho người dùng và cập nhật tài liệu hướng dẫn sử dụng (v2.0.0)
 + [x] Đổi tên file FIT và external_id sang UUID ngẫu nhiên (dạng `uuid-activity.fit`) để giống với các hoạt động thật (v2.0.0)
-- [ ] Dọn dẹp triệt để các cấu hình cũ không sử dụng liên quan đến GPX (như cron job dọn dẹp GPX hàng tuần) ở các phiên bản tiếp theo sau khi test hoàn tất
++ [x] Dọn dẹp triệt để các cấu hình cũ không sử dụng liên quan đến GPX (như cron job dọn dẹp GPX hàng tuần) và sửa lỗi Version Mismatch trên UI (v2.0.1)

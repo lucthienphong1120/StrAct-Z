@@ -94,6 +94,20 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.0.1 (2026-06-11)
+- **Cleanup: Unused GPX references**:
+  - Removed obsolete fallbacks to `gpx_file` from database methods (`sqlite-db.js`).
+  - Removed `gpx_file` reference check and fallback logic from endpoints `/api/upload/:id`, `DELETE /api/activities/:id`, and `GET /api/fit/:filename` (`api.js`).
+- **Fix: Version Mismatch**:
+  - Aligned frontend version tag in `public/index.html` with `package.json` to resolve version checking popup modal mismatch.
+
+### v2.0.0 (2026-06-10)
+- **Feature: FIT route generation (Garmin FIT)**:
+  - Transitioned from GPX route format to standard binary Garmin FIT format (`.fit`) using `@markw65/fit-file-writer` to resolve sync badges and calorie calculations on Strava.
+  - Standardized device manufacturer IDs for Garmin, Coros, Suunto, Amazfit, Huawei, Samsung, Suunto, Apple.
+  - Added automated migration of activities database (renaming `gpx_file` column to `fit_file`) and renamed storage path `data/gpx` to `data/fit`.
+  - Switched file naming of generated FIT files and activity external IDs to randomized UUID files (e.g., `uuid-activity.fit`).
+
 ### v1.60.7 (2026-06-10)
 - **Feature: Custom Upload Limit & Normal Username Badge**:
   - Swapped positioning of Google Fit Account (move to Left Column) and Strava Account (move to Right Column) cards.
