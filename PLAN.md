@@ -211,3 +211,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] tiếp tục edit script test_devices.js để xuất và parse toàn bộ thông tin danh sách thiết bị cần test xuất ra folder ./tmp/fit-testcase/ để tôi check manual trên các trang web preview fit file
 + [ ] đúc kết kết quả nghiên cứu là gì, làm thế nào để hiển thị source như Garmin Connect, Strava App, Huawei Health,... như gpx trước đó đã làm được đây, device product id thì phải test rồi, có phương án nào hay hơn không
 + [ ] check logic Custom time nếu được bật thì sẽ gen chính xác tại thời gian chỉ định, bỏ qua giới hạn của Global Random Time, trừ khi Custom time đặt là 00:00 thì sẽ sinh hoạt động ngẫu nhiên trong ngày (default)
++ [ ] làm manual guide hướng dẫn sử dụng và sổ tay mô tả tính năng trong UI các phần config
++ [ ] viết docs sử dụng mindmap markdown, mô tả luồng khi gen 1 hoạt động sẽ qua những flow nào để chọn, tỉ lệ bao nhiêu, điều kiện rẽ nhánh, step by step, cái nào chạy trước chạy sau,...
++ [ ] 
