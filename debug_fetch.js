@@ -97,14 +97,37 @@ async function main() {
     }
     console.log(`Đang chạy truy vấn bằng tài khoản: ${user.athlete_name}`);
     const accessToken = await getAccessToken(user.account_id);
-    const activityIds = [
-      '18737074484', // Huawei (Thật)
-      '18421904355', // Generated 1 (Garmin Connect)
-      '18811494196', // Generated 2 (Amazfit)
-      '18221159624', // Real - Strava App
-      '18865572186', // Sau update, có nhận device
-      '18865582717'  // Sau update, không nhận device name
-    ];
+    
+    console.log('Đang tải danh sách các hoạt động gần nhất từ Strava...');
+    let activityIds = [];
+    try {
+      const listOptions = {
+        hostname: 'www.strava.com',
+        path: '/api/v3/athlete/activities?per_page=5',
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      };
+      const recentActs = await makeRequest(listOptions);
+      if (Array.isArray(recentActs) && recentActs.length > 0) {
+        activityIds = recentActs.map(a => String(a.id));
+        console.log(`Đã tìm thấy ${activityIds.length} hoạt động gần đây nhất: ${activityIds.join(', ')}`);
+      }
+    } catch (e) {
+      console.warn('Lỗi lấy danh sách hoạt động gần đây, sử dụng danh sách mặc định:', e.message);
+    }
+
+    if (activityIds.length === 0) {
+      activityIds = [
+        '18737074484', // Huawei (Thật)
+        '18421904355', // Generated 1 (Garmin Connect)
+        '18811494196', // Generated 2 (Amazfit)
+        '18221159624', // Real - Strava App
+        '18865572186', // Sau update, có nhận device
+        '18865582717'  // Sau update, không nhận device name
+      ];
+    }
     const outputDir = path.join(__dirname, 'data', 'debug_json');
     fs.mkdirSync(outputDir, { recursive: true });
 
