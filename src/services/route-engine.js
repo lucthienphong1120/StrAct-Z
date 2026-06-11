@@ -4,6 +4,8 @@
  */
 
 const https = require('https');
+const fs = require('fs');
+const path = require('path');
 
 const { DISTRICTS } = require('../config/districts');
 
@@ -154,15 +156,90 @@ const RUNNING_POIS = {
   ]
 };
 
+let cachedGeoJson = null;
+
+function loadGeoJson() {
+  if (cachedGeoJson) return cachedGeoJson;
+  try {
+    const geojsonPath = path.join(__dirname, '..', '..', 'public', 'geo', 'hanoi_full_districts.geojson');
+    if (fs.existsSync(geojsonPath)) {
+      cachedGeoJson = JSON.parse(fs.readFileSync(geojsonPath, 'utf8'));
+      console.log('[GeoJSON] Loaded Hanoi full districts boundaries successfully.');
+    }
+  } catch (err) {
+    console.error('[GeoJSON] Failed to load district boundaries GeoJSON:', err.message);
+  }
+  return cachedGeoJson;
+}
+
+function isPointInPolygon(latitude, longitude, polygon) {
+  const x = longitude;
+  const y = latitude;
+  let inside = false;
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const xi = polygon[i][0], yi = polygon[i][1];
+    const xj = polygon[j][0], yj = polygon[j][1];
+    const intersect = ((yi > y) !== (yj > y))
+        && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
+function isPointInFeature(lat, lng, feature) {
+  const geom = feature.geometry;
+  if (!geom) return false;
+
+  if (geom.type === 'Polygon') {
+    const rings = geom.coordinates;
+    if (rings.length === 0) return false;
+    if (!isPointInPolygon(lat, lng, rings[0])) return false;
+    for (let i = 1; i < rings.length; i++) {
+      if (isPointInPolygon(lat, lng, rings[i])) return false;
+    }
+    return true;
+  } else if (geom.type === 'MultiPolygon') {
+    for (const polygon of geom.coordinates) {
+      if (polygon.length === 0) continue;
+      if (isPointInPolygon(lat, lng, polygon[0])) {
+        let insideHole = false;
+        for (let i = 1; i < polygon.length; i++) {
+          if (isPointInPolygon(lat, lng, polygon[i])) {
+            insideHole = true;
+            break;
+          }
+        }
+        if (!insideHole) return true;
+      }
+    }
+  }
+  return false;
+}
+
+function getDistrictKeyForCoordinate(lat, lng) {
+  const geojson = loadGeoJson();
+  if (!geojson || !geojson.features) return null;
+
+  for (const feature of geojson.features) {
+    if (isPointInFeature(lat, lng, feature)) {
+      const name = feature.properties && feature.properties.name;
+      if (name) {
+        const found = DISTRICTS.find(d => name.includes(d.name));
+        if (found) return found.key;
+      }
+    }
+  }
+  return null;
+}
+
 function getDistrictTargetCenter(districtKey, activityAreas = [], prioritizeCenters = true) {
   const d = HANOI_DISTRICTS[districtKey];
   if (!d) return null;
   
-  // 1. Filter activity areas whose center coordinates are strictly within this district
+  // 1. Filter activity areas whose center coordinates lie inside this district polygon
   const containingAreas = (activityAreas || []).filter(area => {
-    const distRadiusM = d.radiusKm * 1000;
-    const distanceToCenter = haversineDistance(d.lat, d.lng, area.lat, area.lng);
-    return distanceToCenter <= distRadiusM;
+    const areaDistrictKey = getDistrictKeyForCoordinate(area.lat, area.lng);
+    return areaDistrictKey === districtKey;
   });
 
   // 2. If prioritization is enabled, containing areas exist, and the 60% roll is met
