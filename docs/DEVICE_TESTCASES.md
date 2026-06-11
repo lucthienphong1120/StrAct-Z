@@ -11,53 +11,52 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Garmin Forerunner 745** | 1 | 3589 | ✅ OK |
 | **Garmin Forerunner 265** | 1 | 4257 | ✅ OK |
 | **Garmin Forerunner 255** | 1 | 3992 | ✅ OK |
-| **Garmin Forerunner 255S** | 1 | 3993 | ⏳ Untested |
-| **Garmin Forerunner 165** | 1 | 4432 | ⏳ Untested |
-| **Garmin Forerunner 970** | 1 | ? | ⏳ Untested |
-| **Garmin Forerunner 570** | 1 | ? | ⏳ Untested |
-| **Garmin Instinct 3** | 1 | ? | ⏳ Untested |
-| **Garmin fēnix 7x Pro** | 1 | 4376 | ⏳ Untested |
-| **Garmin fēnix 8** | 1 | 4536 | ⏳ Untested |
-| **Garmin fēnix 8 Solar** | 1 | 4533 | ⏳ Untested |
-| **Garmin fēnix E** | 1 | 4666 | ⏳ Untested |
-| **Garmin Enduro 3** | 1 | 4575 | ⏳ Untested |
-| **Garmin Venu 3** | 1 | 4260 | ⏳ Untested |
-| **Garmin Venu 3S** | 1 | 4261 | ⏳ Untested |
-| **Garmin Venu 2** | 1 | 3703 | ⏳ Untested |
-| **Garmin Venu 2S** | 1 | 3704 | ⏳ Untested |
-| **Garmin Venu 2 Plus** | 1 | 3851 | ⏳ Untested |
-| **Garmin Venu Sq 2** | 1 | 4115 | ⏳ Untested |
-| **Garmin Instinct 2X Solar** | 1 | 4394 | ⏳ Untested |
-| **Garmin Epix Pro (Gen 2)** | 1 | 4313 | ⏳ Untested |
-| **Garmin epix Pro (Gen 2) 47mm** | 1 | 4313 | ⏳ Untested |
-| **Garmin Connect** | 1 | ? | ⏳ Untested |
-| **Coros Pace 3** | 294 | ? | ⏳ Untested |
-| **Coros Apex 2 Pro** | 294 | ? | ⏳ Untested |
-| **Coros Vertix 2S** | 294 | ? | ⏳ Untested |
-| **COROS** | 294 | ? | ⏳ Untested |
-| **Suunto Race S** | 23 | ? | ⏳ Untested |
-| **Suunto Vertical** | 23 | ? | ⏳ Untested |
-| **Suunto** | 23 | ? | ⏳ Untested |
-| **Amazfit T-Rex 3** | 339 | ? | ⏳ Untested |
-| **Amazfit Balance 2** | 339 | ? | ⏳ Untested |
-| **Amazfit Active 3 Premium** | 339 | ? | ⏳ Untested |
-| **Zepp App** | 339 | ? | ⏳ Untested |
-| **Huawei Watch GT 6 Pro** | 348 | ? | ⏳ Untested |
-| **Huawei Watch Fit 5 Pro** | 348 | ? | ⏳ Untested |
-| **Huawei Watch Fit 4** | 348 | ? | ⏳ Untested |
-| **Huawei Watch GT 4 Pro** | 348 | ? | ⏳ Untested |
-| **Huawei Watch Ultimate** | 348 | ? | ⏳ Untested |
-| **Huawei Health** | 348 | ? | ⏳ Untested |
-| **Samsung Galaxy Watch Ultra** | 258 | ? | ⏳ Untested |
-| **Samsung Galaxy Watch 8** | 258 | ? | ⏳ Untested |
-| **Samsung Galaxy Watch 7** | 258 | ? | ⏳ Untested |
-| **Samsung Health** | 258 | ? | ⏳ Untested |
-| **Apple Watch Ultra 3** | 263 | ? | ⏳ Untested |
-| **Apple Watch Ultra 2** | 263 | ? | ⏳ Untested |
-| **Apple Watch Series 11** | 263 | ? | ⏳ Untested |
-| **Apple Watch Series 10** | 263 | ? | ⏳ Untested |
-| **Apple Sport** | 263 | ? | ⏳ Untested |
-| **Strava App** | 265 | 265 | ⏳ Untested |
+| **Garmin Forerunner 255S** | 1 | 3993 | ✅ OK |
+| **Garmin Forerunner 165** | 1 | 4432 | ✅ OK |
+| **Garmin Forerunner 970** | 1 | ? | ✅ OK |
+| **Garmin Forerunner 570** | 1 | ? | ✅ OK |
+| **Garmin Instinct 3** | 1 | ? | ✅ OK |
+| **Garmin fēnix 7x Pro** | 1 | 4376 | ✅ OK |
+| **Garmin fēnix 8** | 1 | 4536 | ✅ OK |
+| **Garmin fēnix 8 Solar** | 1 | 4533 | ✅ OK |
+| **Garmin fēnix E** | 1 | 4666 | ✅ OK |
+| **Garmin Enduro 3** | 1 | 4575 | ✅ OK |
+| **Garmin Venu 3** | 1 | 4260 | ✅ OK |
+| **Garmin Venu 3S** | 1 | 4261 | ✅ OK |
+| **Garmin Venu 2** | 1 | 3703 | ✅ OK |
+| **Garmin Venu 2S** | 1 | 3704 | ✅ OK |
+| **Garmin Venu 2 Plus** | 1 | 3851 | ✅ OK |
+| **Garmin Venu Sq 2** | 1 | 4115 | ✅ OK |
+| **Garmin Instinct 2X Solar** | 1 | 4394 | ✅ OK |
+| **Garmin epix Pro (Gen 2) 47mm** | 1 | 4313 | ✅ OK |
+| **Garmin Connect** | 1 | ? | ✅ OK |
+| **Coros Pace 3** | 294 | ? | ✅ OK |
+| **Coros Apex 2 Pro** | 294 | ? | ✅ OK |
+| **Coros Vertix 2S** | 294 | ? | ✅ OK |
+| **COROS** | 294 | ? | ✅ OK |
+| **Suunto Race S** | 23 | ? | ✅ OK |
+| **Suunto Vertical** | 23 | ? | ✅ OK |
+| **Suunto** | 23 | ? | ✅ OK |
+| **Amazfit T-Rex 3** | 339 | ? | ✅ OK |
+| **Amazfit Balance 2** | 339 | ? | ✅ OK |
+| **Amazfit Active 3 Premium** | 339 | ? | ✅ OK |
+| **Zepp App** | 339 | ? | ✅ OK |
+| **Huawei Watch GT 6 Pro** | 348 | ? | ✅ OK |
+| **Huawei Watch Fit 5 Pro** | 348 | ? | ✅ OK |
+| **Huawei Watch Fit 4** | 348 | ? | ✅ OK |
+| **Huawei Watch GT 4 Pro** | 348 | ? | ✅ OK |
+| **Huawei Watch Ultimate** | 348 | ? | ✅ OK |
+| **Huawei Health** | 348 | ? | ✅ OK |
+| **Samsung Galaxy Watch Ultra** | 258 | ? | ✅ OK |
+| **Samsung Galaxy Watch 8** | 258 | ? | ✅ OK |
+| **Samsung Galaxy Watch 7** | 258 | ? | ✅ OK |
+| **Samsung Health** | 258 | ? | ✅ OK |
+| **Apple Watch Ultra 3** | 263 | ? | ✅ OK |
+| **Apple Watch Ultra 2** | 263 | ? | ✅ OK |
+| **Apple Watch Series 11** | 263 | ? | ✅ OK |
+| **Apple Watch Series 10** | 263 | ? | ✅ OK |
+| **Apple Sport** | 263 | ? | ✅ OK |
+| **Strava App** | 265 | 265 | ✅ OK |
 
 ## 🔍 Kết quả nghiên cứu & Ánh xạ ID từ Garmin FIT SDK & ANT+
 

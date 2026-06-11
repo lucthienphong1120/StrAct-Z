@@ -198,7 +198,6 @@ const LIMITS = {
       'Garmin Venu 3S',
       'Garmin Venu 2',
       'Garmin Instinct 2X Solar',
-      'Garmin Epix Pro (Gen 2)',
       'Garmin epix Pro (Gen 2) 47mm',
       'Coros Pace 3',
       'Coros Apex 2 Pro',
