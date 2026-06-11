@@ -130,7 +130,7 @@ const LIMITS = {
     label: 'Thời gian bắt đầu hoạt động ngẫu nhiên (24h).',
     desc_extra: 'Định dạng 24:00',
     type: 'time',
-    default: { start: '04:30', end: '21:30' }
+    default: { start: '04:30', end: '22:30' }
   },
   avoid_workhours: {
     label: 'Khung giờ không tạo hoạt động ngẫu nhiên (24h).',

@@ -312,7 +312,7 @@ async function loadConfig() {
     setVal('cfgCustomMinTime', config.target_time_custom || (sysL?.target_time_custom?.default) || '00:00');
     toggleCustomTime();
     setVal('cfgRandMinTime', config.min_time || (sysL?.random_time_bounds?.default?.start) || '04:30');
-    setVal('cfgRandMaxTime', config.max_time || (sysL?.random_time_bounds?.default?.end) || '21:30');
+    setVal('cfgRandMaxTime', config.max_time || (sysL?.random_time_bounds?.default?.end) || '22:30');
     setVal('cfgWorkStart1', config.work_start1 || (sysL?.avoid_workhours?.default?.start1) || '08:00');
     setVal('cfgWorkEnd1', config.work_end1 || (sysL?.avoid_workhours?.default?.end1) || '11:30');
     setVal('cfgWorkStart2', config.work_start2 || (sysL?.avoid_workhours?.default?.start2) || '13:30');

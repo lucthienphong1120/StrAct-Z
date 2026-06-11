@@ -433,7 +433,7 @@ async function generateActivity(config = {}) {
   if (!activityStartTime) {
     const targetDateStr = config.targetDate || new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
     const minTimeStr = config.minTime || '04:30';
-    const maxTimeStr = config.maxTime || '21:30';
+    const maxTimeStr = config.maxTime || '22:30';
 
     const [minH, minM] = minTimeStr.split(':').map(Number);
     const [maxH, maxM] = maxTimeStr.split(':').map(Number);
