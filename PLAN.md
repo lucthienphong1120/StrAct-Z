@@ -200,4 +200,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] thuật toán Ray-Casting: Tôi đã viết thêm một bộ kiểm tra điểm-trong-đa-giác (Point-in-Polygon) thuần túy dạng Ray-Casting sử dụng dữ liệu ranh giới thật, thay vì vòng tròn ước lượng -> đồng ý, nhưng cái này không cần tính thường xuyên đâu, chỉ cần khi user thay đổi liên quan đến di chuyển vòng tròn home/work trong activity map là tính toán lại được (thậm chí bật tắt quận hay scale radius cũng ko cần chạy lại), lưu thông tin vào db là home thuộc quận này, work thuộc quận này là đủ thông tin rồi
 + [x] Min Distance chuyển default về 0.5 km (v2.0.7)
 + [x] Di chuyển toggle Start near favorite place sang card Map & Priority Areas (v2.0.7)
++ [x] Sửa đổi toàn bộ mã Product ID (BIN) cho Garmin và Manufacturer ID cho Huawei, Coros, Amazfit/Zepp, Polar, Strava theo tài liệu Garmin_BIN_Format và ANT+ SDK (v2.0.8)
 
