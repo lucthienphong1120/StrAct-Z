@@ -303,6 +303,7 @@ router.post('/generate', async (req, res) => {
     const lastUploaded = await db.getLastUploadedActivity(req.user.id);
     const genConfig = buildGeneratorConfig(config, { ...ov, target_date: targetDate }, lastUploaded, req.user.role || 'normal');
     genConfig.existingActivities = [...localActivities, ...stravaActivities];
+    genConfig.isManual = true;
     const activity = await generateActivity(genConfig);
 
     const activityId = await db.saveActivity(req.user.id, {
@@ -385,6 +386,7 @@ router.post('/generate-and-upload', async (req, res) => {
     const lastUploaded = await db.getLastUploadedActivity(req.user.id);
     const genConfig = buildGeneratorConfig(config, { ...ov, target_date: targetDate }, lastUploaded, req.user.role || 'normal');
     genConfig.existingActivities = [...localActivities, ...stravaActivities];
+    genConfig.isManual = true;
     const activity = await generateActivity(genConfig);
 
     const dailyMaxActivity = parseInt(config.daily_max_activity || '2');

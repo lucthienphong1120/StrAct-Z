@@ -25,7 +25,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - **COMMIT & PUSH**: Whenever ANY changes or updates are made, the AI assistant MUST run `git add`, `git commit` and `git push` to synchronize the repository immediately. (Lưu ý: Luôn nhớ thực hiện việc này để đồng bộ hóa mã nguồn).
   - **NO LOCAL TESTING**: Code is local, but it is **not tested locally**. Do not assume database/user data exists locally. If any database queries, real activity logs, or verification needs to be performed, **ask the user** to get or execute them on the production environment.
   - **NO SECRETS IN GIT**: Never push sensitive information, tokens, database files (`data/*.sqlite`), or credential configuration files (`.env`) to GitHub.
-  - **VERSIONING**: Ensure versioning in `package.json`, `AI_RULES.md`, `PLAN.md`, and `public/index.html` is updated in sync.
+  - **VERSIONING**: Ensure versioning in `package.json`, `AI_RULES.md`, `PLAN.md`, and `public/index.html` is updated in sync. Additionally, when bumping the version, you **MUST** update `CACHE_NAME` in `public/sw.js` to trigger a Service Worker update and invalidate browser cache, preventing stale JavaScript code errors.
 - **Production Deployment**:
   - Code is deployed to the production server via `git pull` in the SSH terminal.
 
@@ -62,6 +62,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Concept**: Prevents new activities from being generated too close to existing ones (already uploaded or in Strava Cloud).
 - **Calculation**: Blocked intervals = `[Start - SafeTime, End + SafeTime]`. Selected random time must fall outside these intervals.
 - **SafeTime**: Default 30 minutes (configurable via `overlap_protection_minutes`).
+- **Manual vs Scheduler Draft Filtering**: For manual generation (API endpoints `/generate` or `/generate-and-upload`), the generator bypasses overlap checks with local draft activities that have not been uploaded yet (`upload_status === 'generated'`). This ensures users can regenerate local manual activities freely without conflict. However, for the Scheduler cron runner, these `generated` drafts **MUST** block to prevent overlaps across multiple auto-generated tasks generated in a single loop iteration.
 
 ### 5. Map Persistence (v1.51.5+)
 - **Storage**: `map_lat`, `map_lng`, and `map_zoom` are saved in the `user_config` table whenever "Activity Areas" are saved.
@@ -104,6 +105,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Target Random Weights Adjustment**:
   - Adjusted 🏠 Home weights to `+20 / +14 / +7` and 💼 Work weights to `+12 / +7.5 / +3`.
   - Reset all device verification test cases status in `docs/DEVICE_TESTCASES.md` to `⏳ Untested`.
+- **Fix: Console Refresh Reference & Duplicate Logs**:
+  - Switched UI Refresh onclick to use `window.userRefresh()` explicitly to avoid reference resolution issues.
+  - Set `CACHE_NAME` in `public/sw.js` to match the version (`v2.0.2`) to trigger automatic cache invalidation and SW updates.
+  - Implemented `isManual` flag in generator configurations, skipping overlap checks for local `generated` (unuploaded) drafts for manual runners while preserving scheduler safety.
 
 ### v2.0.1 (2026-06-11)
 - **Cleanup: Unused GPX references**:
