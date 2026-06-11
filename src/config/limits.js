@@ -39,8 +39,8 @@ const LIMITS = {
     same_weight: 2.1
   },
   start_near_favorite_place: {
-    label: 'Khởi động gần địa điểm yêu thích (Start near favorite place).',
-    desc_extra: 'Tác dụng: Khi được bật, hệ thống tự động chọn điểm xuất phát: 60%/35%/5% (nếu có cả Home và Work), 40%/50%/10% (nếu chỉ có Home hoặc Work), và 0%/75%/25% (nếu không có Home lẫn Work hoặc khi tắt tính năng này).',
+    label: 'Khởi động gần địa điểm yêu thích.',
+    desc_extra: 'Tác dụng: Khi được bật, hệ thống tự động chọn điểm xuất phát gần Priority Areas (nếu có) hoặc các POI nổi tiếng (công viên, hồ, đường chạy,...): 60%/35%/5% (nếu có cả Home và Work), 40%/50%/10% (nếu chỉ có Home hoặc Work), và 0%/75%/25% (nếu không có Priority Areas).',
     type: 'bool',
     default: true
   },
@@ -230,7 +230,7 @@ const LIMITS = {
   min_distance_km: {
     label: 'Khoảng cách tối thiểu của hoạt động.',
     type: 'float',
-    default: 1.0,
+    default: 0.5,
     min: { normal: 0.5, vip: 0.2 },
     max: { normal: 2.0, vip: 5.0 },
     unit: 'km'

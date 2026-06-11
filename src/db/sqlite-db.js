@@ -279,6 +279,15 @@ async function getDb() {
         console.error('[Migration] Failed to rename prioritize_centers key:', e.message);
       }
 
+      // Migrate old default min_distance_km from '1.0' to '0.5'
+      try {
+        await db.run("UPDATE user_config SET value = '0.5' WHERE key = 'min_distance_km' AND value = '1.0'");
+        await db.run("UPDATE config SET value = '0.5' WHERE key = 'min_distance_km' AND value = '1.0'");
+        console.log("[Migration] Updated default min_distance_km from 1.0 to 0.5");
+      } catch (e) {
+        console.error('[Migration] Failed to update min_distance_km value:', e.message);
+      }
+
       // One-time initialization and district pre-computation for start_near_favorite_place
       try {
         const { getDistrictKeyForCoordinate } = require('../utils/geo');
