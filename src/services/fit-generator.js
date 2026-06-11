@@ -511,6 +511,7 @@ async function generateActivity(config = {}) {
     distanceKm,
     districtKeys: chosenDistrictKeys,
     useOSRM,
+    activityAreas: config.activity_areas ? JSON.parse(config.activity_areas) : [],
   });
 
   if (!points || points.length < 2) {

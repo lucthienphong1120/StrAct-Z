@@ -154,10 +154,48 @@ const RUNNING_POIS = {
   ]
 };
 
-function getDistrictTargetCenter(districtKey) {
+function getDistrictTargetCenter(districtKey, activityAreas = []) {
   const d = HANOI_DISTRICTS[districtKey];
   if (!d) return null;
   
+  // 1. Filter activity areas that overlap with this district
+  const overlappingAreas = (activityAreas || []).filter(area => {
+    const distRadiusM = d.radiusKm * 1000;
+    const distanceToCenter = haversineDistance(d.lat, d.lng, area.lat, area.lng);
+    return distanceToCenter < distRadiusM + area.radius;
+  });
+
+  // 2. If there are overlapping areas, prioritize them (e.g. 85% chance to start near an overlapping home/work center)
+  if (overlappingAreas.length > 0 && Math.random() < 0.85) {
+    // Sort to prioritize 'home' first, then 'work'
+    const sortedAreas = [...overlappingAreas].sort((a, b) => {
+      if (a.type === 'home' && b.type !== 'home') return -1;
+      if (a.type !== 'home' && b.type === 'home') return 1;
+      return 0;
+    });
+
+    const chosenArea = sortedAreas[0];
+    const searchRadiusM = randomInRange(100, Math.min(300, chosenArea.radius || 200));
+    console.log(`[Route Engine] Prioritizing activity area: "${chosenArea.type}" with radius ${Math.round(searchRadiusM)}m`);
+
+    // Slide target center if it's outside the district radius, so the start point is validly within the district
+    const distRadiusM = d.radiusKm * 1000;
+    const distanceToCenter = haversineDistance(d.lat, d.lng, chosenArea.lat, chosenArea.lng);
+    
+    let targetLat = chosenArea.lat;
+    let targetLng = chosenArea.lng;
+    
+    if (distanceToCenter > distRadiusM) {
+      const ratio = distRadiusM / distanceToCenter;
+      targetLat = d.lat + (chosenArea.lat - d.lat) * ratio;
+      targetLng = d.lng + (chosenArea.lng - d.lng) * ratio;
+      console.log(`[Route Engine] Slid activity area center towards district boundary. Distance: ${Math.round(distanceToCenter)}m, Limit: ${Math.round(distRadiusM)}m`);
+    }
+
+    return { lat: targetLat, lng: targetLng, radiusM: searchRadiusM };
+  }
+
+  // 3. Fallback to scenic POI
   const pois = RUNNING_POIS[districtKey];
   if (pois && pois.length > 0 && Math.random() < 0.70) {
     const poi = pois[Math.floor(Math.random() * pois.length)];
@@ -443,6 +481,7 @@ async function generateRoute(options = {}) {
     distanceKm = 5,
     districtKeys = [], // Now accepts an array of district keys
     useOSRM = true,
+    activityAreas = [], // Custom home/work circles
   } = options;
 
   // Determine center point
@@ -451,7 +490,7 @@ async function generateRoute(options = {}) {
   const routeType = distanceKm < 2 ? 'out-back' : (Math.random() > 0.35 ? 'loop' : 'out-back');
 
   if (districtKeys && districtKeys.length > 0) {
-    const startTarget = getDistrictTargetCenter(districtKeys[0]);
+    const startTarget = getDistrictTargetCenter(districtKeys[0], activityAreas);
     if (startTarget) {
       // Randomize start within the selected target bounds
       const b = randomInRange(0, 360);
@@ -471,7 +510,7 @@ async function generateRoute(options = {}) {
       
       // Traverse initial sequence of districts
       for (let i = 1; i < districtKeys.length; i++) {
-        const target = getDistrictTargetCenter(districtKeys[i]);
+        const target = getDistrictTargetCenter(districtKeys[i], activityAreas);
         if (target) {
           const b = randomInRange(0, 360);
           waypoints.push(destinationPoint(target.lat, target.lng, b, target.radiusM));
@@ -494,7 +533,7 @@ async function generateRoute(options = {}) {
           direction = -1;
         }
         
-        const target = getDistrictTargetCenter(districtKeys[currentIdx]);
+        const target = getDistrictTargetCenter(districtKeys[currentIdx], activityAreas);
         if (target) {
           const b = randomInRange(0, 360);
           waypoints.push(destinationPoint(target.lat, target.lng, b, target.radiusM));

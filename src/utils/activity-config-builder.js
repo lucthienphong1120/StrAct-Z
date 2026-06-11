@@ -39,6 +39,7 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
     deviceName: ov.device_name || config.device_name || systemLimits.device_name.default,
     target_distance_enabled: String(ov.target_distance_enabled !== undefined ? ov.target_distance_enabled : config.target_distance_enabled) === 'true',
     target_distance_km: parseFloat(ov.target_distance_km || config.target_distance_km || '10.0'),
+    activity_areas: ov.activity_areas || config.activity_areas,
   };
 }
 
