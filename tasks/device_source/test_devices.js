@@ -6,7 +6,7 @@ const systemLimits = require('../../src/config/limits');
 const OUTPUT_DIR = path.join(__dirname, '..', '..', 'tmp', 'fit-testcase');
 
 async function runTest() {
-  console.log('--- STARTING BULK FIT GENERATION TEST (100m) ---');
+  console.log('--- STARTING BULK FIT GENERATION TEST (1km) ---');
   
   // Create output directory if not exists
   if (!fs.existsSync(OUTPUT_DIR)) {
@@ -36,9 +36,9 @@ async function runTest() {
 
       const result = await generateActivity({
         deviceName: device,
-        minDistanceKm: 0.1,
-        maxDistanceKm: 0.1,
-        targetDistanceKm: 0.1,
+        minDistanceKm: 1.0,
+        maxDistanceKm: 1.0,
+        targetDistanceKm: 1.0,
         userRole: 'vip', // Use vip role to bypass 0.5km minimum limit
         activityType: 'Run',
         heartRateEnabled: true,
