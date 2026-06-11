@@ -40,6 +40,7 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
     target_distance_enabled: String(ov.target_distance_enabled !== undefined ? ov.target_distance_enabled : config.target_distance_enabled) === 'true',
     target_distance_km: parseFloat(ov.target_distance_km || config.target_distance_km || '10.0'),
     activity_areas: ov.activity_areas || config.activity_areas,
+    prioritize_centers: String(ov.prioritize_centers !== undefined ? ov.prioritize_centers : config.prioritize_centers) !== 'false',
   };
 }
 

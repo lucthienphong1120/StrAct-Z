@@ -194,3 +194,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Sửa lỗi tham chiếu userRefresh, cập nhật CACHE_NAME trong Service Worker và sửa cơ chế chồng chéo thời gian đối với hoạt động nháp (generated) ở chế độ thủ công (v2.0.2)
 + [x] kiểm tra logic gen hoạt động hiện tại có tính chia chi tiết đơn vị nhỏ nhất là gì, có đang theo phường/xã trong quận ko? xử lý tăng độ ưu tiên xuất phát điểm gần tâm vòng tròn work/home (v2.0.3)
 + [x] kiểm tra các luồng tự động vẫn hoạt động tốt với multi-account (schedule, linked tài khoản, generate and upload, history,...) không bị nhầm hoặc xung đột giữa các tài khoản user khác hoặc các phiên cũ trên browser (v2.0.3)
++ [x] thêm cấu hình toggle Prioritize Centers (default true), nếu bật và nếu hoạt động được sinh tại chính quận chứa tâm vòng tròn Home/Work thì có 60% tỉ lệ điểm xuất phát bắt đầu quanh tâm vòng tròn (+ random từ 200m - 500m) (v2.0.4)
+

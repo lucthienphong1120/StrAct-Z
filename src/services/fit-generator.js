@@ -512,6 +512,7 @@ async function generateActivity(config = {}) {
     districtKeys: chosenDistrictKeys,
     useOSRM,
     activityAreas: config.activity_areas ? JSON.parse(config.activity_areas) : [],
+    prioritizeCenters: config.prioritize_centers !== false && config.prioritize_centers !== 'false',
   });
 
   if (!points || points.length < 2) {

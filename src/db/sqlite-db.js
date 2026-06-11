@@ -55,6 +55,7 @@ const DEFAULT_CONFIG = {
   map_lng: String(systemLimits.map_lng.default),
   map_zoom: String(systemLimits.map_zoom.default),
   map_locked: String(systemLimits.map_locked.default),
+  prioritize_centers: String(systemLimits.prioritize_centers.default),
 };
 
 async function getDb() {

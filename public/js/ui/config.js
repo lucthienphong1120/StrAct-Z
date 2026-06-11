@@ -148,6 +148,7 @@ function updateDynamicTooltips() {
     work_count: 'tipWorkPoints',
     scale_radius: 'tipScaleRadius',
     boost_adjacent: 'tipBoostAdjacent',
+    prioritize_centers: 'tipPrioritizeCenters',
     local_history: 'tipLocalHistory',
     strava_cloud: 'tipStravaCloud'
   };
@@ -290,6 +291,9 @@ async function loadConfig() {
 
     const boostAdjacentToggle = document.getElementById('cfgBoostAdjacent');
     if (boostAdjacentToggle) boostAdjacentToggle.checked = config.boost_adjacent !== 'false';
+
+    const prioritizeCentersToggle = document.getElementById('cfgPrioritizeCenters');
+    if (prioritizeCentersToggle) prioritizeCentersToggle.checked = config.prioritize_centers !== 'false';
 
     const setVal = (id, val) => {
       const el = document.getElementById(id);
@@ -593,6 +597,7 @@ async function saveConfig() {
     max_district_span: document.getElementById('cfgMaxSpan').value,
     use_osrm: document.getElementById('cfgOsrm').checked ? 'true' : 'false',
     boost_adjacent: document.getElementById('cfgBoostAdjacent')?.checked ? 'true' : 'false',
+    prioritize_centers: document.getElementById('cfgPrioritizeCenters')?.checked ? 'true' : 'false',
     min_time: document.getElementById('cfgRandMinTime').value,
     max_time: document.getElementById('cfgRandMaxTime').value,
     work_start1: document.getElementById('cfgWorkStart1').value,
@@ -648,6 +653,7 @@ function getOverrideConfig() {
     max_district_span: document.getElementById('cfgMaxSpan').value,
     use_osrm: document.getElementById('cfgOsrm').checked ? 'true' : 'false',
     boost_adjacent: document.getElementById('cfgBoostAdjacent')?.checked ? 'true' : 'false',
+    prioritize_centers: document.getElementById('cfgPrioritizeCenters')?.checked ? 'true' : 'false',
     min_distance_km: document.getElementById('cfgMinDist').value,
     max_distance_km: document.getElementById('cfgMaxDist').value,
     min_pace: document.getElementById('cfgMinPace').value,
