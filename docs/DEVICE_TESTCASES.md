@@ -36,16 +36,30 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **COROS** | 294 | ? | GPX OK |
 | **Suunto Race S** | 23 | ? | Không nhận thiết bị - bỏ |
 | **Suunto Vertical** | 23 | ? | GPX OK |
+| **Suunto Race** | 23 | ? | Thêm cái này - chưa test |
+| **Suunto Ocean** | 23 | ? | Thêm cái này - chưa test |
+| **Suunto 9 Peak Pro** | 23 | ? | Thêm cái này - chưa test |
 | **Suunto** | 23 | ? | Không nhận thiết bị - bỏ |
+| **Amazfit Bip 6** | 339 | ? | Thêm cái này - chưa test |
+| **Amazfit Cheetah** | 339 | ? | Thêm cái này - chưa test |
 | **Amazfit T-Rex 3** | 339 | ? | GPX OK |
+| **Amazfit GTR 4** | 339 | ? | Thêm cái này - chưa test |
 | **Amazfit Balance 2** | 339 | ? | GPX OK |
+| **Amazfit Active 2** | 339 | ? | Thêm cái này - chưa test |
 | **Amazfit Active 3 Premium** | 339 | ? | GPX OK |
 | **Zepp App** | 339 | ? | Không nhận thiết bị - bỏ |
 | **Huawei Watch GT 6 Pro** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
+| **Huawei Watch GT 6** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
 | **Huawei Watch Fit 5 Pro** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
+| **Huawei Watch Fit 5** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
+| **Huawei Watch Fit 4 Pro** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
 | **Huawei Watch Fit 4** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
 | **Huawei Watch GT 5** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
+| **Huawei Watch GT 5 Pro** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
 | **Huawei Watch 5** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
+| **Huawei Watch D2** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
+| **Huawei Watch Ultimate 2** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
+| **Huawei Watch Kids** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
 | **Huawei Watch Ultimate** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
 | **Huawei Health** | 348 | ? | GPX OK |
 | **Samsung Galaxy Watch Ultra** | 258 | ? | Không nhận thiết bị - bỏ |
@@ -84,6 +98,11 @@ Với thiết vị Sunno/Amazfit:
 Type: GPX
 Source: Device name
 Description: 
+```
+
+Với thiết bị Samsung/Apple:
+```
+Không phổ biến, bỏ đỡ tốn effort
 ```
 
 ## 🔍 Kết quả nghiên cứu & Ánh xạ ID từ Garmin FIT SDK & ANT+
