@@ -175,7 +175,7 @@ const LIMITS = {
     }
   },
   export_format: {
-    label: 'Định dạng tệp tin (Export Format).',
+    label: 'Định dạng tệp tin.',
     desc_extra: 'Tác dụng: Chọn định dạng hoạt động đồng bộ. GPX tương thích tốt với các hãng phi-Garmin (hiển thị đúng Sync Badge), FIT hỗ trợ đầy đủ chỉ số cho Garmin.',
     type: 'array',
     default: 'fit',
@@ -185,17 +185,17 @@ const LIMITS = {
     max: 1
   },
   strava_visibility: {
-    label: 'Chế độ hiển thị trên Strava (Strava Visibility).',
-    desc_extra: 'Tác dụng: Chọn chế độ hiển thị khi tải lên Strava. Đặt "Chỉ mình tôi" hoặc "Người theo dõi" hoạt động sẽ được Mute (ẩn khỏi Home Feed của người khác) để phục vụ dev test.',
+    label: 'Chế độ hiển thị trên Strava.',
+    desc_extra: 'Tác dụng: Ngoại trừ chế độ công khai, các hoạt động sẽ không hiện lên trên Feed của bạn bè để phục vụ Dev/Test.',
     type: 'array',
     default: 'everyone',
-    default_label: 'Mọi người (Public)',
+    default_label: 'Mọi người',
     choices: ['everyone', 'only_me', 'followers'],
     min: 1,
     max: 1
   },
   device_name: {
-    label: 'Thiết bị ghi nhận (Device Name).',
+    label: 'Thiết bị ghi nhận.',
     desc_extra: 'Tác dụng: Thiết bị hiển thị ghi nhận hoạt động trên Strava.',
     type: 'array',
     default: 'Garmin fēnix 7x Pro',
