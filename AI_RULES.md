@@ -149,6 +149,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.2.6 (2026-06-12)
+- **UI: Reposition Separator Line in Route Configuration**:
+  - Moved the horizontal separator border style from above the "Start near favorite place" row to above the "Snap OSRM Routing" and "Boost Adjacent" row, creating a cleaner visual separation between the district checklist and the routing toggles.
+
 ### v2.2.5 (2026-06-12)
 - **Fix: Strava Device Source Badge Detection for Zepp/Amazfit**:
   - Restructured GPX output to exactly match real Zepp GPX structure (using `creator` for device name, using `ns3` extension namespace, removing `gpxtpx`, adding `ns3:speed`, `ns3:cad`, `ns3:hr`).

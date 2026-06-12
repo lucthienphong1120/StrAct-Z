@@ -219,3 +219,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Sửa tĩnh nhãn các nút bấm và OSRM Routing trên UI (Generate Activity Only và Snap OSRM Routing), di chuyển toàn bộ tệp tin GPX/FIT vào chung thư mục 'data/activity', và đặt tên file GPX theo dạng 'run_YYYY-MM-DDTHH-mm-ss.gpx' (v2.2.1)
 + [x] Cập nhật Manufacturer ID cho Huami (88) và Coros (264) trong FIT generator để hiển thị đúng tên thiết bị non-Garmin trên Strava; đồng thời hướng dẫn người dùng chuyển sang định dạng FIT (v2.2.2)
 + [x] Loại bỏ cấu hình "Max Districts per Route", cho phép sinh lộ trình tự do và kiểm tra chéo các quận đã xâm phạm bằng Ray-Casting; bổ sung tùy chọn hiển thị "Strava Visibility" (Public/Private/Followers) hỗ trợ dev test bằng cách Mute hoạt động trên Strava (v2.2.3)
++ [x] Sửa lỗi vỡ layout 2 cột từ việc thiếu thẻ đóng div của Allowed Districts và loại bỏ checkMaxSpan thừa (v2.2.4)
++ [x] Sửa lỗi hiển thị thiết bị nguồn Strava cho dòng Zepp/Amazfit (tương thích FIT & GPX) (v2.2.5)
++ [x] Chuyển dấu phân cách lên trên Snap OSRM Routing & Boost Adjacent trong Route Configuration (v2.2.6)
+
