@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
       padding: 20px;
       background: radial-gradient(circle at center, var(--bg-card) 0%, var(--bg-primary) 100%);
     }
+
     .login-card {
       width: 100%;
       max-width: 400px;
@@ -26,10 +28,28 @@
       box-shadow: var(--shadow-lg), var(--shadow-glow);
       text-align: center;
     }
-    .login-logo { font-size: 3rem; margin-bottom: 10px; }
-    .login-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 5px; }
-    .login-subtitle { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 30px; }
-    .login-form { text-align: left; }
+
+    .login-logo {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .login-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .login-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+    }
+
+    .login-form {
+      text-align: left;
+    }
+
     #registerError {
       display: none;
       background: rgba(239, 68, 68, 0.1);
@@ -43,13 +63,14 @@
     }
   </style>
 </head>
+
 <body>
   <div class="login-container">
     <div class="login-card">
       <div class="login-logo">🚀</div>
       <h1 class="login-title">Create Account</h1>
       <p class="login-subtitle">Join StrAct Z to generate activities</p>
-      
+
       <div id="registerError"></div>
 
       <form class="login-form" id="registerForm">
@@ -68,7 +89,8 @@
         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Register</button>
       </form>
       <div style="margin-top: 15px; font-size: 0.9rem;">
-        <a href="/login.html" style="color: var(--accent-blue); text-decoration: none;">Already have an account? Login</a>
+        <a href="/login.html" style="color: var(--accent-blue); text-decoration: none;">Already have an account?
+          Login</a>
       </div>
     </div>
   </div>
@@ -98,9 +120,9 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password })
         });
-        
+
         const data = await res.json();
-        
+
         if (res.ok && data.success) {
           // Auto login after registration
           const loginRes = await fetch('/auth/system/login', {
@@ -127,4 +149,5 @@
     });
   </script>
 </body>
+
 </html>
