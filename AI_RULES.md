@@ -149,6 +149,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.2.8 (2026-06-12)
+- **Feature: Save & Load target_date in Time Configuration**:
+  - Updated `saveConfig()` to save `target_date` to the database (falling back to `'Hôm nay'` if cleared).
+  - Updated `loadConfig()` to load the saved target date on UI startup or refresh, instead of always overwriting it with `today`.
+
 ### v2.2.7 (2026-06-12)
 - **Fix: Resolve 'Invalid field: source' FIT Creation Error**:
   - Removed the invalid `source` property from `device_info` payload when generating FIT files for Amazfit/Zepp devices. The `device_info` message in the standard FIT profile does not support this field and throws an error at runtime. Device brand identification is already fully resolved by custom manufacturer, product, and product name attributes.
