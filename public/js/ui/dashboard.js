@@ -54,6 +54,8 @@ async function loadStats(forceRefresh = false) {
       authText.innerHTML = `<span class="auth-username-text">${currentName}</span>${roleTag}`;
     }
     
+    if (window.updateSchedulerBanner) window.updateSchedulerBanner();
+    
     document.getElementById('statTotal').textContent = stats.total;
     document.getElementById('statUploaded').textContent = stats.uploaded;
     document.getElementById('statDistance').textContent = stats.totalDistanceKm;

@@ -27,6 +27,7 @@ async function loadSchedule() {
     toggleTargetDistanceInputs();
 
     updateScheduleDisplay(status);
+    updateSchedulerBanner();
   } catch (err) { console.error('Schedule error:', err); }
 }
 
@@ -138,8 +139,20 @@ async function updateSchedule() {
   showToast(msg, 'success');
 }
 
+function updateSchedulerBanner() {
+  const isVip = window.userRole === 'vip';
+  const limitDays = isVip ? 7 : 3;
+  const bannerEl = document.getElementById('customTimeLimitBanner');
+  const textEl = document.getElementById('customTimeLimitText');
+  if (bannerEl && textEl) {
+    textEl.textContent = `Custom Time: Hỗ trợ đặt lịch trước tối đa ${limitDays} ngày trong tương lai.`;
+    bannerEl.style.display = 'flex';
+  }
+}
+
 // Export to window
 window.loadSchedule = loadSchedule;
 window.updateScheduleDisplay = updateScheduleDisplay;
 window.toggleTargetDistanceInputs = toggleTargetDistanceInputs;
 window.updateSchedule = updateSchedule;
+window.updateSchedulerBanner = updateSchedulerBanner;

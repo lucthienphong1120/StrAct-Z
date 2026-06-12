@@ -702,10 +702,11 @@ function toggleCustomTime() {
     randomInputs.style.opacity = '0.4';
     randomInputs.style.pointerEvents = 'none';
 
-    // Set max date constraint to future when Custom Time is active
-    if (targetDateInput && window.sysLimits) {
+    // Set max date constraint to future when Custom Time is active (basic: 3 days, vip: 7 days)
+    if (targetDateInput) {
       const today = new Date();
-      const maxDaysFuture = window.sysLimits.target_date.max;
+      const isVip = window.userRole === 'vip';
+      const maxDaysFuture = isVip ? 7 : 3;
       const maxDate = new Date();
       maxDate.setDate(today.getDate() + maxDaysFuture);
       targetDateInput.max = maxDate.toLocaleDateString('en-CA');

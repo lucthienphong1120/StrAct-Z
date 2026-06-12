@@ -14,11 +14,9 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
   let minTime = config.min_time;
   let maxTime = config.max_time;
   
-  if (customTimeEnabled) {
-    if (targetTimeCustom !== '00:00') {
-      minTime = targetTimeCustom;
-      maxTime = targetTimeCustom;
-    }
+  if (customTimeEnabled && targetTimeCustom !== '00:00') {
+    minTime = targetTimeCustom;
+    maxTime = targetTimeCustom;
   } else {
     minTime = ov.min_time || config.min_time;
     maxTime = ov.max_time || config.max_time;

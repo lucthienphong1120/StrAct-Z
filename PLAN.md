@@ -225,6 +225,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Sửa lỗi Invalid field 'source' for message 'device_info' khi tạo cấu hình FIT cho Amazfit/Zepp (v2.2.7)
 + [x] Lưu và khôi phục target_date của Custom Time khi lưu cấu hình (saveConfig) (v2.2.8)
 + [x] Cấu hình hoãn lập lịch (Pending Scheduler) khi bật Custom Time và cho phép chọn ngày tương lai (v2.2.9)
++ [x] Hoàn thiện logic Custom Target Time (00:00 vs cụ thể) & Giới hạn đặt lịch tương lai (Basic 3 ngày, VIP 7 ngày) kèm banner hướng dẫn ở thẻ Auto Schedule (v2.3.0)
 
 
 

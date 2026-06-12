@@ -98,19 +98,18 @@ function validateConfig(updates, role = 'basic') {
         const diffDays = Math.ceil((today - targetDate) / (1000 * 60 * 60 * 24));
         const isCustomTimeActive = updates.custom_time_enabled === 'true';
 
-        if (isCustomTimeActive) {
-            // Custom time: allow future dates up to rule.max days in the future
-            if (diffDays < -rule.max) {
-                return { success: false, error: `${label} không được quá ${rule.max} ngày trong tương lai.` };
+        if (diffDays < 0) {
+            // Future date
+            if (!isCustomTimeActive) {
+                return { success: false, error: 'Ngày mục tiêu không được ở tương lai khi không bật Custom Time.' };
             }
-        } else {
-            // Normal generation: do not allow future dates
-            if (diffDays < 0) {
-                return { success: false, error: `${label} không được ở tương lai.` };
+            const maxFutureDays = (role === 'vip') ? 7 : 3;
+            if (diffDays < -maxFutureDays) {
+                return { success: false, error: `Ngày mục tiêu không được quá ${maxFutureDays} ngày trong tương lai.` };
             }
-        }
-        if (diffDays > rule.max) {
-            return { success: false, error: `${label} không được quá ${rule.max} ngày trong quá khứ.` };
+        } else if (diffDays > rule.max) {
+            // Past date exceeded limit
+            return { success: false, error: `Ngày mục tiêu không được quá ${rule.max} ngày trong quá khứ.` };
         }
     }
 
