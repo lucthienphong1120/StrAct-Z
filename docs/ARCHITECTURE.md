@@ -243,6 +243,8 @@ Danh sách Manufacturer ID & Product ID chuẩn hóa cho các dòng thiết bị
 * **Amazfit / Zepp (Manufacturer: 339)**: Product `undefined` (nhận diện qua tên thiết bị)
 * **Huawei (Manufacturer: 348)**: Product `undefined` (nhận diện qua tên thiết bị)
 * **Suunto (Manufacturer: 23)**: Product `undefined` (nhận diện qua tên thiết bị)
+* **Polar (Manufacturer: 80)**: Product `undefined` (nhận diện qua tên thiết bị)
+* **Xiaomi / Redmi (Manufacturer: 0)**: Product `undefined` (không có ID chính thức, khuyến nghị GPX)
 * **Strava (Manufacturer: 265)**: Product `265` (hoạt động ghi nhận trực tiếp bằng ứng dụng Strava)
 
 ### 3. Chuẩn hóa thời gian (Time Standard) trong tệp FIT

@@ -57,15 +57,15 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Huawei Watch Ultimate** | 348 | ? | GPX OK |
 | **Huawei Health** | 348 | ? | GPX OK |
 | **Samsung Health** | 258 | ? | GPX OK |
-| **Polar Vantage V3** | ? | ? | Chưa test |
-| **Polar Grit X2 Pro** | ? | ? | Chưa test |
-| **Polar Pacer** | ? | ? | Chưa test |
-| **Polar Pacer Pro** | ? | ? | Chưa test |
-| **Polar Ignite 3** | ? | ? | Chưa test |
-| **Xiaomi Watch S5** | ? | ? | Chưa test |
-| **Xiaomi Watch 2** | ? | ? | Chưa test |
-| **Xiaomi Smart Band 10** | ? | ? | Chưa test |
-| **Redmi Watch 6** | ? | ? | Chưa test |
-| **Redmi Watch 5 Active** | ? | ? | Chưa test |
+| **Polar Vantage V3** | 80 | ? | Chưa test |
+| **Polar Grit X2 Pro** | 80 | ? | Chưa test |
+| **Polar Pacer** | 80 | ? | Chưa test |
+| **Polar Pacer Pro** | 80 | ? | Chưa test |
+| **Polar Ignite 3** | 80 | ? | Chưa test |
+| **Xiaomi Watch S5** | 0 | ? | Chưa test |
+| **Xiaomi Watch 2** | 0 | ? | Chưa test |
+| **Xiaomi Smart Band 10** | 0 | ? | Chưa test |
+| **Redmi Watch 6** | 0 | ? | Chưa test |
+| **Redmi Watch 5 Active** | 0 | ? | Chưa test |
 | **Strava App** | 265 | 265 | GPX OK |
 
