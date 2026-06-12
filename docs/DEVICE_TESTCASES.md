@@ -30,23 +30,24 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Garmin Instinct 2X Solar** | 1 | 4394 | Fit OK |
 | **Garmin epix Pro (Gen 2) 47mm** | 1 | 4313 | Fit OK |
 | **Garmin Connect** | 1 | ? | GPX OK |
-| **Coros Pace 3** | 294 | ? | - |
-| **Coros Apex 2 Pro** | 294 | ? | - |
-| **Coros Vertix 2S** | 294 | ? | - |
-| **COROS** | 294 | ? | - |
-| **Suunto Race S** | 23 | ? | - |
-| **Suunto Vertical** | 23 | ? | - |
-| **Suunto** | 23 | ? | - |
-| **Amazfit T-Rex 3** | 339 | ? | - |
-| **Amazfit Balance 2** | 339 | ? | - |
-| **Amazfit Active 3 Premium** | 339 | ? | - |
-| **Zepp App** | 339 | ? | - |
-| **Huawei Watch GT 6 Pro** | 348 | ? | ❌ Failed |
-| **Huawei Watch Fit 5 Pro** | 348 | ? | ❌ Failed |
-| **Huawei Watch Fit 4** | 348 | ? | ❌ Failed |
-| **Huawei Watch GT 4 Pro** | 348 | ? | ❌ Failed |
-| **Huawei Watch Ultimate** | 348 | ? | ❌ Failed |
-| **Huawei Health** | 348 | ? | - |
+| **Coros Pace 3** | 294 | ? | Đang nhận fallback là COROS - Chuyển sang ghi tên thiết bị ở mô tả |
+| **Coros Apex 2 Pro** | 294 | ? | Đang nhận fallback là COROS - Chuyển sang ghi tên thiết bị ở mô tả |
+| **Coros Vertix 2S** | 294 | ? | Đang nhận fallback là COROS - Chuyển sang ghi tên thiết bị ở mô tả |
+| **COROS** | 294 | ? | GPX OK |
+| **Suunto Race S** | 23 | ? | Không nhận thiết bị - bỏ |
+| **Suunto Vertical** | 23 | ? | GPX OK |
+| **Suunto** | 23 | ? | Không nhận thiết bị - bỏ |
+| **Amazfit T-Rex 3** | 339 | ? | GPX OK |
+| **Amazfit Balance 2** | 339 | ? | GPX OK |
+| **Amazfit Active 3 Premium** | 339 | ? | GPX OK |
+| **Zepp App** | 339 | ? | Không nhận thiết bị - bỏ |
+| **Huawei Watch GT 6 Pro** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
+| **Huawei Watch Fit 5 Pro** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
+| **Huawei Watch Fit 4** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
+| **Huawei Watch GT 5** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
+| **Huawei Watch 5** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
+| **Huawei Watch Ultimate** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
+| **Huawei Health** | 348 | ? | GPX OK |
 | **Samsung Galaxy Watch Ultra** | 258 | ? | - |
 | **Samsung Galaxy Watch 8** | 258 | ? | - |
 | **Samsung Galaxy Watch 7** | 258 | ? | - |
@@ -57,6 +58,26 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Apple Watch Series 10** | 263 | ? | - |
 | **Apple Sport** | 263 | ? | - |
 | **Strava App** | 265 | 265 | - |
+
+### Phương án triển khai sau khi Test
+
+Với thiết bị Garmin:
+```
+Type: Fit
+Source: Manufactor/Device ID
+Description:
+hoặc
+Type: GPX
+Source: Garmin Connect
+Description: Device name
+```
+
+Với thiết bị Huawei/COROS:
+```
+Type: GPX
+Source: Huawei Health
+Description: Device name
+```
 
 ## 🔍 Kết quả nghiên cứu & Ánh xạ ID từ Garmin FIT SDK & ANT+
 
