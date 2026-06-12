@@ -184,6 +184,16 @@ const LIMITS = {
     min: 1,
     max: 1
   },
+  strava_visibility: {
+    label: 'Chế độ hiển thị trên Strava (Strava Visibility).',
+    desc_extra: 'Tác dụng: Chọn chế độ hiển thị khi tải lên Strava. Đặt "Chỉ mình tôi" hoặc "Người theo dõi" hoạt động sẽ được Mute (ẩn khỏi Home Feed của người khác) để phục vụ dev test.',
+    type: 'array',
+    default: 'everyone',
+    default_label: 'Mọi người (Public)',
+    choices: ['everyone', 'only_me', 'followers'],
+    min: 1,
+    max: 1
+  },
   device_name: {
     label: 'Thiết bị ghi nhận (Device Name).',
     desc_extra: 'Tác dụng: Thiết bị hiển thị ghi nhận hoạt động trên Strava.',

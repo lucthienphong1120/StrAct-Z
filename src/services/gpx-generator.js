@@ -267,10 +267,8 @@ async function generateActivity(config = {}) {
     finalMaxHR = Math.round(mhr * limits.hr_zones.Run.max);
   }
 
-  // Determine District (Random if 'random' or not provided)
+  // Determine Start District (Random if 'random' or not provided)
   const allowedDistricts = config.selected_districts ? config.selected_districts.split(',').filter(Boolean) : Object.keys(HANOI_DISTRICTS);
-  const maxSpan = parseInt(config.max_district_span || '1', 10);
-  const actualSpan = Math.max(1, Math.floor(Math.random() * maxSpan) + 1);
   
   let chosenDistrictKeys = [];
   if (!districtKey || districtKey === 'random') {
@@ -354,24 +352,24 @@ async function generateActivity(config = {}) {
       console.log(`  - District "${name}" (${key}): weight = ${w.toFixed(2)} (${percent}%)`);
     });
 
-    // Weighted pick `span` districts
+    // Pick exactly 1 start district using weighted choice
     let available = [...allowedDistricts];
     let availableWeights = [...weights];
-    const span = Math.min(actualSpan, available.length);
     
-    for (let i = 0; i < span && available.length > 0; i++) {
+    if (available.length > 0) {
       const totalWeight = availableWeights.reduce((a, b) => a + b, 0);
       let r = Math.random() * totalWeight;
       let sum = 0;
-      for (let j = 0; j < available.length; j++) {
-        sum += availableWeights[j];
+      for (let i = 0; i < available.length; i++) {
+        sum += availableWeights[i];
         if (r <= sum) {
-          chosenDistrictKeys.push(available[j]);
-          available.splice(j, 1);
-          availableWeights.splice(j, 1);
+          chosenDistrictKeys = [available[i]];
           break;
         }
       }
+    }
+    if (chosenDistrictKeys.length === 0) {
+      chosenDistrictKeys = ['hoan_kiem'];
     }
   } else if (HANOI_DISTRICTS[districtKey]) {
     chosenDistrictKeys = [districtKey];

@@ -34,6 +34,7 @@ const DEFAULT_CONFIG = {
   max_distance_km: String(systemLimits.max_distance_km.default),
   activity_type: systemLimits.activity_type.default,
   export_format: systemLimits.export_format.default,
+  strava_visibility: systemLimits.strava_visibility.default,
   device_name: systemLimits.device_name.default,
   heart_rate_enabled: String(systemLimits.heart_rate_enabled.default),
   user_age: String(systemLimits.user_age.default),

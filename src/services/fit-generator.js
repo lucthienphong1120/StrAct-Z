@@ -342,10 +342,8 @@ async function generateActivity(config = {}) {
     finalMaxHR = Math.round(mhr * limits.hr_zones.Run.max);
   }
 
-  // Determine District
+  // Determine Start District
   const allowedDistricts = config.selected_districts ? config.selected_districts.split(',').filter(Boolean) : Object.keys(HANOI_DISTRICTS);
-  const maxSpan = parseInt(config.max_district_span || '1', 10);
-  const actualSpan = Math.max(1, Math.floor(Math.random() * maxSpan) + 1);
   
   let chosenDistrictKeys = [];
   if (!districtKey || districtKey === 'random') {
@@ -415,35 +413,24 @@ async function generateActivity(config = {}) {
       return weight;
     });
 
-    // Weighted pick `span` districts
+    // Pick exactly 1 start district using weighted choice
     let available = [...allowedDistricts];
     let availableWeights = [...weights];
-    const span = Math.min(actualSpan, available.length);
     
-    for (let i = 0; i < span && available.length > 0; i++) {
-      const previousKey = chosenDistrictKeys[chosenDistrictKeys.length - 1];
-      let candidateIndexes = available.map((_, index) => index);
-
-      if (previousKey) {
-        const adjacentKeys = ADJACENT_DISTRICTS[previousKey] || [];
-        const adjacentIndexes = candidateIndexes.filter(index => adjacentKeys.includes(available[index]));
-        if (adjacentIndexes.length > 0) {
-          candidateIndexes = adjacentIndexes;
-        }
-      }
-
-      const totalWeight = candidateIndexes.reduce((total, index) => total + availableWeights[index], 0);
+    if (available.length > 0) {
+      const totalWeight = availableWeights.reduce((total, w) => total + w, 0);
       let r = Math.random() * totalWeight;
       let sum = 0;
-      for (const j of candidateIndexes) {
-        sum += availableWeights[j];
+      for (let i = 0; i < available.length; i++) {
+        sum += availableWeights[i];
         if (r <= sum) {
-          chosenDistrictKeys.push(available[j]);
-          available.splice(j, 1);
-          availableWeights.splice(j, 1);
+          chosenDistrictKeys = [available[i]];
           break;
         }
       }
+    }
+    if (chosenDistrictKeys.length === 0) {
+      chosenDistrictKeys = ['hoan_kiem'];
     }
   } else if (HANOI_DISTRICTS[districtKey]) {
     chosenDistrictKeys = [districtKey];

@@ -50,7 +50,8 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - Same district (the district of the last activity itself): `+2.1` boost.
   - Neighboring (adjacent) districts: `+1.4` boost.
   - If multiple last activities exist, the maximum of matching boosts is taken.
-- **Traverse District Count**: Traverses a random number of districts between 1 and the configured `max_district_span` instead of always forcing it to equal `max_district_span`.
+- **Free Routing & Ray-Casting (v2.2.3+)**: Logic sinh lộ trình không còn bị gò bó bởi cấu hình "Max Districts per Route" (`max_district_span`). Lộ trình chỉ dựa vào 1 quận xuất phát duy nhất (theo trọng số home/work/POI), OSRM tự do sinh đường chạy và kết quả cuối cùng sẽ được tính toán chéo bằng Ray-Casting (Point-in-Polygon ranh giới thật) để gán nhãn toàn bộ các quận đi qua thực tế.
+- **Strava Visibility (v2.2.3+)**: Tích hợp cấu hình `strava_visibility` cho phép chọn Public, Private/Muted, Followers/Muted. Đối với các chế độ ẩn (Private/Followers), hoạt động sẽ được tự động Mute trên Strava (`hide_from_home: true` thông qua API `PUT /activities/{id}`) sau khi tải lên thành công.
 - **Simulation Constants**: Centralized in `limits.js` (e.g. 1.5% red light stop probability, 30% weather probability).
 - **Scenic Running POIs**: Prioritizes starting and routing coordinates (70% probability) near predefined scenic lakes, parks, and low-traffic running tracks in Hanoi (e.g. Hồ Hoàn Kiếm, Hồ Tây, Công viên Yên Sở, etc.) with a tight radius (150m - 450m) to generate realistic trails.
 
@@ -94,6 +95,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - The generated target distance is capped between the activity type's minimum and maximum constraints, and strictly capped by the user-configured random max distance (without being affected by the activity's distance multiplier itself) to ensure valid route generation.
 
 ## 🛠️ Developer Rules
+
+### v2.2.3 (2026-06-12)
+- **Free Routing & Strava Visibility Config**:
+  - Loại bỏ hoàn toàn cấu hình "Max Districts per Route" (`max_district_span`) trên giao diện và trong logic generator. Lộ trình chạy tự do, tính toán quận thực tế bằng Ray-Casting.
+  - Bổ sung tùy chọn cấu hình `Strava Visibility` (everyone, only_me, followers) trên UI.
+  - Tích hợp gọi API `PUT /activities/{activityId}` với tham số `{ hide_from_home: true }` để Mute hoạt động đối với các chế độ ẩn (only_me và followers) sau khi upload thành công phục vụ dev test.
 
 ### v2.2.2 (2026-06-12)
 - **Non-Garmin Device Mapping Fix**:

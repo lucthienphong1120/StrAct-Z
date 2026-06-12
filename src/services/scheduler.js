@@ -245,6 +245,17 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
 
         console.log(`[Scheduler] Upload complete! Strava Activity ID: ${finalStatus.activity_id}`);
 
+        // Update visibility if needed
+        const visibility = config.strava_visibility || 'everyone';
+        if (visibility !== 'everyone' && finalStatus.activity_id) {
+          try {
+            console.log(`[Scheduler] Updating activity ${finalStatus.activity_id} visibility to private/muted (hide_from_home: true)`);
+            await stravaApi.updateActivity(accountId, finalStatus.activity_id, { hide_from_home: true });
+          } catch (err) {
+            console.error('[Scheduler] Failed to update activity visibility:', err);
+          }
+        }
+
         await db.updateActivity(accountId, activityId, {
           strava_activity_id: String(finalStatus.activity_id),
           upload_status: 'uploaded',

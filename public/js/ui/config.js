@@ -23,7 +23,6 @@ function applyLimitsToUI() {
     }
   };
 
-  syncRange('cfgMaxSpan', 'max_district_span');
   syncRange('cfgOverlapProtection', 'overlap_protection_minutes');
   syncRange('cfgRestTime', 'rest_time_percent');
   syncRange('cfgMinDist', 'min_distance_km');
@@ -115,7 +114,7 @@ function updateDynamicTooltips() {
   const tipMapping = {
     daily_upload_limit: 'tipDailyLimit',
     selected_districts: 'tipDistricts',
-    max_district_span: 'tipMaxSpan',
+    strava_visibility: 'tipStravaVisibility',
     overlap_protection_minutes: 'tipSafeTime',
     rest_time_percent: 'tipRestTime',
     use_osrm: 'tipOsrm',
@@ -284,8 +283,7 @@ async function loadConfig() {
       updateSelectedDistrictKeys();
     }
 
-    const maxSpanInput = document.getElementById('cfgMaxSpan');
-    if (maxSpanInput) maxSpanInput.value = config.max_district_span || '1';
+    // max_district_span has been deprecated and removed from the UI.
 
     const osrmToggle = document.getElementById('cfgOsrm');
     if (osrmToggle) osrmToggle.checked = config.use_osrm !== 'false';
@@ -329,6 +327,7 @@ async function loadConfig() {
     updateActivityTypeHint();
     setVal('cfgDeviceName', config.device_name || (sysL?.device_name?.default) || 'Garmin Forerunner 975');
     setVal('cfgExportFormat', config.export_format || (sysL?.export_format?.default) || 'fit');
+    setVal('cfgStravaVisibility', config.strava_visibility || (sysL?.strava_visibility?.default) || 'everyone');
     setChecked('cfgHeartRate', config.heart_rate_enabled === 'true');
     setVal('cfgUserAge', config.user_age || (sysL?.user_age?.default ? String(sysL.user_age.default) : '25'));
     updateMHR();
@@ -400,7 +399,6 @@ function validateInputs(config, isRealTime = false) {
 
   // Key mapping from config object to DOM element IDs
   const idMap = {
-    max_district_span: 'cfgMaxSpan',
     min_distance_km: 'cfgMinDist',
     max_distance_km: 'cfgMaxDist',
     min_pace: 'cfgMinPace',
@@ -412,7 +410,6 @@ function validateInputs(config, isRealTime = false) {
   };
 
   const keyMap = {
-    max_district_span: 'max_district_span',
     min_distance_km: 'min_distance_km',
     max_distance_km: 'max_distance_km',
     min_pace: 'min_pace',
@@ -535,7 +532,7 @@ function validateInputs(config, isRealTime = false) {
 
 function attachRealTimeValidation() {
   const inputs = [
-    'cfgMaxSpan', 'cfgOverlapProtection', 'cfgRestTime', 'cfgMinDist', 'cfgMaxDist',
+    'cfgOverlapProtection', 'cfgRestTime', 'cfgMinDist', 'cfgMaxDist',
     'cfgMinPace', 'cfgMaxPace', 'cfgUserAge', 'cfgDeviceName', 'cfgDailyMaxActivity'
   ];
 
@@ -545,7 +542,6 @@ function attachRealTimeValidation() {
 
     const validate = () => {
       const config = {
-        max_district_span: document.getElementById('cfgMaxSpan').value,
         overlap_protection_minutes: document.getElementById('cfgOverlapProtection').value,
         rest_time_percent: document.getElementById('cfgRestTime').value,
         min_distance_km: document.getElementById('cfgMinDist').value,
@@ -574,7 +570,7 @@ async function saveConfig() {
   const selected_districts = Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value).join(',');
   const config = {
     selected_districts,
-    max_district_span: document.getElementById('cfgMaxSpan').value,
+    strava_visibility: document.getElementById('cfgStravaVisibility')?.value || 'everyone',
     use_osrm: document.getElementById('cfgOsrm').checked ? 'true' : 'false',
     boost_adjacent: document.getElementById('cfgBoostAdjacent')?.checked ? 'true' : 'false',
     start_near_favorite_place: document.getElementById('cfgStartNearFavoritePlace')?.checked ? 'true' : 'false',
@@ -631,7 +627,7 @@ function getOverrideConfig() {
     work_start2: document.getElementById('cfgWorkStart2').value,
     work_end2: document.getElementById('cfgWorkEnd2').value,
     selected_districts,
-    max_district_span: document.getElementById('cfgMaxSpan').value,
+    strava_visibility: document.getElementById('cfgStravaVisibility')?.value || 'everyone',
     use_osrm: document.getElementById('cfgOsrm').checked ? 'true' : 'false',
     boost_adjacent: document.getElementById('cfgBoostAdjacent')?.checked ? 'true' : 'false',
     start_near_favorite_place: document.getElementById('cfgStartNearFavoritePlace')?.checked ? 'true' : 'false',
@@ -689,13 +685,7 @@ function updateMHR() {
   document.getElementById('cfgMaxHR').value = mhr;
 }
 
-function checkMaxSpan() {
-  const el = document.getElementById('cfgMaxSpan');
-  if (parseInt(el.value, 10) > window.sysLimits.max_district_span) {
-    showToast(`Max ${window.sysLimits.max_district_span} districts allowed for your account.`, 'warning');
-    el.value = window.sysLimits.max_district_span;
-  }
-}
+
 
 function toggleCustomTime() {
   const isCustom = document.getElementById('cfgCustomTime').checked;

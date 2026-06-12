@@ -357,6 +357,28 @@ async function deleteActivity(accountId, stravaActivityId) {
 }
 
 /**
+ * Update a Strava activity
+ */
+async function updateActivity(accountId, activityId, params) {
+  const accessToken = await refreshToken(accountId);
+  const postData = JSON.stringify(params);
+
+  const options = {
+    hostname: STRAVA_BASE_URL,
+    path: `/api/v3/activities/${activityId}`,
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(postData),
+    },
+  };
+
+  clearActivityCache(accountId);
+  return makeRequest(options, postData);
+}
+
+/**
  * Disconnect / deauthorize
  */
 async function disconnect(accountId) {
@@ -479,4 +501,5 @@ module.exports = {
   isAuthenticated,
   deleteActivity,
   disconnect,
+  updateActivity,
 };
