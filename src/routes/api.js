@@ -503,7 +503,7 @@ router.post('/upload/:id', async (req, res) => {
       return res.status(403).json({ error: `Giới hạn upload hàng ngày là ${dailyMaxActivity}. Vui lòng xóa bớt trên Strava để tiếp tục.` });
     }
 
-    const fitPath = path.join(__dirname, '..', '..', 'data', 'fit', activity.fit_file || '');
+    const fitPath = path.join(__dirname, '..', '..', 'data', 'activity', activity.fit_file || '');
     if (!fs.existsSync(fitPath)) {
       const ext = path.extname(activity.fit_file || '').toLowerCase();
       return res.status(404).json({ error: `${ext === '.gpx' ? 'GPX' : 'FIT'} file not found` });
@@ -574,7 +574,7 @@ router.delete('/activities/:id', async (req, res) => {
 
   // Delete FIT file
   try {
-    const fitPath = path.join(__dirname, '..', '..', 'data', 'fit', activity.fit_file || '');
+    const fitPath = path.join(__dirname, '..', '..', 'data', 'activity', activity.fit_file || '');
     if (fs.existsSync(fitPath)) fs.unlinkSync(fitPath);
   } catch (e) { /* ignore */ }
 
@@ -667,7 +667,7 @@ router.get('/fit/:filename', async (req, res) => {
       return res.status(403).json({ error: 'Access denied. You do not own this FIT file.' });
     }
 
-    const fitPath = path.join(__dirname, '..', '..', 'data', 'fit', req.params.filename);
+    const fitPath = path.join(__dirname, '..', '..', 'data', 'activity', req.params.filename);
     if (!fs.existsSync(fitPath)) return res.status(404).json({ error: 'FIT file not found' });
     res.download(fitPath, req.params.filename);
   } catch (err) {

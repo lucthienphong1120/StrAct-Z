@@ -446,7 +446,7 @@ async function cleanupOldFITFiles() {
     
     for (const activity of activities) {
       if (activity.fit_file) {
-        const fitPath = path.join(__dirname, '..', '..', 'data', 'fit', activity.fit_file);
+        const fitPath = path.join(__dirname, '..', '..', 'data', 'activity', activity.fit_file);
         try {
           if (fs.existsSync(fitPath)) {
             fs.unlinkSync(fitPath);

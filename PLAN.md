@@ -215,3 +215,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] refact toàn bộ keyword, chức năng liên quan đến "normal account" đổi tên thành "basic account" trong DB và UI (v2.1.4)
 + [x] Sửa lỗi Local Generated History hiển thị tag 2 quận xa nhau dù route thực tế chỉ chạy trong 1 quận: lưu tag theo quận thực sự đi qua sau khi route đã trim theo distance, đồng thời ràng buộc multi-district chỉ chọn quận liền kề (v2.1.8)
 + [x] [quan trọng] khôi phục tính năng tạo với gpx (gfx), song song với fit, do fit lỗi ko nhận diện các thiết bị non-garmin, đồng thời chuẩn hóa tên file theo định dạng thực tế và hiển thị tag phân loại tệp tin trên UI (v2.2.0)
++ [x] Sửa tĩnh nhãn các nút bấm và OSRM Routing trên UI (Generate Activity Only và Snap OSRM Routing), di chuyển toàn bộ tệp tin GPX/FIT vào chung thư mục 'data/activity', và đặt tên file GPX theo dạng 'run_YYYY-MM-DDTHH-mm-ss.gpx' (v2.2.1)

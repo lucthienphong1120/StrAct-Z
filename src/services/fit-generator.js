@@ -21,7 +21,7 @@ const systemLimits = require('../config/limits');
 const { ADJACENT_DISTRICTS } = require('../config/districts');
 const { getDistrictKeyForCoordinate } = require('../utils/geo');
 
-const FIT_DIR = path.join(__dirname, '..', '..', 'data', 'fit');
+const FIT_DIR = path.join(__dirname, '..', '..', 'data', 'activity');
 fs.mkdirSync(FIT_DIR, { recursive: true });
 
 const DEVICE_INFO_MAP = {

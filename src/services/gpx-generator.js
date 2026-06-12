@@ -19,7 +19,7 @@ const { ADJACENT_DISTRICTS } = require('../config/districts');
 
 const { getDistrictKeyForCoordinate } = require('../utils/geo');
 
-const GPX_DIR = path.join(__dirname, '..', '..', 'data', 'fit');
+const GPX_DIR = path.join(__dirname, '..', '..', 'data', 'activity');
 fs.mkdirSync(GPX_DIR, { recursive: true });
 
 const APP_SOURCE_MAP = {
@@ -613,8 +613,13 @@ async function generateActivity(config = {}) {
   });
 
   // Save GPX file
-  const activityId = Math.floor(10000000000 + Math.random() * 90000000000);
-  const filename = `activity_${activityId}.gpx`;
+  const year = activityStartTime.getFullYear();
+  const month = String(activityStartTime.getMonth() + 1).padStart(2, '0');
+  const day = String(activityStartTime.getDate()).padStart(2, '0');
+  const hours = String(activityStartTime.getHours()).padStart(2, '0');
+  const minutes = String(activityStartTime.getMinutes()).padStart(2, '0');
+  const seconds = String(activityStartTime.getSeconds()).padStart(2, '0');
+  const filename = `run_${year}-${month}-${day}T${hours}-${minutes}-${seconds}.gpx`;
   const filepath = path.join(GPX_DIR, filename);
   fs.writeFileSync(filepath, gpxContent, 'utf-8');
 

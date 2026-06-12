@@ -734,7 +734,7 @@ async function generateOnly() {
     }
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '📝 Generate FIT Only';
+    btn.innerHTML = '📝 Generate Activity Only';
   }
 }
 

@@ -95,6 +95,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.2.1 (2026-06-12)
+- **UI & File Storage Refinements**:
+  - Đổi nhãn nút Generate FIT Only thành Generate Activity Only tĩnh để phù hợp với việc sinh cả GPX và FIT.
+  - Đổi nhãn FIT OSRM Routing thành Snap OSRM Routing để làm nhãn chung.
+  - Gom toàn bộ tệp tin GPX và FIT vào chung thư mục lưu trữ 'data/activity'.
+  - Thay đổi cách đặt tên file GPX thành định dạng run_YYYY-MM-DDTHH-mm-ss.gpx theo thời gian thực tế của hoạt động.
+
 ### v2.2.0 (2026-06-12)
 - **Feature: GPX Format Support alongside FIT**:
   - Restored GPX generation and upload capabilities alongside FIT to resolve device recognition/Sync Badge issues for non-Garmin devices.
