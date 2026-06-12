@@ -27,9 +27,9 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Garmin Venu 2S** | 1 | 3704 | Fit OK - chưa có trong UI |
 | **Garmin Venu 2 Plus** | 1 | 3851 | Fit OK - chưa có trong UI |
 | **Garmin Venu Sq 2** | 1 | 4115 | Fit OK - chưa có trong UI |
-| **Garmin Instinct 2X Solar** | 1 | 4394 | - |
-| **Garmin epix Pro (Gen 2) 47mm** | 1 | 4313 | - |
-| **Garmin Connect** | 1 | ? | - |
+| **Garmin Instinct 2X Solar** | 1 | 4394 | Fit OK |
+| **Garmin epix Pro (Gen 2) 47mm** | 1 | 4313 | Fit OK |
+| **Garmin Connect** | 1 | ? | GPX OK |
 | **Coros Pace 3** | 294 | ? | - |
 | **Coros Apex 2 Pro** | 294 | ? | - |
 | **Coros Vertix 2S** | 294 | ? | - |
