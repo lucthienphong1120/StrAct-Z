@@ -393,10 +393,10 @@ The project uses high-quality administrative boundary data for Hanoi's 12 urban 
 ## 🛠️ Testing & Troubleshooting
 
 ### Removing VIP Status (Manual Override)
-If you need to downgrade an account to 'Normal' for testing purposes, you can use the following Node.js command in your terminal (replace `YOUR_USERNAME` with the actual username):
+If you need to downgrade an account to 'Basic' for testing purposes, you can use the following Node.js command in your terminal (replace `YOUR_USERNAME` with the actual username):
 
 ```bash
-node -e "require('./src/db/sqlite-db').getDb().then(db => db.run(\"UPDATE accounts SET role = 'normal' WHERE username = 'YOUR_USERNAME'\").then(() => { console.log('✅ Account downgraded to Normal'); process.exit(0); }))"
+node -e "require('./src/db/sqlite-db').getDb().then(db => db.run(\"UPDATE accounts SET role = 'basic' WHERE username = 'YOUR_USERNAME'\").then(() => { console.log('✅ Account downgraded to Basic'); process.exit(0); }))"
 ```
 *Note: You must log out and log back in (or refresh the page) for the changes to take effect in your session.*
 

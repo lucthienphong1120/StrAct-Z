@@ -199,13 +199,13 @@ async function generateActivity(config = {}) {
     maxHeartRate = 165,
     startTime = null,
     useOSRM = true,
-    userRole = 'normal',
+    userRole = 'basic',
     deviceName = 'Garmin fēnix 7x Pro',
     simWeather = true,
     simRedLights = true,
   } = config;
 
-  const limits = systemLimits[userRole] || systemLimits.normal;
+  const limits = systemLimits[userRole] || systemLimits.basic;
 
   // Determine Activity Type
   let finalActivityType = activityType;
@@ -298,8 +298,8 @@ async function generateActivity(config = {}) {
         
         if (ratio > 0) {
           const areaWeights = limits.activity_areas?.weights || {
-            home: { fully: 7.0, mostly: 4.2, partially: 2.8 },
-            work: { fully: 5.2, mostly: 3.0, partially: 1.5 }
+            home: { fully: 20.0, mostly: 14.0, partially: 7.0 },
+            work: { fully: 12.0, mostly: 7.5, partially: 3.0 }
           };
           if (area.type === 'home') {
             if (ratio >= 0.85) weight += areaWeights.home.fully;      // Bao trọn / Nằm trọn
@@ -488,7 +488,8 @@ async function generateActivity(config = {}) {
       const dayOfWeek = targetDateObj.getDay();
       const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
 
-      if (isWeekday && isWorkOverlap(ms, msEnd)) return false;
+      const bypassWorkHours = (minMs === maxMs);
+      if (!bypassWorkHours && isWeekday && isWorkOverlap(ms, msEnd)) return false;
       if (isOverlap(ms)) return false;
       return true;
     };
@@ -562,6 +563,8 @@ async function generateActivity(config = {}) {
     distanceKm,
     districtKeys: chosenDistrictKeys,
     useOSRM,
+    activityAreas: config.activity_areas ? JSON.parse(config.activity_areas) : [],
+    startNearFavoritePlace: config.start_near_favorite_place !== false && config.start_near_favorite_place !== 'false',
   });
 
   if (!points || points.length < 2) {

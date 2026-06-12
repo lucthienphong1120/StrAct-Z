@@ -49,7 +49,7 @@ async function loadStats(forceRefresh = false) {
     const authText = document.getElementById('authText');
     if (authText) {
       const nameSpan = authText.querySelector('.auth-username-text');
-      const currentName = nameSpan ? nameSpan.textContent : authText.textContent.replace(/(\sVIP|\sBASIC|\sNORMAL)/gi, '').trim();
+      const currentName = nameSpan ? nameSpan.textContent : authText.textContent.replace(/(\sVIP|\sBASIC)/gi, '').trim();
       const roleTag = window.userRole === 'vip' ? '<span class="vip-badge-premium">VIP</span>' : '<span class="basic-badge-standard">basic</span>';
       authText.innerHTML = `<span class="auth-username-text">${currentName}</span>${roleTag}`;
     }

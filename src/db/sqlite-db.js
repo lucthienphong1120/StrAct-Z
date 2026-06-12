@@ -290,13 +290,7 @@ async function getDb() {
         console.error('[Migration] Failed to update min_distance_km value:', e.message);
       }
 
-      // Migrate role 'normal' to 'basic'
-      try {
-        await db.run("UPDATE accounts SET role = 'basic' WHERE role = 'normal'");
-        console.log("[Migration] Migrated user roles 'normal' to 'basic'");
-      } catch (e) {
-        console.error('[Migration] Failed to migrate user roles:', e.message);
-      }
+
 
       // One-time initialization and district pre-computation for start_near_favorite_place
       try {

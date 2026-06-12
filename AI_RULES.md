@@ -11,7 +11,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🎨 Theme Standards (v1.50.31+)
 - **Fallback (Initial State)**: Default theme (via `:root`) uses a **Grey/Neutral** tone (`#6b7280`). This prevents the "orange flash" for VIP users before their role is identified.
-- **Normal User**: Distinguished by the **Strava Orange** theme (`#fc4c02`). Applied via `document.body.classList.add('is-normal')`.
+- **Basic User**: Distinguished by the **Strava Orange** theme (`#fc4c02`). Applied via `document.body.classList.add('is-basic')`.
 - **VIP User**: Distinguished by the **Gold/Amber** theme (`#f59e0b`). Applied via `document.body.classList.add('is-vip')`.
 - **Implementation**: The role-based class is applied in `loadStats()` (dashboard.js) or `initTheme()`.
 - **Design System**: Use variables like `--strava-orange`, `--gradient-primary`, and `--body-glow` instead of hardcoded hex/rgba values to ensure theme consistency.
@@ -57,7 +57,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ### 4. Custom Device Names (v1.56.0)
 - **VIP Accounts**: Allowed to enter any custom free-text Device Name (trimmed, max 100 characters).
-- **Normal Accounts**: UI restricts custom entries, and the backend validates that their chosen device name strictly matches one of the preset choices in `limits.device_name.choices`.
+- **Basic Accounts**: UI restricts custom entries, and the backend validates that their chosen device name strictly matches one of the preset choices in `limits.device_name.choices`.
 
 ### 4. Duplicate Protection (Safe Time)
 - **Concept**: Prevents new activities from being generated too close to existing ones (already uploaded or in Strava Cloud).
@@ -148,6 +148,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - Updated `test_devices.js` script to dynamically test and save FIT files for all 47 presets into `./tmp/fit-testcase`.
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
+
+### v2.3.7 (2026-06-12)
+- **Refactor: Legacy 'Normal' Role Terminology Cleanup**:
+  - Removed database startup migration code from `src/db/sqlite-db.js` that converted `'normal'` role to `'basic'`, as the migration has already completed successfully.
+  - Removed legacy `|| sysL.heart_rate_zones?.normal` fallback lookup in `public/js/ui/config.js`.
+  - Cleaned up `NORMAL` from username cleanup regex pattern in `public/js/ui/dashboard.js`.
+  - Updated references to `normal`/`Normal` role in `README.md` and `AI_RULES.md` to reference `basic`/`Basic` and `.is-basic`.
 
 ### v2.3.6 (2026-06-12)
 - **Bug Fixes: GPX & FIT Active Overlap Filter Synchronization**:
@@ -245,12 +252,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - Switched file naming of generated FIT files and activity external IDs to randomized UUID files (e.g., `uuid-activity.fit`).
 
 ### v1.60.7 (2026-06-10)
-- **Feature: Custom Upload Limit & Normal Username Badge**:
+- **Feature: Custom Upload Limit & Basic Username Badge**:
   - Swapped positioning of Google Fit Account (move to Left Column) and Strava Account (move to Right Column) cards.
   - Added editable `Daily Max Activity` setting (editable integer from `1` to account's `daily_upload_limit`) directly under `Daily Upload Limit`.
   - Extended Custom Time (date/time override) functionality to both GPX Generation and GPX Upload manual flows.
-  - Rendered standard pulsing orange `.normal-badge-standard` badge next to athlete name in header and settings panel for normal/standard accounts.
-  - Added frontend and backend validations to enforce normal accounts strictly choosing preset device name choices.
+  - Rendered standard pulsing orange `.basic-badge-standard` badge next to athlete name in header and settings panel for basic/standard accounts.
+  - Added frontend and backend validations to enforce basic accounts strictly choosing preset device name choices.
   - Skips validation checks against time ranges when target time input is exactly `'00:00'`.
 - **Feature: Cache Clearing & Load Optimization**:
   - Implemented service worker unregistration and browser cache purge on both login and logout flows to resolve version mismatch.
@@ -447,7 +454,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - Implemented visual split in Activity Insights chart: activities created by StrAct-Z are shown in orange, and other activities from Strava cloud are shown in purple. Added "StrAct Z" and "Strava Cloud" to the chart legend, and updated tooltips to display detailed splits.
   - Simplified insights chart by removing the duration/time line chart and changing the distance line chart color to yellow (gold/amber) to avoid visual clutter.
   - Hardened daily upload limit checks in the scheduler and API routes by bypassing cache (`forceRefresh = true` parameter) to ensure calculations are based on live cloud data.
-  - Standardized next auto-run display styling in scheduler card: neutral grey by default/fallback, Strava Orange for normal users and preview normal theme, and VIP Gold for active VIP users.
+  - Standardized next auto-run display styling in scheduler card: neutral grey by default/fallback, Strava Orange for basic users and preview basic theme, and VIP Gold for active VIP users.
 
 ### v1.52.1 (2026-06-01)
 - **Fix: Restored lastUploaded Variable & Cleanup Stale Migrations**:
@@ -535,14 +542,14 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Debug: District Weight Ratios Logs**: Added console log statements to display calculated weight values and percentage distributions of allowed Hanoi districts prior to performing the weighted selection in GPX generator.
 
 ### v1.51.46 (2026-05-28)
-- **Fix: Live District Borders (Activity Areas) Map Color Update**: Resolved issue where map borders (District highlights) did not change color when user used "Preview Normal Theme" or "Restore to VIP Theme". Changed `getDistrictStyle` in `map.js` to dynamically determine the VIP status using body classes instead of `window.userRole` (which doesn't change on preview). Restored original static colors for Home (#ff7800) and Work (#3b82f6) circles and legend text.
+- **Fix: Live District Borders (Activity Areas) Map Color Update**: Resolved issue where map borders (District highlights) did not change color when user used "Preview Basic Theme" or "Restore to VIP Theme". Changed `getDistrictStyle` in `map.js` to dynamically determine the VIP status using body classes instead of `window.userRole` (which doesn't change on preview). Restored original static colors for Home (#ff7800) and Work (#3b82f6) circles and legend text.
 
 ### v1.51.45 (2026-05-28)
-- **Fix: Live Activity Area Circles Color Update**: Updated Leaflet maps' Activity Areas (Home/Work) circle colors to dynamically update style using CSS variables when toggling themes (VIP Gold vs. Normal) or previewing. Also updated the frontend legend text colors in `index.html` to reflect theme variable changes properly.
+- **Fix: Live Activity Area Circles Color Update**: Updated Leaflet maps' Activity Areas (Home/Work) circle colors to dynamically update style using CSS variables when toggling themes (VIP Gold vs. Basic) or previewing. Also updated the frontend legend text colors in `index.html` to reflect theme variable changes properly.
 
 ### v1.51.44 (2026-05-28)
 - **Clean: Removed Stale Configurations**: Cleaned up the deprecated `district_key` configuration parameters completely across the frontend configuration panel (`config.js`), the backend endpoint (`api.js`), and the scheduled runner (`scheduler.js`) to prevent any potential storage of unused parameters in `user_config` database table.
-- **Fix: Live Map Color Update**: Ensured the Leaflet maps' polygon colors update immediately when switching themes between VIP Gold and Normal without requiring a page refresh.
+- **Fix: Live Map Color Update**: Ensured the Leaflet maps' polygon colors update immediately when switching themes between VIP Gold and Basic without requiring a page refresh.
 
 ### v1.51.43 (2026-05-28)
 - **Fix: Weighted District Selection Bug**: Fixed root cause of all activities generating in Hoàn Kiếm. The `districtKey` parameter in `gpx-generator.js` had a hardcoded default of `'hoan_kiem'` which bypassed the entire weighted random selection algorithm whenever `district_key` was not set in the user's DB config. Changed default to `null` so the code correctly falls into the weighted probability path. Also fixed the unknown-key fallback to use random from `allowedDistricts` instead of hardcoded `'hoan_kiem'`.
@@ -770,7 +777,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ### v1.50.31 (2026-05-12)
 - **Theme Fallback Overhaul**: Changed default CSS variables to grey/neutral to prevent orange flash for VIP users.
-- **Role-Based Classes**: Implemented `.is-normal` class for the Strava Orange theme and updated logic to toggle between `.is-normal` and `.is-vip`.
+- **Role-Based Classes**: Implemented `.is-basic` class for the Strava Orange theme and updated logic to toggle between `.is-basic` and `.is-vip`.
 - **Variable Synchronization**: Replaced hardcoded orange hex/rgba values in `layout.css` and `components.css` with CSS variables (`--strava-orange`, `--strava-orange-glow`, etc.).
 - **Improved Initial Load**: Neutral fallback ensures a premium feel during the brief authentication/stats fetching phase.
 
@@ -778,7 +785,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Capitalization Fixes**: Standardized all tooltips and UI labels to Sentence Case.
 - **Inheritance Fix**: Added `text-transform: none` to `.tooltip-icon` to prevent tooltips from inheriting uppercase styling from parent containers.
 - **Localized Labels**: Updated Map Info grid labels to Vietnamese sentence case ('Khóa bản đồ', 'Điểm Nhà', etc.).
-- **Consistent Roles**: Standardized role names to capitalized 'Normal' and 'VIP' in tooltips.
+- **Consistent Roles**: Standardized role names to capitalized 'Basic' and 'VIP' in tooltips.
 
 ### v1.50.29 (2026-05-11)
 - **Map Info Structure**: Separated map stats into a 2-row grid for better readability.
