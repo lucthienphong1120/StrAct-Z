@@ -71,6 +71,16 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Apple Watch Series 11** | 263 | ? | Không nhận thiết bị - bỏ |
 | **Apple Watch Series 10** | 263 | ? | Không nhận thiết bị - bỏ |
 | **Apple Sport** | 263 | ? | Không nhận thiết bị - bỏ |
+| **Polar Vantage V3** | ? | ? | Thêm cái này - chưa test |
+| **Polar Grit X2 Pro** | ? | ? | Thêm cái này - chưa test |
+| **Polar Pacer** | ? | ? | Thêm cái này - chưa test |
+| **Polar Pacer Pro** | ? | ? | Thêm cái này - chưa test |
+| **Polar Ignite 3** | ? | ? | Thêm cái này - chưa test |
+| **Xiaomi Watch S5** | ? | ? | Thêm cái này - chưa test |
+| **Xiaomi Watch 2** | ? | ? | Thêm cái này - chưa test |
+| **Xiaomi Smart Band 10** | ? | ? | Thêm cái này - chưa test |
+| **Redmi Watch 6** | ? | ? | Thêm cái này - chưa test |
+| **Redmi Watch 5 Active** | ? | ? | Thêm cái này - chưa test |
 | **Strava App** | 265 | 265 | GPX OK |
 
 ### Phương án triển khai sau khi Test
@@ -105,7 +115,7 @@ Với thiết bị Samsung/Apple:
 Không phổ biến, bỏ đỡ tốn effort
 ```
 
-Với các thiết bị Polar/Xiaomi/Casio:
+Với các thiết bị Polar/Xiaomi:
 ```
 Thêm một vài dòng làm testcase
 ```
