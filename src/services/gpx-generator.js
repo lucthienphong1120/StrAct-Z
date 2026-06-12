@@ -22,17 +22,54 @@ const { getDistrictKeyForCoordinate } = require('../utils/geo');
 const GPX_DIR = path.join(__dirname, '..', '..', 'data', 'activity');
 fs.mkdirSync(GPX_DIR, { recursive: true });
 
-const APP_SOURCE_MAP = {
-  garmin: 'Garmin Connect',
-  coros: 'COROS',
-  suunto: 'Suunto',
-  amazfit: 'Zepp App',
-  zepp: 'Zepp App',
-  huawei: 'Huawei Health',
-  samsung: 'Samsung Health',
-  apple: 'Apple Sport',
-  strava: 'Strava App'
-};
+/**
+ * Determines the GPX creator (source app/device name) for a given device.
+ * Strategy based on DEVICE_TESTCASES.md:
+ * - Garmin Connect / Garmin devices in GPX: creator = 'Garmin Connect'
+ * - COROS devices: creator = 'COROS'
+ * - Huawei devices: creator = 'Huawei Health'
+ * - Suunto/Amazfit/Polar/Xiaomi/Redmi: creator = device name directly
+ * - Strava App: creator = 'Strava App'
+ */
+function getGPXCreator(deviceName) {
+  const nameLower = (deviceName || '').toLowerCase();
+  if (nameLower.includes('garmin') || nameLower === 'garmin connect') return 'Garmin Connect';
+  if (nameLower.includes('coros')) return 'COROS';
+  if (nameLower.includes('huawei')) return 'Huawei Health';
+  if (nameLower.includes('strava')) return 'Strava App';
+  // Suunto, Amazfit, Polar, Xiaomi, Redmi → use device name directly
+  return deviceName || 'Strava App';
+}
+
+/**
+ * Returns the description for Strava upload.
+ * - Garmin devices (not 'Garmin Connect'): description = device name
+ * - COROS specific devices (not generic 'COROS'): description = device name
+ * - Huawei specific devices (not generic 'Huawei Health'): description = device name
+ * - Others: empty description
+ */
+function getShortDescription(deviceName) {
+  const nameLower = (deviceName || '').toLowerCase();
+  // Garmin device in GPX mode → description = device name (but not for 'Garmin Connect' itself)
+  if (nameLower.includes('garmin') && nameLower !== 'garmin connect') return deviceName;
+  // COROS specific device → description = device name (but not for generic 'COROS')
+  if (nameLower.includes('coros') && nameLower !== 'coros') return deviceName;
+  // Huawei specific device → description = device name (but not for generic 'Huawei Health')
+  if (nameLower.includes('huawei') && nameLower !== 'huawei health') return deviceName;
+  return '';
+}
+
+/**
+ * Determines if a device should always use GPX format (non-Garmin FIT-incompatible devices).
+ * Garmin devices + Strava App can use FIT. Everything else should use GPX.
+ */
+function shouldForceGPX(deviceName) {
+  const nameLower = (deviceName || '').toLowerCase();
+  if (nameLower.includes('garmin')) return false;
+  if (nameLower.includes('strava')) return false;
+  // All other brands: COROS, Suunto, Amazfit, Huawei, Polar, Xiaomi, Redmi → force GPX
+  return true;
+}
 
 function getDeviceBrand(deviceName) {
   const nameLower = (deviceName || '').toLowerCase();
@@ -40,16 +77,11 @@ function getDeviceBrand(deviceName) {
   if (nameLower.includes('coros')) return 'coros';
   if (nameLower.includes('suunto')) return 'suunto';
   if (nameLower.includes('amazfit')) return 'amazfit';
-  if (nameLower.includes('zepp')) return 'zepp';
   if (nameLower.includes('huawei')) return 'huawei';
-  if (nameLower.includes('samsung')) return 'samsung';
-  if (nameLower.includes('apple') || nameLower.includes('sport')) return 'apple';
+  if (nameLower.includes('polar')) return 'polar';
+  if (nameLower.includes('xiaomi') || nameLower.includes('redmi')) return 'xiaomi';
   if (nameLower.includes('strava')) return 'strava';
   return 'garmin';
-}
-
-function getShortDescription(deviceName) {
-  return '';
 }
 
 function getActualDistrictKeysForRoute(points, fallbackKeys = []) {
@@ -129,8 +161,8 @@ function getCircleIntersectionArea(r1, r2, d) {
 
 function buildGPX(points, options = {}) {
   const { activityName = 'Morning Run', activityType = 'running', includeHeartRate = true, includeCadence = true, deviceName = 'Garmin Connect', description = '' } = options;
-  // Directly use the deviceName as the creator, as this is how Zepp App outputs GPX.
-  const creator = deviceName || 'Zepp App';
+  // Use getGPXCreator() to determine the proper source app/device name as the GPX creator attribute
+  const creator = getGPXCreator(deviceName);
 
   let gpx = `<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <gpx xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns3="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:ns2="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:ns1="http://www.cluetrust.com/XML/GPXDATA/1/0" creator="${escapeXml(creator)}" version="1.1">
@@ -614,7 +646,7 @@ async function generateActivity(config = {}) {
     includeHeartRate: heartRateEnabled,
     includeCadence: true,
     deviceName: deviceName ? deviceName.replace(/\s*★$/, '') : '', // Strip trailing star if any
-    description: '', // Globally empty description
+    description: getShortDescription(deviceName), // Description will be set for Garmin/Huawei/COROS
   });
 
   // Save GPX file
@@ -647,4 +679,4 @@ async function generateActivity(config = {}) {
   };
 }
 
-module.exports = { generateActivity, buildGPX, GPX_DIR, HANOI_DISTRICTS, getShortDescription };
+module.exports = { generateActivity, buildGPX, GPX_DIR, HANOI_DISTRICTS, getShortDescription, shouldForceGPX };

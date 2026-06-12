@@ -181,7 +181,9 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
           genConfig.targetDistanceKm = targetDistanceKmOverride;
         }
         
-        const format = config.export_format || 'fit';
+        let format = config.export_format || 'fit';
+        const schedulerDeviceName = config.device_name || systemLimits.device_name.default;
+        if (gpxGenerator.shouldForceGPX(schedulerDeviceName)) format = 'gpx';
         generator = format === 'gpx' ? gpxGenerator : fitGenerator;
         activity = await generator.generateActivity(genConfig);
       } catch (genErr) {

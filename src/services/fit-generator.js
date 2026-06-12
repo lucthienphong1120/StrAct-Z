@@ -141,7 +141,7 @@ function resolveDeviceParams(deviceName) {
   let product = 3907;   // Default fenix 7x
   let productName = deviceName || 'Garmin fēnix 7x Pro';
 
-  // Specific Garmin models
+  // ── Specific Garmin models (FIT OK with Product IDs) ──
   if (nameLower.includes('forerunner 965')) {
     manufacturer = 1; product = 4315; productName = 'Forerunner 965';
   } else if (nameLower.includes('forerunner 955')) {
@@ -168,7 +168,7 @@ function resolveDeviceParams(deviceName) {
     manufacturer = 1; product = 4666; productName = 'fēnix E';
   } else if (nameLower.includes('enduro 3')) {
     manufacturer = 1; product = 4575; productName = 'Enduro 3';
-  } else if (nameLower.includes('venu 3 plus') || nameLower.includes('venu 3s')) {
+  } else if (nameLower.includes('venu 3s')) {
     manufacturer = 1; product = 4261; productName = 'Venu 3S';
   } else if (nameLower.includes('venu 3')) {
     manufacturer = 1; product = 4260; productName = 'Venu 3';
@@ -176,80 +176,81 @@ function resolveDeviceParams(deviceName) {
     manufacturer = 1; product = 3851; productName = 'Venu 2 Plus';
   } else if (nameLower.includes('venu 2s')) {
     manufacturer = 1; product = 3704; productName = 'Venu 2S';
-  } else if (nameLower.includes('venu 2')) {
-    manufacturer = 1; product = 3703; productName = 'Venu 2';
   } else if (nameLower.includes('venu sq 2')) {
     manufacturer = 1; product = 4115; productName = 'Venu Sq 2';
+  } else if (nameLower.includes('venu 2')) {
+    manufacturer = 1; product = 3703; productName = 'Venu 2';
   } else if (nameLower.includes('instinct 2x')) {
     manufacturer = 1; product = 4394; productName = 'Instinct 2X';
   } else if (nameLower.includes('epix pro')) {
     manufacturer = 1; product = 4313; productName = 'Epix Pro';
   }
-  // Garmin Connect - App creator, product should be undefined to avoid mapping to a specific watch
+  // Garmin Connect - App creator
   else if (nameLower === 'garmin connect') {
     manufacturer = 1; product = undefined; productName = 'Garmin Connect';
   }
-  // Unknown, Fictional or New Garmin devices (with undefined product to use fallback)
-  else if (nameLower.includes('forerunner 570') || nameLower.includes('forerunner 970') || nameLower.includes('forerunner 975') || nameLower.includes('instinct 3')) {
-    manufacturer = 1; product = undefined; productName = deviceName;
-  }
   
-  // Non-Garmin Brands & Devices
+  // ── COROS (Manufacturer: 294) ──
   else if (nameLower.includes('pace 3')) {
-    manufacturer = 264; product = undefined; productName = 'PACE 3';
+    manufacturer = 294; product = undefined; productName = 'PACE 3';
   } else if (nameLower.includes('apex 2 pro')) {
-    manufacturer = 264; product = undefined; productName = 'APEX 2 Pro';
+    manufacturer = 294; product = undefined; productName = 'APEX 2 Pro';
   } else if (nameLower.includes('vertix 2s')) {
-    manufacturer = 264; product = undefined; productName = 'VERTIX 2S';
-  } else if (nameLower.includes('race s')) {
-    manufacturer = 23; product = undefined; productName = 'Suunto Race S';
-  } else if (nameLower.includes('vertical')) {
+    manufacturer = 294; product = undefined; productName = 'VERTIX 2S';
+  }
+  // ── Suunto (Manufacturer: 23) ──
+  else if (nameLower.includes('suunto vertical') || nameLower === 'suunto vertical') {
     manufacturer = 23; product = undefined; productName = 'Suunto Vertical';
+  } else if (nameLower.includes('suunto race')) {
+    manufacturer = 23; product = undefined; productName = 'Suunto Race';
+  } else if (nameLower.includes('suunto ocean')) {
+    manufacturer = 23; product = undefined; productName = 'Suunto Ocean';
+  } else if (nameLower.includes('9 peak pro')) {
+    manufacturer = 23; product = undefined; productName = 'Suunto 9 Peak Pro';
+  }
+  // ── Amazfit / Zepp (Manufacturer: 339) ──
+  else if (nameLower.includes('bip 6')) {
+    manufacturer = 339; product = undefined; productName = 'Amazfit Bip 6';
+  } else if (nameLower.includes('cheetah')) {
+    manufacturer = 339; product = undefined; productName = 'Amazfit Cheetah';
   } else if (nameLower.includes('t-rex 3')) {
-    manufacturer = 255; product = 0; productName = 'Amazfit T-Rex 3';
+    manufacturer = 339; product = undefined; productName = 'Amazfit T-Rex 3';
+  } else if (nameLower.includes('gtr 4')) {
+    manufacturer = 339; product = undefined; productName = 'Amazfit GTR 4';
   } else if (nameLower.includes('balance 2')) {
-    manufacturer = 255; product = 0; productName = 'Amazfit Balance 2';
-  } else if (nameLower.includes('active')) {
-    manufacturer = 255; product = 0; productName = 'Amazfit Active 3 Premium';
-  } else if (nameLower.includes('gt 6 pro')) {
-    manufacturer = 348; product = undefined; productName = 'Huawei Watch GT 6 Pro';
-  } else if (nameLower.includes('fit 5 pro')) {
-    manufacturer = 348; product = undefined; productName = 'Huawei Watch Fit 5 Pro';
-  } else if (nameLower.includes('fit 4')) {
-    manufacturer = 348; product = undefined; productName = 'Huawei Watch Fit 4';
-  } else if (nameLower.includes('gt 4 pro')) {
-    manufacturer = 348; product = undefined; productName = 'Huawei Watch GT 4 Pro';
-  } else if (nameLower.includes('fit 3')) {
-    manufacturer = 348; product = undefined; productName = 'Huawei Watch Fit 3';
-  } else if (nameLower.includes('ultimate')) {
-    manufacturer = 348; product = undefined; productName = 'Huawei Watch Ultimate';
-  } else if (nameLower.includes('galaxy watch ultra')) {
-    manufacturer = 258; product = undefined; productName = 'Galaxy Watch Ultra';
-  } else if (nameLower.includes('galaxy watch 8')) {
-    manufacturer = 258; product = undefined; productName = 'Galaxy Watch 8';
-  } else if (nameLower.includes('galaxy watch 7')) {
-    manufacturer = 258; product = undefined; productName = 'Galaxy Watch 7';
-  } else if (nameLower.includes('zepp')) {
-    manufacturer = 255; product = 0; productName = 'Zepp App';
-  } else if (nameLower.includes('apple') || nameLower.includes('sport')) {
-    manufacturer = 263; product = undefined; productName = deviceName || 'Apple Watch';
-  } else if (nameLower.includes('strava')) {
+    manufacturer = 339; product = undefined; productName = 'Amazfit Balance 2';
+  } else if (nameLower.includes('active 2') && !nameLower.includes('active 3')) {
+    manufacturer = 339; product = undefined; productName = 'Amazfit Active 2';
+  } else if (nameLower.includes('active 3') || nameLower.includes('active')) {
+    manufacturer = 339; product = undefined; productName = 'Amazfit Active 3 Premium';
+  }
+  // ── Huawei (Manufacturer: 348) ──
+  else if (nameLower.includes('huawei') && !nameLower.includes('health')) {
+    manufacturer = 348; product = undefined; productName = deviceName;
+  } else if (nameLower === 'huawei health') {
+    manufacturer = 348; product = undefined; productName = 'Huawei Health';
+  }
+  // ── Polar (Manufacturer: 80) ──
+  else if (nameLower.includes('polar')) {
+    manufacturer = 80; product = undefined; productName = deviceName;
+  }
+  // ── Strava App ──
+  else if (nameLower.includes('strava')) {
     manufacturer = 265; product = 265; productName = deviceName || 'Strava App';
   }
   
-  // Generic Brand Fallbacks
+  // ── Generic Brand Fallbacks ──
   else if (nameLower.includes('garmin')) {
     manufacturer = 1; product = 3907; productName = deviceName;
   } else if (nameLower.includes('coros')) {
-    manufacturer = 264; product = undefined; productName = deviceName;
+    manufacturer = 294; product = undefined; productName = deviceName;
   } else if (nameLower.includes('suunto')) {
     manufacturer = 23; product = undefined; productName = deviceName;
   } else if (nameLower.includes('huami') || nameLower.includes('amazfit')) {
-    manufacturer = 255; product = 0; productName = deviceName;
-  } else if (nameLower.includes('huawei')) {
-    manufacturer = 348; product = undefined; productName = deviceName;
-  } else if (nameLower.includes('samsung')) {
-    manufacturer = 258; product = undefined; productName = deviceName;
+    manufacturer = 339; product = undefined; productName = deviceName;
+  } else if (nameLower.includes('xiaomi') || nameLower.includes('redmi')) {
+    // Xiaomi/Redmi: no official ANT+ manufacturer ID, GPX-only recommended
+    manufacturer = 0; product = undefined; productName = deviceName;
   }
 
   return { manufacturer, product, productName };

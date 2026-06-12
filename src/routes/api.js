@@ -305,7 +305,9 @@ router.post('/generate', async (req, res) => {
     const genConfig = buildGeneratorConfig(config, { ...ov, target_date: targetDate }, lastUploaded, req.user.role || 'basic');
     genConfig.existingActivities = [...localActivities, ...stravaActivities];
     genConfig.isManual = true;
-    const format = ov.export_format || config.export_format || 'fit';
+    let format = ov.export_format || config.export_format || 'fit';
+    const deviceNameForFormat = ov.device_name || config.device_name || systemLimits.device_name.default;
+    if (gpxGenerator.shouldForceGPX(deviceNameForFormat)) format = 'gpx';
     const generator = format === 'gpx' ? gpxGenerator : fitGenerator;
     const activity = await generator.generateActivity(genConfig);
 
@@ -390,7 +392,9 @@ router.post('/generate-and-upload', async (req, res) => {
     const genConfig = buildGeneratorConfig(config, { ...ov, target_date: targetDate }, lastUploaded, req.user.role || 'basic');
     genConfig.existingActivities = [...localActivities, ...stravaActivities];
     genConfig.isManual = true;
-    const format = ov.export_format || config.export_format || 'fit';
+    let format = ov.export_format || config.export_format || 'fit';
+    const deviceNameForFormat2 = ov.device_name || config.device_name || systemLimits.device_name.default;
+    if (gpxGenerator.shouldForceGPX(deviceNameForFormat2)) format = 'gpx';
     const generator = format === 'gpx' ? gpxGenerator : fitGenerator;
     const activity = await generator.generateActivity(genConfig);
 
