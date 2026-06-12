@@ -1,6 +1,7 @@
 async function loadSchedule() {
   try {
     const status = await api('/scheduler');
+    window.lastSavedScheduleStatus = status;
     const sysL = window.sysLimits;
     document.getElementById('scheduleEnabled').checked = status.enabled;
     document.getElementById('scheduleTime').value = status.scheduleTime || (sysL?.schedule_time?.default) || '22:00';
@@ -132,6 +133,7 @@ async function updateSchedule(showToastOnSuccess = true) {
     showToast(status.error, 'error');
     return;
   }
+  window.lastSavedScheduleStatus = status;
   updateScheduleDisplay(status);
   
   if (showToastOnSuccess) {
@@ -162,9 +164,9 @@ function updateSchedulerBanner() {
 
 function refreshScheduleDisplayFromUI() {
   const enabled = document.getElementById('scheduleEnabled')?.checked || false;
-  const customTimeEnabled = document.getElementById('cfgCustomTime')?.checked || false;
-  const targetDate = document.getElementById('cfgTargetDate')?.value || 'Hôm nay';
-  const targetTimeCustom = document.getElementById('cfgCustomMinTime')?.value || '00:00';
+  const customTimeEnabled = window.lastSavedScheduleStatus?.customTimeEnabled || false;
+  const targetDate = window.lastSavedScheduleStatus?.targetDate || 'Hôm nay';
+  const targetTimeCustom = window.lastSavedScheduleStatus?.targetTimeCustom || '00:00';
   
   const scheduleTime = document.getElementById('scheduleTime')?.value || '22:00';
   const scheduleTime2 = document.getElementById('scheduleTime2')?.value || '14:00';
@@ -176,7 +178,7 @@ function refreshScheduleDisplayFromUI() {
   }
   const customStartMs = new Date(`${dateText}T${targetTimeCustom}:00.000+07:00`).getTime();
   const nowMs = Date.now();
-  const customTimePending = nowMs < customStartMs;
+  const customTimePending = customTimeEnabled && (nowMs < customStartMs);
   
   const status = {
     enabled,

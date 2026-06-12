@@ -149,6 +149,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.4 (2026-06-12)
+- **Feature: Unsaved Config Scope Limits on UI Live Updates**:
+  - Restored "Pending (until target_date target_time_custom)" scheduler banner status to evaluate from the last saved status (`window.lastSavedScheduleStatus`) instead of unsaved input controls in the Time Configuration card.
+  - Automatically reload the schedule settings using `loadSchedule()` upon successfully saving the general configuration.
+  - Removed immediate event listeners from `cfgTargetDate` and `cfgCustomMinTime`, and removed update triggers from `toggleCustomTime()`.
+  - Changed `scheduleEnabled` checkbox toggle behavior in the Auto Schedule card to only update the UI in real-time. Toggling this switch no longer automatically saves to the database; it must be committed by clicking the Save button.
+
 ### v2.3.3 (2026-06-12)
 - **Bug Fixes: Time Slot 2 Close Bug**:
   - Tapped/clicked areas around the margins of Time Slot 2 closed the slot due to the "Remove" button being nested inside the flex-layout `<label>` tag. Separated the button from the `<label>` tag, resolving undesired HTML event delegation.

@@ -229,6 +229,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Sửa lỗi getOverrideConfig gán cứng min_time/max_time khi dùng custom time 00:00 và ẩn thông tin Pending khi target_date đã ở quá khứ (v2.3.1)
 + [x] Sửa lỗi mất cấu hình time slot 2 khi reload (race condition userRole), chuyển Auto Save sang Save buttons (scheduler, daily max activities), và cập nhật Pending status tức thời trên UI (v2.3.2)
 + [x] Sửa lỗi click vào rìa thẻ mốc thời gian 2 cũng bị đóng bằng cách tách button ra khỏi label (v2.3.3)
++ [x] Cập nhật cơ chế hiển thị Pending chỉ update sau khi click Save trong Time Configuration; nút bật/tắt Auto Schedule chỉ lưu khi click nút Save của thẻ (v2.3.4)
 
 
 

@@ -563,25 +563,7 @@ function attachRealTimeValidation() {
     el.addEventListener('blur', validate);
   });
 
-  // Real-time scheduler pending display updates for Custom Time controls
-  const targetDateEl = document.getElementById('cfgTargetDate');
-  const customTimeEl = document.getElementById('cfgCustomMinTime');
-  if (targetDateEl) {
-    targetDateEl.addEventListener('input', () => {
-      if (window.refreshScheduleDisplayFromUI) window.refreshScheduleDisplayFromUI();
-    });
-    targetDateEl.addEventListener('change', () => {
-      if (window.refreshScheduleDisplayFromUI) window.refreshScheduleDisplayFromUI();
-    });
-  }
-  if (customTimeEl) {
-    customTimeEl.addEventListener('input', () => {
-      if (window.refreshScheduleDisplayFromUI) window.refreshScheduleDisplayFromUI();
-    });
-    customTimeEl.addEventListener('change', () => {
-      if (window.refreshScheduleDisplayFromUI) window.refreshScheduleDisplayFromUI();
-    });
-  }
+
 }
 
 async function saveConfig() {
@@ -629,6 +611,9 @@ async function saveConfig() {
     const res = await api('/config', { method: 'POST', body: config });
     if (res && res.success) {
       showToast('Configuration saved!', 'success');
+      if (window.loadSchedule) {
+        await window.loadSchedule();
+      }
     } else {
       showToast(res?.error || 'Failed to save configuration', 'error');
     }
@@ -746,9 +731,6 @@ function toggleCustomTime() {
     if (targetDateInput) {
       targetDateInput.max = new Date().toLocaleDateString('en-CA');
     }
-  }
-  if (window.refreshScheduleDisplayFromUI) {
-    window.refreshScheduleDisplayFromUI();
   }
 }
 
