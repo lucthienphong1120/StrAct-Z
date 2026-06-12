@@ -128,14 +128,12 @@ const LIMITS = {
     default: false
   },
   random_time_bounds: {
-    label: 'Thời gian bắt đầu hoạt động ngẫu nhiên (24h).',
-    desc_extra: 'Định dạng 24:00',
+    label: 'Khung thời gian bắt đầu hoạt động ngẫu nhiên.',
     type: 'time',
     default: { start: '04:30', end: '22:30' }
   },
   avoid_workhours: {
-    label: 'Khung giờ không tạo hoạt động ngẫu nhiên (24h).',
-    desc_extra: 'Định dạng 24:00',
+    label: 'Khung giờ tránh tạo hoạt động ngẫu nhiên.',
     type: 'time',
     default: {
       start1: '08:00', end1: '11:30',
@@ -143,7 +141,7 @@ const LIMITS = {
     }
   },
   target_date: {
-    label: 'Tạo hoạt động cho một ngày trong quá khứ.',
+    label: 'Tạo hoạt động cho một ngày trong quá khứ hoặc đặt lịch cho hoạt động trong tương lai.',
     type: 'date',
     default: 'Hôm nay',
     min: 'today',
