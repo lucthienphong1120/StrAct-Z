@@ -149,6 +149,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.6 (2026-06-12)
+- **Bug Fixes: GPX & FIT Active Overlap Filter Synchronization**:
+  - Synchronized the active activity filter logic in `gpx-generator.js` with `fit-generator.js` to correctly evaluate `config.isManual` for local `generated` draft activities, and explicitly ignore `'failed'`, `'deleted'`, or `'removed'` activities during collision detection.
+
 ### v2.3.5 (2026-06-12)
 - **Feature: Standardized YYYY-MM-DD Locale & 24-Hour Input Enforcement**:
   - Replaced the `'en-CA'` (English Canada) locale string format references across the entire codebase with `'sv-SE'` (Swedish Sweden) to produce the standard ISO-8601 `YYYY-MM-DD` date format without referencing Canada.

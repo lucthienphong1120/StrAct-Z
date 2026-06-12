@@ -231,6 +231,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Sửa lỗi click vào rìa thẻ mốc thời gian 2 cũng bị đóng bằng cách tách button ra khỏi label (v2.3.3)
 + [x] Cập nhật cơ chế hiển thị Pending chỉ update sau khi click Save trong Time Configuration; nút bật/tắt Auto Schedule chỉ lưu khi click nút Save của thẻ (v2.3.4)
 + [x] Thay thế toàn bộ locale 'en-CA' sang 'sv-SE' để giữ định dạng YYYY-MM-DD chuẩn mà không dùng mã vùng Canada; đồng thời gán 'lang="vi-VN"' cho toàn bộ các thẻ input time để ép hiển thị định dạng 24h (v2.3.5)
++ [x] Đồng bộ và chuẩn hóa logic lọc hoạt động active cho bộ sinh GPX và FIT, đảm bảo bỏ qua các hoạt động có trạng thái 'failed', 'deleted', hoặc 'removed' trong khi kiểm tra trùng lặp (v2.3.6)
 
 
 
