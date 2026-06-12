@@ -105,6 +105,11 @@ Với thiết bị Samsung/Apple:
 Không phổ biến, bỏ đỡ tốn effort
 ```
 
+Với các thiết bị Polar/Xiaomi/Casio:
+```
+Thêm một vài dòng làm testcase
+```
+
 ## 🔍 Kết quả nghiên cứu & Ánh xạ ID từ Garmin FIT SDK & ANT+
 
 Dựa trên tài liệu chính thống của **Garmin FIT SDK** và **ANT+ Alliance (thisisant.com)**, dưới đây là các phát hiện quan trọng phục vụ cho việc sinh tệp FIT chuẩn hóa trên hệ thống:
