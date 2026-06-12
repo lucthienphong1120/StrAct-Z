@@ -13,9 +13,9 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Garmin Forerunner 255** | 1 | 3992 | Fit OK - chưa có trong UI |
 | **Garmin Forerunner 255S** | 1 | 3993 | Fit OK |
 | **Garmin Forerunner 165** | 1 | 4432 | Fit OK |
-| **Garmin Forerunner 970** | 1 | ? | Không nhận thiết bị |
-| **Garmin Forerunner 570** | 1 | ? | Không nhận thiết bị |
-| **Garmin Instinct 3** | 1 | ? | Không nhận thiết bị |
+| **Garmin Forerunner 970** | 1 | ? | Không nhận thiết bị - bỏ |
+| **Garmin Forerunner 570** | 1 | ? | Không nhận thiết bị - bỏ |
+| **Garmin Instinct 3** | 1 | ? | Không nhận thiết bị - bỏ |
 | **Garmin fēnix 7x Pro** | 1 | 4376 | Fit OK |
 | **Garmin fēnix 8** | 1 | 4536 | Fit OK |
 | **Garmin fēnix 8 Solar** | 1 | 4533 | Fit OK |
@@ -48,16 +48,16 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Huawei Watch 5** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
 | **Huawei Watch Ultimate** | 348 | ? | Không nhận thiết bị - Chuyển sang dùng Huawei Health và ghi tên thiết bị ở mô tả |
 | **Huawei Health** | 348 | ? | GPX OK |
-| **Samsung Galaxy Watch Ultra** | 258 | ? | - |
-| **Samsung Galaxy Watch 8** | 258 | ? | - |
-| **Samsung Galaxy Watch 7** | 258 | ? | - |
-| **Samsung Health** | 258 | ? | - |
-| **Apple Watch Ultra 3** | 263 | ? | - |
-| **Apple Watch Ultra 2** | 263 | ? | - |
-| **Apple Watch Series 11** | 263 | ? | - |
-| **Apple Watch Series 10** | 263 | ? | - |
-| **Apple Sport** | 263 | ? | - |
-| **Strava App** | 265 | 265 | - |
+| **Samsung Galaxy Watch Ultra** | 258 | ? | Không nhận thiết bị - bỏ |
+| **Samsung Galaxy Watch 8** | 258 | ? | Không nhận thiết bị - bỏ |
+| **Samsung Galaxy Watch 7** | 258 | ? | Không nhận thiết bị - bỏ |
+| **Samsung Health** | 258 | ? | GPX OK |
+| **Apple Watch Ultra 3** | 263 | ? | Không nhận thiết bị - bỏ |
+| **Apple Watch Ultra 2** | 263 | ? | Không nhận thiết bị - bỏ |
+| **Apple Watch Series 11** | 263 | ? | Không nhận thiết bị - bỏ |
+| **Apple Watch Series 10** | 263 | ? | Không nhận thiết bị - bỏ |
+| **Apple Sport** | 263 | ? | Không nhận thiết bị - bỏ |
+| **Strava App** | 265 | 265 | GPX OK |
 
 ### Phương án triển khai sau khi Test
 
@@ -77,6 +77,13 @@ Với thiết bị Huawei/COROS:
 Type: GPX
 Source: Huawei Health
 Description: Device name
+```
+
+Với thiết vị Sunno/Amazfit:
+```
+Type: GPX
+Source: Device name
+Description: 
 ```
 
 ## 🔍 Kết quả nghiên cứu & Ánh xạ ID từ Garmin FIT SDK & ANT+
