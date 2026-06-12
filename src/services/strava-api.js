@@ -6,6 +6,7 @@ const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const FormData = require('form-data');
 const db = require('../db/database');
 
@@ -227,7 +228,10 @@ async function uploadActivity(accountId, fitFilepath, options = {}) {
   form.append('name', name);
   form.append('description', description);
   form.append('sport_type', sportType);
-  form.append('external_id', path.basename(fitFilepath));
+  
+  // Use a Zepp-like format for external_id
+  const externalId = `stripped_${crypto.randomUUID()}-activity.${ext}`;
+  form.append('external_id', externalId);
 
   const requestOptions = {
     hostname: STRAVA_BASE_URL,

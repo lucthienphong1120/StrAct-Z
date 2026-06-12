@@ -18,6 +18,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] mọi update config, button sửa đổi, validate, check quyền, vip max range,... đều phải có notify
 + [x] toàn bộ config đều phải có hint (?) button hover hiện giải thích thông tin (ý nghĩa, loại giá trị, đơn vị, phạm vi min/max)
 + [x] review, cân nhắc vị trí có thể dùng Caching layer (optimize API calls)
++ [x] fix lỗi Strava không nhận diện đúng source device cho Zepp/Amazfit (tối ưu cấu trúc file GPX/FIT format và external_id)
 + [x] tích hợp đẩy data về các luồng công cụ Health Hub như Google Fit, Health connect, Samsung Health, Apple Health
 + [x] tích hợp bổ sung cho các công cụ luyện tập khác như adidas running, nike run club, runkeeper (optional, not tested)
 + [x] review và sửa lại min, max, range các option + validate (min/max/range)

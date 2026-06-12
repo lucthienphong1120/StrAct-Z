@@ -206,11 +206,11 @@ function resolveDeviceParams(deviceName) {
   } else if (nameLower.includes('vertical')) {
     manufacturer = 23; product = undefined; productName = 'Suunto Vertical';
   } else if (nameLower.includes('t-rex 3')) {
-    manufacturer = 88; product = undefined; productName = 'Amazfit T-Rex 3';
+    manufacturer = 255; product = 0; productName = 'Amazfit T-Rex 3';
   } else if (nameLower.includes('balance 2')) {
-    manufacturer = 88; product = undefined; productName = 'Amazfit Balance 2';
+    manufacturer = 255; product = 0; productName = 'Amazfit Balance 2';
   } else if (nameLower.includes('active')) {
-    manufacturer = 88; product = undefined; productName = 'Amazfit Active 3 Premium';
+    manufacturer = 255; product = 0; productName = 'Amazfit Active 3 Premium';
   } else if (nameLower.includes('gt 6 pro')) {
     manufacturer = 348; product = undefined; productName = 'Huawei Watch GT 6 Pro';
   } else if (nameLower.includes('fit 5 pro')) {
@@ -230,7 +230,7 @@ function resolveDeviceParams(deviceName) {
   } else if (nameLower.includes('galaxy watch 7')) {
     manufacturer = 258; product = undefined; productName = 'Galaxy Watch 7';
   } else if (nameLower.includes('zepp')) {
-    manufacturer = 88; product = undefined; productName = 'Zepp App';
+    manufacturer = 255; product = 0; productName = 'Zepp App';
   } else if (nameLower.includes('apple') || nameLower.includes('sport')) {
     manufacturer = 263; product = undefined; productName = deviceName || 'Apple Watch';
   } else if (nameLower.includes('strava')) {
@@ -245,7 +245,7 @@ function resolveDeviceParams(deviceName) {
   } else if (nameLower.includes('suunto')) {
     manufacturer = 23; product = undefined; productName = deviceName;
   } else if (nameLower.includes('huami') || nameLower.includes('amazfit')) {
-    manufacturer = 88; product = undefined; productName = deviceName;
+    manufacturer = 255; product = 0; productName = deviceName;
   } else if (nameLower.includes('huawei')) {
     manufacturer = 348; product = undefined; productName = deviceName;
   } else if (nameLower.includes('samsung')) {
@@ -669,24 +669,30 @@ async function generateActivity(config = {}) {
       manufacturer: devParams.manufacturer,
       product: devParams.product,
       serial_number: serialNumber,
-      time_created: start
+      time_created: start,
+      product_name: devParams.productName
     },
     null,
     true
   );
 
   // 2. device_info
+  const deviceInfoPayload = {
+    timestamp: start,
+    device_index: 0, // creator
+    manufacturer: devParams.manufacturer,
+    product: devParams.product,
+    serial_number: serialNumber,
+    product_name: devParams.productName,
+    software_version: softwareVer
+  };
+  if (brand === 'amazfit' || brand === 'zepp') {
+    deviceInfoPayload.source = "run.10944771.huami.com";
+  }
+
   fitWriter.writeMessage(
     "device_info",
-    {
-      timestamp: start,
-      device_index: 0, // creator
-      manufacturer: devParams.manufacturer,
-      product: devParams.product,
-      serial_number: serialNumber,
-      product_name: devParams.productName,
-      software_version: softwareVer
-    },
+    deviceInfoPayload,
     null,
     true
   );

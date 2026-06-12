@@ -129,45 +129,47 @@ function getCircleIntersectionArea(r1, r2, d) {
 
 function buildGPX(points, options = {}) {
   const { activityName = 'Morning Run', activityType = 'running', includeHeartRate = true, includeCadence = true, deviceName = 'Garmin Connect', description = '' } = options;
-  const brand = getDeviceBrand(deviceName);
-  const appSource = APP_SOURCE_MAP[brand] || 'Garmin Connect';
+  // Directly use the deviceName as the creator, as this is how Zepp App outputs GPX.
+  const creator = deviceName || 'Zepp App';
 
-  let gpx = `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="${escapeXml(appSource)}"
-  xmlns="http://www.topografix.com/GPX/1/1"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd
-                      http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd">
+  let gpx = `<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<gpx xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns3="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:ns2="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:ns1="http://www.cluetrust.com/XML/GPXDATA/1/0" creator="${escapeXml(creator)}" version="1.1">
   <metadata>
     <name>${escapeXml(activityName)}</name>
     ${description ? `    <desc>${escapeXml(description)}</desc>` : ''}
     <time>${formatGPXTime(points[0].time)}</time>
   </metadata>
   <trk>
-    <name>${escapeXml(activityName)}</name>
-    ${description ? `    <desc>${escapeXml(description)}</desc>` : ''}
+    <name><![CDATA[${activityName}]]></name>
+    ${description ? `    <desc><![CDATA[${description}]]></desc>` : ''}
     <type>${activityType}</type>
     <trkseg>`;
 
-  for (const pt of points) {
-    gpx += `
-      <trkpt lat="${pt.lat.toFixed(7)}" lon="${pt.lng.toFixed(7)}">
-        <ele>${pt.elevation.toFixed(1)}</ele>
-        <time>${formatGPXTime(pt.time)}</time>`;
-    if ((includeHeartRate && pt.heartRate) || (includeCadence && pt.cadence)) {
-      gpx += `
-        <extensions>
-          <gpxtpx:TrackPointExtension>`;
-      if (includeHeartRate && pt.heartRate) gpx += `
-            <gpxtpx:hr>${pt.heartRate}</gpxtpx:hr>`;
-      if (includeCadence && pt.cadence) gpx += `
-            <gpxtpx:cad>${pt.cadence}</gpxtpx:cad>`;
-      gpx += `
-          </gpxtpx:TrackPointExtension>
-        </extensions>`;
+  for (let i = 0; i < points.length; i++) {
+    const pt = points[i];
+    let speed = 0;
+    if (i > 0) {
+      const timeDeltaSec = (pt.time - points[i - 1].time) / 1000;
+      const distDeltaM = pt.distance - points[i - 1].distance;
+      speed = timeDeltaSec > 0 ? distDeltaM / timeDeltaSec : 0;
     }
+
     gpx += `
+      <trkpt lat="${pt.lat.toFixed(8)}" lon="${pt.lng.toFixed(8)}">
+        <ele>${pt.elevation.toFixed(2)}</ele>
+        <time>${formatGPXTime(pt.time)}</time>`;
+        
+    gpx += `
+        <extensions>
+          <ns3:TrackPointExtension>
+            <ns3:speed>${speed.toFixed(2)}</ns3:speed>`;
+    if (includeCadence && pt.cadence) gpx += `
+            <ns3:cad>${pt.cadence}</ns3:cad>`;
+    if (includeHeartRate && pt.heartRate) gpx += `
+            <ns3:hr>${pt.heartRate}</ns3:hr>`;
+    gpx += `
+          </ns3:TrackPointExtension>
+        </extensions>
       </trkpt>`;
   }
 

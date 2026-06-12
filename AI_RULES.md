@@ -149,6 +149,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.2.5 (2026-06-12)
+- **Fix: Strava Device Source Badge Detection for Zepp/Amazfit**:
+  - Restructured GPX output to exactly match real Zepp GPX structure (using `creator` for device name, using `ns3` extension namespace, removing `gpxtpx`, adding `ns3:speed`, `ns3:cad`, `ns3:hr`).
+  - Restructured FIT output for Zepp/Amazfit devices by mapping `manufacturer` to `255`, `product` to `0`, and explicitly writing `product_name` directly into the `file_id` and `device_info` messages, matching the Zepp development profile.
+  - Added `source` attribute inside `device_info` for Zepp/Amazfit matching `run.10944771.huami.com`.
+  - Modified Strava API upload logic to generate custom `external_id` (e.g., `stripped_...-activity.fit/gpx`) mimicking the exact format used by Zepp App's OAuth sync, ensuring proper source tracking by Strava.
+
 ### v2.0.2 (2026-06-11)
 - **Fix: Garmin Venu 2 product mapping**:
   - Remapped Garmin Venu 2 product code to `3703`, Venu 2S to `3704`, and Venu 2 Plus to `3851`.
