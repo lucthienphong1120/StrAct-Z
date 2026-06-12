@@ -149,6 +149,14 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.8 (2026-06-12)
+- **Feature: Standardized Device Mappings & GPX Mappings**:
+  - Updated device choices, Manufacturer ID and Product ID mappings per `docs/DEVICE_TESTCASES.md`.
+  - Configured Polar (Manufacturer: 80) and Strava App (Manufacturer: 265, Product: 265) in FIT.
+  - Added generic fallbacks for Garmin, COROS, Suunto, Amazfit, Xiaomi/Redmi.
+  - Implemented `shouldForceGPX` in `src/services/gpx-generator.js` so all brands except Garmin and Strava App force GPX format.
+  - Aligned GPX creator attribute to proper sync application names via `getGPXCreator` and descriptions via `getShortDescription`.
+
 ### v2.3.7 (2026-06-12)
 - **Refactor: Legacy 'Normal' Role Terminology Cleanup**:
   - Removed database startup migration code from `src/db/sqlite-db.js` that converted `'normal'` role to `'basic'`, as the migration has already completed successfully.
