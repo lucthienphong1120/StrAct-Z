@@ -41,11 +41,11 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Amazfit Balance 2** | 339 | ? | ✅ OK |
 | **Amazfit Active 3 Premium** | 339 | ? | ✅ OK |
 | **Zepp App** | 339 | ? | ✅ OK |
-| **Huawei Watch GT 6 Pro** | 348 | ? | ✅ OK |
-| **Huawei Watch Fit 5 Pro** | 348 | ? | ✅ OK |
-| **Huawei Watch Fit 4** | 348 | ? | ✅ OK |
-| **Huawei Watch GT 4 Pro** | 348 | ? | ✅ OK |
-| **Huawei Watch Ultimate** | 348 | ? | ✅ OK |
+| **Huawei Watch GT 6 Pro** | 348 | ? | ❌ Failed |
+| **Huawei Watch Fit 5 Pro** | 348 | ? | ❌ Failed |
+| **Huawei Watch Fit 4** | 348 | ? | ❌ Failed |
+| **Huawei Watch GT 4 Pro** | 348 | ? | ❌ Failed |
+| **Huawei Watch Ultimate** | 348 | ? | ❌ Failed |
 | **Huawei Health** | 348 | ? | ✅ OK |
 | **Samsung Galaxy Watch Ultra** | 258 | ? | ✅ OK |
 | **Samsung Galaxy Watch 8** | 258 | ? | ✅ OK |
