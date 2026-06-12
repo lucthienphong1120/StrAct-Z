@@ -196,21 +196,21 @@ function resolveDeviceParams(deviceName) {
   
   // Non-Garmin Brands & Devices
   else if (nameLower.includes('pace 3')) {
-    manufacturer = 294; product = undefined; productName = 'PACE 3';
+    manufacturer = 264; product = undefined; productName = 'PACE 3';
   } else if (nameLower.includes('apex 2 pro')) {
-    manufacturer = 294; product = undefined; productName = 'APEX 2 Pro';
+    manufacturer = 264; product = undefined; productName = 'APEX 2 Pro';
   } else if (nameLower.includes('vertix 2s')) {
-    manufacturer = 294; product = undefined; productName = 'VERTIX 2S';
+    manufacturer = 264; product = undefined; productName = 'VERTIX 2S';
   } else if (nameLower.includes('race s')) {
     manufacturer = 23; product = undefined; productName = 'Suunto Race S';
   } else if (nameLower.includes('vertical')) {
     manufacturer = 23; product = undefined; productName = 'Suunto Vertical';
   } else if (nameLower.includes('t-rex 3')) {
-    manufacturer = 339; product = undefined; productName = 'Amazfit T-Rex 3';
+    manufacturer = 88; product = undefined; productName = 'Amazfit T-Rex 3';
   } else if (nameLower.includes('balance 2')) {
-    manufacturer = 339; product = undefined; productName = 'Amazfit Balance 2';
+    manufacturer = 88; product = undefined; productName = 'Amazfit Balance 2';
   } else if (nameLower.includes('active')) {
-    manufacturer = 339; product = undefined; productName = 'Amazfit Active';
+    manufacturer = 88; product = undefined; productName = 'Amazfit Active 3 Premium';
   } else if (nameLower.includes('gt 6 pro')) {
     manufacturer = 348; product = undefined; productName = 'Huawei Watch GT 6 Pro';
   } else if (nameLower.includes('fit 5 pro')) {
@@ -230,7 +230,7 @@ function resolveDeviceParams(deviceName) {
   } else if (nameLower.includes('galaxy watch 7')) {
     manufacturer = 258; product = undefined; productName = 'Galaxy Watch 7';
   } else if (nameLower.includes('zepp')) {
-    manufacturer = 339; product = undefined; productName = 'Zepp App';
+    manufacturer = 88; product = undefined; productName = 'Zepp App';
   } else if (nameLower.includes('apple') || nameLower.includes('sport')) {
     manufacturer = 263; product = undefined; productName = deviceName || 'Apple Watch';
   } else if (nameLower.includes('strava')) {
@@ -241,11 +241,11 @@ function resolveDeviceParams(deviceName) {
   else if (nameLower.includes('garmin')) {
     manufacturer = 1; product = 3907; productName = deviceName;
   } else if (nameLower.includes('coros')) {
-    manufacturer = 294; product = undefined; productName = deviceName;
+    manufacturer = 264; product = undefined; productName = deviceName;
   } else if (nameLower.includes('suunto')) {
     manufacturer = 23; product = undefined; productName = deviceName;
   } else if (nameLower.includes('huami') || nameLower.includes('amazfit')) {
-    manufacturer = 339; product = undefined; productName = deviceName;
+    manufacturer = 88; product = undefined; productName = deviceName;
   } else if (nameLower.includes('huawei')) {
     manufacturer = 348; product = undefined; productName = deviceName;
   } else if (nameLower.includes('samsung')) {

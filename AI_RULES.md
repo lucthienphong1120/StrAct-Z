@@ -95,6 +95,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.2.2 (2026-06-12)
+- **Non-Garmin Device Mapping Fix**:
+  - Cập nhật Manufacturer ID cho Huami/Amazfit từ 339 thành 88 và Coros từ 294 thành 264 trong FIT generator.
+  - Hướng dẫn người dùng chuyển sang sử dụng FIT thay vì GPX do giới hạn kỹ thuật của Strava đối với GPX.
+
 ### v2.2.1 (2026-06-12)
 - **UI & File Storage Refinements**:
   - Đổi nhãn nút Generate FIT Only thành Generate Activity Only tĩnh để phù hợp với việc sinh cả GPX và FIT.
