@@ -90,14 +90,28 @@ function validateConfig(updates, role = 'basic') {
       }
     }
 
-    // Special check for target_date max days ago
+    // Special check for target_date max days ago / in future
     if (rule.type === 'date' && value !== 'Hôm nay' && typeof rule.max === 'number') {
         const targetDate = new Date(value);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const diffDays = Math.ceil((today - targetDate) / (1000 * 60 * 60 * 24));
-        if (diffDays > rule.max) return { success: false, error: `${label} cannot be more than ${rule.max} days ago.` };
-        if (diffDays < 0) return { success: false, error: `${label} cannot be in the future.` };
+        const isCustomTimeActive = updates.custom_time_enabled === 'true';
+
+        if (isCustomTimeActive) {
+            // Custom time: allow future dates up to rule.max days in the future
+            if (diffDays < -rule.max) {
+                return { success: false, error: `${label} không được quá ${rule.max} ngày trong tương lai.` };
+            }
+        } else {
+            // Normal generation: do not allow future dates
+            if (diffDays < 0) {
+                return { success: false, error: `${label} không được ở tương lai.` };
+            }
+        }
+        if (diffDays > rule.max) {
+            return { success: false, error: `${label} không được quá ${rule.max} ngày trong quá khứ.` };
+        }
     }
 
     // Special handling for activity_areas to pre-compute districts

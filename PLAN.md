@@ -224,6 +224,8 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Chuyển dấu phân cách lên trên Snap OSRM Routing & Boost Adjacent trong Route Configuration (v2.2.6)
 + [x] Sửa lỗi Invalid field 'source' for message 'device_info' khi tạo cấu hình FIT cho Amazfit/Zepp (v2.2.7)
 + [x] Lưu và khôi phục target_date của Custom Time khi lưu cấu hình (saveConfig) (v2.2.8)
++ [x] Cấu hình hoãn lập lịch (Pending Scheduler) khi bật Custom Time và cho phép chọn ngày tương lai (v2.2.9)
+
 
 
 

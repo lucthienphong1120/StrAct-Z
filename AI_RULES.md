@@ -149,6 +149,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.2.9 (2026-06-12)
+- **Feature: Pending Auto Scheduler on Custom Time & Future Date Allowance**:
+  - Implemented scheduler pending logic: when `custom_time_enabled` is active, the Auto Scheduler stops executing (skips runs) if the current time is before the custom time. The first run after custom time is reached will execute the job using the custom time, and then automatically disable `custom_time_enabled`.
+  - Updated validator `validation.js` to allow future dates for `target_date` (up to the role's maximum range limit) only when `custom_time_enabled` is active.
+  - Dynamically updated the date picker `max` constraint on the UI based on the Custom Time toggle state.
+  - Displayed the pending custom time notice next to the auto-run text on the dashboard.
+
 ### v2.2.8 (2026-06-12)
 - **Feature: Save & Load target_date in Time Configuration**:
   - Updated `saveConfig()` to save `target_date` to the database (falling back to `'Hôm nay'` if cleared).

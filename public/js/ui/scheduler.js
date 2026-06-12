@@ -34,10 +34,35 @@ function updateScheduleDisplay(status) {
   const display = document.getElementById('scheduleDisplay');
   if (status?.enabled) {
     display.style.display = 'flex';
-    let times = [];
-    times.push(status.scheduleTime);
-    if (status.scheduleCount >= 2) times.push(status.scheduleTime2);
-    document.getElementById('scheduleTimeDisplay').textContent = times.join(' & ');
+    const timeDisplay = document.getElementById('scheduleTimeDisplay');
+    const labelDisplay = display.querySelector('.schedule-label');
+
+    if (status.customTimeEnabled) {
+      let dateText = status.targetDate;
+      if (dateText === 'Hôm nay') {
+        dateText = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+      }
+      timeDisplay.textContent = `Pending (until ${dateText} ${status.targetTimeCustom})`;
+      timeDisplay.style.background = 'none';
+      timeDisplay.style.webkitTextFillColor = 'var(--vip-gold, #f59e0b)';
+      timeDisplay.style.color = 'var(--vip-gold, #f59e0b)';
+      timeDisplay.style.fontSize = '1.1rem';
+      if (labelDisplay) {
+        labelDisplay.textContent = 'Next auto-run is paused until custom time';
+      }
+    } else {
+      let times = [];
+      times.push(status.scheduleTime);
+      if (status.scheduleCount >= 2) times.push(status.scheduleTime2);
+      timeDisplay.textContent = times.join(' & ');
+      timeDisplay.style.background = '';
+      timeDisplay.style.webkitTextFillColor = '';
+      timeDisplay.style.color = '';
+      timeDisplay.style.fontSize = '';
+      if (labelDisplay) {
+        labelDisplay.textContent = 'Next auto-run (Asia/Ho_Chi_Minh)';
+      }
+    }
   } else {
     display.style.display = 'none';
   }

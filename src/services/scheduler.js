@@ -44,9 +44,28 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     const role = await db.getAccountRole(accountId);
     const limits = systemLimits[role] || systemLimits.basic;
 
+    // Check if custom time is enabled and if we should wait
     if (config.custom_time_enabled === 'true') {
+      const targetTimeStr = config.target_time_custom || '00:00';
+      const targetDateStr = config.target_date || 'Hôm nay';
+      
+      let resolvedTargetDate = targetDateStr;
+      if (targetDateStr === 'Hôm nay') {
+        resolvedTargetDate = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+      }
+      
+      const customStartMs = new Date(`${resolvedTargetDate}T${targetTimeStr}:00.000+07:00`).getTime();
+      const nowMs = Date.now();
+      
+      if (nowMs < customStartMs) {
+        console.log(`[Scheduler] Current time (${new Date(nowMs).toISOString()}) is before custom time (${resolvedTargetDate} ${targetTimeStr}), skipping execution for account ${accountId}.`);
+        isRunning.set(accountId, false);
+        return { success: true, message: `Pending: Waiting until ${resolvedTargetDate} ${targetTimeStr} to trigger.` };
+      }
+      
+      // If reached/passed, disable custom time so future schedulers run normally
       await db.setConfig(accountId, 'custom_time_enabled', 'false');
-      console.log(`[Scheduler] Disabled custom time database flag at startup for account ${accountId}`);
+      console.log(`[Scheduler] Reached custom time (${resolvedTargetDate} ${targetTimeStr}). Disabled custom time flag for account ${accountId}`);
     }
 
     const minCount = parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : systemLimits.schedule_count_min.default;
@@ -405,6 +424,9 @@ async function getStatus(accountId) {
     scheduleCountMax: parseInt(config.schedule_count_max) >= 0 ? parseInt(config.schedule_count_max) : systemLimits.schedule_count_max.default,
     targetDistanceEnabled: config.target_distance_enabled === 'true',
     targetDistanceKm: parseFloat(config.target_distance_km || systemLimits.target_distance_km.default),
+    customTimeEnabled: config.custom_time_enabled === 'true',
+    targetDate: config.target_date || 'Hôm nay',
+    targetTimeCustom: config.target_time_custom || '00:00',
     isRunning: isRunning.get(accountId) || false,
     taskActive: scheduledTasks.has(accountId),
   };

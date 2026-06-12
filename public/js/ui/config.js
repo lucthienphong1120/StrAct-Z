@@ -121,6 +121,7 @@ function updateDynamicTooltips() {
     random_time_bounds: 'tipRandTime',
     avoid_workhours: 'tipAvoidWork',
     target_date: 'tipTargetDate',
+    custom_time_enabled: 'tipCustomTimeEnabled',
     target_time_custom: 'tipCustomTime',
     min_distance_km: 'tipMinDist',
     max_distance_km: 'tipMaxDist',
@@ -693,17 +694,32 @@ function toggleCustomTime() {
   const isCustom = document.getElementById('cfgCustomTime').checked;
   const customInputs = document.getElementById('timeCustomInputs');
   const randomInputs = document.getElementById('timeRandomInputs');
+  const targetDateInput = document.getElementById('cfgTargetDate');
 
   if (isCustom) {
     customInputs.style.opacity = '1';
     customInputs.style.pointerEvents = 'auto';
     randomInputs.style.opacity = '0.4';
     randomInputs.style.pointerEvents = 'none';
+
+    // Set max date constraint to future when Custom Time is active
+    if (targetDateInput && window.sysLimits) {
+      const today = new Date();
+      const maxDaysFuture = window.sysLimits.target_date.max;
+      const maxDate = new Date();
+      maxDate.setDate(today.getDate() + maxDaysFuture);
+      targetDateInput.max = maxDate.toLocaleDateString('en-CA');
+    }
   } else {
     customInputs.style.opacity = '0.4';
     customInputs.style.pointerEvents = 'none';
     randomInputs.style.opacity = '1';
     randomInputs.style.pointerEvents = 'auto';
+
+    // Restrict max date to today when Custom Time is inactive
+    if (targetDateInput) {
+      targetDateInput.max = new Date().toLocaleDateString('en-CA');
+    }
   }
 }
 

@@ -122,7 +122,8 @@ const LIMITS = {
     unit: '%'
   },
   custom_time_enabled: {
-    label: 'Giới hạn thời gian cho ngày mục tiêu.',
+    label: 'Custom Time (Pending Next Schedule)',
+    desc_extra: 'Khi bật, các mốc lập lịch tự động (Auto Schedule) tiếp theo sẽ ở trạng thái chờ (Pending) và tạm dừng cho tới khi qua mốc Custom Time chỉ định. Hoạt động đầu tiên chạy sau mốc này sẽ được tạo đúng theo Custom Time, sau đó tính năng này tự động tắt.',
     type: 'bool',
     default: false
   },
