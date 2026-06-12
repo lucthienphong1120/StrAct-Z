@@ -222,4 +222,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Sửa lỗi vỡ layout 2 cột từ việc thiếu thẻ đóng div của Allowed Districts và loại bỏ checkMaxSpan thừa (v2.2.4)
 + [x] Sửa lỗi hiển thị thiết bị nguồn Strava cho dòng Zepp/Amazfit (tương thích FIT & GPX) (v2.2.5)
 + [x] Chuyển dấu phân cách lên trên Snap OSRM Routing & Boost Adjacent trong Route Configuration (v2.2.6)
++ [x] Sửa lỗi Invalid field 'source' for message 'device_info' khi tạo cấu hình FIT cho Amazfit/Zepp (v2.2.7)
+
 

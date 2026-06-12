@@ -149,6 +149,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.2.7 (2026-06-12)
+- **Fix: Resolve 'Invalid field: source' FIT Creation Error**:
+  - Removed the invalid `source` property from `device_info` payload when generating FIT files for Amazfit/Zepp devices. The `device_info` message in the standard FIT profile does not support this field and throws an error at runtime. Device brand identification is already fully resolved by custom manufacturer, product, and product name attributes.
+
 ### v2.2.6 (2026-06-12)
 - **UI: Reposition Separator Line in Route Configuration**:
   - Moved the horizontal separator border style from above the "Start near favorite place" row to above the "Snap OSRM Routing" and "Boost Adjacent" row, creating a cleaner visual separation between the district checklist and the routing toggles.

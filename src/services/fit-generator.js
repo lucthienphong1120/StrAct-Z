@@ -686,9 +686,7 @@ async function generateActivity(config = {}) {
     product_name: devParams.productName,
     software_version: softwareVer
   };
-  if (brand === 'amazfit' || brand === 'zepp') {
-    deviceInfoPayload.source = "run.10944771.huami.com";
-  }
+
 
   fitWriter.writeMessage(
     "device_info",
