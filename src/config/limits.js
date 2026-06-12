@@ -269,6 +269,7 @@ const LIMITS = {
       'Redmi Watch 5 Active',
       // ── App Sources ──
       'Strava App',
+      'Samsung Health',
     ],
     min: 1,
     max: 1

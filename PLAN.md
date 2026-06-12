@@ -234,6 +234,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Đồng bộ và chuẩn hóa logic lọc hoạt động active cho bộ sinh GPX và FIT, đảm bảo bỏ qua các hoạt động có trạng thái 'failed', 'deleted', hoặc 'removed' trong khi kiểm tra trùng lặp (v2.3.6)
 + [x] Review và loại bỏ các tham chiếu cuối cùng đến vai trò 'normal' trong config và regex UI (thay thế bằng 'basic'); dọn dẹp khối mã nguồn di trú database cũ trong sqlite-db.js (v2.3.7)
 + [x] Sửa đổi và chuẩn hóa ánh xạ thiết bị và định dạng GPX/FIT tương ứng theo DEVICE_TESTCASES.md (v2.3.8)
++ [x] Cập nhật và đồng bộ tùy chọn thiết bị, loại bỏ thiết bị không nhận trên Strava theo DEVICE_TESTCASES.md (v2.3.9)
 
 
 

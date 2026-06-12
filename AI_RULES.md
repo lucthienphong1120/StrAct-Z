@@ -149,6 +149,14 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.9 (2026-06-12)
+- **Feature: Device Options & Presets Synchronization**:
+  - Added missing verified Garmin models (Forerunner 955, 255, Venu 2S, Venu 2 Plus, Venu Sq 2) with ★ suffix to the UI presets list.
+  - Added untested models (Suunto, Amazfit, Polar, Xiaomi/Redmi) to the UI presets list, marked in `docs/DEVICE_TESTCASES.md` as `Chưa test`.
+  - Added `Samsung Health` (GPX OK) to the whitelist of device choices in `limits.js` and HTML presets.
+  - Removed all non-functional devices (marked `Không nhận thiết bị - bỏ` in `docs/DEVICE_TESTCASES.md`) from the UI datalist and documentation.
+  - Cleared fallback notes and updated verified devices to `GPX OK` in `docs/DEVICE_TESTCASES.md`.
+
 ### v2.3.8 (2026-06-12)
 - **Feature: Standardized Device Mappings & GPX Mappings**:
   - Updated device choices, Manufacturer ID and Product ID mappings per `docs/DEVICE_TESTCASES.md`.
