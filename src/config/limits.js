@@ -308,16 +308,16 @@ const LIMITS = {
     desc_extra: 'Tác dụng: Dùng để tính Nhịp tim tối đa (MHR = 220 - Tuổi).',
     type: 'int',
     default: 25,
-    min: 18,
-    max: 90
+    min: 6,
+    max: 85
   },
   max_heart_rate: {
     label: 'Nhịp tim tối đa (Max Heart Rate).',
     desc_extra: 'Tác dụng: Được tự động tính dựa trên Tuổi (MHR = 220 - Tuổi).',
     type: 'int',
     default: 195,
-    min: 130,
-    max: 202
+    min: 135,
+    max: 214
   },
   heart_rate_zones: {
     label: 'Vùng nhịp tim (Heart Rate Zones).',

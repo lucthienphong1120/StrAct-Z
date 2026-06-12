@@ -149,6 +149,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.10 (2026-06-12)
+- **Feature: Limited Adjacent Boost & User Age Constraints Adjustment**:
+  - Restructured the Adjacent Boost (Boost Adjacent) logic to only evaluate the first element of the last uploaded activity's `district_keys` (representing the starting district), ignoring subsequent traversed districts. Applied this change symmetrically across FIT/GPX generator backends and the frontend weights debugger.
+  - Expanded the permissible `user_age` range from `18-90` to `6-85` years.
+  - Configured matching limits for `max_heart_rate` from `130-202` to `135-214` to support the expanded age range safely (`220 - Age`).
+
 ### v2.3.9 (2026-06-12)
 - **Feature: Device Options & Presets Synchronization**:
   - Added missing verified Garmin models (Forerunner 955, 255, Venu 2S, Venu 2 Plus, Venu Sq 2) with ★ suffix to the UI presets list.

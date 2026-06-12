@@ -930,14 +930,13 @@ async function debugDistrictWeightRatios() {
           ? JSON.parse(lastDistrictKeys)
           : lastDistrictKeys.split(',');
         
-        if (Array.isArray(lastKeys)) {
+        if (Array.isArray(lastKeys) && lastKeys.length > 0) {
+          const lk = lastKeys[0]; // Chỉ áp dụng với quận start, các quận sau ko tính
           let boostValue = 0;
-          for (const lk of lastKeys) {
-            if (lk === d.key) {
-              boostValue = Math.max(boostValue, sameWeight);
-            } else if (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(d.key)) {
-              boostValue = Math.max(boostValue, adjacentWeight);
-            }
+          if (lk === d.key) {
+            boostValue = sameWeight;
+          } else if (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(d.key)) {
+            boostValue = adjacentWeight;
           }
           weight += boostValue;
           adjacentBoost += boostValue;

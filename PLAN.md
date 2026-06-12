@@ -235,6 +235,8 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Review và loại bỏ các tham chiếu cuối cùng đến vai trò 'normal' trong config và regex UI (thay thế bằng 'basic'); dọn dẹp khối mã nguồn di trú database cũ trong sqlite-db.js (v2.3.7)
 + [x] Sửa đổi và chuẩn hóa ánh xạ thiết bị và định dạng GPX/FIT tương ứng theo DEVICE_TESTCASES.md (v2.3.8)
 + [x] Cập nhật và đồng bộ tùy chọn thiết bị, loại bỏ thiết bị không nhận trên Strava theo DEVICE_TESTCASES.md (v2.3.9)
++ [x] Sửa logic Boost Adjacent chỉ áp dụng với quận start của hoạt động upload gần nhất và cho phép cấu hình user age từ 6 đến 85 tuổi (v2.3.10)
+
 
 
 

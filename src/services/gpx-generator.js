@@ -357,16 +357,15 @@ async function generateActivity(config = {}) {
           lastKeys = [];
         }
         
-        if (Array.isArray(lastKeys)) {
+        if (Array.isArray(lastKeys) && lastKeys.length > 0) {
+          const lk = lastKeys[0]; // Chỉ áp dụng với quận start, các quận sau ko tính
           let boostValue = 0;
-          for (let lk of lastKeys) {
-            if (lk === key) {
-              const sameWeight = limits.boost_adjacent?.same_weight || 2.1;
-              boostValue = Math.max(boostValue, sameWeight);
-            } else if (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(key)) {
-              const adjWeight = limits.boost_adjacent?.adjacent_weight || 1.4;
-              boostValue = Math.max(boostValue, adjWeight);
-            }
+          if (lk === key) {
+            const sameWeight = limits.boost_adjacent?.same_weight || 2.1;
+            boostValue = sameWeight;
+          } else if (ADJACENT_DISTRICTS[lk] && ADJACENT_DISTRICTS[lk].includes(key)) {
+            const adjWeight = limits.boost_adjacent?.adjacent_weight || 1.4;
+            boostValue = adjWeight;
           }
           weight += boostValue;
         }
