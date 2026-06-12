@@ -28,6 +28,12 @@ async function loadSchedule() {
 
     updateScheduleDisplay(status);
     updateSchedulerBanner();
+    
+    // Attach listeners once
+    if (!window.scheduleListenersAttached) {
+      attachScheduleRealTimeListeners();
+      window.scheduleListenersAttached = true;
+    }
   } catch (err) { console.error('Schedule error:', err); }
 }
 
@@ -86,7 +92,7 @@ function toggleTargetDistanceInputs() {
   }
 }
 
-async function updateSchedule() {
+async function updateSchedule(showToastOnSuccess = true) {
   const enabled = document.getElementById('scheduleEnabled').checked;
   const time = document.getElementById('scheduleTime').value;
   
@@ -128,15 +134,19 @@ async function updateSchedule() {
   }
   updateScheduleDisplay(status);
   
-  let msg = '';
-  if (!enabled) {
-    msg = 'Schedule disabled';
+  if (showToastOnSuccess) {
+    let msg = '';
+    if (!enabled) {
+      msg = 'Auto schedule disabled';
+    } else {
+      let times = [time];
+      if (scheduleCount >= 2) times.push(time2);
+      msg = `Auto schedule saved and enabled at ${times.join(' & ')} (${countMin}-${countMax} acts)`;
+    }
+    showToast(msg, 'success');
   } else {
-    let times = [time];
-    if (scheduleCount >= 2) times.push(time2);
-    msg = `Schedule enabled at ${times.join(' & ')} (${countMin}-${countMax} acts)`;
+    showToast(enabled ? 'Auto schedule enabled' : 'Auto schedule disabled', 'success');
   }
-  showToast(msg, 'success');
 }
 
 function updateSchedulerBanner() {
@@ -150,9 +160,59 @@ function updateSchedulerBanner() {
   }
 }
 
+function refreshScheduleDisplayFromUI() {
+  const enabled = document.getElementById('scheduleEnabled')?.checked || false;
+  const customTimeEnabled = document.getElementById('cfgCustomTime')?.checked || false;
+  const targetDate = document.getElementById('cfgTargetDate')?.value || 'Hôm nay';
+  const targetTimeCustom = document.getElementById('cfgCustomMinTime')?.value || '00:00';
+  
+  const scheduleTime = document.getElementById('scheduleTime')?.value || '22:00';
+  const scheduleTime2 = document.getElementById('scheduleTime2')?.value || '14:00';
+  const scheduleCount = document.getElementById('scheduleSlot2')?.style.display === 'block' ? 2 : 1;
+  
+  let dateText = targetDate;
+  if (dateText === 'Hôm nay') {
+    dateText = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+  }
+  const customStartMs = new Date(`${dateText}T${targetTimeCustom}:00.000+07:00`).getTime();
+  const nowMs = Date.now();
+  const customTimePending = nowMs < customStartMs;
+  
+  const status = {
+    enabled,
+    customTimeEnabled,
+    targetDate,
+    targetTimeCustom,
+    customTimePending,
+    scheduleTime,
+    scheduleTime2,
+    scheduleCount
+  };
+  
+  updateScheduleDisplay(status);
+}
+
+function attachScheduleRealTimeListeners() {
+  const inputs = [
+    'scheduleTime', 'scheduleTime2', 'scheduleCountMin', 'scheduleCountMax',
+    'cfgTargetDistanceEnabled', 'cfgTargetDistanceKm'
+  ];
+  inputs.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const update = () => {
+      refreshScheduleDisplayFromUI();
+    };
+    el.addEventListener('input', update);
+    el.addEventListener('change', update);
+  });
+}
+
 // Export to window
 window.loadSchedule = loadSchedule;
 window.updateScheduleDisplay = updateScheduleDisplay;
 window.toggleTargetDistanceInputs = toggleTargetDistanceInputs;
 window.updateSchedule = updateSchedule;
 window.updateSchedulerBanner = updateSchedulerBanner;
+window.refreshScheduleDisplayFromUI = refreshScheduleDisplayFromUI;
+window.attachScheduleRealTimeListeners = attachScheduleRealTimeListeners;

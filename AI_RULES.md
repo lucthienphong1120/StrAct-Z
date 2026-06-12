@@ -149,6 +149,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.2 (2026-06-12)
+- **Feature: Explicit Card Save Buttons & Real-Time Scheduler Display Update**:
+  - Moved auto-saving scheduler settings and `Daily Max Activity` configuration to explicit manual "Save" buttons in their respective cards (`Auto Schedule` and `Strava Account`).
+  - Allowed `scheduleEnabled` toggle checkbox to still immediately commit scheduler activation status to the database.
+  - Fixed a race condition where time slot 2 was lost on page load/refresh because `loadSchedule()` was executed before `loadStats()` populated `window.userRole = 'vip'`. Now `loadStats` is awaited sequentially first in `loadDashboard`.
+  - Implemented real-time scheduler pending/next-run display updates (`refreshScheduleDisplayFromUI`) responding immediately to custom time, date picker inputs, and scheduler card changes without requiring database saving or page reloads.
+
 ### v2.3.1 (2026-06-12)
 - **Bug Fixes: Manual Custom 00:00 Generation & Scheduler UI Past Pending State**:
   - Fixed client-side `getOverrideConfig()` setting `min_time` and `max_time` to `'00:00'` during manual activity generation when Custom Time was active and set to `'00:00'`. Now correctly falls back to Global Random Time bounds.

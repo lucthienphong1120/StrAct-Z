@@ -5,8 +5,8 @@ async function loadDashboard(forceRefresh = false) {
   window.allCloudActivities = [];     // Store for robust cross-check (insights)
   await fetchLimits();
   await loadDistricts();
+  await loadStats(forceRefresh);
   await Promise.all([
-    loadStats(forceRefresh),
     loadConfig(),
     loadSchedule(),
     loadStravaActivities(forceRefresh, false), // Load Strava first for cross-check

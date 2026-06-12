@@ -227,6 +227,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Cấu hình hoãn lập lịch (Pending Scheduler) khi bật Custom Time và cho phép chọn ngày tương lai (v2.2.9)
 + [x] Hoàn thiện logic Custom Target Time (00:00 vs cụ thể) & Giới hạn đặt lịch tương lai (Basic 3 ngày, VIP 7 ngày) kèm banner hướng dẫn ở thẻ Auto Schedule (v2.3.0)
 + [x] Sửa lỗi getOverrideConfig gán cứng min_time/max_time khi dùng custom time 00:00 và ẩn thông tin Pending khi target_date đã ở quá khứ (v2.3.1)
++ [x] Sửa lỗi mất cấu hình time slot 2 khi reload (race condition userRole), chuyển Auto Save sang Save buttons (scheduler, daily max activities), và cập nhật Pending status tức thời trên UI (v2.3.2)
 
 
 
