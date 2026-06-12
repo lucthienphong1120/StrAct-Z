@@ -96,6 +96,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.2.4 (2026-06-12)
+- **Fix: Broken Layout from Missing `</div>` Tag**:
+  - Commit v2.2.3 khi xóa block "Max Districts per Route" đã vô tình xóa mất thẻ đóng `</div>` của `form-row` chứa Allowed Districts, khiến cấu trúc HTML lồng nhau bị vỡ và layout 2 cột (`content-grid`) bị co lại thành 1 cột.
+  - Khôi phục thẻ `</div>` bị thiếu trong `index.html`.
+  - Xóa dòng export `window.checkMaxSpan = checkMaxSpan` bị sót trong `config.js` gây lỗi `ReferenceError` chặn khởi tạo UI.
+
 ### v2.2.3 (2026-06-12)
 - **Free Routing & Strava Visibility Config**:
   - Loại bỏ hoàn toàn cấu hình "Max Districts per Route" (`max_district_span`) trên giao diện và trong logic generator. Lộ trình chạy tự do, tính toán quận thực tế bằng Ray-Casting.
