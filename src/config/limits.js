@@ -174,6 +174,16 @@ const LIMITS = {
       'Ride': { Run: 0.05, Walk: 0.05, Ride: 0.90 }
     }
   },
+  export_format: {
+    label: 'Định dạng tệp tin (Export Format).',
+    desc_extra: 'Tác dụng: Chọn định dạng hoạt động đồng bộ. GPX tương thích tốt với các hãng phi-Garmin (hiển thị đúng Sync Badge), FIT hỗ trợ đầy đủ chỉ số cho Garmin.',
+    type: 'array',
+    default: 'fit',
+    default_label: 'FIT',
+    choices: ['fit', 'gpx'],
+    min: 1,
+    max: 1
+  },
   device_name: {
     label: 'Thiết bị ghi nhận (Device Name).',
     desc_extra: 'Tác dụng: Thiết bị hiển thị ghi nhận hoạt động trên Strava.',

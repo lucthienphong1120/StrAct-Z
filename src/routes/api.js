@@ -8,7 +8,8 @@ const path = require('path');
 const fs = require('fs');
 const db = require('../db/database');
 const scheduler = require('../services/scheduler');
-const { generateActivity, getShortDescription } = require('../services/fit-generator');
+const fitGenerator = require('../services/fit-generator');
+const gpxGenerator = require('../services/gpx-generator');
 const stravaApi = require('../services/strava-api');
 const googleFit = require('../services/google-fit');
 const systemLimits = require('../config/limits');
@@ -304,7 +305,9 @@ router.post('/generate', async (req, res) => {
     const genConfig = buildGeneratorConfig(config, { ...ov, target_date: targetDate }, lastUploaded, req.user.role || 'basic');
     genConfig.existingActivities = [...localActivities, ...stravaActivities];
     genConfig.isManual = true;
-    const activity = await generateActivity(genConfig);
+    const format = ov.export_format || config.export_format || 'fit';
+    const generator = format === 'gpx' ? gpxGenerator : fitGenerator;
+    const activity = await generator.generateActivity(genConfig);
 
     const activityId = await db.saveActivity(req.user.id, {
       activity_name: activity.activityName,
@@ -387,7 +390,9 @@ router.post('/generate-and-upload', async (req, res) => {
     const genConfig = buildGeneratorConfig(config, { ...ov, target_date: targetDate }, lastUploaded, req.user.role || 'basic');
     genConfig.existingActivities = [...localActivities, ...stravaActivities];
     genConfig.isManual = true;
-    const activity = await generateActivity(genConfig);
+    const format = ov.export_format || config.export_format || 'fit';
+    const generator = format === 'gpx' ? gpxGenerator : fitGenerator;
+    const activity = await generator.generateActivity(genConfig);
 
     const dailyMaxActivity = parseInt(config.daily_max_activity || '2');
     if (stravaActivities.length >= dailyMaxActivity) {
@@ -426,7 +431,7 @@ router.post('/generate-and-upload', async (req, res) => {
     const deviceName = ov.device_name || config.device_name || systemLimits.device_name.default;
     const uploadResult = await stravaApi.uploadActivity(req.user.id, activity.filepath, {
       name: activity.activityName,
-      description: getShortDescription(deviceName), // Swapped: Use app name as description
+      description: generator.getShortDescription(deviceName), // Swapped: Use app name as description
       sportType: activity.activityType || 'Run',
     });
 
@@ -499,16 +504,22 @@ router.post('/upload/:id', async (req, res) => {
     }
 
     const fitPath = path.join(__dirname, '..', '..', 'data', 'fit', activity.fit_file || '');
-    if (!fs.existsSync(fitPath)) return res.status(404).json({ error: 'FIT file not found' });
+    if (!fs.existsSync(fitPath)) {
+      const ext = path.extname(activity.fit_file || '').toLowerCase();
+      return res.status(404).json({ error: `${ext === '.gpx' ? 'GPX' : 'FIT'} file not found` });
+    }
 
     const deviceName = await db.getConfig(req.user.id, 'device_name') || systemLimits.device_name.default;
     let sportType = 'Run';
     if (activity.activity_name.includes('Đi bộ')) sportType = 'Walk';
     else if (activity.activity_name.includes('Đạp xe')) sportType = 'Ride';
 
+    const isGpx = (activity.fit_file || '').endsWith('.gpx');
+    const generator = isGpx ? gpxGenerator : fitGenerator;
+
     const uploadResult = await stravaApi.uploadActivity(req.user.id, fitPath, {
       name: activity.activity_name,
-      description: getShortDescription(deviceName), // Swapped: Use app name as description
+      description: generator.getShortDescription(deviceName), // Swapped: Use app name as description
       sportType: sportType,
     });
 

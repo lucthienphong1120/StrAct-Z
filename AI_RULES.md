@@ -95,6 +95,14 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.2.0 (2026-06-12)
+- **Feature: GPX Format Support alongside FIT**:
+  - Restored GPX generation and upload capabilities alongside FIT to resolve device recognition/Sync Badge issues for non-Garmin devices.
+  - Added user configuration `export_format` (FIT or GPX) selectable from the UI dashboard.
+  - GPX filename format is synchronized to standard activity names `activity_[random_11_digit_id].gpx` and stored in `data/fit` to ease database structure management.
+  - GPX metadata attribute `creator` is set to the corresponding connecting app name (e.g. `Garmin Connect`, `Zepp App`) based on the watch brand to display correct sync badges on Strava.
+  - Integrated `getActualDistrictKeysForRoute` (using GeoJSON point-in-polygon checks) into GPX generation to save actual districts crossed.
+
 ### v2.1.8 (2026-06-11)
 - **Fix: Actual Route District Tags**:
   - Local Generated History district tags now use the districts actually crossed by the final trimmed route points, instead of the preselected route plan.

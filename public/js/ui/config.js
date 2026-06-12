@@ -126,6 +126,7 @@ function updateDynamicTooltips() {
     min_distance_km: 'tipMinDist',
     max_distance_km: 'tipMaxDist',
     activity_type: 'tipActivityType',
+    export_format: 'tipExportFormat',
     device_name: 'tipDeviceName',
     heart_rate_enabled: 'tipHeartRate',
     user_age: 'tipUserAge',
@@ -327,6 +328,7 @@ async function loadConfig() {
     setVal('cfgActivityType', actType);
     updateActivityTypeHint();
     setVal('cfgDeviceName', config.device_name || (sysL?.device_name?.default) || 'Garmin Forerunner 975');
+    setVal('cfgExportFormat', config.export_format || (sysL?.export_format?.default) || 'fit');
     setChecked('cfgHeartRate', config.heart_rate_enabled === 'true');
     setVal('cfgUserAge', config.user_age || (sysL?.user_age?.default ? String(sysL.user_age.default) : '25'));
     updateMHR();
@@ -588,6 +590,7 @@ async function saveConfig() {
     max_pace: document.getElementById('cfgMaxPace').value,
     activity_type: document.getElementById('cfgActivityType').value,
     device_name: document.getElementById('cfgDeviceName').value,
+    export_format: document.getElementById('cfgExportFormat')?.value || 'fit',
     heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
     max_heart_rate: document.getElementById('cfgMaxHR').value,
     user_age: document.getElementById('cfgUserAge').value,
@@ -638,6 +641,7 @@ function getOverrideConfig() {
     max_pace: document.getElementById('cfgMaxPace').value,
     activity_type: document.getElementById('cfgActivityType').value,
     device_name: document.getElementById('cfgDeviceName').value,
+    export_format: document.getElementById('cfgExportFormat')?.value || 'fit',
     heart_rate_enabled: document.getElementById('cfgHeartRate').checked ? 'true' : 'false',
     user_age: document.getElementById('cfgUserAge').value,
     max_heart_rate: document.getElementById('cfgMaxHR').value,

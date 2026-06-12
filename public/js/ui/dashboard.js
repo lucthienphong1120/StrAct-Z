@@ -280,12 +280,18 @@ async function loadActivities(logDistance = false) {
         }
       }
 
+      const isGpx = a.fit_file && a.fit_file.endsWith('.gpx');
+      const formatTag = isGpx 
+        ? `<span class="status-badge" style="background: rgba(249, 115, 22, 0.1); color: #f97316; padding: 2px 6px; font-weight: bold; border: 1px solid rgba(249, 115, 22, 0.2);">GPX</span>`
+        : `<span class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); padding: 2px 6px; font-weight: bold; border: 1px solid rgba(59, 130, 246, 0.2);">FIT</span>`;
+
       return `
         <div class="activity-item">
           <div>
             <div class="activity-name">${a.activity_name || 'Unnamed'}</div>
             <div class="activity-date" style="display:flex; gap:6px; margin-top:4px; flex-wrap:wrap; align-items:center;">
                <span class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); padding: 2px 6px;">🕒 ${timeStr} ${dateOnlyStr}</span>
+               ${formatTag}
                ${districtTags}
                ${a.created_by ? `<span class="status-badge" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); padding: 2px 6px;">${a.created_by}</span>` : ''}
             </div>

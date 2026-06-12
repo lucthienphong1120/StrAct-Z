@@ -4,7 +4,8 @@
 
 const cron = require('node-cron');
 const db = require('../db/database');
-const { generateActivity, getShortDescription } = require('./fit-generator');
+const fitGenerator = require('./fit-generator');
+const gpxGenerator = require('./gpx-generator');
 const stravaApi = require('./strava-api');
 const googleFit = require('./google-fit');
 const systemLimits = require('../config/limits');
@@ -144,6 +145,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         }
       }
 
+      let generator;
       try {
         const isCustomTimeActive = (i === 0 && config.custom_time_enabled === 'true');
         const overrides = {};
@@ -159,7 +161,10 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         if (targetDistanceKmOverride !== null) {
           genConfig.targetDistanceKm = targetDistanceKmOverride;
         }
-        activity = await generateActivity(genConfig);
+        
+        const format = config.export_format || 'fit';
+        generator = format === 'gpx' ? gpxGenerator : fitGenerator;
+        activity = await generator.generateActivity(genConfig);
       } catch (genErr) {
         if (genErr.code === 'NO_VALID_TIME_SLOT') {
           console.warn(`[Scheduler] Account ${accountId}: No valid time slot available. Saving failed record.`);
@@ -229,7 +234,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         const deviceName = config.device_name || 'Garmin fēnix 7x Pro';
         const uploadResult = await stravaApi.uploadActivity(accountId, activity.filepath, {
           name: activity.activityName,
-          description: getShortDescription(deviceName), // returns "" globally
+          description: generator ? generator.getShortDescription(deviceName) : '', // returns "" globally
           sportType: activity.activityType || 'Run',
         });
 

@@ -220,7 +220,10 @@ async function uploadActivity(accountId, fitFilepath, options = {}) {
 
   const form = new FormData();
   form.append('file', fs.createReadStream(fitFilepath));
-  form.append('data_type', 'fit');
+  
+  const ext = path.extname(fitFilepath).toLowerCase().replace('.', '');
+  const dataType = ext === 'gpx' ? 'gpx' : 'fit';
+  form.append('data_type', dataType);
   form.append('name', name);
   form.append('description', description);
   form.append('sport_type', sportType);
