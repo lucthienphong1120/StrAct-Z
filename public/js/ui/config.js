@@ -746,7 +746,6 @@ window.saveConfig = saveConfig;
 window.getOverrideConfig = getOverrideConfig;
 window.resetToDefault = resetToDefault;
 window.updateMHR = updateMHR;
-window.checkMaxSpan = checkMaxSpan;
 window.toggleCustomTime = toggleCustomTime;
 window.updateActivityTypeHint = updateActivityTypeHint;
 window.toggleHRInputs = toggleHRInputs;
