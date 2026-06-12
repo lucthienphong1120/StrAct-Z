@@ -288,7 +288,7 @@ router.post('/generate', async (req, res) => {
 
     const config = await db.getAllConfig(req.user.id);
 
-    const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+    const targetDate = ov.target_date || new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
     let localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
     let stravaActivities = [];
     if (await stravaApi.isAuthenticated(req.user.id)) {
@@ -373,7 +373,7 @@ router.post('/generate-and-upload', async (req, res) => {
 
     const config = await db.getAllConfig(req.user.id);
 
-    const targetDate = ov.target_date || new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+    const targetDate = ov.target_date || new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
     let localActivities = await db.getActivitiesByDate(req.user.id, targetDate);
     let stravaActivities = [];
     if (await stravaApi.isAuthenticated(req.user.id)) {
@@ -497,7 +497,7 @@ router.post('/upload/:id', async (req, res) => {
     const activity = activities.find(a => a.id === parseInt(req.params.id));
     if (!activity) return res.status(404).json({ error: 'Activity not found' });
 
-    const targetDate = new Date(activity.route_start_time || activity.created_at || Date.now()).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+    const targetDate = new Date(activity.route_start_time || activity.created_at || Date.now()).toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
     let stravaActivities = [];
     if (await stravaApi.isAuthenticated(req.user.id)) {
       try {

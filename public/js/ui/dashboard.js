@@ -145,18 +145,18 @@ async function loadActivities(logDistance = false) {
     // Calculate and log total distance covered today to browser console (F12)
     let totalDistanceToday = 0;
     const seenTimesLog = [];
-    const targetDateStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+    const targetDateStr = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
     
     const todayLocal = allActivities.filter(a => {
       const actualTime = a.route_start_time || a.created_at;
       const dateStr = actualTime.endsWith('Z') ? actualTime : actualTime + 'Z';
-      return new Date(dateStr).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }) === targetDateStr;
+      return new Date(dateStr).toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' }) === targetDateStr;
     });
 
     const todayCloud = cloudBuffer.filter(a => {
       const startDate = a.start_date || a.created_at;
       if (!startDate) return false;
-      return new Date(startDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }) === targetDateStr;
+      return new Date(startDate).toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' }) === targetDateStr;
     });
 
     const combinedToday = [...todayLocal, ...todayCloud];
@@ -487,7 +487,7 @@ function updateActivityChart(activities, days = 14) {
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
-    rangeDays.push(d.toLocaleDateString('en-CA'));
+    rangeDays.push(d.toLocaleDateString('sv-SE'));
   }
 
   const activitiesByDate = {};
@@ -495,7 +495,7 @@ function updateActivityChart(activities, days = 14) {
     activitiesByDate[date] = cleanActivities.filter(a => {
       const startDate = a.start_date || a.created_at;
       if (!startDate) return false;
-      const localDate = new Date(startDate).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+      const localDate = new Date(startDate).toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
       return localDate === date;
     });
   });

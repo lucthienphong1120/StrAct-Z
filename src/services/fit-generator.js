@@ -454,7 +454,7 @@ async function generateActivity(config = {}) {
   // Time handling
   let activityStartTime = startTime;
   if (!activityStartTime) {
-    const targetDateStr = config.targetDate || new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
+    const targetDateStr = config.targetDate || new Date().toLocaleDateString('sv-SE', {timeZone: 'Asia/Ho_Chi_Minh'});
     const minTimeStr = config.minTime || '04:30';
     const maxTimeStr = config.maxTime || '22:30';
 

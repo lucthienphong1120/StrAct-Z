@@ -45,8 +45,8 @@ function applyLimitsToUI() {
     const maxDaysAgo = sysL.target_date.max;
     const minDate = new Date();
     minDate.setDate(today.getDate() - maxDaysAgo);
-    targetDateInput.min = minDate.toLocaleDateString('en-CA');
-    targetDateInput.max = today.toLocaleDateString('en-CA');
+    targetDateInput.min = minDate.toLocaleDateString('sv-SE');
+    targetDateInput.max = today.toLocaleDateString('sv-SE');
   }
 
   // Build Dynamic Tooltips from Metadata
@@ -305,7 +305,7 @@ async function loadConfig() {
     };
 
     const savedTargetDate = config.target_date;
-    const today = new Date().toLocaleDateString('en-CA');
+    const today = new Date().toLocaleDateString('sv-SE');
     setVal('cfgTargetDate', (savedTargetDate && savedTargetDate !== 'Hôm nay') ? savedTargetDate : today);
 
     const sysL = window.sysLimits;
@@ -385,7 +385,7 @@ function validateTimeBounds(minTimeStr, maxTimeStr, targetDateStr, isCustomTime)
       return false;
     }
   } else if (!isCustomTime && minTimeStr) {
-    const todayStr = new Date().toLocaleDateString('en-CA');
+    const todayStr = new Date().toLocaleDateString('sv-SE');
     const minDateObj = new Date(`${todayStr}T${minTimeStr}:00.000+07:00`);
     if (minDateObj > now) {
       showToast('Start Time is currently in the future! Please adjust.', 'error');
@@ -719,7 +719,7 @@ function toggleCustomTime() {
       const maxDaysFuture = isVip ? 7 : 3;
       const maxDate = new Date();
       maxDate.setDate(today.getDate() + maxDaysFuture);
-      targetDateInput.max = maxDate.toLocaleDateString('en-CA');
+      targetDateInput.max = maxDate.toLocaleDateString('sv-SE');
     }
   } else {
     customInputs.style.opacity = '0.4';
@@ -729,7 +729,7 @@ function toggleCustomTime() {
 
     // Restrict max date to today when Custom Time is inactive
     if (targetDateInput) {
-      targetDateInput.max = new Date().toLocaleDateString('en-CA');
+      targetDateInput.max = new Date().toLocaleDateString('sv-SE');
     }
   }
 }

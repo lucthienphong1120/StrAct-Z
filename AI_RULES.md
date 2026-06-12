@@ -149,6 +149,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.5 (2026-06-12)
+- **Feature: Standardized YYYY-MM-DD Locale & 24-Hour Input Enforcement**:
+  - Replaced the `'en-CA'` (English Canada) locale string format references across the entire codebase with `'sv-SE'` (Swedish Sweden) to produce the standard ISO-8601 `YYYY-MM-DD` date format without referencing Canada.
+  - Standardized all 9 `<input type="time">` elements in `index.html` by setting `lang="vi-VN"`, forcing browsers (like Chrome/Edge) to display inputs in 24-hour notation (00:00 - 23:59) instead of 12-hour AM/PM format.
+
 ### v2.3.4 (2026-06-12)
 - **Feature: Unsaved Config Scope Limits on UI Live Updates**:
   - Restored "Pending (until target_date target_time_custom)" scheduler banner status to evaluate from the last saved status (`window.lastSavedScheduleStatus`) instead of unsaved input controls in the Time Configuration card.

@@ -48,7 +48,7 @@ function updateScheduleDisplay(status) {
     if (status.customTimeEnabled && status.customTimePending) {
       let dateText = status.targetDate;
       if (dateText === 'Hôm nay') {
-        dateText = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+        dateText = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
       }
       timeDisplay.textContent = `Pending (until ${dateText} ${status.targetTimeCustom})`;
       timeDisplay.style.background = 'none';
@@ -174,7 +174,7 @@ function refreshScheduleDisplayFromUI() {
   
   let dateText = targetDate;
   if (dateText === 'Hôm nay') {
-    dateText = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+    dateText = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
   }
   const customStartMs = new Date(`${dateText}T${targetTimeCustom}:00.000+07:00`).getTime();
   const nowMs = Date.now();

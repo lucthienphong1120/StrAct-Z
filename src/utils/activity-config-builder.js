@@ -25,7 +25,7 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
   const rawTargetDate = ov.target_date || (customTimeEnabled ? config.target_date : null);
   const targetDate = (rawTargetDate && rawTargetDate !== 'Hôm nay') 
     ? rawTargetDate 
-    : new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+    : new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
   
   return {
     districtKey: null,

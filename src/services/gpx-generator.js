@@ -399,7 +399,7 @@ async function generateActivity(config = {}) {
   // Handle Random Time Generation if startTime is not explicitly provided
   let activityStartTime = startTime;
   if (!activityStartTime) {
-    const targetDateStr = config.targetDate || new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
+    const targetDateStr = config.targetDate || new Date().toLocaleDateString('sv-SE', {timeZone: 'Asia/Ho_Chi_Minh'});
     const minTimeStr = config.minTime || '04:30';
     const maxTimeStr = config.maxTime || '21:30';
 

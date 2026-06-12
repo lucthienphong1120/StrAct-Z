@@ -51,7 +51,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       
       let resolvedTargetDate = targetDateStr;
       if (targetDateStr === 'Hôm nay') {
-        resolvedTargetDate = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+        resolvedTargetDate = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
       }
       
       const customStartMs = new Date(`${resolvedTargetDate}T${targetTimeStr}:00.000+07:00`).getTime();
@@ -81,7 +81,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     }
 
     // Get existing activities for today to avoid overlaps
-    const targetDate = new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Ho_Chi_Minh'});
+    const targetDate = new Date().toLocaleDateString('sv-SE', {timeZone: 'Asia/Ho_Chi_Minh'});
     let localActivities = await db.getActivitiesByDate(accountId, targetDate);
     if (await stravaApi.isAuthenticated(accountId)) {
       try {
@@ -420,7 +420,7 @@ async function getStatus(accountId) {
   const targetDateStr = config.target_date || 'Hôm nay';
   let resolvedTargetDate = targetDateStr;
   if (targetDateStr === 'Hôm nay') {
-    resolvedTargetDate = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+    resolvedTargetDate = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
   }
   const customStartMs = new Date(`${resolvedTargetDate}T${targetTimeStr}:00.000+07:00`).getTime();
   const nowMs = Date.now();
