@@ -10,7 +10,7 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Garmin Forerunner 955** | 1 | 4024 | Fit OK - chưa có trong UI |
 | **Garmin Forerunner 745** | 1 | 3589 | Fit OK |
 | **Garmin Forerunner 265** | 1 | 4257 | Fit OK |
-| **Garmin Forerunner 255** | 1 | 3992 | Fit OK |
+| **Garmin Forerunner 255** | 1 | 3992 | Fit OK - chưa có trong UI |
 | **Garmin Forerunner 255S** | 1 | 3993 | Fit OK |
 | **Garmin Forerunner 165** | 1 | 4432 | Fit OK |
 | **Garmin Forerunner 970** | 1 | ? | Không nhận thiết bị |
@@ -23,10 +23,10 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Garmin Enduro 3** | 1 | 4575 | Fit OK |
 | **Garmin Venu 3** | 1 | 4260 | Fit OK |
 | **Garmin Venu 3S** | 1 | 4261 | Fit OK |
-| **Garmin Venu 2** | 1 | 3703 | - |
-| **Garmin Venu 2S** | 1 | 3704 | - |
-| **Garmin Venu 2 Plus** | 1 | 3851 | - |
-| **Garmin Venu Sq 2** | 1 | 4115 | - |
+| **Garmin Venu 2** | 1 | 3703 | Fit OK |
+| **Garmin Venu 2S** | 1 | 3704 | Fit OK - chưa có trong UI |
+| **Garmin Venu 2 Plus** | 1 | 3851 | Fit OK - chưa có trong UI |
+| **Garmin Venu Sq 2** | 1 | 4115 | Fit OK - chưa có trong UI |
 | **Garmin Instinct 2X Solar** | 1 | 4394 | - |
 | **Garmin epix Pro (Gen 2) 47mm** | 1 | 4313 | - |
 | **Garmin Connect** | 1 | ? | - |
