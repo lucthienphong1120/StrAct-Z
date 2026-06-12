@@ -38,7 +38,7 @@ function updateScheduleDisplay(status) {
     const timeDisplay = document.getElementById('scheduleTimeDisplay');
     const labelDisplay = display.querySelector('.schedule-label');
 
-    if (status.customTimeEnabled) {
+    if (status.customTimeEnabled && status.customTimePending) {
       let dateText = status.targetDate;
       if (dateText === 'Hôm nay') {
         dateText = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });

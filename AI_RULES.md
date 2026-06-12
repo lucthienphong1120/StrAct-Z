@@ -149,6 +149,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.1 (2026-06-12)
+- **Bug Fixes: Manual Custom 00:00 Generation & Scheduler UI Past Pending State**:
+  - Fixed client-side `getOverrideConfig()` setting `min_time` and `max_time` to `'00:00'` during manual activity generation when Custom Time was active and set to `'00:00'`. Now correctly falls back to Global Random Time bounds.
+  - Added `customTimePending` field to scheduler status payload and updated scheduler UI display logic to only show `Pending` status if the custom target time is in the future.
+  - Explicitly passed `custom_time_enabled` and `target_time_custom` overrides from client-side payload to correctly align backend builder config logic during manual generations.
+
 ### v2.3.0 (2026-06-12)
 - **Feature: Custom Target Time Bounds & Future Date Constraints**:
   - Implemented logic where `target_time_custom` of `00:00` randomizes activity time within Global Random Time bounds, while other times generate exactly at the custom target time, bypassing Global Random Time.

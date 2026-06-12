@@ -621,10 +621,15 @@ async function saveConfig() {
 function getOverrideConfig() {
   const selected_districts = Array.from(document.querySelectorAll('.district-cb:checked')).map(cb => cb.value).join(',');
   const isCustomTime = document.getElementById('cfgCustomTime').checked;
+  const targetTimeCustomVal = document.getElementById('cfgCustomMinTime').value || '00:00';
+  const isCustomTimeFixed = isCustomTime && targetTimeCustomVal !== '00:00';
+  
   const overrideConfig = {
     target_date: isCustomTime ? document.getElementById('cfgTargetDate').value : undefined,
-    min_time: isCustomTime ? document.getElementById('cfgCustomMinTime').value : document.getElementById('cfgRandMinTime').value,
-    max_time: isCustomTime ? document.getElementById('cfgCustomMinTime').value : document.getElementById('cfgRandMaxTime').value,
+    min_time: isCustomTimeFixed ? targetTimeCustomVal : document.getElementById('cfgRandMinTime').value,
+    max_time: isCustomTimeFixed ? targetTimeCustomVal : document.getElementById('cfgRandMaxTime').value,
+    custom_time_enabled: isCustomTime ? 'true' : 'false',
+    target_time_custom: isCustomTime ? targetTimeCustomVal : '00:00',
     work_start1: document.getElementById('cfgWorkStart1').value,
     work_end1: document.getElementById('cfgWorkEnd1').value,
     work_start2: document.getElementById('cfgWorkStart2').value,

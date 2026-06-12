@@ -415,6 +415,17 @@ function stopScheduler(accountId) {
 async function getStatus(accountId) {
   const config = await db.getAllConfig(accountId);
   const count = parseInt(config.schedule_count) || 1;
+
+  const targetTimeStr = config.target_time_custom || '00:00';
+  const targetDateStr = config.target_date || 'Hôm nay';
+  let resolvedTargetDate = targetDateStr;
+  if (targetDateStr === 'Hôm nay') {
+    resolvedTargetDate = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
+  }
+  const customStartMs = new Date(`${resolvedTargetDate}T${targetTimeStr}:00.000+07:00`).getTime();
+  const nowMs = Date.now();
+  const customTimePending = config.custom_time_enabled === 'true' && (nowMs < customStartMs);
+
   return {
     enabled: config.schedule_enabled === 'true',
     scheduleTime: config.schedule_time || systemLimits.schedule_time.default,
@@ -425,6 +436,7 @@ async function getStatus(accountId) {
     targetDistanceEnabled: config.target_distance_enabled === 'true',
     targetDistanceKm: parseFloat(config.target_distance_km || systemLimits.target_distance_km.default),
     customTimeEnabled: config.custom_time_enabled === 'true',
+    customTimePending: customTimePending,
     targetDate: config.target_date || 'Hôm nay',
     targetTimeCustom: config.target_time_custom || '00:00',
     isRunning: isRunning.get(accountId) || false,
