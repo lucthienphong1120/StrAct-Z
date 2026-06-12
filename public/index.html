@@ -29,7 +29,7 @@
         <div class="logo-icon">🏃</div>
         <span class="logo-text">StrAct Z</span>
         <small
-          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v2.3.2</small>
+          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v2.3.3</small>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -581,11 +581,11 @@
                 <div id="scheduleSlot2"
                   style="display:none; padding:16px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px dashed var(--border); margin-top:4px;">
                   <div class="form-group" style="margin-bottom:0;">
-                    <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
-                      <span>Mốc thời gian 2 (24h)</span>
-                      <button class="btn btn-sm" onclick="removeSchedule2()"
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                      <label class="form-label" style="margin-bottom:0;">Mốc thời gian 2 (24h)</label>
+                      <button type="button" class="btn btn-sm" onclick="removeSchedule2()"
                         style="padding:2px 10px; font-size:0.75rem; color:var(--accent-red); background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); border-radius:6px; cursor:pointer;">Remove</button>
-                    </label>
+                    </div>
                     <input type="time" id="scheduleTime2" class="form-input" value="14:00"
                       lang="en-GB">
                   </div>

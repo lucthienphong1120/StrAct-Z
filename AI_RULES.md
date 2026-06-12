@@ -149,6 +149,10 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.3 (2026-06-12)
+- **Bug Fixes: Time Slot 2 Close Bug**:
+  - Tapped/clicked areas around the margins of Time Slot 2 closed the slot due to the "Remove" button being nested inside the flex-layout `<label>` tag. Separated the button from the `<label>` tag, resolving undesired HTML event delegation.
+
 ### v2.3.2 (2026-06-12)
 - **Feature: Explicit Card Save Buttons & Real-Time Scheduler Display Update**:
   - Moved auto-saving scheduler settings and `Daily Max Activity` configuration to explicit manual "Save" buttons in their respective cards (`Auto Schedule` and `Strava Account`).
