@@ -161,6 +161,16 @@
                   </label>
                 </div>
               </div>
+              <div class="form-row" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
+                <div class="form-group" style="display:flex;align-items:center;">
+                  <label class="toggle">
+                    <input type="checkbox" id="cfgStartNearFavoritePlace" checked>
+                    <div class="toggle-track"></div>
+                    <span class="toggle-label">Start near favorite place <span class="tooltip-icon" id="tipStartNearFavoritePlace"
+                        data-tooltip="?">?</span></span>
+                  </label>
+                </div>
+              </div>
 
             </div>
           </div>
@@ -339,23 +349,21 @@
                 </div>
               </div>
               <div class="form-row">
-                <div class="form-group" style="grid-column: 1 / -1;">
+                <div class="form-group">
                   <label class="form-label">Export Format <span class="tooltip-icon tooltip-right"
                       id="tipExportFormat">?</span></label>
-                  <select id="cfgExportFormat" class="form-select" style="width: 100%;">
+                  <select id="cfgExportFormat" class="form-select">
                     <option value="fit">FIT (Garmin)</option>
                     <option value="gpx">GPX (Non-Garmin)</option>
                   </select>
                 </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group" style="grid-column: 1 / -1;">
-                  <label class="form-label">Strava Visibility <span class="tooltip-icon tooltip-right"
+                <div class="form-group">
+                  <label class="form-label">Strava Visibility <span class="tooltip-icon tooltip-left"
                       id="tipStravaVisibility">?</span></label>
-                  <select id="cfgStravaVisibility" class="form-select" style="width: 100%;">
-                    <option value="everyone">Mọi người (Public)</option>
-                    <option value="only_me">Chỉ mình tôi (Only me / Muted)</option>
-                    <option value="followers">Người theo dõi (Followers Only / Muted)</option>
+                  <select id="cfgStravaVisibility" class="form-select">
+                    <option value="everyone">Public</option>
+                    <option value="only_me">Only me / Muted</option>
+                    <option value="followers">Followers / Muted</option>
                   </select>
                 </div>
               </div>
@@ -690,14 +698,6 @@
                   </div>
                 </div>
 
-                <div style="margin-top: 15px; margin-bottom: 15px; display: flex; align-items: center;">
-                  <label class="toggle">
-                    <input type="checkbox" id="cfgStartNearFavoritePlace" checked>
-                    <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size: 0.8rem; font-weight: 600;">Start near favorite place <span class="tooltip-icon" id="tipStartNearFavoritePlace"
-                        data-tooltip="?">?</span></span>
-                  </label>
-                </div>
 
                 <div
                   style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
