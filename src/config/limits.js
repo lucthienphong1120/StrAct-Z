@@ -114,7 +114,7 @@ const LIMITS = {
   },
   rest_time_percent: {
     label: 'Thời gian nghỉ sau hoạt động.',
-    desc_extra: 'Bằng 50% thời lượng hoạt động trước đó.',
+    desc_extra: 'Tác dụng: Thời gian đệm bổ sung dựa trên thời lượng hoạt động đã có.',
     type: 'int',
     default: 50,
     min: 0,
@@ -122,8 +122,8 @@ const LIMITS = {
     unit: '%'
   },
   custom_time_enabled: {
-    label: 'Custom Time (Pending Next Schedule)',
-    desc_extra: 'Khi bật, các mốc lập lịch tự động (Auto Schedule) tiếp theo sẽ ở trạng thái chờ (Pending) và tạm dừng cho tới khi qua mốc Custom Time chỉ định. Hoạt động đầu tiên chạy sau mốc này sẽ được tạo đúng theo Custom Time, sau đó tính năng này tự động tắt.',
+    label: 'Chỉ định thời gian tạo hoạt động (Quá khứ / Tương lai)',
+    desc_extra: 'Tác dụng: Khi bật, toàn bộ lịch Auto Schedule tiếp theo sẽ ở trạng thái Pending nếu chưa đến Target Time. Sau khi chạy xong hoạt động đầu tiên theo Target Time, tính năng này tự động tắt.',
     type: 'bool',
     default: false
   },
@@ -151,15 +151,15 @@ const LIMITS = {
     unit: 'ngày'
   },
   target_time_custom: {
-    label: 'Thời gian cụ thể tạo hoạt động (Target Time).',
-    desc_extra: 'Tác dụng: Chỉ định thời gian cụ thể. Đặt 00:00 để tự động tạo ngẫu nhiên thời gian trong ngày.',
+    label: 'Chỉ định thời gian cụ thể khi tạo hoạt động.',
+    desc_extra: 'Tác dụng: Đặt 00:00 để tự động chọn thời gian ngẫu nhiên trong ngày.',
     type: 'time',
     default: '00:00'
   },
 
   // ─── ⚙️ Activity Settings ──────────────────────────────────────────────────
   activity_type: {
-    label: 'Loại hoạt động (Activity Type).',
+    label: 'Loại hoạt động.',
     desc_extra: 'Tác dụng: Tỉ lệ tạo ngẫu nhiên từng loại hoạt động.',
     type: 'array',
     default: 'Random (misc)',
@@ -330,14 +330,14 @@ const LIMITS = {
     max: 15.0
   },
   pace_multipliers: {
-    label: 'Hệ số tốc độ (Pace Multipliers).',
+    label: 'Hệ số tốc độ.',
     type: 'map',
     desc_extra: 'Tác dụng: Điều chỉnh tốc độ chạy thực tế so với hệ số cơ bản.',
     example: 'Ví dụ: Walk 1.7x có nghĩa là nhịp độ đi bộ sẽ chậm hơn 70% so với khi chạy bộ.',
     default: { Walk: 1.7, Ride: 0.45, Run: 1.0 }
   },
   sim_weather: {
-    label: 'Giả lập thời tiết (Weather Sim).',
+    label: 'Giả lập thời tiết.',
     desc_extra: 'Tác dụng: Tăng Nhịp tim (HR) thêm 5-15 bpm. Điều kiện: Ngẫu nhiên 30% hoặc khung giờ 11h-16h',
     type: 'bool',
     default: true,
@@ -346,7 +346,7 @@ const LIMITS = {
     hr_increase_max: 15
   },
   sim_redlights: {
-    label: 'Giả lập đèn đỏ (Red Lights).',
+    label: 'Giả lập đèn đỏ.',
     desc_extra: 'Tác dụng: Tăng Elapsed Time, Giảm Avg Pace, Giảm HR. Xác suất: 1.5% mỗi điểm, dừng 15-60s',
     type: 'bool',
     default: true,

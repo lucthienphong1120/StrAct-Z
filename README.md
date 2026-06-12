@@ -13,7 +13,7 @@ It simulates human heart rate variability, weather effects, red light stops, and
 - **🏢 Multi-Tenant Architecture:** Supports multiple independent users on a single server instance. Each user has their own secure login, Strava connection, configuration, and scheduled jobs.
 - **🗺️ Realistic GPS Tracks:** Uses OSRM to snap routes to actual streets across 12 inner districts of Hanoi. Toggle off for faster straight-line fallback routes.
 - **🤖 Advanced Simulations:**
-  - **🌤️ Weather Sim:** 30% chance of hot weather, adding +3~8 BPM to heart rate.
+  - **🌤️ Weather Simulation:** 30% chance of hot weather, adding +3~8 BPM to heart rate.
   - **🚦 Red Light Stops:** 1.5% chance per GPS point to pause for 15-60 seconds, during which heart rate naturally drops.
   - **🏔️ Elevation & Cadence:** Generates realistic elevation profiles and stride cadences.
 - **⏰ Smart Auto-Scheduler:** Configure background cron jobs to auto-generate and upload 1-2 activities daily within specific time windows, strictly avoiding configured work hours.

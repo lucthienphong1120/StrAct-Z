@@ -838,7 +838,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ### v1.50.17 (2026-05-11)
 - **Advanced UI Polish**: Finalized Activity Settings layout with Min/Max Distance on the same row and Activity Type full-width.
-- **Detailed Simulation Hints**: Updated tooltips for Weather Sim and Red Lights to explain specific effects on Heart Rate, Elapsed Time, and Pace.
+- **Detailed Simulation Hints**: Updated tooltips for Weather Simulation and Red Lights to explain specific effects on Heart Rate, Elapsed Time, and Pace.
 - **Improved Transparency**: Added titles and hints for all reference tables (Distance/Pace Multipliers, HR Zones) to explain their functional impact.
 
 ### v1.50.16 (2026-05-11)

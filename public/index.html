@@ -201,7 +201,8 @@
                   <label class="toggle">
                     <input type="checkbox" id="cfgCustomTime" onchange="toggleCustomTime()">
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size:0.9rem; font-weight:600;">Custom Time <span class="tooltip-icon" id="tipCustomTimeEnabled" data-tooltip="?">?</span></span>
+                    <span class="toggle-label" style="font-size:0.9rem; font-weight:600;">Custom Time <span
+                        class="tooltip-icon" id="tipCustomTimeEnabled" data-tooltip="?">?</span></span>
                   </label>
                 </div>
 
@@ -488,7 +489,7 @@
                   <label class="toggle" style="margin-bottom: 5px;">
                     <input type="checkbox" id="cfgSimWeather" checked>
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size: 0.85rem;">🌤️ Weather Sim <span
+                    <span class="toggle-label" style="font-size: 0.85rem;">🌤️ Weather Simulation <span
                         class="tooltip-icon tooltip-right" id="tipSimWeather">?</span></span>
                   </label>
                 </div>
@@ -553,18 +554,21 @@
         <div style="display: flex; flex-direction: column; gap: 20px;">
           <!-- Schedule Card -->
           <div class="card">
-            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div class="card-header"
+              style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
               <div class="card-title">⏰ Auto Schedule</div>
               <div style="display: flex; align-items: center; gap: 12px;">
                 <button class="btn btn-sm btn-primary" onclick="updateSchedule(true)">💾 Save</button>
                 <label class="toggle">
-                  <input type="checkbox" id="scheduleEnabled" onchange="if (window.refreshScheduleDisplayFromUI) window.refreshScheduleDisplayFromUI()">
+                  <input type="checkbox" id="scheduleEnabled"
+                    onchange="if (window.refreshScheduleDisplayFromUI) window.refreshScheduleDisplayFromUI()">
                   <div class="toggle-track"></div>
                 </label>
               </div>
             </div>
             <div class="card-body">
-              <div id="customTimeLimitBanner" style="display: none; margin-bottom: 12px; padding: 10px 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px; color: var(--accent-blue); font-size: 0.8rem; line-height: 1.4; align-items: center; gap: 8px;">
+              <div id="customTimeLimitBanner"
+                style="display: none; margin-bottom: 12px; padding: 10px 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px; color: var(--accent-blue); font-size: 0.8rem; line-height: 1.4; align-items: center; gap: 8px;">
                 <span>💡</span>
                 <span id="customTimeLimitText">Custom Time: Hỗ trợ đặt lịch trước tối đa 3 ngày trong tương lai.</span>
               </div>
@@ -574,8 +578,7 @@
                     <span>Mốc thời gian 1 (24h) <span class="tooltip-icon" id="tipScheduleTime"
                         data-tooltip="?">?</span></span>
                   </label>
-                  <input type="time" id="scheduleTime" class="form-input" value="22:00"
-                    lang="vi-VN">
+                  <input type="time" id="scheduleTime" class="form-input" value="22:00" lang="vi-VN">
                 </div>
 
                 <div id="scheduleSlot2"
@@ -586,8 +589,7 @@
                       <button type="button" class="btn btn-sm" onclick="removeSchedule2()"
                         style="padding:2px 10px; font-size:0.75rem; color:var(--accent-red); background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); border-radius:6px; cursor:pointer;">Remove</button>
                     </div>
-                    <input type="time" id="scheduleTime2" class="form-input" value="14:00"
-                      lang="vi-VN">
+                    <input type="time" id="scheduleTime2" class="form-input" value="14:00" lang="vi-VN">
                   </div>
                 </div>
 
@@ -613,8 +615,7 @@
               <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
                 <div class="form-group" style="margin-bottom:12px;">
                   <label class="toggle">
-                    <input type="checkbox" id="cfgTargetDistanceEnabled"
-                      onchange="toggleTargetDistanceInputs();">
+                    <input type="checkbox" id="cfgTargetDistanceEnabled" onchange="toggleTargetDistanceInputs();">
                     <div class="toggle-track"></div>
                     <span class="toggle-label" style="font-size: 0.85rem;">🎯 Daily Target Distance <span
                         class="tooltip-icon tooltip-right" id="tipTargetDistanceEnabled">?</span></span>
@@ -782,7 +783,8 @@
 
           <!-- Strava Account -->
           <div class="card">
-            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div class="card-header"
+              style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
               <div class="card-title">🔗 Strava Account</div>
               <button class="btn btn-sm btn-primary" onclick="saveConfig()">💾 Save</button>
             </div>
