@@ -196,11 +196,11 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] kiểm tra logic gen hoạt động hiện tại có tính chia chi tiết đơn vị nhỏ nhất là gì, có đang theo phường/xã trong quận ko? xử lý tăng độ ưu tiên xuất phát điểm gần tâm vòng tròn work/home (v2.0.3)
 + [x] kiểm tra các luồng tự động vẫn hoạt động tốt với multi-account (schedule, linked tài khoản, generate and upload, history,...) không bị nhầm hoặc xung đột giữa các tài khoản user khác hoặc các phiên cũ trên browser (v2.0.3)
 + [x] thêm cấu hình toggle Prioritize Centers (default true), nếu bật và nếu hoạt động được sinh tại chính quận chứa tâm vòng tròn Home/Work thì có 60% tỉ lệ điểm xuất phát bắt đầu quanh tâm vòng tròn (+ random từ 200m - 500m) (v2.0.4)
-+ [x] về tính năng "Fallback tự nhiên: Nếu quận được chọn không chứa tâm vòng tròn, roll trượt (rơi vào 40% còn lại), hoặc tính năng này bị tắt đi, lộ trình sẽ sinh ngẫu nhiên quanh các POI hoặc tâm quận như bình thường." -> đổi tên thành Start near favorite place
-+ [x] tính năng Start near favorite place: 55% là start tại tâm home/work, 35% là start tại POI nổi tiếng/khu tập luyện/cảnh đẹp/ao hồ/công viên, 5% còn lại là ngẫu nhiên, bỏ option tâm quận đi -> ko ai tự nhiên lại chạy ở tâm quận cả (đồng thời update lại phần tooltip chú thích)
++ [x] về tính năng "Fallback tự nhiên: Nếu quận được chọn không chứa tâm vòng tròn, roll trượt (rơi vào 40% còn lại), hoặc tính năng này bị tắt đi, lộ trình sẽ sinh ngẫu nhiên quanh các POI hoặc tâm quận như bình thường." -> đổi tên thành Start Near Favorite Place
++ [x] tính năng Start Near Favorite Place: 55% là start tại tâm home/work, 35% là start tại POI nổi tiếng/khu tập luyện/cảnh đẹp/ao hồ/công viên, 5% còn lại là ngẫu nhiên, bỏ option tâm quận đi -> ko ai tự nhiên lại chạy ở tâm quận cả (đồng thời update lại phần tooltip chú thích)
 + [x] thuật toán Ray-Casting: Tôi đã viết thêm một bộ kiểm tra điểm-trong-đa-giác (Point-in-Polygon) thuần túy dạng Ray-Casting sử dụng dữ liệu ranh giới thật, thay vì vòng tròn ước lượng -> đồng ý, nhưng cái này không cần tính thường xuyên đâu, chỉ cần khi user thay đổi liên quan đến di chuyển vòng tròn home/work trong activity map là tính toán lại được (thậm chí bật tắt quận hay scale radius cũng ko cần chạy lại), lưu thông tin vào db là home thuộc quận này, work thuộc quận này là đủ thông tin rồi
 + [x] Min Distance chuyển default về 0.5 km (v2.0.7)
-+ [x] Di chuyển toggle Start near favorite place sang card Map & Priority Areas (v2.0.7)
++ [x] Di chuyển toggle Start Near Favorite Place sang card Map & Priority Areas (v2.0.7)
 + [x] Sửa đổi toàn bộ mã Product ID (BIN) cho Garmin và Manufacturer ID cho Huawei, Coros, Amazfit/Zepp, Polar, Strava theo tài liệu Garmin_BIN_Format và ANT+ SDK (v2.0.8)
 + [x] Khảo sát tài liệu Strava Device Mapping, đối chiếu tính đầy đủ và chuẩn xác của các trường dữ liệu FIT (đặc biệt là các trường thời gian như local_timestamp, start_time...) (v2.0.9)
 + [x] Nghiên cứu tài liệu chính thống Garmin FIT SDK và ANT+ Alliance, phân tích cơ chế map thiết bị phi-Garmin bằng fallback product_name, cập nhật tài liệu testcase thiết bị (v2.1.0)
@@ -237,5 +237,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Cập nhật và đồng bộ tùy chọn thiết bị, loại bỏ thiết bị không nhận trên Strava theo DEVICE_TESTCASES.md (v2.3.9)
 + [x] Sửa logic Boost Adjacent chỉ áp dụng với quận start của hoạt động upload gần nhất và cho phép cấu hình user age từ 6 đến 85 tuổi (v2.3.10)
 + [x] Fix lỗi nghiêm trọng scheduler: biến stravaActivities global gây spam tạo max hoạt động, config snapshot stale gây sai target_date, loại bỏ giá trị đặc biệt 'Hôm nay' từ target_date, escape HTML trong error_message tooltip (v2.3.11)
-+ [ ] đổi màu nhãn FIT (xanh lá) và GPX (cam) ở Local Generated History
++ [x] đổi màu nhãn FIT (xanh lá) và GPX (cam) ở Local Generated History (v2.3.12)
 

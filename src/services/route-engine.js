@@ -160,7 +160,7 @@ const RUNNING_POIS = {
 function getDistrictTargetCenter(districtKey, activityAreas = [], startNearFavoritePlace = true) {
   const d = HANOI_DISTRICTS[districtKey];
   if (!d) return null;
-  
+
   // 1. Filter activity areas whose center coordinates lie inside this district polygon
   const containingAreas = (activityAreas || []).filter(area => {
     const areaDistrictKey = area.district || getDistrictKeyForCoordinate(area.lat, area.lng);
@@ -202,14 +202,14 @@ function getDistrictTargetCenter(districtKey, activityAreas = [], startNearFavor
 
     const chosenArea = sortedAreas[0];
     const searchRadiusM = randomInRange(200, 500); // Random offset between 200m and 500m
-    console.log(`[Route Engine] Start near favorite place - Home/Work center: "${chosenArea.type}" in district "${d.name}" with radius ${Math.round(searchRadiusM)}m`);
+    console.log(`[Route Engine] Start Near Favorite Place - Home/Work center: "${chosenArea.type}" in district "${d.name}" with radius ${Math.round(searchRadiusM)}m`);
     return { lat: chosenArea.lat, lng: chosenArea.lng, radiusM: searchRadiusM };
   } else if (roll < pCenter + pPoi) {
     const pois = RUNNING_POIS[districtKey];
     if (pois && pois.length > 0) {
       const poi = pois[Math.floor(Math.random() * pois.length)];
       const r = randomInRange(150, 450); // tight search radius around scenic spot (150m - 450m)
-      console.log(`[Route Engine] Start near favorite place - Scenic POI: "${poi.name}" in district "${d.name}" with radius ${Math.round(r)}m`);
+      console.log(`[Route Engine] Start Near Favorite Place - Scenic POI: "${poi.name}" in district "${d.name}" with radius ${Math.round(r)}m`);
       return { lat: poi.lat, lng: poi.lng, radiusM: r };
     }
   }
@@ -218,13 +218,13 @@ function getDistrictTargetCenter(districtKey, activityAreas = [], startNearFavor
   const pt = getRandomPointInDistrict(districtKey);
   if (pt) {
     const r = randomInRange(5, 50); // slight variance
-    console.log(`[Route Engine] Start near favorite place - True random inside district polygon "${d.name}" with radius ${Math.round(r)}m`);
+    console.log(`[Route Engine] Start Near Favorite Place - True random inside district polygon "${d.name}" with radius ${Math.round(r)}m`);
     return { lat: pt.lat, lng: pt.lng, radiusM: r };
   }
 
   // Ultimate fallback to randomized offset from district center
   const r = d.radiusKm * 1000 * randomInRange(0.1, 0.6);
-  console.log(`[Route Engine] Start near favorite place - Fallback to center of district "${d.name}" with radius ${Math.round(r)}m`);
+  console.log(`[Route Engine] Start Near Favorite Place - Fallback to center of district "${d.name}" with radius ${Math.round(r)}m`);
   return { lat: d.lat, lng: d.lng, radiusM: r };
 }
 
@@ -445,17 +445,17 @@ function trimRouteToDistance(points, targetDistM) {
  */
 function resampleRoute(points, stepM = 10) {
   if (points.length < 2) return points;
-  
+
   const resampled = [];
   resampled.push({ ...points[0] });
-  
+
   let currentTargetDist = stepM;
   let i = 1;
-  
+
   while (i < points.length) {
     const prev = points[i - 1];
     const curr = points[i];
-    
+
     if (curr.distance >= currentTargetDist) {
       const segDist = curr.distance - prev.distance;
       if (segDist === 0) {
@@ -477,12 +477,12 @@ function resampleRoute(points, stepM = 10) {
       i++;
     }
   }
-  
+
   const last = points[points.length - 1];
   if (resampled[resampled.length - 1].distance < last.distance) {
     resampled.push({ ...last });
   }
-  
+
   return resampled;
 }
 
@@ -526,7 +526,7 @@ async function generateRoute(options = {}) {
     } else {
       // Multi-district: generate path traversing the districts
       waypoints.push({ lat: centerLat, lng: centerLng });
-      
+
       // Traverse initial sequence of districts
       for (let i = 1; i < districtKeys.length; i++) {
         const target = getDistrictTargetCenter(districtKeys[i], activityAreas, startNearFavoritePlace);
@@ -540,7 +540,7 @@ async function generateRoute(options = {}) {
       // so that trimRouteToDistance has enough track to work with
       let currentIdx = districtKeys.length - 1;
       let direction = -1;
-      
+
       // Generate up to 15 bounces (enough to cover 20-30km)
       for (let bounce = 0; bounce < 15; bounce++) {
         currentIdx += direction;
@@ -551,7 +551,7 @@ async function generateRoute(options = {}) {
           currentIdx = districtKeys.length - 2;
           direction = -1;
         }
-        
+
         const target = getDistrictTargetCenter(districtKeys[currentIdx], activityAreas, startNearFavoritePlace);
         if (target) {
           const b = randomInRange(0, 360);
@@ -580,7 +580,7 @@ async function generateRoute(options = {}) {
         withDist.push({ ...osrmPoints[i], distance: cum });
       }
       points = trimRouteToDistance(withDist, targetDistM);
-      console.log(`[Route] OSRM success: ${points.length} pts, ${(points[points.length-1].distance/1000).toFixed(2)}km`);
+      console.log(`[Route] OSRM success: ${points.length} pts, ${(points[points.length - 1].distance / 1000).toFixed(2)}km`);
     } catch (err) {
       console.warn('[Route] OSRM failed, using fallback:', err.message);
       points = fallbackRoute(waypoints, targetDistM);
@@ -603,10 +603,10 @@ function fallbackRoute(waypoints, targetDistM) {
   for (let i = 0; i < waypoints.length - 1; i++) {
     const from = waypoints[i], to = waypoints[i + 1];
     const midPt = { lat: from.lat, lng: to.lng }; // L-shape
-    
+
     const dist1 = haversineDistance(from.lat, from.lng, midPt.lat, midPt.lng);
     const dist2 = haversineDistance(midPt.lat, midPt.lng, to.lat, to.lng);
-    
+
     const steps1 = Math.max(2, Math.floor(dist1 / 20));
     const steps2 = Math.max(2, Math.floor(dist2 / 20));
 
@@ -691,29 +691,29 @@ function generateTimestamps(points, options = {}) {
 
     const speed = avgSpeed / Math.max(0.5, paceFactor);
     const secs = segDist > 0 ? segDist / speed : 0;
-    
+
     // Add seconds and round next point's time to nearest second
     let nextTimeMs = cur.getTime() + secs * 1000;
     let nextTimeRounded = Math.round(nextTimeMs / 1000) * 1000;
-    
+
     // Enforce that the time must advance by at least 1 second (1000ms)
     if (nextTimeRounded <= cur.getTime()) {
       nextTimeRounded = cur.getTime() + 1000;
     }
-    
+
     cur = new Date(nextTimeRounded);
     pt.time = new Date(cur);
-    
+
     // Simulate Red Light / Pause (approx 1.5% chance per point if not near start/end)
     if (options.simRedLights !== false && progress > 0.1 && progress < 0.9 && Math.random() < redLightsProbability) {
-       const pauseSecs = randomInRange(redLightsMinDuration, redLightsMaxDuration);
-       const steps = Math.floor(pauseSecs / 5);
-       for (let j = 1; j <= steps; j++) {
-         cur = new Date(cur.getTime() + 5000);
-         result.push({ ...pt, time: new Date(cur), isPause: true });
-       }
+      const pauseSecs = randomInRange(redLightsMinDuration, redLightsMaxDuration);
+      const steps = Math.floor(pauseSecs / 5);
+      for (let j = 1; j <= steps; j++) {
+        cur = new Date(cur.getTime() + 5000);
+        result.push({ ...pt, time: new Date(cur), isPause: true });
+      }
     }
-    
+
     result.push(pt);
   }
   return result;
@@ -726,11 +726,11 @@ function generateHeartRate(points, options = {}) {
   const weatherProbability = options.weatherProbability !== undefined ? options.weatherProbability : 0.3;
   const weatherHRMin = options.weatherHRMin !== undefined ? options.weatherHRMin : 5;
   const weatherHRMax = options.weatherHRMax !== undefined ? options.weatherHRMax : 15;
-  
+
   // Simulate weather factor randomly (hot weather = +HR)
   const isHotWeather = options.simWeather !== false && Math.random() < weatherProbability;
   let weatherFactor = isHotWeather ? randomInRange(weatherHRMin, weatherHRMax) : 0;
-  
+
   // Time-of-day factor: trưa/chiều (11:00 - 16:00) nắng cũng tăng chút
   const startHour = startTime ? new Date(startTime).getHours() : 10;
   if (startHour >= 11 && startHour <= 16) {
@@ -744,27 +744,27 @@ function generateHeartRate(points, options = {}) {
   for (let i = 0; i < n; i++) {
     const p = i / n;
     let hr;
-    
+
     if (points[i].isPause) {
-       // HR drops during pauses towards restingHR
-       pauseDuration += 5; // each pause point is 5s
-       const dropFactor = Math.min(0.8, pauseDuration / 120); // max 80% drop towards resting after 2 mins
-       hr = lastActiveHR - (lastActiveHR - restingHR) * dropFactor + randomInRange(-2, 2);
+      // HR drops during pauses towards restingHR
+      pauseDuration += 5; // each pause point is 5s
+      const dropFactor = Math.min(0.8, pauseDuration / 120); // max 80% drop towards resting after 2 mins
+      hr = lastActiveHR - (lastActiveHR - restingHR) * dropFactor + randomInRange(-2, 2);
     } else {
-       pauseDuration = 0; // Reset pause counter when moving
-       if (p < 0.1) {
-          hr = restingHR + (minHR - restingHR) * (p / 0.1);
-       } else if (p < 0.9) {
-         const mp = (p - 0.1) / 0.8;
-         hr = minHR + (maxHR - minHR) * (0.5 + 0.3 * Math.sin(2 * Math.PI * 3 * mp)) + randomInRange(-5, 5);
-         if (points[i].elevation !== undefined && i > 0 && points[i - 1].elevation !== undefined)
-           hr += (points[i].elevation - points[i - 1].elevation) * 2;
-       } else {
-         hr = minHR + (restingHR - minHR) * ((p - 0.9) / 0.1) * 0.5;
-       }
-       lastActiveHR = hr;
+      pauseDuration = 0; // Reset pause counter when moving
+      if (p < 0.1) {
+        hr = restingHR + (minHR - restingHR) * (p / 0.1);
+      } else if (p < 0.9) {
+        const mp = (p - 0.1) / 0.8;
+        hr = minHR + (maxHR - minHR) * (0.5 + 0.3 * Math.sin(2 * Math.PI * 3 * mp)) + randomInRange(-5, 5);
+        if (points[i].elevation !== undefined && i > 0 && points[i - 1].elevation !== undefined)
+          hr += (points[i].elevation - points[i - 1].elevation) * 2;
+      } else {
+        hr = minHR + (restingHR - minHR) * ((p - 0.9) / 0.1) * 0.5;
+      }
+      lastActiveHR = hr;
     }
-    
+
     points[i].heartRate = Math.round(Math.max(restingHR, Math.min(maxHR + 15, hr + weatherFactor)));
   }
   return points;

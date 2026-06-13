@@ -154,6 +154,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.12 (2026-06-13)
+- **UI: Local Generated History Labels Refinement**:
+  - Updated the FIT badge styling to use green (`var(--accent-green)`) and matching semi-transparent values, ensuring clear visual distinction from GPX (which remains orange `#f97316`).
+  - Synchronized and bumped versions across `package.json`, `public/index.html`, `public/sw.js`, `PLAN.md`, and `AI_RULES.md` to trigger a clean automatic client cache clear.
+
 ### v2.3.11 (2026-06-13)
 - **Bugfix: Critical Scheduler & Validation Fixes**:
   - Fixed `stravaActivities` global variable leak in `scheduler.js` which caused spamming of activities up to the daily limit.
@@ -248,7 +253,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ### v2.2.6 (2026-06-12)
 - **UI: Reposition Separator Line in Route Configuration**:
-  - Moved the horizontal separator border style from above the "Start near favorite place" row to above the "Snap OSRM Routing" and "Boost Adjacent" row, creating a cleaner visual separation between the district checklist and the routing toggles.
+  - Moved the horizontal separator border style from above the "Start Near Favorite Place" row to above the "Snap OSRM Routing" and "Boost Adjacent" row, creating a cleaner visual separation between the district checklist and the routing toggles.
 
 ### v2.2.5 (2026-06-12)
 - **Fix: Strava Device Source Badge Detection for Zepp/Amazfit**:
