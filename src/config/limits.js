@@ -116,7 +116,7 @@ const LIMITS = {
     label: 'Thời gian nghỉ sau hoạt động.',
     desc_extra: 'Tác dụng: Thời gian đệm bổ sung dựa trên thời lượng hoạt động đã có.',
     type: 'int',
-    default: 50,
+    default: 40,
     min: 0,
     max: 100,
     unit: '%'

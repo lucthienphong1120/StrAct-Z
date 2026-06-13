@@ -455,7 +455,7 @@ async function generateActivity(config = {}) {
     
     // Blocked intervals from existing activities + safe time
     const safeMs = (parseInt(config.overlap_protection_minutes || limits.overlap_minutes || '30')) * 60000;
-    const restPercent = parseInt(config.rest_time_percent || (limits.rest_time_percent ? limits.rest_time_percent.default : 50) || '50');
+    const restPercent = parseInt(config.rest_time_percent || (limits.rest_time_percent ? limits.rest_time_percent.default : 40) || '40');
     const restMultiplier = restPercent / 100;
     const estimatedDurationMs = (avgPace * distanceKm) * 60000;
 

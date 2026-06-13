@@ -342,7 +342,7 @@ async function loadConfig() {
 
 
     setVal('cfgOverlapProtection', config.overlap_protection_minutes || (sysL?.overlap_protection_minutes?.default ? String(sysL.overlap_protection_minutes.default) : '30'));
-    setVal('cfgRestTime', config.rest_time_percent || (sysL?.rest_time_percent?.default ? String(sysL.rest_time_percent.default) : '50'));
+    setVal('cfgRestTime', config.rest_time_percent || (sysL?.rest_time_percent?.default ? String(sysL.rest_time_percent.default) : '40'));
 
     if (config.map_lat && config.map_lng && config.map_zoom) {
       window.savedMapState = {
@@ -601,7 +601,7 @@ async function saveConfig() {
     target_date: document.getElementById('cfgTargetDate').value || new Date().toLocaleDateString('sv-SE'),
     target_time_custom: document.getElementById('cfgCustomMinTime').value,
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || '30',
-    rest_time_percent: document.getElementById('cfgRestTime')?.value || '50',
+    rest_time_percent: document.getElementById('cfgRestTime')?.value || '40',
     daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || '2',
   };
 

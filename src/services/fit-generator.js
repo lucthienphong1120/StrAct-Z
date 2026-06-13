@@ -477,7 +477,7 @@ async function generateActivity(config = {}) {
     const targetDateObj = new Date(`${targetDateStr}T00:00:00.000+07:00`);
     
     const safeMs = (parseInt(config.overlap_protection_minutes || limits.overlap_minutes || '30')) * 60000;
-    const restPercent = parseInt(config.rest_time_percent || 50);
+    const restPercent = parseInt(config.rest_time_percent || limits.rest_time_percent?.default || 40);
     const restMultiplier = restPercent / 100;
     const estimatedDurationMs = (avgPace * distanceKm) * 60000;
 

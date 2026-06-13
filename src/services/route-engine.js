@@ -201,14 +201,14 @@ function getDistrictTargetCenter(districtKey, activityAreas = [], startNearFavor
     });
 
     const chosenArea = sortedAreas[0];
-    const searchRadiusM = randomInRange(200, 500); // Random offset between 200m and 500m
+    const searchRadiusM = randomInRange(100, 300); // Random offset between 100m and 300m
     console.log(`[Route Engine] Start Near Favorite Place - Home/Work center: "${chosenArea.type}" in district "${d.name}" with radius ${Math.round(searchRadiusM)}m`);
     return { lat: chosenArea.lat, lng: chosenArea.lng, radiusM: searchRadiusM };
   } else if (roll < pCenter + pPoi) {
     const pois = RUNNING_POIS[districtKey];
     if (pois && pois.length > 0) {
       const poi = pois[Math.floor(Math.random() * pois.length)];
-      const r = randomInRange(150, 450); // tight search radius around scenic spot (150m - 450m)
+      const r = randomInRange(0, 200); // tight search radius around scenic spot (0m - 200m)
       console.log(`[Route Engine] Start Near Favorite Place - Scenic POI: "${poi.name}" in district "${d.name}" with radius ${Math.round(r)}m`);
       return { lat: poi.lat, lng: poi.lng, radiusM: r };
     }

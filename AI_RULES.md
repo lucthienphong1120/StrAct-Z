@@ -154,6 +154,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.13 (2026-06-13)
+- **Feature: Rest Time & Routing Proximity Adjustments**:
+  - Decreased default Rest Time (rest buffering percentage) from 50% to 40% globally in frontend configs, SQLite defaults, FIT generator, and GPX generator fallback logic.
+  - Adjusted coordinate offset ranges for "Start Near Favorite Place": Home/Work start locations are randomized within 100m-300m (down from 200m-500m), while scenic POIs are randomized within 0m-200m (down from 150m-450m).
+  - Synchronized version bump to `v2.3.13` across `package.json`, `public/index.html`, `public/sw.js`, `PLAN.md`, and `AI_RULES.md`.
+
 ### v2.3.12 (2026-06-13)
 - **UI: Local Generated History Labels Refinement**:
   - Updated the FIT badge styling to use green (`var(--accent-green)`) and matching semi-transparent values, ensuring clear visual distinction from GPX (which remains orange `#f97316`).
