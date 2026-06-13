@@ -349,9 +349,8 @@ function generateLoopWaypoints(centerLat, centerLng, targetDistKm) {
   const adjustedDist = targetDistM / 1.35;
   const radius = adjustedDist / (2 * Math.PI);
 
-  // Clamp radius to district size
-  const maxRadius = Math.min(radius, 1500); // max 1.5km from center
-  const effectiveRadius = Math.max(100, maxRadius);
+  // No hard limit clamp on radius so that loops scale naturally for longer target distances, preventing duplicate overlaps
+  const effectiveRadius = Math.max(100, radius);
 
   // Number of waypoints based on distance
   const numWP = Math.max(3, Math.min(8, Math.floor(targetDistKm * 1.5)));
@@ -518,54 +517,12 @@ async function generateRoute(options = {}) {
       centerLat = pt.lat;
       centerLng = pt.lng;
     }
-
-    if (districtKeys.length === 1) {
-      // Single district: normal behavior
-      waypoints = routeType === 'loop'
-        ? generateLoopWaypoints(centerLat, centerLng, distanceKm)
-        : generateOutBackWaypoints(centerLat, centerLng, distanceKm);
-    } else {
-      // Multi-district: generate path traversing the districts
-      waypoints.push({ lat: centerLat, lng: centerLng });
-
-      // Traverse initial sequence of districts
-      for (let i = 1; i < districtKeys.length; i++) {
-        const target = getDistrictTargetCenter(districtKeys[i], activityAreas, startNearFavoritePlace);
-        if (target) {
-          const b = randomInRange(0, 360);
-          waypoints.push(destinationPoint(target.lat, target.lng, b, target.radiusM));
-        }
-      }
-
-      // Add bounce-back waypoints to ensure the route is long enough
-      // so that trimRouteToDistance has enough track to work with
-      let currentIdx = districtKeys.length - 1;
-      let direction = -1;
-
-      // Generate up to 15 bounces (enough to cover 20-30km)
-      for (let bounce = 0; bounce < 15; bounce++) {
-        currentIdx += direction;
-        if (currentIdx < 0) {
-          currentIdx = 1;
-          direction = 1;
-        } else if (currentIdx >= districtKeys.length) {
-          currentIdx = districtKeys.length - 2;
-          direction = -1;
-        }
-
-        const target = getDistrictTargetCenter(districtKeys[currentIdx], activityAreas, startNearFavoritePlace);
-        if (target) {
-          const b = randomInRange(0, 360);
-          waypoints.push(destinationPoint(target.lat, target.lng, b, target.radiusM));
-        }
-      }
-    }
-  } else {
-    // No district specified
-    waypoints = routeType === 'loop'
-      ? generateLoopWaypoints(centerLat, centerLng, distanceKm)
-      : generateOutBackWaypoints(centerLat, centerLng, distanceKm);
   }
+
+  // Generate loop or out-and-back waypoints around the start coordinate (centerLat, centerLng)
+  waypoints = routeType === 'loop'
+    ? generateLoopWaypoints(centerLat, centerLng, distanceKm)
+    : generateOutBackWaypoints(centerLat, centerLng, distanceKm);
 
   let points;
   const targetDistM = distanceKm * 1000;

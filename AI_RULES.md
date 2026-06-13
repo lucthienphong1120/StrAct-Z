@@ -154,6 +154,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.15 (2026-06-13)
+- **Refactoring & Optimization: Deprecated Span Cleanup, Loop Scaling & Rejection Sampling Optimization**:
+  - Removed all remaining backend remnants of the deprecated `max_district_span` config option (deleted from `limits.js`, `activity-config-builder.js`, `sqlite-db.js`, and cleaned up dead multi-district traversal branches in `route-engine.js`).
+  - Removed the arbitrary `1500m` maximum loop radius clamp in `generateLoopWaypoints`, allowing loop route sizes to scale naturally with distance targets, avoiding spaghetti overlaps.
+  - Increased rejection sampling attempts from 50 to 100 in `getRandomPointInDistrict` (`geo.js`) and returned the last attempted random bounding box point as a fallback instead of `null`, completely preventing hardcoded fallback to district centers.
+  - Synchronized version bump to `v2.3.15` across `package.json`, `public/index.html`, `public/sw.js`, `PLAN.md`, and `AI_RULES.md`.
+
 ### v2.3.14 (2026-06-13)
 - **Feature: POI Running Registry Expansion**:
   - Added "Công viên Hoàng Văn Thụ" to the Hoàng Mai district scenic POI registry in `route-engine.js` so it can be dynamically selected for randomized routes.

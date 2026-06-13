@@ -30,7 +30,6 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
   return {
     districtKey: null,
     selected_districts: ov.selected_districts || config.selected_districts,
-    max_district_span: ov.max_district_span || config.max_district_span,
     targetDate: targetDate,
     minTime: minTime,
     maxTime: maxTime,

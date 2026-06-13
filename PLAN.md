@@ -240,4 +240,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] đổi màu nhãn FIT (xanh lá) và GPX (cam) ở Local Generated History (v2.3.12)
 + [x] Đặt Rest Time mặc định về 40% (v2.3.13)
 + [x] Bổ sung Công viên Hoàng Văn Thụ vào danh sách POI chạy bộ của quận Hoàng Mai (v2.3.14)
++ [x] Dọn dẹp cấu hình max_district_span đã deprecated, tăng cự ly vòng lặp thực tế, tối ưu hóa thuật toán chọn tọa độ ngẫu nhiên trong boundary của quận (v2.3.15)
 

@@ -17,13 +17,6 @@ const LIMITS = {
     min: { basic: 4, vip: 2 },
     max: { basic: 10, vip: 15 }
   },
-  max_district_span: {
-    label: 'Số lượng quận tối đa một lộ trình có thể đi qua.',
-    type: 'int',
-    default: 1,
-    min: 1,
-    max: { basic: 2, vip: 3 }
-  },
   use_osrm: {
     label: 'Lộ trình đi theo đường thực tế qua OSRM.',
     desc_extra: 'Tắt để dùng đường chim bay fallback',
@@ -513,7 +506,6 @@ function getLimits(role = 'basic') {
     return item.default;
   };
 
-  result.max_district_span_val = getVal(LIMITS.max_district_span, role) || 1;
   result.overlap_protection_minutes_val = LIMITS.overlap_protection_minutes.default;
   result.rest_time_percent_val = LIMITS.rest_time_percent.default;
   result.daily_upload_limit_val = getVal(LIMITS.daily_upload_limit, role) || 2;

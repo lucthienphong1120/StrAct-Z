@@ -144,17 +144,20 @@ function getRandomPointInDistrict(districtKey) {
   const bbox = getFeatureBoundingBox(feature);
   if (!bbox) return null;
 
-  // Try up to 50 times to find a point inside the polygon
-  for (let attempt = 0; attempt < 50; attempt++) {
-    const lat = bbox.minLat + Math.random() * (bbox.maxLat - bbox.minLat);
-    const lng = bbox.minLng + Math.random() * (bbox.maxLng - bbox.minLng);
-    if (isPointInFeature(lat, lng, feature)) {
-      return { lat, lng };
+  let lastLat = bbox.minLat + (bbox.maxLat - bbox.minLat) / 2;
+  let lastLng = bbox.minLng + (bbox.maxLng - bbox.minLng) / 2;
+
+  // Try up to 100 times to find a point inside the polygon
+  for (let attempt = 0; attempt < 100; attempt++) {
+    lastLat = bbox.minLat + Math.random() * (bbox.maxLat - bbox.minLat);
+    lastLng = bbox.minLng + Math.random() * (bbox.maxLng - bbox.minLng);
+    if (isPointInFeature(lastLat, lastLng, feature)) {
+      return { lat: lastLat, lng: lastLng };
     }
   }
 
-  // Fallback to null if all attempts fail
-  return null;
+  // Fallback to a random bounding box point if all attempts fail
+  return { lat: lastLat, lng: lastLng };
 }
 
 module.exports = {

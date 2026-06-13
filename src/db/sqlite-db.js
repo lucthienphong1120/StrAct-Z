@@ -17,7 +17,6 @@ let dbPromise = null;
 
 const DEFAULT_CONFIG = {
   selected_districts: systemLimits.selected_districts.default.join(','),
-  max_district_span: String(systemLimits.max_district_span.default),
   overlap_protection_minutes: String(systemLimits.overlap_protection_minutes.default),
   rest_time_percent: String(systemLimits.rest_time_percent.default),
   use_osrm: String(systemLimits.use_osrm.default),
