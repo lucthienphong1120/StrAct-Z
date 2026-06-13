@@ -141,16 +141,27 @@ graph TD
     OverlapConflict -->|No| RoutingInit
     
     %% Geography Phase
-    RoutingInit["🎯 Determine Starting Coordinates"] --> FavorPOI{"Start Near Favorite POI?"}
-    FavorPOI -->|Yes (70%)| PickPOI["Select coordinate from Scenic POIs in Hanoi"]
-    FavorPOI -->|No (30%)| WeightedDistrict["Weighted Random District Selection"]
+    RoutingInit["🎯 Determine Start Coordinate"] --> SelectDistrict["Weighted District Selection<br/>Based on Home/Work & last activity boost"]
+    SelectDistrict --> FavorPOI{"Start Near Favorite Place?"}
+    FavorPOI -->|Yes| ResolveFavorite["Check Home/Work area (40-60% chance)<br/>or Scenic POI (35-75% chance)"]
+    FavorPOI -->|No| PickRandomInPolygon["Select true random inside district polygon<br/>(Rejection sampling bbox fallback)"]
     
-    PickPOI --> RouteGen
-    WeightedDistrict --> PickRandomInPolygon["Select random coordinate inside district polygon"]
+    ResolveFavorite --> RouteGen
     PickRandomInPolygon --> RouteGen
     
     %% Routing Engine Phase
-    RouteGen["🚲 Generate Route"] --> OSRMRoute{"Use OSRM Routing?"}
+    RouteGen["🚲 Generate Waypoints"] --> StartPOI{"Starting at a POI?"}
+    StartPOI -->|Yes| POILoopProb{"30% Chance to target another POI?"}
+    StartPOI -->|No (Home/Work/Random)| TargetPOI{"Target nearest POI within 1.5km?"}
+    POILoopProb -->|Yes| TargetPOI
+    POILoopProb -->|No| GeometricLoop["Generate classic loop / out-back around start"]
+    
+    TargetPOI -->|POI found & target distance >= 2.5*d| POIRouting["Smart Routing: Chained path via second POI<br/>(Loop around it or perpendicular detour)"]
+    TargetPOI -->|Otherwise| GeometricLoop
+    
+    POIRouting --> OSRMRoute{"Use OSRM Routing?"}
+    GeometricLoop --> OSRMRoute
+    
     OSRMRoute -->|Yes| CallOSRM["Fetch real road points from OSRM API"]
     OSRMRoute -->|No| FallbackGPS["Generate straight-line fallback nodes"]
     
@@ -250,4 +261,16 @@ Danh sách Manufacturer ID & Product ID chuẩn hóa cho các dòng thiết bị
 ### 3. Chuẩn hóa thời gian (Time Standard) trong tệp FIT
 * Mọi timestamp trong tệp FIT (`time_created`, `start_time`, `timestamp`) bắt buộc phải theo định dạng **giây kể từ kỷ nguyên FIT epoch** (00:00:00 UTC ngày 31/12/1989).
 * Để Strava hiểu đúng múi giờ hiển thị của hoạt động, message `activity` cần ghi nhận thuộc tính `local_timestamp`. Đây là thời gian local tính bằng giây từ FIT epoch (bằng thời gian UTC cộng thêm offset múi giờ). Với múi giờ Việt Nam (GMT+7), công thức `local_timestamp = start_time + 7 * 3600` đang được áp dụng chuẩn xác.
+
+### 4. Thuật toán điều tuyến thông minh đến POI (Smart POI-to-POI Routing)
+Để tạo cảm giác chạy bộ chân thực (ví dụ: chạy từ Nhà/Công ty đến một hồ chạy bộ, chạy xung quanh đó rồi quay về, hoặc chạy từ địa điểm danh lam này sang địa điểm danh lam khác), hệ thống áp dụng các quy tắc sau:
+* **Start Point Context (Ngữ cảnh xuất phát):** 
+  * Nếu điểm xuất phát là một POI nổi tiếng, hệ thống có **30% tỉ lệ** sẽ di chuyển sang các POI khác gần đó (trong vòng 1.5km) và **70% tỉ lệ** chạy một vòng lặp xung quanh chính POI ban đầu.
+  * Nếu điểm xuất phát không phải là POI (ví dụ: bắt đầu ở Home/Work hoặc điểm ngẫu nhiên), hệ thống sẽ **luôn luôn hướng lộ trình** về phía POI nổi tiếng gần nhất (trong vòng 1.5km).
+* **Quy tắc kiểm tra cự ly (Target Distance Constraints):**
+  * Để hướng tuyến đi tới một POI khác có khoảng cách $d$ mét, cự ly sinh ra của hoạt động phải đủ lớn để đi và về: $\text{targetDistM} \ge 2.5 \times d$. Nếu không thỏa mãn, hệ thống sẽ tự động chạy vòng lặp hình học ngẫu nhiên quanh điểm xuất phát để bảo toàn cự ly.
+* **Hình học lộ trình (Route Geometry):**
+  * **Cự ly ngắn ($\le 5 \times d$):** Hệ thống sinh một tam giác lộ trình thông minh gồm: `start` $\rightarrow$ `secondPoi` $\rightarrow$ `detourPt` (điểm đổi hướng lệch vuông góc từ trung điểm đi-về, tính bằng công thức Pythagore) $\rightarrow$ `start`.
+  * **Cự ly dài ($> 5 \times d$):** Hệ thống sinh chuỗi đường chạy đi từ `start` $\rightarrow$ `secondPoi` $\rightarrow$ chuỗi 3 điểm vòng quanh `secondPoi` $\rightarrow$ `start` để kéo dài cự ly mà không bị đè lặp vết chạy.
+
 

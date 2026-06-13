@@ -154,6 +154,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.16 (2026-06-13)
+- **Feature: Smart POI-to-POI & Upgraded Out-and-Back Routing**:
+  - Implemented dynamic waypoint targeting for loop and out-and-back routes. If the starting point is Home/Work or random, it targets the nearest scenic POI within 1.5km. If starting at a POI, it has a 30% chance to target a neighboring POI.
+  - Implemented mathematical path planning for targeted loops: short distances utilize a perpendicular detour triangle calculated via Pythagore, whereas longer distances generate a detailed loop around the targeted POI to prevent overlaps.
+  - Updated system flowchart, ER diagram details, and documentation in `docs/ARCHITECTURE.md` to map the upgraded POI-aware routing and PWA version synchronization.
+  - Synchronized version bump to `v2.3.16` across `package.json`, `public/index.html`, `public/sw.js`, `PLAN.md`, and `AI_RULES.md`.
+
 ### v2.3.15 (2026-06-13)
 - **Refactoring & Optimization: Deprecated Span Cleanup, Loop Scaling & Rejection Sampling Optimization**:
   - Removed all remaining backend remnants of the deprecated `max_district_span` config option (deleted from `limits.js`, `activity-config-builder.js`, `sqlite-db.js`, and cleaned up dead multi-district traversal branches in `route-engine.js`).
