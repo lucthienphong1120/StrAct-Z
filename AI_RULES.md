@@ -154,6 +154,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.20 (2026-06-13)
+- **Feature: Concurrency Lock for Automated Scheduler**:
+  - Implemented SQLite database-level concurrency locking using a placeholder activity record with `upload_status: 'generating'`.
+  - Added race condition resolution where only the earliest inserted placeholder ID (ordered ascending) proceeds, preventing duplicates in multi-process/Passenger nodeenv environments.
+  - Updated the activity generation loop to update the placeholder lock record on the first iteration (`i === 0`) instead of saving a new record, and to update it to `failed` upon scheduler or generator errors.
+  - Synchronized version bump to `v2.3.20` across `package.json`, `public/index.html`, `public/sw.js`, `PLAN.md`, and `AI_RULES.md`.
+
 ### v2.3.19 (2026-06-13)
 - **Feature: Flexible Returning and P2P Routing for Home/Work/Random starts**:
   - Implemented metadata tagging inside `getDistrictTargetCenter` to track starting point type (`isHomeWork`, `isPoi`, `isRandom`, `isFallback`).

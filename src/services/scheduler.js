@@ -29,6 +29,8 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
   isRunning.set(accountId, true);
   console.log(`[Scheduler] Starting auto-generate job for account ${accountId} at ${new Date().toISOString()}`);
 
+  let lockActivityId = null;
+
   try {
     // Check if authenticated
     if (!(await stravaApi.isAuthenticated(accountId))) {
@@ -73,11 +75,64 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
 
     if (taskCount <= 0) {
       console.log(`[Scheduler] Account ${accountId}: taskCount is 0, skipping.`);
+      isRunning.set(accountId, false);
       return { success: true, message: 'No activities scheduled for this slot' };
     }
 
-    // Get existing activities for today to avoid overlaps
     const targetDate = new Date().toLocaleDateString('sv-SE', {timeZone: 'Asia/Ho_Chi_Minh'});
+    const dbInstance = await db.getDb();
+
+    // 1. Check if we already have a completed/failed activity for this slot today
+    const completedCount = await dbInstance.get(
+      `SELECT COUNT(*) as c FROM activities 
+       WHERE account_id = ? 
+         AND route_start_time LIKE ? 
+         AND created_by = ? 
+         AND upload_status IN ('uploaded', 'generated')`,
+      [accountId, `${targetDate}%`, slotName]
+    );
+
+    if (completedCount && completedCount.c > 0) {
+      console.log(`[Scheduler] Slot "${slotName}" already completed today (${targetDate}) for account ${accountId}. Skipping duplicate execution.`);
+      isRunning.set(accountId, false);
+      return { success: true, message: `Slot ${slotName} already executed today.` };
+    }
+
+    // 2. Insert our placeholder lock record
+    lockActivityId = await db.saveActivity(accountId, {
+      activity_name: 'Đang tạo tự động...',
+      distance_km: 0,
+      duration_min: 0,
+      pace_min_km: 0,
+      fit_file: null,
+      upload_status: 'generating',
+      route_start_lat: null,
+      route_start_lng: null,
+      route_start_time: new Date().toISOString(),
+      district_keys: null,
+      created_by: slotName,
+    });
+
+    // 3. Query all active generating locks for this slot today
+    const activeLocks = await dbInstance.all(
+      `SELECT id FROM activities 
+       WHERE account_id = ? 
+         AND route_start_time LIKE ? 
+         AND created_by = ? 
+         AND upload_status = 'generating'
+       ORDER BY id ASC`,
+      [accountId, `${targetDate}%`, slotName]
+    );
+
+    // If our lock is not the first one, we lost the race
+    if (activeLocks.length > 0 && activeLocks[0].id !== lockActivityId) {
+      console.log(`[Scheduler] Concurrency lock lost for slot "${slotName}" on account ${accountId}. Deleting placeholder.`);
+      await db.deleteActivity(accountId, lockActivityId, true); // Hard delete our lock
+      isRunning.set(accountId, false);
+      return { success: true, message: 'Concurrency lock lost' };
+    }
+
+    // Get existing activities for today to avoid overlaps
     let localActivities = await db.getActivitiesByDate(accountId, targetDate);
     let stravaActivities = [];
     if (await stravaApi.isAuthenticated(accountId)) {
@@ -186,7 +241,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       } catch (genErr) {
         if (genErr.code === 'NO_VALID_TIME_SLOT') {
           console.warn(`[Scheduler] Account ${accountId}: No valid time slot available. Saving failed record.`);
-          await db.saveActivity(accountId, {
+          const failData = {
             activity_name: 'Không thể tạo hoạt động',
             distance_km: 0, duration_min: 0, pace_min_km: 0,
             fit_file: null, upload_status: 'failed',
@@ -194,7 +249,12 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
             route_start_time: new Date().toISOString(),
             district_keys: null, created_by: slotName,
             error_message: genErr.message,
-          });
+          };
+          if (i === 0 && lockActivityId) {
+            await db.updateActivity(accountId, lockActivityId, failData);
+          } else {
+            await db.saveActivity(accountId, failData);
+          }
           continue; // Skip trying for this item, continue to the next requested item
         }
         throw genErr; // Other errors bubble up
@@ -206,7 +266,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       const dailyMaxActivity = parseInt(config.daily_max_activity || '2');
       if (currentStravaCount >= dailyMaxActivity) {
         console.log(`[Scheduler] Account ${accountId}: Daily upload limit of ${dailyMaxActivity} reached. Saving activity as FAILED.`);
-        await db.saveActivity(accountId, {
+        const failData = {
           activity_name: activity.activityName,
           distance_km: activity.distanceKm,
           duration_min: activity.durationMin,
@@ -219,7 +279,12 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
           district_keys: activity.districtKey,
           created_by: slotName,
           error_message: `Giới hạn upload hàng ngày là ${dailyMaxActivity}. Vui lòng xóa bớt trên Strava để tiếp tục.`,
-        });
+        };
+        if (i === 0 && lockActivityId) {
+          await db.updateActivity(accountId, lockActivityId, failData);
+        } else {
+          await db.saveActivity(accountId, failData);
+        }
         continue;
       }
 
@@ -232,7 +297,8 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       });
 
       // Save to database
-      const activityId = await db.saveActivity(accountId, {
+      let activityId;
+      const activityData = {
         activity_name: activity.activityName,
         distance_km: activity.distanceKm,
         duration_min: activity.durationMin,
@@ -244,7 +310,14 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         route_start_time: activity.startTime ? activity.startTime.toISOString() : new Date().toISOString(),
         district_keys: activity.districtKey,
         created_by: slotName,
-      });
+      };
+
+      if (i === 0 && lockActivityId) {
+        await db.updateActivity(accountId, lockActivityId, activityData);
+        activityId = lockActivityId;
+      } else {
+        activityId = await db.saveActivity(accountId, activityData);
+      }
 
       // Upload to Strava
       console.log(`[Scheduler] Uploading activity ${i+1} to Strava...`);
@@ -312,6 +385,21 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     };
   } catch (err) {
     console.error(`[Scheduler] Job failed for account ${accountId}:`, err);
+    if (lockActivityId) {
+      try {
+        const dbInstance = await db.getDb();
+        const currentLock = await dbInstance.get(`SELECT upload_status FROM activities WHERE id = ?`, [lockActivityId]);
+        if (currentLock && currentLock.upload_status === 'generating') {
+          await db.updateActivity(accountId, lockActivityId, {
+            activity_name: 'Không thể tạo hoạt động',
+            upload_status: 'failed',
+            error_message: err.message,
+          });
+        }
+      } catch (updateErr) {
+        console.error(`[Scheduler] Failed to set lock status to failed:`, updateErr);
+      }
+    }
     return { success: false, message: err.message };
   } finally {
     isRunning.set(accountId, false);
