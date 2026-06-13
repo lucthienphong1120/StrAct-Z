@@ -161,7 +161,7 @@ const LIMITS = {
     max: 1,
     weights: {
       'Random (misc)': { Run: 0.55, Walk: 0.30, Ride: 0.15 },
-      'Random (rush)': { Run: 0.20, Walk: 0.10, Ride: 0.70 },
+      'Random (rush)': { Ride: 0.60, Run: 0.30, Walk: 0.10 },
       'Run': { Run: 0.90, Walk: 0.05, Ride: 0.05 },
       'Walk': { Run: 0.05, Walk: 0.90, Ride: 0.05 },
       'Ride': { Run: 0.05, Walk: 0.05, Ride: 0.90 }

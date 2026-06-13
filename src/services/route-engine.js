@@ -204,14 +204,26 @@ function getDistrictTargetCenter(districtKey, activityAreas = [], startNearFavor
     const chosenArea = sortedAreas[0];
     const searchRadiusM = randomInRange(100, 300); // Random offset between 100m and 300m
     console.log(`[Route Engine] Start Near Favorite Place - Home/Work center: "${chosenArea.type}" in district "${d.name}" with radius ${Math.round(searchRadiusM)}m`);
-    return { lat: chosenArea.lat, lng: chosenArea.lng, radiusM: searchRadiusM };
+    return {
+      lat: chosenArea.lat,
+      lng: chosenArea.lng,
+      radiusM: searchRadiusM,
+      isHomeWork: true,
+      type: chosenArea.type
+    };
   } else if (roll < pCenter + pPoi) {
     const pois = RUNNING_POIS[districtKey];
     if (pois && pois.length > 0) {
       const poi = pois[Math.floor(Math.random() * pois.length)];
       const r = randomInRange(0, 200); // tight search radius around scenic spot (0m - 200m)
       console.log(`[Route Engine] Start Near Favorite Place - Scenic POI: "${poi.name}" in district "${d.name}" with radius ${Math.round(r)}m`);
-      return { lat: poi.lat, lng: poi.lng, radiusM: r };
+      return {
+        lat: poi.lat,
+        lng: poi.lng,
+        radiusM: r,
+        isPoi: true,
+        poiName: poi.name
+      };
     }
   }
 
@@ -220,13 +232,23 @@ function getDistrictTargetCenter(districtKey, activityAreas = [], startNearFavor
   if (pt) {
     const r = randomInRange(5, 50); // slight variance
     console.log(`[Route Engine] Start Near Favorite Place - True random inside district polygon "${d.name}" with radius ${Math.round(r)}m`);
-    return { lat: pt.lat, lng: pt.lng, radiusM: r };
+    return {
+      lat: pt.lat,
+      lng: pt.lng,
+      radiusM: r,
+      isRandom: true
+    };
   }
 
   // Ultimate fallback to randomized offset from district center
   const r = d.radiusKm * 1000 * randomInRange(0.1, 0.6);
   console.log(`[Route Engine] Start Near Favorite Place - Fallback to center of district "${d.name}" with radius ${Math.round(r)}m`);
-  return { lat: d.lat, lng: d.lng, radiusM: r };
+  return {
+    lat: d.lat,
+    lng: d.lng,
+    radiusM: r,
+    isFallback: true
+  };
 }
 
 const EARTH_RADIUS = 6371000;
@@ -343,12 +365,35 @@ function generateLoopWaypoints(centerLat, centerLng, targetDistKm, districtKey =
   const targetDistM = targetDistKm * 1000;
   const waypoints = [];
 
+  const isStartPoi = !!(startTargetInfo && startTargetInfo.isPoi);
+  const isStartHomeWork = !!(startTargetInfo && startTargetInfo.isHomeWork);
+  const isStartRandom = !startTargetInfo || !!startTargetInfo.isRandom || !!startTargetInfo.isFallback;
+
+  // 1. Determine if we should target a POI
+  let shouldTargetPoi = false;
+  if (isStartPoi) {
+    shouldTargetPoi = Math.random() < 0.30; // 30% chance to target another POI
+  } else if (isStartHomeWork) {
+    shouldTargetPoi = Math.random() < 0.40; // 40% chance to target a POI
+  } else {
+    shouldTargetPoi = Math.random() < 0.85; // 85% chance to target a POI
+  }
+
   // Default fallback behavior: standard geometric loop
   const generateDefaultLoop = () => {
+    const shouldReturnDefaultLoop = Math.random() < 0.50; // 50% return, 50% point-to-point curved run
     const adjustedDist = targetDistM / 1.35;
-    const radius = adjustedDist / (2 * Math.PI);
+    
+    // Scale radius based on whether it returns to start
+    const divisionFactor = shouldReturnDefaultLoop ? (2 * Math.PI) : (1.3 * Math.PI);
+    const radius = adjustedDist / divisionFactor;
     const effectiveRadius = Math.max(100, radius);
-    const numWP = Math.max(3, Math.min(8, Math.floor(targetDistKm * 1.5)));
+    
+    // Fewer waypoints if we don't return to start
+    const numWP = shouldReturnDefaultLoop
+      ? Math.max(3, Math.min(8, Math.floor(targetDistKm * 1.5)))
+      : Math.max(2, Math.min(6, Math.floor(targetDistKm * 1.2)));
+
     const startBearing = randomInRange(0, 360);
     const startOffset = randomInRange(0, effectiveRadius * 0.3);
     const startBear = randomInRange(0, 360);
@@ -356,29 +401,24 @@ function generateLoopWaypoints(centerLat, centerLng, targetDistKm, districtKey =
     waypoints.push(start);
 
     for (let i = 0; i < numWP; i++) {
-      const angle = startBearing + (360 * i / numWP) + randomInRange(-25, 25);
+      // If we don't return, distribute angles across a partial arc (e.g. 240 degrees) instead of a full 360 circle
+      const angleMultiplier = shouldReturnDefaultLoop ? 360 : 240;
+      const angle = startBearing + (angleMultiplier * i / numWP) + randomInRange(-25, 25);
       const r = effectiveRadius * randomInRange(0.6, 1.2);
       const wp = destinationPoint(centerLat, centerLng, angle, r);
       waypoints.push(wp);
     }
-    waypoints.push({ ...start });
+
+    if (shouldReturnDefaultLoop) {
+      waypoints.push({ ...start });
+    } else {
+      console.log(`[Route Engine] Default Loop: Point-to-Point curved run (ends randomly at distance ${targetDistM}m)`);
+    }
     return waypoints;
   };
 
   // Check if we can target a POI
-  if (!districtKey || !RUNNING_POIS[districtKey]) {
-    return generateDefaultLoop();
-  }
-
-  // 1. Determine if we should target another POI
-  let shouldTargetPoi = false;
-  if (startTargetInfo && startTargetInfo.isPoi) {
-    shouldTargetPoi = Math.random() < 0.30;
-  } else {
-    shouldTargetPoi = true;
-  }
-
-  if (!shouldTargetPoi) {
+  if (!districtKey || !RUNNING_POIS[districtKey] || !shouldTargetPoi) {
     return generateDefaultLoop();
   }
 
@@ -388,10 +428,17 @@ function generateLoopWaypoints(centerLat, centerLng, targetDistKm, districtKey =
   const eligiblePois = [];
 
   // Roll whether we should return to start:
-  // - If start is POI: 30% return to start, 70% stop/loop at second POI
-  // - If start is Home/Work/Random: 15% return to start, 85% stop/loop at second POI
-  const isStartPoi = startTargetInfo && startTargetInfo.isPoi;
-  const pReturn = isStartPoi ? 0.30 : 0.15;
+  // - POI-to-POI: 30% return, 70% stop/loop at second POI
+  // - Home/Work-to-POI: 60% return, 40% stop/loop at second POI
+  // - Random-to-POI: 15% return, 85% stop/loop at second POI
+  let pReturn = 0.50;
+  if (isStartPoi) {
+    pReturn = 0.30;
+  } else if (isStartHomeWork) {
+    pReturn = 0.60;
+  } else {
+    pReturn = 0.15;
+  }
   const shouldReturn = Math.random() < pReturn;
 
   for (const poi of allPois) {
@@ -472,12 +519,12 @@ function generateLoopWaypoints(centerLat, centerLng, targetDistKm, districtKey =
     waypoints.push({ lat: secondPoi.lat, lng: secondPoi.lng });
     const remainingDist = targetDistM - d;
     if (remainingDist > 100) {
-      const loopRadius = remainingDist / (2 * Math.PI);
+      const loopRadius = remainingDist / (1.3 * Math.PI);
       const clampedRadius = Math.max(100, Math.min(loopRadius, 1200));
       const numLoopWP = 3;
       const startBearing = randomInRange(0, 360);
       for (let i = 0; i < numLoopWP; i++) {
-        const angle = startBearing + (360 * i / numLoopWP) + randomInRange(-20, 20);
+        const angle = startBearing + (240 * i / numLoopWP) + randomInRange(-20, 20);
         const r = clampedRadius * randomInRange(0.8, 1.2);
         waypoints.push(destinationPoint(secondPoi.lat, secondPoi.lng, angle, r));
       }
@@ -492,12 +539,38 @@ function generateOutBackWaypoints(centerLat, centerLng, targetDistKm, districtKe
   const targetDistM = targetDistKm * 1000;
   const numLegs = Math.max(2, Math.floor(targetDistKm));
 
-  // Determine whether we should return to start:
-  // - For out-and-back: 50% chance to return, 50% chance to be point-to-point
-  const shouldReturn = Math.random() < 0.50;
+  const isStartPoi = !!(startTargetInfo && startTargetInfo.isPoi);
+  const isStartHomeWork = !!(startTargetInfo && startTargetInfo.isHomeWork);
+  const isStartRandom = !startTargetInfo || !!startTargetInfo.isRandom || !!startTargetInfo.isFallback;
+
+  // 1. Determine if we should target a POI
+  let shouldTargetPoi = false;
+  if (isStartPoi) {
+    shouldTargetPoi = Math.random() < 0.30; // 30% chance to target another POI
+  } else if (isStartHomeWork) {
+    shouldTargetPoi = Math.random() < 0.40; // 40% chance to target a POI
+  } else {
+    shouldTargetPoi = Math.random() < 0.85; // 85% chance to target a POI
+  }
+
+  // 2. Determine whether we should return to start:
+  // - POI-to-POI: 30% return, 70% stop/loop at destination POI
+  // - Home/Work-to-POI: 60% return, 40% stop/loop at destination POI
+  // - Random-to-POI: 15% return, 85% stop/loop at destination POI
+  let pReturn = 0.50;
+  if (isStartPoi) {
+    pReturn = 0.30;
+  } else if (isStartHomeWork) {
+    pReturn = 0.60;
+  } else {
+    pReturn = 0.15;
+  }
+  const shouldReturn = Math.random() < pReturn;
 
   const generateDefaultOutBack = () => {
-    const outboundDistM = shouldReturn ? (targetDistM / 2 / 1.35) : (targetDistM / 1.35);
+    // 50% chance to return, 50% chance to be point-to-point for default out-back
+    const shouldReturnDefaultOutBack = Math.random() < 0.50;
+    const outboundDistM = shouldReturnDefaultOutBack ? (targetDistM / 2 / 1.35) : (targetDistM / 1.35);
     const legDist = outboundDistM / numLegs;
     const bearing = randomInRange(0, 360);
     const outPoints = [{ lat: centerLat, lng: centerLng }];
@@ -509,7 +582,7 @@ function generateOutBackWaypoints(centerLat, centerLng, targetDistKm, districtKe
       outPoints.push(cur);
     }
 
-    if (!shouldReturn) {
+    if (!shouldReturnDefaultOutBack) {
       return outPoints; // Point-to-point: no return path
     }
 
@@ -525,18 +598,7 @@ function generateOutBackWaypoints(centerLat, centerLng, targetDistKm, districtKe
   };
 
   // Check if we can target a POI
-  if (!districtKey || !RUNNING_POIS[districtKey]) {
-    return generateDefaultOutBack();
-  }
-
-  let shouldTargetPoi = false;
-  if (startTargetInfo && startTargetInfo.isPoi) {
-    shouldTargetPoi = Math.random() < 0.30;
-  } else {
-    shouldTargetPoi = true;
-  }
-
-  if (!shouldTargetPoi) {
+  if (!districtKey || !RUNNING_POIS[districtKey] || !shouldTargetPoi) {
     return generateDefaultOutBack();
   }
 
@@ -584,6 +646,10 @@ function generateOutBackWaypoints(centerLat, centerLng, targetDistKm, districtKe
     const extraBear = bearing + randomInRange(-25, 25);
     const finalOutPt = destinationPoint(targetPoi.lat, targetPoi.lng, extraBear, remainingOutM);
     outPoints.push(finalOutPt);
+  }
+
+  if (!shouldReturn) {
+    return outPoints; // Point-to-point: no return path
   }
 
   // Return path with slight offset

@@ -154,6 +154,18 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.19 (2026-06-13)
+- **Feature: Flexible Returning and P2P Routing for Home/Work/Random starts**:
+  - Implemented metadata tagging inside `getDistrictTargetCenter` to track starting point type (`isHomeWork`, `isPoi`, `isRandom`, `isFallback`).
+  - Added start-type-aware POI targeting probabilities (`shouldTargetPoi`): POI starts have a 30% chance to target another POI, Home/Work starts have a 40% chance, and Random starts have an 85% chance.
+  - Implemented start-type-aware return probabilities (`shouldReturn`): POI-to-POI has a 30% return chance, Home/Work-to-POI has a 60% return chance, and Random-to-POI has a 15% return chance.
+  - Updated default loop/out-back routes (where no POI is targeted) to have a 50% return chance and 50% random finish (P2P) chance.
+  - Fixed out-and-back routing to immediately return the outbound path without appending return trackpoints when `shouldReturn` is false.
+- **Feature: Adjust Random (rush) Activity Type Weights**:
+  - Adjusted `Random (rush)` activity distribution weights to `60% Ride, 30% Run, 10% Walk` in `limits.js`.
+  - Updated the frontend UI hint text for `Random (rush)` to match the new `60% Ride, 30% Run, 10% Walk` weights.
+  - Synchronized version bump to `v2.3.19` across `package.json`, `public/index.html`, `public/sw.js`, `PLAN.md`, and `AI_RULES.md`.
+
 ### v2.3.17 (2026-06-13)
 - **Feature: Flexible Point-to-Point Routing & Destination Stopping Probability**:
   - Upgraded loop and out-and-back routing to support Point-to-Point (non-returning) runs. Out-and-back has a 50% chance to be point-to-point (stopping at target destination with full distance mapped outbound).

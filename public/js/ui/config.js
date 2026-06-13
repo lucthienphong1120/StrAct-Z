@@ -740,7 +740,7 @@ function updateActivityTypeHint() {
   if (type === 'Random (misc)') {
     hint.textContent = '🎲 55% Run, 30% Walk, 15% Ride';
   } else if (type === 'Random (rush)') {
-    hint.textContent = '🎲 70% Ride, 20% Run, 10% Walk';
+    hint.textContent = '🎲 60% Ride, 30% Run, 10% Walk';
   } else if (type === 'Run') {
     hint.textContent = '🎲 90% Run, 5% Walk, 5% Ride';
   } else if (type === 'Walk') {

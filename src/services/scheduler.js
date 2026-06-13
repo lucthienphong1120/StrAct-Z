@@ -108,7 +108,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       // Only applies when target not yet met; if already exceeded, uses basic random.
       let targetDistanceKmOverride = null;
       const isLastSchedule = (parseInt(config.schedule_count) === 1) || (slotName === 'Schedule 2');
-      const targetDistanceEnabled = config.target_distance_enabled === 'true';
+      const targetDistanceEnabled = config.target_distance_enabled === 'true' && config.custom_time_enabled !== 'true';
 
       if (targetDistanceEnabled && isLastSchedule && (i === taskCount - 1)) {
         let accumulatedDistanceForToday = 0;
