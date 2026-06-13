@@ -47,12 +47,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     // Check if custom time is enabled and if we should wait
     if (config.custom_time_enabled === 'true') {
       const targetTimeStr = config.target_time_custom || '00:00';
-      const targetDateStr = config.target_date || 'Hôm nay';
-      
-      let resolvedTargetDate = targetDateStr;
-      if (targetDateStr === 'Hôm nay') {
-        resolvedTargetDate = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
-      }
+      const resolvedTargetDate = config.target_date || new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
       
       const customStartMs = new Date(`${resolvedTargetDate}T${targetTimeStr}:00.000+07:00`).getTime();
       const nowMs = Date.now();
@@ -65,6 +60,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       
       // If reached/passed, disable custom time so future schedulers run normally
       await db.setConfig(accountId, 'custom_time_enabled', 'false');
+      config.custom_time_enabled = 'false'; // Update in-memory snapshot immediately
       console.log(`[Scheduler] Reached custom time (${resolvedTargetDate} ${targetTimeStr}). Disabled custom time flag for account ${accountId}`);
     }
 
@@ -83,6 +79,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     // Get existing activities for today to avoid overlaps
     const targetDate = new Date().toLocaleDateString('sv-SE', {timeZone: 'Asia/Ho_Chi_Minh'});
     let localActivities = await db.getActivitiesByDate(accountId, targetDate);
+    let stravaActivities = [];
     if (await stravaApi.isAuthenticated(accountId)) {
       try {
         const after = Math.floor(new Date(`${targetDate}T00:00:00.000+07:00`).getTime() / 1000) - 1;
@@ -419,11 +416,7 @@ async function getStatus(accountId) {
   const count = parseInt(config.schedule_count) || 1;
 
   const targetTimeStr = config.target_time_custom || '00:00';
-  const targetDateStr = config.target_date || 'Hôm nay';
-  let resolvedTargetDate = targetDateStr;
-  if (targetDateStr === 'Hôm nay') {
-    resolvedTargetDate = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
-  }
+  const resolvedTargetDate = config.target_date || new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
   const customStartMs = new Date(`${resolvedTargetDate}T${targetTimeStr}:00.000+07:00`).getTime();
   const nowMs = Date.now();
   const customTimePending = config.custom_time_enabled === 'true' && (nowMs < customStartMs);
@@ -439,7 +432,7 @@ async function getStatus(accountId) {
     targetDistanceKm: parseFloat(config.target_distance_km || systemLimits.target_distance_km.default),
     customTimeEnabled: config.custom_time_enabled === 'true',
     customTimePending: customTimePending,
-    targetDate: config.target_date || 'Hôm nay',
+    targetDate: resolvedTargetDate,
     targetTimeCustom: config.target_time_custom || '00:00',
     isRunning: isRunning.get(accountId) || false,
     taskActive: scheduledTasks.has(accountId),

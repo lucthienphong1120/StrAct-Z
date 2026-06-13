@@ -23,7 +23,7 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
   }
   
   const rawTargetDate = ov.target_date || (customTimeEnabled ? config.target_date : null);
-  const targetDate = (rawTargetDate && rawTargetDate !== 'Hôm nay') 
+  const targetDate = rawTargetDate
     ? rawTargetDate 
     : new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
   

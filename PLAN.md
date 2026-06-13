@@ -236,6 +236,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Sửa đổi và chuẩn hóa ánh xạ thiết bị và định dạng GPX/FIT tương ứng theo DEVICE_TESTCASES.md (v2.3.8)
 + [x] Cập nhật và đồng bộ tùy chọn thiết bị, loại bỏ thiết bị không nhận trên Strava theo DEVICE_TESTCASES.md (v2.3.9)
 + [x] Sửa logic Boost Adjacent chỉ áp dụng với quận start của hoạt động upload gần nhất và cho phép cấu hình user age từ 6 đến 85 tuổi (v2.3.10)
-+ [ ] fix lỗi nghiêm trọng về pending schedule nhưng vẫn lỗi tạo full hoạt động trong ngày, có cái còn lỗi format
-+ [ ] 
++ [x] Fix lỗi nghiêm trọng scheduler: biến stravaActivities global gây spam tạo max hoạt động, config snapshot stale gây sai target_date, loại bỏ giá trị đặc biệt 'Hôm nay' từ target_date, escape HTML trong error_message tooltip (v2.3.11)
++ [ ] đổi màu nhãn FIT (xanh lá) và GPX (cam) ở Local Generated History
 

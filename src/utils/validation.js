@@ -66,7 +66,7 @@ function validateConfig(updates, role = 'basic') {
           if (!/^([01]\d|2[0-3]):([0-5]\d)$/.test(value)) throw new Error(`${label} must be in HH:mm format.`);
           break;
         case 'date':
-          if (!/^\d{4}-\d{2}-\d{2}$/.test(value) && value !== 'Hôm nay') throw new Error(`${label} must be in YYYY-MM-DD format.`);
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) throw new Error(`${label} must be in YYYY-MM-DD format.`);
           break;
       }
     } catch (err) {
@@ -91,7 +91,7 @@ function validateConfig(updates, role = 'basic') {
     }
 
     // Special check for target_date max days ago / in future
-    if (rule.type === 'date' && value !== 'Hôm nay' && typeof rule.max === 'number') {
+    if (rule.type === 'date' && typeof rule.max === 'number') {
         const targetDate = new Date(value);
         const today = new Date();
         today.setHours(0, 0, 0, 0);

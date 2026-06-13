@@ -46,10 +46,7 @@ function updateScheduleDisplay(status) {
     const labelDisplay = display.querySelector('.schedule-label');
 
     if (status.customTimeEnabled && status.customTimePending) {
-      let dateText = status.targetDate;
-      if (dateText === 'Hôm nay') {
-        dateText = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
-      }
+      const dateText = status.targetDate;
       timeDisplay.textContent = `Pending (until ${dateText} ${status.targetTimeCustom})`;
       timeDisplay.style.background = 'none';
       timeDisplay.style.webkitTextFillColor = 'var(--vip-gold, #f59e0b)';
@@ -165,17 +162,14 @@ function updateSchedulerBanner() {
 function refreshScheduleDisplayFromUI() {
   const enabled = document.getElementById('scheduleEnabled')?.checked || false;
   const customTimeEnabled = window.lastSavedScheduleStatus?.customTimeEnabled || false;
-  const targetDate = window.lastSavedScheduleStatus?.targetDate || 'Hôm nay';
+  const targetDate = window.lastSavedScheduleStatus?.targetDate || new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
   const targetTimeCustom = window.lastSavedScheduleStatus?.targetTimeCustom || '00:00';
   
   const scheduleTime = document.getElementById('scheduleTime')?.value || '22:00';
   const scheduleTime2 = document.getElementById('scheduleTime2')?.value || '14:00';
   const scheduleCount = document.getElementById('scheduleSlot2')?.style.display === 'block' ? 2 : 1;
   
-  let dateText = targetDate;
-  if (dateText === 'Hôm nay') {
-    dateText = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
-  }
+  const dateText = targetDate;
   const customStartMs = new Date(`${dateText}T${targetTimeCustom}:00.000+07:00`).getTime();
   const nowMs = Date.now();
   const customTimePending = customTimeEnabled && (nowMs < customStartMs);

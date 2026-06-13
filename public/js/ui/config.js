@@ -212,7 +212,7 @@ function buildTooltipText(cfg) {
     else defVal = JSON.stringify(defVal);
   }
 
-  const unitStr = (cfg.unit && defVal !== 'Hôm nay') ? ' ' + cfg.unit : '';
+  const unitStr = cfg.unit ? ' ' + cfg.unit : '';
   lines.push(`Mặc định: ${defVal}${unitStr}`);
 
   const rangeStr = buildRangeString(cfg);
@@ -306,7 +306,7 @@ async function loadConfig() {
 
     const savedTargetDate = config.target_date;
     const today = new Date().toLocaleDateString('sv-SE');
-    setVal('cfgTargetDate', (savedTargetDate && savedTargetDate !== 'Hôm nay') ? savedTargetDate : today);
+    setVal('cfgTargetDate', savedTargetDate || today);
 
     const sysL = window.sysLimits;
     setChecked('cfgCustomTime', config.custom_time_enabled === 'true');
@@ -598,7 +598,7 @@ async function saveConfig() {
     sim_redlights: document.getElementById('cfgSimRedLights')?.checked ? 'true' : 'false',
 
     custom_time_enabled: document.getElementById('cfgCustomTime').checked ? 'true' : 'false',
-    target_date: document.getElementById('cfgTargetDate').value || 'Hôm nay',
+    target_date: document.getElementById('cfgTargetDate').value || new Date().toLocaleDateString('sv-SE'),
     target_time_custom: document.getElementById('cfgCustomMinTime').value,
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || '30',
     rest_time_percent: document.getElementById('cfgRestTime')?.value || '50',

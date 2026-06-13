@@ -143,7 +143,8 @@ const LIMITS = {
   target_date: {
     label: 'Tạo hoạt động cho một ngày trong quá khứ hoặc đặt lịch cho hoạt động trong tương lai.',
     type: 'date',
-    default: 'Hôm nay',
+    default: null,
+    default_label: 'Hôm nay (tự động)',
     min: 'today',
     max: { basic: 7, vip: 30 }, // days ago
     unit: 'ngày'

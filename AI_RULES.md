@@ -55,7 +55,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Simulation Constants**: Centralized in `limits.js` (e.g. 1.5% red light stop probability, 30% weather probability).
 - **Scenic Running POIs**: Prioritizes starting and routing coordinates (70% probability) near predefined scenic lakes, parks, and low-traffic running tracks in Hanoi (e.g. Hồ Hoàn Kiếm, Hồ Tây, Công viên Yên Sở, etc.) with a tight radius (150m - 450m) to generate realistic trails.
 
-### 4. Custom Device Names (v1.56.0)
+### 4. Scheduler Rules
+- **Variables**: Luôn khai báo rõ ràng các biến cục bộ (ví dụ: `let stravaActivities = []`) trong hàm thực thi scheduler để tránh rò rỉ dữ liệu qua biến toàn cục giữa các lần chạy.
+- **Target Date**: Tránh dùng giá trị đặc biệt phụ thuộc UI (như `'Hôm nay'`). Luôn lưu và xử lý `target_date` theo chuẩn `YYYY-MM-DD`. Nếu không có giá trị (null/undefined), fallback về `new Date().toLocaleDateString('sv-SE')` ngay tại thời điểm sử dụng để đảm bảo chính xác khi chuyển ngày (cross-midnight).
+- **Custom Time**: Cờ `custom_time_enabled` bị disable sau lần thực thi đầu tiên thành công. Đảm bảo config snapshot trong bộ nhớ được cập nhật để tránh cache stale.
+
+### 5. Custom Device Names (v1.56.0)
 - **VIP Accounts**: Allowed to enter any custom free-text Device Name (trimmed, max 100 characters).
 - **Basic Accounts**: UI restricts custom entries, and the backend validates that their chosen device name strictly matches one of the preset choices in `limits.device_name.choices`.
 

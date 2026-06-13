@@ -274,7 +274,8 @@ async function loadActivities(logDistance = false) {
         }
       } else {
         if (a.upload_status === 'failed') {
-          badge = `<span class="status-badge failed" title="${a.error_message || 'Không thể tạo hoạt động'}">❌ FAILED</span>`;
+          const safeMsg = (a.error_message || 'Không thể tạo hoạt động').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          badge = `<span class="status-badge failed" title="${safeMsg}">❌ FAILED</span>`;
         } else if (a.deleted_at || a.upload_status === 'deleted') {
           badge = `<span class="status-badge deleted" title="Đã tạo local và chưa upload, sau đó xóa ở local">🔴 DELETED</span>`;
         } else {
