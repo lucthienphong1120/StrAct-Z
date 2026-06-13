@@ -242,4 +242,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Bổ sung Công viên Hoàng Văn Thụ vào danh sách POI chạy bộ của quận Hoàng Mai (v2.3.14)
 + [x] Dọn dẹp cấu hình max_district_span đã deprecated, tăng cự ly vòng lặp thực tế, tối ưu hóa thuật toán chọn tọa độ ngẫu nhiên trong boundary của quận (v2.3.15)
 + [x] Thiết kế thuật toán điều tuyến thông minh qua các POI chạy bộ trung gian và tối ưu hóa tuyến đường khứ hồi (v2.3.16)
++ [x] Thiết kế xác suất khứ hồi ngẫu nhiên (Point-to-Point) và tỉ lệ dừng tại POI đích (v2.3.17)
 

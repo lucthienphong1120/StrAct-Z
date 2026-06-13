@@ -154,6 +154,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.17 (2026-06-13)
+- **Feature: Flexible Point-to-Point Routing & Destination Stopping Probability**:
+  - Upgraded loop and out-and-back routing to support Point-to-Point (non-returning) runs. Out-and-back has a 50% chance to be point-to-point (stopping at target destination with full distance mapped outbound).
+  - Implemented stop-at-destination probabilities for targeted POI runs: POI-to-POI has a 70% chance to finish at the second POI (looping around it to complete target distance), while Random-to-POI has an 85% chance to finish at the POI.
+  - Restored OSRM route segments generation and resolved unclosed comments in `route-engine.js`.
+  - Synchronized version bump to `v2.3.17` across `package.json`, `public/index.html`, `public/sw.js`, `PLAN.md`, and `AI_RULES.md`.
+
 ### v2.3.16 (2026-06-13)
 - **Feature: Smart POI-to-POI & Upgraded Out-and-Back Routing**:
   - Implemented dynamic waypoint targeting for loop and out-and-back routes. If the starting point is Home/Work or random, it targets the nearest scenic POI within 1.5km. If starting at a POI, it has a 30% chance to target a neighboring POI.

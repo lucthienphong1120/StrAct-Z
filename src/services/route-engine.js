@@ -373,10 +373,8 @@ function generateLoopWaypoints(centerLat, centerLng, targetDistKm, districtKey =
   // 1. Determine if we should target another POI
   let shouldTargetPoi = false;
   if (startTargetInfo && startTargetInfo.isPoi) {
-    // 30% chance to move to another POI if start is a POI
     shouldTargetPoi = Math.random() < 0.30;
   } else {
-    // 100% chance to target a POI if start is home/work or random
     shouldTargetPoi = true;
   }
 
@@ -389,17 +387,31 @@ function generateLoopWaypoints(centerLat, centerLng, targetDistKm, districtKey =
   const allPois = RUNNING_POIS[districtKey] || [];
   const eligiblePois = [];
 
+  // Roll whether we should return to start:
+  // - If start is POI: 30% return to start, 70% stop/loop at second POI
+  // - If start is Home/Work/Random: 15% return to start, 85% stop/loop at second POI
+  const isStartPoi = startTargetInfo && startTargetInfo.isPoi;
+  const pReturn = isStartPoi ? 0.30 : 0.15;
+  const shouldReturn = Math.random() < pReturn;
+
   for (const poi of allPois) {
     // Skip if it's the starting POI
-    if (startTargetInfo && startTargetInfo.isPoi && startTargetInfo.poiName === poi.name) {
+    if (isStartPoi && startTargetInfo.poiName === poi.name) {
       continue;
     }
     const d = haversineDistance(startPt.lat, startPt.lng, poi.lat, poi.lng);
     // Distance must be between 100m and 1500m
     if (d >= 100 && d <= 1500) {
-      // Run distance must be at least 2.5 * d to allow going there and back
-      if (targetDistM >= 2.5 * d) {
-        eligiblePois.push({ poi, d });
+      if (shouldReturn) {
+        // If returning, run distance must be at least 2.5 * d to allow going there and back
+        if (targetDistM >= 2.5 * d) {
+          eligiblePois.push({ poi, d });
+        }
+      } else {
+        // If not returning, run distance must be at least 1.3 * d to allow reaching and looping a bit
+        if (targetDistM >= 1.3 * d) {
+          eligiblePois.push({ poi, d });
+        }
       }
     }
   }
@@ -414,67 +426,79 @@ function generateLoopWaypoints(centerLat, centerLng, targetDistKm, districtKey =
   const secondPoi = chosen.poi;
   const d = chosen.d;
 
-  console.log(`[Route Engine] Smart Loop: Targeting second POI "${secondPoi.name}" at distance ${Math.round(d)}m (Target distance: ${targetDistM}m)`);
-
-  // Start point
   const start = { lat: centerLat, lng: centerLng };
   waypoints.push(start);
 
-  // We want to construct a route: start -> secondPoi -> detour/loop around secondPoi -> detour back -> start
-  if (targetDistM <= 5 * d) {
-    // Use the perpendicular detour point triangle
-    // Midpoint between start and secondPoi
-    const midLat = (start.lat + secondPoi.lat) / 2;
-    const midLng = (start.lng + secondPoi.lng) / 2;
+  if (shouldReturn) {
+    console.log(`[Route Engine] Smart Loop (Returns to Start): Targeting second POI "${secondPoi.name}" at distance ${Math.round(d)}m (Target distance: ${targetDistM}m)`);
+    // We want to construct a route: start -> secondPoi -> detour/loop around secondPoi -> detour back -> start
+    if (targetDistM <= 5 * d) {
+      // Use the perpendicular detour point triangle
+      const midLat = (start.lat + secondPoi.lat) / 2;
+      const midLng = (start.lng + secondPoi.lng) / 2;
 
-    // Flat bearing calculation
-    const dLat = secondPoi.lat - start.lat;
-    const dLng = secondPoi.lng - start.lng;
-    const bearing = Math.atan2(dLng, dLat) * 180 / Math.PI;
+      const dLat = secondPoi.lat - start.lat;
+      const dLng = secondPoi.lng - start.lng;
+      const bearing = Math.atan2(dLng, dLat) * 180 / Math.PI;
 
-    // Perpendicular height h
-    const h2 = Math.pow(targetDistM - d, 2) - Math.pow(d, 2);
-    const h = h2 > 0 ? Math.sqrt(h2) / 2 : 100;
+      const h2 = Math.pow(targetDistM - d, 2) - Math.pow(d, 2);
+      const h = h2 > 0 ? Math.sqrt(h2) / 2 : 100;
 
-    // Detour point: offset from midpoint perpendicularly
-    const detourAngle = bearing + (Math.random() < 0.5 ? 90 : -90);
-    const detourPt = destinationPoint(midLat, midLng, detourAngle, h);
+      const detourAngle = bearing + (Math.random() < 0.5 ? 90 : -90);
+      const detourPt = destinationPoint(midLat, midLng, detourAngle, h);
 
-    waypoints.push({ lat: secondPoi.lat, lng: secondPoi.lng });
-    waypoints.push(detourPt);
+      waypoints.push({ lat: secondPoi.lat, lng: secondPoi.lng });
+      waypoints.push(detourPt);
+    } else {
+      // Target distance is large
+      waypoints.push({ lat: secondPoi.lat, lng: secondPoi.lng });
+      const remainingDist = targetDistM - d;
+      const loopDist = remainingDist - d;
+      const loopRadius = loopDist / (2 * Math.PI);
+      const clampedRadius = Math.max(100, Math.min(loopRadius, 1200));
+
+      const numLoopWP = 3;
+      const startBearing = randomInRange(0, 360);
+      for (let i = 0; i < numLoopWP; i++) {
+        const angle = startBearing + (360 * i / numLoopWP) + randomInRange(-20, 20);
+        const r = clampedRadius * randomInRange(0.8, 1.2);
+        waypoints.push(destinationPoint(secondPoi.lat, secondPoi.lng, angle, r));
+      }
+    }
+    waypoints.push({ ...start });
   } else {
-    // Target distance is large (targetDistM > 5 * d)
-    // Run to secondPoi, do a loop around it, then return to start
+    // Point-to-point: start -> secondPoi -> loop around secondPoi, finishing at secondPoi
+    console.log(`[Route Engine] Smart Point-to-Point (Ends at POI): Targeting second POI "${secondPoi.name}" at distance ${Math.round(d)}m (Target distance: ${targetDistM}m)`);
     waypoints.push({ lat: secondPoi.lat, lng: secondPoi.lng });
-
-    const remainingDist = targetDistM - d; // remaining distance for the loop + return path
-    // Let the loop circumference be roughly remainingDist - d
-    const loopDist = remainingDist - d;
-    const loopRadius = loopDist / (2 * Math.PI);
-    const clampedRadius = Math.max(100, Math.min(loopRadius, 1200));
-
-    // Generate 3 loop points around the secondPoi
-    const numLoopWP = 3;
-    const startBearing = randomInRange(0, 360);
-    for (let i = 0; i < numLoopWP; i++) {
-      const angle = startBearing + (360 * i / numLoopWP) + randomInRange(-20, 20);
-      const r = clampedRadius * randomInRange(0.8, 1.2);
-      waypoints.push(destinationPoint(secondPoi.lat, secondPoi.lng, angle, r));
+    const remainingDist = targetDistM - d;
+    if (remainingDist > 100) {
+      const loopRadius = remainingDist / (2 * Math.PI);
+      const clampedRadius = Math.max(100, Math.min(loopRadius, 1200));
+      const numLoopWP = 3;
+      const startBearing = randomInRange(0, 360);
+      for (let i = 0; i < numLoopWP; i++) {
+        const angle = startBearing + (360 * i / numLoopWP) + randomInRange(-20, 20);
+        const r = clampedRadius * randomInRange(0.8, 1.2);
+        waypoints.push(destinationPoint(secondPoi.lat, secondPoi.lng, angle, r));
+      }
+      waypoints.push({ lat: secondPoi.lat, lng: secondPoi.lng }); // close loop at secondPoi
     }
   }
 
-  // Return to start
-  waypoints.push({ ...start });
   return waypoints;
 }
 
 function generateOutBackWaypoints(centerLat, centerLng, targetDistKm, districtKey = null, startTargetInfo = null) {
   const targetDistM = targetDistKm * 1000;
-  const halfDistM = targetDistM / 2 / 1.35;
   const numLegs = Math.max(2, Math.floor(targetDistKm));
-  const legDist = halfDistM / numLegs;
+
+  // Determine whether we should return to start:
+  // - For out-and-back: 50% chance to return, 50% chance to be point-to-point
+  const shouldReturn = Math.random() < 0.50;
 
   const generateDefaultOutBack = () => {
+    const outboundDistM = shouldReturn ? (targetDistM / 2 / 1.35) : (targetDistM / 1.35);
+    const legDist = outboundDistM / numLegs;
     const bearing = randomInRange(0, 360);
     const outPoints = [{ lat: centerLat, lng: centerLng }];
     let cur = { lat: centerLat, lng: centerLng };
@@ -483,6 +507,10 @@ function generateOutBackWaypoints(centerLat, centerLng, targetDistKm, districtKe
       const bear = bearing + randomInRange(-30, 30);
       cur = destinationPoint(cur.lat, cur.lng, bear, legDist * randomInRange(0.8, 1.2));
       outPoints.push(cur);
+    }
+
+    if (!shouldReturn) {
+      return outPoints; // Point-to-point: no return path
     }
 
     const retPoints = [];
@@ -503,10 +531,8 @@ function generateOutBackWaypoints(centerLat, centerLng, targetDistKm, districtKe
 
   let shouldTargetPoi = false;
   if (startTargetInfo && startTargetInfo.isPoi) {
-    // If start is POI, only 30% chance to target another POI
     shouldTargetPoi = Math.random() < 0.30;
   } else {
-    // If start is home/work or random, 100% chance to target a nearby POI
     shouldTargetPoi = true;
   }
 
@@ -514,18 +540,19 @@ function generateOutBackWaypoints(centerLat, centerLng, targetDistKm, districtKe
     return generateDefaultOutBack();
   }
 
-  // Find eligible POIs that are close enough
   const startPt = { lat: centerLat, lng: centerLng };
   const allPois = RUNNING_POIS[districtKey] || [];
   const eligiblePois = [];
+
+  const maxOutboundDistM = shouldReturn ? (targetDistM / 2 / 1.35) : (targetDistM / 1.35);
 
   for (const poi of allPois) {
     if (startTargetInfo && startTargetInfo.isPoi && startTargetInfo.poiName === poi.name) {
       continue;
     }
     const d = haversineDistance(startPt.lat, startPt.lng, poi.lat, poi.lng);
-    // Distance must be <= halfDistM and <= 1500m
-    if (d >= 100 && d <= 1500 && d <= halfDistM) {
+    // Distance must be <= maxOutboundDistM and <= 1500m
+    if (d >= 100 && d <= 1500 && d <= maxOutboundDistM) {
       eligiblePois.push({ poi, d });
     }
   }
@@ -540,15 +567,13 @@ function generateOutBackWaypoints(centerLat, centerLng, targetDistKm, districtKe
   const targetPoi = chosen.poi;
   const d = chosen.d;
 
-  console.log(`[Route Engine] Smart Out-Back: Heading to POI "${targetPoi.name}" at distance ${Math.round(d)}m (Half-dist: ${Math.round(halfDistM)}m)`);
+  console.log(`[Route Engine] Smart Out-Back: Heading to POI "${targetPoi.name}" at distance ${Math.round(d)}m (Outbound target: ${Math.round(maxOutboundDistM)}m, shouldReturn: ${shouldReturn})`);
 
   const outPoints = [{ lat: centerLat, lng: centerLng }];
-  
-  // First leg goes to targetPoi
   outPoints.push({ lat: targetPoi.lat, lng: targetPoi.lng });
 
   // Remaining distance for the outbound path
-  const remainingOutM = halfDistM - d;
+  const remainingOutM = maxOutboundDistM - d;
   if (remainingOutM > 100) {
     // Continue running past/around the POI
     const dLat = targetPoi.lat - centerLat;
