@@ -154,6 +154,14 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.11 (2026-06-13)
+- **Bugfix: Critical Scheduler & Validation Fixes**:
+  - Fixed `stravaActivities` global variable leak in `scheduler.js` which caused spamming of activities up to the daily limit.
+  - Fixed stale `config` snapshot for `custom_time_enabled` in `scheduler.js` to ensure the correct activity time generation.
+  - Enforced strict `YYYY-MM-DD` date logic across the scheduler, validation, limits, and configuration UI, completely removing the unstable `'Hôm nay'` fallback.
+  - Escaped HTML in error messages rendered inside `dashboard.js` to fix layout issues with the status badge tooltip.
+  - Synchronized and bumped versions across all files including `public/index.html`.
+
 ### v2.3.10 (2026-06-12)
 - **Feature: Limited Adjacent Boost & User Age Constraints Adjustment**:
   - Restructured the Adjacent Boost (Boost Adjacent) logic to only evaluate the first element of the last uploaded activity's `district_keys` (representing the starting district), ignoring subsequent traversed districts. Applied this change symmetrically across FIT/GPX generator backends and the frontend weights debugger.
