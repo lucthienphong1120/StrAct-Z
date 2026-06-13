@@ -89,7 +89,8 @@ const RUNNING_POIS = {
     { name: 'Hồ Đền Lừ', lat: 20.9882, lng: 105.8565 },
     { name: 'Hồ Vĩnh Hoàng', lat: 20.9835, lng: 105.8640 },
     { name: 'Trường Đại học Thăng Long', lat: 20.9760, lng: 105.8160 },
-    { name: 'Hồ Định Công', lat: 20.9785, lng: 105.8250 }
+    { name: 'Hồ Định Công', lat: 20.9785, lng: 105.8250 },
+    { name: 'Công viên Hoàng Văn Thụ', lat: 20.9902, lng: 105.8492 }
   ],
   long_bien: [
     { name: 'Khu đô thị Vinhomes Riverside', lat: 21.0395, lng: 105.9080 },

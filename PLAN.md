@@ -239,4 +239,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Fix lỗi nghiêm trọng scheduler: biến stravaActivities global gây spam tạo max hoạt động, config snapshot stale gây sai target_date, loại bỏ giá trị đặc biệt 'Hôm nay' từ target_date, escape HTML trong error_message tooltip (v2.3.11)
 + [x] đổi màu nhãn FIT (xanh lá) và GPX (cam) ở Local Generated History (v2.3.12)
 + [x] Đặt Rest Time mặc định về 40% (v2.3.13)
++ [x] Bổ sung Công viên Hoàng Văn Thụ vào danh sách POI chạy bộ của quận Hoàng Mai (v2.3.14)
 

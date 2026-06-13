@@ -154,6 +154,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.14 (2026-06-13)
+- **Feature: POI Running Registry Expansion**:
+  - Added "Công viên Hoàng Văn Thụ" to the Hoàng Mai district scenic POI registry in `route-engine.js` so it can be dynamically selected for randomized routes.
+  - Synchronized version bump to `v2.3.14` across `package.json`, `public/index.html`, `public/sw.js`, `PLAN.md`, and `AI_RULES.md`.
+
 ### v2.3.13 (2026-06-13)
 - **Feature: Rest Time & Routing Proximity Adjustments**:
   - Decreased default Rest Time (rest buffering percentage) from 50% to 40% globally in frontend configs, SQLite defaults, FIT generator, and GPX generator fallback logic.

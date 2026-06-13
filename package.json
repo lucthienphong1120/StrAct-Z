@@ -1,6 +1,6 @@
 {
   "name": "stract-z",
-  "version": "2.3.13",
+  "version": "2.3.14",
   "description": "Auto-generate and upload running activities to Strava daily",
   "main": "server.js",
   "scripts": {
