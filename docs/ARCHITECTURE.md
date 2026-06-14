@@ -116,10 +116,12 @@ graph TD
     InputCheck -->|Manual| BuildManualConfig["Read UI parameters / Overrides"]
     InputCheck -->|Scheduler| BuildSchedulerConfig["Fetch DB User Settings & Check Slots"]
     
-    BuildManualConfig --> TimingCheck{"Custom Time Active?"}
-    BuildSchedulerConfig --> TimingCheck
+    BuildSchedulerConfig --> ConcurrencyLock["Acquire Concurrency Lock<br/>(Insert placeholder 'generating')"]
+    ConcurrencyLock --> TimingCheck{"Custom Time Active?"}
     
-    TimingCheck -->|Yes| SetCustomTime["Use Custom Date & Time<br/>Bypass random bounds"]
+    BuildManualConfig --> TimingCheck
+    
+    TimingCheck -->|Yes| SetCustomTime["Use Custom Date & Time<br/>Bypass random bounds & target distance"]
     TimingCheck -->|No| SetRandomTime["Select random time within bounds<br/>Check Avoid Workhours"]
     
     %% Target Distance Phase
@@ -269,8 +271,13 @@ Danh sách Manufacturer ID & Product ID chuẩn hóa cho các dòng thiết bị
   * Nếu điểm xuất phát không phải là POI (ví dụ: bắt đầu ở Home/Work hoặc điểm ngẫu nhiên), hệ thống sẽ **luôn luôn hướng lộ trình** về phía POI nổi tiếng gần nhất (trong vòng 1.5km).
 * **Quy tắc kiểm tra cự ly (Target Distance Constraints):**
   * Để hướng tuyến đi tới một POI khác có khoảng cách $d$ mét, cự ly sinh ra của hoạt động phải đủ lớn để đi và về: $\text{targetDistM} \ge 2.5 \times d$. Nếu không thỏa mãn, hệ thống sẽ tự động chạy vòng lặp hình học ngẫu nhiên quanh điểm xuất phát để bảo toàn cự ly.
-* **Hình học lộ trình (Route Geometry):**
-  * **Cự ly ngắn ($\le 5 \times d$):** Hệ thống sinh một tam giác lộ trình thông minh gồm: `start` $\rightarrow$ `secondPoi` $\rightarrow$ `detourPt` (điểm đổi hướng lệch vuông góc từ trung điểm đi-về, tính bằng công thức Pythagore) $\rightarrow$ `start`.
-  * **Cự ly dài ($> 5 \times d$):** Hệ thống sinh chuỗi đường chạy đi từ `start` $\rightarrow$ `secondPoi` $\rightarrow$ chuỗi 3 điểm vòng quanh `secondPoi` $\rightarrow$ `start` để kéo dài cự ly mà không bị đè lặp vết chạy.
+  * **Custom Time Bypass:** Khi tính năng Custom Time được kích hoạt, hệ thống sẽ ưu tiên giữ lịch trình thời gian tùy chỉnh, có thể không bị ràng buộc quá nghiêm ngặt bởi Target Distance nếu có xung đột để tránh làm sai lệch lịch trình sinh (schedule time).
+* **Hình học lộ trình (Route Geometry) & Khứ hồi linh hoạt:**
+  * **Không bắt buộc quay về điểm xuất phát:** Hệ thống loại bỏ ràng buộc 100% quay về điểm bắt đầu để tăng tính tự nhiên.
+  * Lộ trình **POI to POI**: Có ~70% khả năng sẽ kết thúc tại POI gần nhất hoặc loanh quanh khu vực đó.
+  * Lộ trình **Random to POI**: Có ~85% khả năng đi quanh POI đích và dừng luôn tại POI đó thay vì quay về.
+  * Lộ trình xuất phát từ **Home/Work** hoặc không có POI đích: Điểm kết thúc có thể được thả ngẫu nhiên ở một vị trí bất kỳ quanh khu vực, không cần ép buộc chạy lại về đích.
+  * **Cự ly ngắn ($\le 5 \times d$):** Hệ thống sinh một tam giác lộ trình thông minh gồm: `start` $\rightarrow$ `secondPoi` $\rightarrow$ `detourPt` (điểm đổi hướng lệch vuông góc từ trung điểm đi-về, tính bằng công thức Pythagore) $\rightarrow$ `end`.
+  * **Cự ly dài ($> 5 \times d$):** Hệ thống sinh chuỗi đường chạy đi từ `start` $\rightarrow$ `secondPoi` $\rightarrow$ chuỗi 3 điểm vòng quanh `secondPoi` $\rightarrow$ `end` để kéo dài cự ly mà không bị đè lặp vết chạy.
 
 
