@@ -96,7 +96,7 @@ function validateConfig(updates, role = 'basic') {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const diffDays = Math.ceil((today - targetDate) / (1000 * 60 * 60 * 24));
-        const isCustomTimeActive = updates.custom_time_enabled === 'true';
+        const isCustomTimeActive = String(updates.custom_time_enabled) === 'true';
 
         if (diffDays < 0) {
             // Future date

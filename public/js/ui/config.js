@@ -309,7 +309,7 @@ async function loadConfig() {
     setVal('cfgTargetDate', savedTargetDate || today);
 
     const sysL = window.sysLimits;
-    setChecked('cfgCustomTime', config.custom_time_enabled === 'true');
+    setChecked('cfgCustomTime', String(config.custom_time_enabled) === 'true');
     setVal('cfgCustomMinTime', config.target_time_custom || (sysL?.target_time_custom?.default) || '00:00');
     toggleCustomTime();
     setVal('cfgRandMinTime', config.min_time || (sysL?.random_time_bounds?.default?.start) || '04:30');
