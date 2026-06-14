@@ -169,7 +169,7 @@ function buildGPX(points, options = {}) {
   <metadata>
     <name>${escapeXml(activityName)}</name>
     ${description ? `    <desc>${escapeXml(description)}</desc>` : ''}
-    <time>${formatGPXTime(points[0].time)}</time>
+    <time>${formatGPXTime(points[points.length - 1].time)}</time>
   </metadata>
   <trk>
     <name><![CDATA[${activityName}]]></name>
