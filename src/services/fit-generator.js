@@ -794,14 +794,15 @@ async function generateActivity(config = {}) {
   );
 
   // 7. activity
+  const endTimestamp = fitWriter.time(points[points.length - 1].time);
   fitWriter.writeMessage(
     "activity",
     {
-      timestamp: start,
+      timestamp: endTimestamp,
       total_timer_time: totalElapsedTime,
       num_sessions: 1,
       type: "manual",
-      local_timestamp: start + 7 * 3600 // Hanoi GMT+7 offset
+      local_timestamp: endTimestamp + 7 * 3600 // Hanoi GMT+7 offset
     },
     null,
     true
