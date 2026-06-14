@@ -83,13 +83,16 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     const dbInstance = await db.getDb();
 
     // 1. Check if we already have a completed/failed activity for this slot today
+    const startTimeUTC = new Date(`${targetDate}T00:00:00.000+07:00`).toISOString();
+    const endTimeUTC = new Date(`${targetDate}T23:59:59.999+07:00`).toISOString();
     const completedCount = await dbInstance.get(
       `SELECT COUNT(*) as c FROM activities 
        WHERE account_id = ? 
-         AND route_start_time LIKE ? 
+         AND route_start_time >= ? 
+         AND route_start_time <= ? 
          AND created_by = ? 
          AND upload_status IN ('uploaded', 'generated')`,
-      [accountId, `${targetDate}%`, slotName]
+      [accountId, startTimeUTC, endTimeUTC, slotName]
     );
 
     if (completedCount && completedCount.c > 0) {
@@ -152,7 +155,31 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     
     let lastActivity = null;
     let successCount = 0;
-    let currentStravaCount = stravaActivities.length;
+    
+    let totalActivitiesToday = 0;
+    const seenTimesDailyCheck = [];
+    for (const act of existingActivities) {
+      if (act.upload_status === 'failed' || act.upload_status === 'deleted' || act.upload_status === 'generating') continue;
+      const startTime = act.start_date || act.route_start_time;
+      if (!startTime) continue;
+      const startMs = new Date(startTime).getTime();
+      let isDuplicate = false;
+      for (const seenMs of seenTimesDailyCheck) {
+        if (Math.abs(seenMs - startMs) < 10 * 60 * 1000) { isDuplicate = true; break; }
+      }
+      if (!isDuplicate) {
+        seenTimesDailyCheck.push(startMs);
+        totalActivitiesToday++;
+      }
+    }
+
+    const dailyMaxActivity = parseInt(config.daily_max_activity || '2');
+    if (totalActivitiesToday >= dailyMaxActivity) {
+      console.log(`[Scheduler] Account ${accountId}: Daily upload limit of ${dailyMaxActivity} already reached BEFORE generation (${totalActivitiesToday} act). Skipping.`);
+      if (lockActivityId) await db.deleteActivity(accountId, lockActivityId, true);
+      isRunning.set(accountId, false);
+      return { success: true, message: `Giới hạn upload hàng ngày là ${dailyMaxActivity} đã đạt. Bỏ qua lịch trình.` };
+    }
 
     for (let i = 0; i < taskCount; i++) {
       let activity;
@@ -263,8 +290,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       console.log(`[Scheduler] Generated: ${activity.activityName} at ${activity.startTime.toLocaleTimeString('vi-VN', { hour12: false })} - ${activity.distanceKm}km`);
       
       // Check if daily limit is reached
-      const dailyMaxActivity = parseInt(config.daily_max_activity || '2');
-      if (currentStravaCount >= dailyMaxActivity) {
+      if (totalActivitiesToday + successCount >= dailyMaxActivity) {
         console.log(`[Scheduler] Account ${accountId}: Daily upload limit of ${dailyMaxActivity} reached. Saving activity as FAILED.`);
         const failData = {
           activity_name: activity.activityName,
@@ -355,7 +381,6 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         stravaApi.clearActivityCache(accountId);
 
         successCount++;
-        currentStravaCount++;
         lastActivity = {
           ...activity,
           stravaActivityId: finalStatus.activity_id,
