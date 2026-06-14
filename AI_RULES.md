@@ -154,6 +154,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.4.0 (2026-06-14)
+- **Feature: Major Release 2.4.0**:
+  - Consolidates and ships the timezone-aware scheduler concurrency lock, automatic synchronization of local activity times and details with Strava, and state preservation for Custom Time toggle switches on UI devices.
+  - Implements daily max activity limit checks to prevent duplicates or over-generation under concurrency, ensuring strict compliance with subscription quotas.
+- **Documentation & Version Bump**:
+  - Synchronized version bump to `v2.4.0` across `package.json`, `public/index.html`, `public/sw.js`, `PLAN.md`, and `AI_RULES.md`.
+
 ### v2.3.21 (2026-06-14)
 - **Bugfix: Timezone-aware Scheduler Concurrency Lock**:
   - Replaced the local date string `LIKE` query with UTC timezone range boundary checks (`route_start_time >= startTimeUTC AND route_start_time <= endTimeUTC`) when querying existing activities. This fixes scheduler locking failures for early morning runs (e.g. before 07:00 AM in UTC+7) where the UTC date falls on the previous day.
