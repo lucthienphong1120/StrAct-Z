@@ -50,7 +50,8 @@ async function exchangeCode(code) {
   const response = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: params.toString()
+    body: params.toString(),
+    signal: AbortSignal.timeout(15000)
   });
 
   if (!response.ok) {
@@ -78,7 +79,8 @@ async function refreshTokens(userId) {
   const response = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: params.toString()
+    body: params.toString(),
+    signal: AbortSignal.timeout(15000)
   });
 
   if (!response.ok) {
@@ -145,7 +147,8 @@ async function uploadActivity(userId, activity) {
       'Authorization': `Bearer ${tokens.access_token}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(sessionBody)
+    body: JSON.stringify(sessionBody),
+    signal: AbortSignal.timeout(15000)
   });
 
   if (sessionRes.status === 401) {
@@ -188,7 +191,8 @@ async function uploadActivity(userId, activity) {
         type: 'raw',
         application: { name: 'StrAct Z' },
         dataType: { name: ds.dataType, field: [{ name: ds.type.split('.').pop(), format: ds.values[0].intVal !== undefined ? 'integer' : 'floatPoint' }] }
-      })
+      }),
+      signal: AbortSignal.timeout(15000)
     }).catch(() => {}); // Ignore if already exists
 
     // Patch Data Point
@@ -209,7 +213,8 @@ async function uploadActivity(userId, activity) {
           dataTypeName: ds.dataType,
           value: ds.values
         }]
-      })
+      }),
+      signal: AbortSignal.timeout(15000)
     });
 
     if (patchRes.status === 401) {
@@ -266,7 +271,8 @@ async function getTodayStats(userId, forceRefresh = false) {
       'Authorization': `Bearer ${tokens.access_token}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(aggregateBody)
+    body: JSON.stringify(aggregateBody),
+    signal: AbortSignal.timeout(15000)
   });
 
   if (!response.ok) {
@@ -307,7 +313,8 @@ async function disconnect(userId) {
       const token = tokens.refresh_token || tokens.access_token;
       await fetch(`https://oauth2.googleapis.com/revoke?token=${token}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        signal: AbortSignal.timeout(15000)
       });
     }
   } catch (err) {

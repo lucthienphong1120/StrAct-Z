@@ -154,6 +154,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.4.1 (2026-06-14)
+- **Feature: Process Lifecycle and Network Timeouts Optimization**:
+  - Implemented aggressive network timeouts (`req.setTimeout` and `AbortSignal.timeout`) for Strava API, OSRM routes, and Google Fit fetches to forcefully destroy hanging sockets and unblock the Node event loop.
+  - Added a `closeDb` method to SQLite handler and executed it gracefully on `SIGTERM` / `SIGINT` inside `server.js`.
+  - Resolved an issue where accumulated LiteSpeed `lsnode` processes remained alive due to unhandled network request hangs keeping `node-cron` schedulers stuck.
+
 ### v2.4.0 (2026-06-14)
 - **Feature: Major Release 2.4.0**:
   - Consolidates and ships the timezone-aware scheduler concurrency lock, automatic synchronization of local activity times and details with Strava, and state preservation for Custom Time toggle switches on UI devices.

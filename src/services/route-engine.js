@@ -304,13 +304,10 @@ function osrmRoute(fromLat, fromLng, toLat, toLng, timeoutMs = 8000) {
       agent: osrmAgent,
     };
 
-    const timer = setTimeout(() => reject(new Error('OSRM timeout')), timeoutMs);
-
     const req = https.request(options, (res) => {
       let data = '';
       res.on('data', c => data += c);
       res.on('end', () => {
-        clearTimeout(timer);
         try {
           const json = JSON.parse(data);
           if (json.routes && json.routes[0]) {
@@ -324,7 +321,11 @@ function osrmRoute(fromLat, fromLng, toLat, toLng, timeoutMs = 8000) {
         } catch (e) { reject(e); }
       });
     });
-    req.on('error', (e) => { clearTimeout(timer); reject(e); });
+    req.on('error', reject);
+    req.setTimeout(timeoutMs, () => {
+      req.destroy();
+      reject(new Error('OSRM timeout'));
+    });
     req.end();
   });
 }

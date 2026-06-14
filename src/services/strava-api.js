@@ -132,6 +132,10 @@ function makeRequest(options, postData = null) {
       });
     });
     req.on('error', reject);
+    req.setTimeout(15000, () => {
+      req.destroy();
+      reject(new Error('Strava API request timeout (15s)'));
+    });
     if (postData) {
       if (typeof postData === 'string') {
         req.write(postData);
@@ -300,6 +304,10 @@ async function uploadActivity(accountId, fitFilepath, options = {}) {
       });
     });
     req.on('error', reject);
+    req.setTimeout(60000, () => {
+      req.destroy();
+      reject(new Error('Strava upload timeout (60s)'));
+    });
     form.pipe(req);
   });
 }

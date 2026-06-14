@@ -624,10 +624,21 @@ async function deleteExternalTokens(accountId, provider) {
   return true;
 }
 
-
+async function closeDb() {
+  if (dbInstance) {
+    try {
+      await dbInstance.close();
+      console.log('[SQLite] Database connection closed.');
+      dbInstance = null;
+      dbPromise = null;
+    } catch (err) {
+      console.error('[SQLite] Error closing database:', err.message);
+    }
+  }
+}
 
 module.exports = {
-  getDb,
+  getDb, closeDb,
   getConfig, setConfig, getAllConfig,
   saveTokens, getTokens, deleteTokens,
   saveExternalTokens, getExternalTokens, deleteExternalTokens,

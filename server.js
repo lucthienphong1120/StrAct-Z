@@ -127,8 +127,13 @@ const handleShutdown = async (signal) => {
     console.error('[Server] Error stopping schedulers:', err.message);
   }
 
-  server.close(() => {
+  server.close(async () => {
     console.log('[Server] HTTP server closed.');
+    try {
+      if (db.closeDb) await db.closeDb();
+    } catch (e) {
+      console.error('[Server] Error closing database:', e.message);
+    }
     process.exit(0);
   });
 

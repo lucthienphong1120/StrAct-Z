@@ -247,5 +247,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Thiết kế cơ chế khóa phân tán SQLite Placeholder đồng bộ scheduler đa tiến trình (v2.3.20)
 + [x] Khắc phục lỗi timezone khi parse/so sánh thời gian khóa scheduler tránh trùng lặp hoạt động; sửa lỗi lưu trạng thái Custom Time trên UI điện thoại và tối ưu hóa việc kiểm tra dailyMaxActivity trước khi sinh hoạt động (v2.3.21)
 + [x] Phát hành phiên bản chính thức v2.4.0 với đầy đủ các bản vá timezone scheduler lock, đồng bộ giờ giữa local và Strava, sửa UI Custom Time trên điện thoại, khóa trùng lặp phân tán SQLite Placeholder, và tối ưu hóa hiệu năng sinh hoạt động (v2.4.0)
-
-
++ [x] Tối ưu hóa vòng đời tiến trình LiteSpeed Node.js (lsnode), bổ sung cơ chế Timeout cứng và dọn dẹp kết nối mạng (Strava, OSRM, Google Fit), và đóng kết nối Database khi nhận tín hiệu Shutdown (v2.4.1)
