@@ -154,6 +154,18 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Feature: Documentation**:
   - Added a detailed Mindmap of OSRM/POI routing and logic flows (`docs/GENERATION_FLOW_MINDMAP.md`) and a user features manual (`docs/FEATURES_MANUAL.md`).
 
+### v2.3.21 (2026-06-14)
+- **Bugfix: Timezone-aware Scheduler Concurrency Lock**:
+  - Replaced the local date string `LIKE` query with UTC timezone range boundary checks (`route_start_time >= startTimeUTC AND route_start_time <= endTimeUTC`) when querying existing activities. This fixes scheduler locking failures for early morning runs (e.g. before 07:00 AM in UTC+7) where the UTC date falls on the previous day.
+- **Bugfix: Daily Max Activity Pre-generation Limits**:
+  - Enforced a strict combined daily activity limit check before generation by query-merging and deduplicating local DB records with Strava's cloud records. This accurately respects account max activity limits even under high API delays.
+- **Bugfix: Custom Time UI Loading & Validation**:
+  - Fixed an issue where the `custom_time_enabled` switch state failed to render properly on phone/secondary browser logins by standardizing string coercion (`String(val) === 'true'`).
+- **Bugfix: GPX and FIT Activity Timestamp End Alignments**:
+  - Adjusted the GPX file metadata generator and FIT file writer structures to correctly record the end timestamp matching the computed duration and route start time of the activity.
+- **Documentation & Version Bump**:
+  - Synchronized version bump to `v2.3.21` across `package.json`, `public/index.html`, `public/sw.js`, `PLAN.md`, and `AI_RULES.md`.
+
 ### v2.3.20 (2026-06-13)
 - **Feature: Concurrency Lock for Automated Scheduler**:
   - Implemented SQLite database-level concurrency locking using a placeholder activity record with `upload_status: 'generating'`.
