@@ -46,10 +46,47 @@ async function syncLocalActivitiesWithStrava(userId, stravaActivities) {
         const aTime = new Date(a.route_start_time || a.created_at).getTime();
         // Check only local activities within the timeframe of fetched activities (with 24h timezone buffer)
         if (aTime >= oldestTime - 24 * 60 * 60 * 1000) {
-          if (!stravaIds.has(String(a.strava_activity_id))) {
+          const stravaIdStr = String(a.strava_activity_id);
+          if (!stravaIds.has(stravaIdStr)) {
             console.log(`[Central Sync] Activity ${a.id} (Strava ID: ${a.strava_activity_id}) not found on Strava. Marking as 'removed'.`);
             await db.deleteActivity(userId, a.id, false, 'removed').catch(() => { });
             a.upload_status = 'removed';
+          } else {
+            // Found on Strava - verify and sync any fields that differ (like timezone adjustments or user edits on Strava)
+            const match = stravaActivities.find(s => String(s.id) === stravaIdStr);
+            if (match) {
+              const stravaStartTime = match.start_date || match.start_date_local;
+              const stravaDistanceKm = Math.round((match.distance / 1000) * 10) / 10;
+              const stravaDurationMin = Math.round(((match.moving_time || match.elapsed_time) / 60) * 10) / 10;
+              
+              let needsUpdate = false;
+              const updates = {};
+              
+              if (stravaStartTime && a.route_start_time !== stravaStartTime) {
+                updates.route_start_time = stravaStartTime;
+                needsUpdate = true;
+              }
+              if (match.name && a.activity_name !== match.name) {
+                updates.activity_name = match.name;
+                needsUpdate = true;
+              }
+              if (stravaDistanceKm > 0 && Math.abs((a.distance_km || 0) - stravaDistanceKm) > 0.15) {
+                updates.distance_km = stravaDistanceKm;
+                needsUpdate = true;
+              }
+              if (stravaDurationMin > 0 && Math.abs((a.duration_min || 0) - stravaDurationMin) > 1.5) {
+                updates.duration_min = stravaDurationMin;
+                needsUpdate = true;
+              }
+              
+              if (needsUpdate) {
+                console.log(`[Central Sync] Updating local activity ${a.id} to match Strava data:`, updates);
+                await db.updateActivity(userId, a.id, updates).catch(err => {
+                  console.error(`[Central Sync] Failed to update local activity ${a.id}:`, err);
+                });
+                Object.assign(a, updates);
+              }
+            }
           }
         }
       }

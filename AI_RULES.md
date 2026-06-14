@@ -163,6 +163,8 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - Fixed an issue where the `custom_time_enabled` switch state failed to render properly on phone/secondary browser logins by standardizing string coercion (`String(val) === 'true'`).
 - **Bugfix: GPX and FIT Activity Timestamp End Alignments**:
   - Adjusted the GPX file metadata generator and FIT file writer structures to correctly record the end timestamp matching the computed duration and route start time of the activity.
+- **Feature: Auto-synchronization of Local Activity Details with Strava**:
+  - Enhanced `syncLocalActivitiesWithStrava` to check for and sync any differences in start time, name, distance, and duration between local database records and matching Strava cloud activities. This automatically corrects timezone discrepancies (e.g. `05:32` vs `04:40` mismatches) and user edits from Strava.
 - **Documentation & Version Bump**:
   - Synchronized version bump to `v2.3.21` across `package.json`, `public/index.html`, `public/sw.js`, `PLAN.md`, and `AI_RULES.md`.
 
