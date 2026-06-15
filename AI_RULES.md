@@ -64,32 +64,32 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **VIP Accounts**: Allowed to enter any custom free-text Device Name (trimmed, max 100 characters).
 - **Basic Accounts**: UI restricts custom entries, and the backend validates that their chosen device name strictly matches one of the preset choices in `limits.device_name.choices`.
 
-### 4. Duplicate Protection (Safe Time)
+### 6. Duplicate Protection (Safe Time)
 - **Concept**: Prevents new activities from being generated too close to existing ones (already uploaded or in Strava Cloud).
 - **Calculation**: Blocked intervals = `[Start - SafeTime, End + SafeTime]`. Selected random time must fall outside these intervals.
 - **SafeTime**: Default 30 minutes (configurable via `overlap_protection_minutes`).
 - **Manual vs Scheduler Draft Filtering**: For manual generation (API endpoints `/generate` or `/generate-and-upload`), the generator bypasses overlap checks with local draft activities that have not been uploaded yet (`upload_status === 'generated'`). This ensures users can regenerate local manual activities freely without conflict. However, for the Scheduler cron runner, these `generated` drafts **MUST** block to prevent overlaps across multiple auto-generated tasks generated in a single loop iteration.
 
-### 5. Map Persistence (v1.51.5+)
+### 7. Map Persistence (v1.51.5+)
 - **Storage**: `map_lat`, `map_lng`, and `map_zoom` are saved in the `user_config` table whenever "Activity Areas" are saved.
 - **UI Persistence**:
   - **Refresh (Global)**: Restores the last saved map view (position/zoom) and all activity areas.
   - **Reset (Global)**: Resets the map view (position/zoom) to defaults, but **PRESERVES** the saved Home and Work locations (`activity_areas`).
 - **Initialization**: The map restores its last saved center and zoom level upon page load via `window.savedMapState`.
 
-### 5. Knowledge Management
+### 8. Knowledge Management
 - **Read Documentation**: AI assistants MUST read the files in the `docs/` directory (e.g., `ARCHITECTURE.md`, `USER_GUIDE.md`) to understand the system's design and intent before proposing major architectural changes.
 - **Preserve Memory**: Always update this `AI_RULES.md` file after significant logic changes.
 - **Version Headers**: Do NOT update version numbers in the titles/headers/first section of `AI_RULES.md`, `docs/ARCHITECTURE.md`, or `docs/SETUP_GUIDE.md` unless there is a specific, valid issue. (Lưu ý quan trọng: các file `AI_RULES.md`, `ARCHITECTURE.md`, `SETUP_GUIDE.md` nếu không có vấn đề gì thì không cần tự ý cập nhật version vào phần đầu file).
 
-### 6. Log Preservation (v1.50.40+)
+### 9. Log Preservation (v1.50.40+)
 - **Soft-Delete Only**: Never hard-delete records from the `activities` table.
 - **Status Change**: 
   - If deleted locally (before upload): `upload_status = 'deleted'`.
   - If deleted from cloud (or detected missing): `upload_status = 'removed'`.
 - **Reset Config**: The "Reset to Default" action ONLY resets configuration settings. It MUST NOT clear the activity history.
 
-### 7. Target Distance Configuration (v1.57.0+)
+### 10. Target Distance Configuration (v1.57.0+)
 - **Concept**: Allows users to configure a daily target distance (5-30km) under the Auto Schedule card.
 - **Rules**:
   - Only active when target distance is enabled, and the last activity of the last schedule of the day is running.
@@ -99,7 +99,39 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - If remaining distance is positive, it sets the generated activity's distance to the remaining distance +/- 50m to 200m random variation.
   - The generated target distance is capped between the activity type's minimum and maximum constraints, and strictly capped by the user-configured random max distance (without being affected by the activity's distance multiplier itself) to ensure valid route generation.
 
+### 11. Garmin FIT SDK & ANT+ Device Mapping Rules
+- **Manufacturer ID**: Allocated by ANT+ Alliance to member companies. Sending the correct ID is required for Strava to display the correct brand sync logo/badge (e.g., `Zepp App` for Amazfit, `Huawei Health` for Huawei).
+- **Product ID Mapping**:
+  - **Garmin**: Map correct Garmin product IDs (e.g. `4376` for fēnix 7x Pro, `4315` for Forerunner 965) to let Strava match the watch directly from their database.
+  - **Non-Garmin Devices**: ANT+ does not manage Product IDs in FIT SDK. To match them, leave the `product` ID `undefined` in `file_id` and `device_info` messages. Strava will automatically fallback to match the model based on the **`product_name`** string in the `device_info` message.
+
+### 12. Time Standardization in FIT Files
+- **FIT Epoch**: All timestamps in the FIT file (`time_created`, `start_time`, `timestamp`) must represent seconds elapsed since the FIT epoch (00:00:00 UTC on December 31, 1989).
+- **Timezone Display**: To ensure Strava interprets the local activity timezone properly, the `activity` message needs to record the `local_timestamp` attribute. Calculated as: `local_timestamp = start_time + 7 * 3600` for UTC+7 (Vietnam).
+
+### 13. Device Metadata Hashing
+- String serial numbers (e.g. `'grmn_sn_4982_xxxxxx'`) are converted to 32-bit unsigned integers using the DJB2 hashing algorithm to comply with Garmin FIT binary requirements.
+
+### 14. Smart POI-to-POI Routing
+- **Start Point Context**:
+  - If the start location is a scenic POI, there is a **30% chance** to route to another POI within 1.5km, and **70% chance** to generate a loop/out-and-back route around the starting POI.
+  - If the start location is Home/Work/Random, the route will target the nearest scenic POI within 1.5km.
+- **Target Distance Constraints**:
+  - To target a neighboring POI at distance $d$ meters, the generated distance must satisfy $\text{targetDistM} \ge 2.5 \times d$. Otherwise, it falls back to a standard geometric loop/out-back to avoid clipping.
+  - **Custom Time Bypass**: If Custom Time is enabled, target distance constraints may be bypassed to avoid timing mismatches.
+- **Return & stopping probabilities**:
+  - **POI-to-POI**: 70% chance to finish at the destination POI (P2P), 30% chance to return to start.
+  - **Random-to-POI**: 85% chance to finish at the POI (P2P), 15% chance to return to start.
+  - **Home/Work / No POI**: 50% chance to finish at a random coordinate (P2P), 50% chance to return to start.
+
 ## 🛠️ Developer Rules
+
+### v2.4.2 (2026-06-15)
+- **Documentation Overhaul & Version Bump**:
+  - Unified activity generation, weighted district selection, and POI routing logic into a single flowchart in `docs/ARCHITECTURE.md`.
+  - Converted Garmin FIT SDK, ANT+ device mapping, and time standards from text descriptions to flowchart diagrams in `docs/ARCHITECTURE.md`.
+  - Moved detailed theoretical references (device mapping, time standardization, POI routing weights) from `docs/ARCHITECTURE.md` to `AI_RULES.md` under core calculations.
+  - Bumped version to `v2.4.2` across `package.json`, `public/index.html`, `public/sw.js`, and `AI_RULES.md`.
 
 ### v2.2.4 (2026-06-12)
 - **Fix: Broken Layout from Missing `</div>` Tag**:

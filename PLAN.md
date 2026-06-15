@@ -248,7 +248,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Khắc phục lỗi timezone khi parse/so sánh thời gian khóa scheduler tránh trùng lặp hoạt động; sửa lỗi lưu trạng thái Custom Time trên UI điện thoại và tối ưu hóa việc kiểm tra dailyMaxActivity trước khi sinh hoạt động (v2.3.21)
 + [x] Phát hành phiên bản chính thức v2.4.0 với đầy đủ các bản vá timezone scheduler lock, đồng bộ giờ giữa local và Strava, sửa UI Custom Time trên điện thoại, khóa trùng lặp phân tán SQLite Placeholder, và tối ưu hóa hiệu năng sinh hoạt động (v2.4.0)
 + [x] Tối ưu hóa vòng đời tiến trình LiteSpeed Node.js (lsnode), bổ sung cơ chế Timeout cứng và dọn dẹp kết nối mạng (Strava, OSRM, Google Fit), và đóng kết nối Database khi nhận tín hiệu Shutdown (v2.4.1)
-+ [ ] update docs/ARCHITECTURE.md: 🔍 Garmin FIT SDK & ANT+ Device Mapping & Time Standards -> chuyển thành dạng flowchart, các phần lý thuyết chuyển sang docs khác (README, AI RULES,...)
-+ [ ] update docs/ARCHITECTURE.md: bỏ phần ⚙️ Device Metadata Hashing -> cái này cho vào docs khác (README, AI RULES,...)
-+ [ ] update docs/ARCHITECTURE.md: phần 🚀 Activity Generation Flowchart lỗi cú pháp mermaid
-+ [ ] update docs/ARCHITECTURE.md: tổng hợp chung vào 1 flowchart về tiến trình lựa chọn, thứ tự, tỉ lệ, các option khi gen hoạt động: 🚀 Activity Generation Flowchart, 🏡 Weighted District Selection & Boost Logic, Thuật toán điều tuyến thông minh đến POI (Smart POI-to-POI Routing) -> vào thành 1 cái chung thôi
++ [x] update docs/ARCHITECTURE.md: 🔍 Garmin FIT SDK & ANT+ Device Mapping & Time Standards -> chuyển thành dạng flowchart, các phần lý thuyết chuyển sang docs khác (README, AI RULES,...) (v2.4.2)
++ [x] update docs/ARCHITECTURE.md: bỏ phần ⚙️ Device Metadata Hashing -> cái này cho vào docs khác (README, AI RULES,...) (v2.4.2)
++ [x] update docs/ARCHITECTURE.md: phần 🚀 Activity Generation Flowchart lỗi cú pháp mermaid (v2.4.2)
++ [x] update docs/ARCHITECTURE.md: tổng hợp chung vào 1 flowchart về tiến trình lựa chọn, thứ tự, tỉ lệ, các option khi gen hoạt động: 🚀 Activity Generation Flowchart, 🏡 Weighted District Selection & Boost Logic, Thuật toán điều tuyến thông minh đến POI (Smart POI-to-POI Routing) -> vào thành 1 cái chung thôi (v2.4.2)

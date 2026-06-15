@@ -103,181 +103,145 @@ erDiagram
 
 ---
 
-## 🚀 Activity Generation Flowchart
+## 🚀 Activity Generation & Routing Flowchart
 
-The execution flow of the generation engine from trigger to the final output of a signed Garmin `.fit` or `.gpx` activity file.
-
-```mermaid
-graph TD
-    %% Trigger Phase
-    Start(["⚡ Trigger Activity Generation"]) --> InputCheck{"Manual or Scheduler?"}
-    
-    %% Setup & Custom Time Phase
-    InputCheck -->|Manual| BuildManualConfig["Read UI parameters / Overrides"]
-    InputCheck -->|Scheduler| BuildSchedulerConfig["Fetch DB User Settings & Check Slots"]
-    
-    BuildSchedulerConfig --> ConcurrencyLock["Acquire Concurrency Lock<br/>(Insert placeholder 'generating')"]
-    ConcurrencyLock --> TimingCheck{"Custom Time Active?"}
-    
-    BuildManualConfig --> TimingCheck
-    
-    TimingCheck -->|Yes| SetCustomTime["Use Custom Date & Time<br/>Bypass random bounds & target distance"]
-    TimingCheck -->|No| SetRandomTime["Select random time within bounds<br/>Check Avoid Workhours"]
-    
-    %% Target Distance Phase
-    SetCustomTime --> TargetDistCheck{"Scheduler & Last Run of Day?"}
-    SetRandomTime --> TargetDistCheck
-    
-    TargetDistCheck -->|Yes| CheckTargetDistance["Calculate distance done today<br/>Set target override +/- random variance"]
-    TargetDistCheck -->|No| StandardDistance["Select random distance & pace<br/>Scale by activity type multiplier"]
-
-    %% Overlap Protection Phase
-    CheckTargetDistance --> OverlapCheck{"Overlap Protection Enabled?"}
-    StandardDistance --> OverlapCheck
-    
-    OverlapCheck -->|Yes| QueryOverlap["Check conflict range:<br/>[Start - SafeTime - RestTime, End + SafeTime + RestTime]"]
-    OverlapCheck -->|No| RoutingInit
-    
-    QueryOverlap --> OverlapConflict{"Conflict found?"}
-    OverlapConflict -->|Yes| ErrorExit(["❌ Failed: Overlap Conflict"])
-    OverlapConflict -->|No| RoutingInit
-    
-    %% Geography Phase
-    RoutingInit["🎯 Determine Start Coordinate"] --> SelectDistrict["Weighted District Selection<br/>Based on Home/Work & last activity boost"]
-    SelectDistrict --> FavorPOI{"Start Near Favorite Place?"}
-    FavorPOI -->|Yes| ResolveFavorite["Check Home/Work area (40-60% chance)<br/>or Scenic POI (35-75% chance)"]
-    FavorPOI -->|No| PickRandomInPolygon["Select true random inside district polygon<br/>(Rejection sampling bbox fallback)"]
-    
-    ResolveFavorite --> RouteGen
-    PickRandomInPolygon --> RouteGen
-    
-    %% Routing Engine Phase
-    RouteGen["🚲 Generate Waypoints"] --> StartPOI{"Starting at a POI?"}
-    StartPOI -->|Yes| POILoopProb{"30% Chance to target another POI?"}
-    StartPOI -->|No (Home/Work/Random)| TargetPOI{"Target nearest POI within 1.5km?"}
-    POILoopProb -->|Yes| TargetPOI
-    POILoopProb -->|No| GeometricLoop["Generate classic loop / out-back around start"]
-    
-    TargetPOI -->|POI found & target distance >= 2.5*d| POIRouting["Smart Routing: Chained path via second POI<br/>(Loop around it or perpendicular detour)"]
-    TargetPOI -->|Otherwise| GeometricLoop
-    
-    POIRouting --> OSRMRoute{"Use OSRM Routing?"}
-    GeometricLoop --> OSRMRoute
-    
-    OSRMRoute -->|Yes| CallOSRM["Fetch real road points from OSRM API"]
-    OSRMRoute -->|No| FallbackGPS["Generate straight-line fallback nodes"]
-    
-    CallOSRM --> Resampling["Resample route coordinates to uniform 10m segments"]
-    FallbackGPS --> Resampling
-    
-    %% Generation Phase
-    Resampling --> SpeedCalcs["Determine pace & elevation grade"]
-    SpeedCalcs --> TimestampGen["Generate timestamps rounded to nearest second<br/>Clamp grade slope to max 8%"]
-    
-    %% Device & Serialization Phase
-    TimestampGen --> DeviceSelection["Resolve Watch Preset and Brand"]
-    DeviceSelection --> SerialHash["Generate serial string & hash to uint32 via DJB2"]
-    SerialHash --> LTSVersion["Lookup brand LTS software version"]
-    LTSVersion --> WriteFIT["Write binary FIT or GPX file"]
-    
-    %% Save Phase
-    WriteFIT --> SaveDB["Save local activity to DB as generated"]
-    SaveDB --> DisableCustom["Turn off Custom Time in DB if enabled"]
-    DisableCustom --> SuccessExit(["🎉 Output Activity File Ready"])
-```
-
----
-
-## 🏡 Weighted District Selection & Boost Logic
-
-When selecting random starting coordinates outside Scenic POIs, districts are chosen using weights calculated from Home/Work coverage overlays and the starting district of the last uploaded/removed activity.
+This comprehensive flowchart details the entire execution flow from trigger to the final output of a signed Garmin `.fit` or `.gpx` activity file, including concurrency lock, daily limit checks, overlap protection, weighted district selection, favorite place start points, smart POI-to-POI routing, return probability rules, and biometrics simulation.
 
 ```mermaid
 graph TD
-    Start(["Start District Selection"]) --> BaseWeight["Set base weight for all districts = 1.0"]
+    %% 1. Trigger & Limits
+    Start(["⚡ Start Generation"]) --> Trigger{"Trigger Type?"}
+    Trigger -->|Manual| ReadUI["Read UI Overrides (Target Date, Custom Time, etc.)"]
+    Trigger -->|Scheduler| ReadSettings["Fetch User Config & Slots from DB"]
     
-    BaseWeight --> HomeCheck{"Has Home Area?"}
-    HomeCheck -->|Yes| ApplyHome["Calculate Home Overlap Ratio<br/>Fully (>=85%): +20.0<br/>Mostly (>=35%): +14.0<br/>Partially (>0%): +7.0"]
-    HomeCheck -->|No| WorkCheck{"Has Work Area?"}
+    ReadSettings --> CheckLimit{"Daily Activity Limit Reached?<br/>(Local DB + Strava Cloud)"}
+    CheckLimit -->|Yes| SaveFailedLimit["Create DB Activity with Status: FAILED<br/>(Exit scheduler loop)"]
+    CheckLimit -->|No| AcquireLock["Acquire Concurrency Lock<br/>(Placeholder: 'generating')"]
     
-    ApplyHome --> WorkCheck
-    WorkCheck -->|Yes| ApplyWork["Calculate Work Overlap Ratio<br/>Fully (>=85%): +12.0<br/>Mostly (>=35%): +7.5<br/>Partially (>0%): +3.0"]
-    WorkCheck -->|No| AdjacentCheck{"Adjacent to starting district of last activity?"}
+    AcquireLock --> TimingMode
+    ReadUI --> TimingMode{"Custom Time Enabled?"}
     
-    ApplyWork --> AdjacentCheck
-    AdjacentCheck -->|Same District| BoostSame["Add boost +2.1"]
-    AdjacentCheck -->|Neighbor District| BoostNeigh["Add boost +1.4"]
-    AdjacentCheck -->|Otherwise| WeightedRandom["Run Weighted Random Choice"]
+    %% 2. Timing & Date
+    TimingMode -->|Yes| CustomTime["Use Exact Custom Date & Time<br/>Bypass Global Random Bounds"]
+    TimingMode -->|No| RandomTime["Select Random Time within Bounds<br/>Check Avoid Workhours (Mon-Fri only)"]
     
-    BoostSame --> WeightedRandom
-    BoostNeigh --> WeightedRandom
-    WeightedRandom --> End(["District Selected"])
+    CustomTime --> DistanceMode
+    RandomTime --> DistanceMode{"Is Scheduler & Last Run of Day & Target Distance Enabled?"}
+    
+    %% 3. Distance & Overlap
+    DistanceMode -->|Yes| TargetDistance["Calculate Remaining Target Distance today<br/>Set Distance to Remaining +/- 50-200m variation<br/>Clamp to min_distance and max_distance"]
+    DistanceMode -->|No| StdDistance["Select Random Distance & Pace within limits<br/>Apply Activity Type Multiplier (Walk x0.7, Run x1.0, Ride x1.5)"]
+    
+    TargetDistance --> OverlapCheck{"Overlap Protection Enabled?"}
+    StdDistance --> OverlapCheck
+    
+    OverlapCheck -->|Yes| CheckOverlap["Check Overlaps against active activities in<br/>(Start-SafeTime-RestTime to End+SafeTime+RestTime)"]
+    CheckOverlap --> OverlapConflict{"Conflict?"}
+    OverlapConflict -->|Yes| SaveFailedOverlap["Set status to FAILED / Show UI Error"]
+    OverlapConflict -->|No| SelectDistrict
+    OverlapCheck -->|No| SelectDistrict
+    
+    %% 4. District & Coordinate Selection
+    subgraph Selection ["🎯 District & Start Coordinate Selection"]
+        SelectDistrict["Calculate District Weights:<br/>- Base Weight = 1.0<br/>- Home Boost (Fully +20, Mostly +14, Partially +7)<br/>- Work Boost (Fully +12, Mostly +7.5, Partially +3)<br/>- Adjacent Boost (Same starting district +2.1, Neighbor +1.4)"]
+        SelectDistrict --> RollDistrict["Select District via Weighted Random Selection"]
+        RollDistrict --> FavorCheck{"Start Near Favorite Place Enabled?"}
+        
+        FavorCheck -->|Yes| RollFavorite{"Roll Start Point Type"}
+        RollFavorite -->|55% Home/Work| HomeWorkStart["Start near Home or Work coordinate<br/>(+ random 100m-300m offset)"]
+        RollFavorite -->|35% POI| POIStart["Start near Scenic POI coordinate<br/>(+ random 0m-200m offset)"]
+        RollFavorite -->|10% Random| PolygonStart["Start at true random point in district polygon<br/>(Rejection sampling with bbox fallback)"]
+        
+        FavorCheck -->|No| PolygonStart
+    end
+    
+    HomeWorkStart --> RoutingEngine
+    POIStart --> RoutingEngine
+    PolygonStart --> RoutingEngine
+    
+    %% 5. Waypoint & Routing Engine
+    subgraph Routing ["🚲 Route Generation & POI Targeting"]
+        RoutingEngine{"Is Start Point a POI?"}
+        
+        RoutingEngine -->|Yes| POILoopCheck{"Roll POI-to-POI Routing?"}
+        POILoopCheck -->|30% Yes| TargetPOI["Target neighboring POI within 1.5km"]
+        POILoopCheck -->|70% No| GeometricLoop["Generate Classic Loop/Out-Back Route around start"]
+        
+        RoutingEngine -->|No (Home/Work/Random)| TargetPoiNear{"POI within 1.5km?"}
+        TargetPoiNear -->|Yes| CheckPoiDist{"Is target distance >= 2.5 * d?"}
+        CheckPoiDist -->|Yes| TargetPOI
+        CheckPoiDist -->|No| GeometricLoop
+        TargetPoiNear -->|No| GeometricLoop
+        
+        TargetPOI --> RouteShape{"Generate Route Points"}
+        GeometricLoop --> RouteShape
+    end
+    
+    %% 6. Return & Stopping Probabilities
+    RouteShape --> ReturnCheck{"Determine Return / P2P Mode"}
+    ReturnCheck -->|POI-to-POI| PoiToPoiReturn{"Roll Return Probability"}
+    PoiToPoiReturn -->|70% Stop (P2P)| StopPoi["Stop at second POI (outbound path only)"]
+    PoiToPoiReturn -->|30% Return| LoopBack["Loop back to starting POI"]
+    
+    ReturnCheck -->|Random-to-POI| RandToPoiReturn{"Roll Return Probability"}
+    RandToPoiReturn -->|85% Stop (P2P)| StopPoi
+    RandToPoiReturn -->|15% Return| LoopBack
+    
+    ReturnCheck -->|Home/Work or No POI| StdReturn{"Roll Return Probability"}
+    StdReturn -->|50% P2P| StopRand["Stop at random point (outbound only)"]
+    StdReturn -->|50% Return| LoopBack
+    
+    StopPoi --> RoadSnapping
+    StopRand --> RoadSnapping
+    LoopBack --> RoadSnapping
+    
+    %% 7. Snapping & Simulation
+    subgraph Simulation ["🛣️ Road Snapping & Biometrics Simulation"]
+        RoadSnapping{"Use Snap OSRM Routing?"}
+        RoadSnapping -->|Yes| OSRMCall["Fetch real road points from OSRM API"]
+        RoadSnapping -->|No| FallbackLine["Fetch straight-line GPS points"]
+        
+        OSRMCall --> Resampling["Resample coordinates to uniform 10m spacing"]
+        FallbackLine --> Resampling
+        
+        Resampling --> HRZone["Calculate Target Heart Rate Zone by Activity Type:<br/>- Walk: 50-60% MHR<br/>- Ride: 60-70% MHR<br/>- Run: 70-85% MHR"]
+        HRZone --> SimulationRuns["Simulate Pace & biometrics:<br/>- 30% Hot Weather (+3 to 8 BPM)<br/>- 1.5% Red Light Stop (rest 15-60s, HR drops)<br/>- Elevation grade clamped to max 8%"]
+    end
+    
+    SimulationRuns --> BuildFormat
+    
+    %% 8. File Encoding & Export
+    subgraph Export ["💾 File Generation & Device Mapping"]
+        BuildFormat{"Export Format?"}
+        BuildFormat -->|FIT| FitWriter["Encode binary FIT format"]
+        BuildFormat -->|GPX| GpxWriter["Encode GPX format"]
+        
+        FitWriter --> DeviceMapping["Map Device Details:<br/>- Garmin: Set Manufacturer (1) & Product ID Enum<br/>- Non-Garmin: Set Manufacturer, Product (undefined), product_name in device_info<br/>- Serial: Hash serial string to uint32 (DJB2)"]
+        GpxWriter --> DeviceMapping
+        
+        DeviceMapping --> SaveActivity["Save to SQLite DB with status: generated / uploaded"]
+        SaveActivity --> ClearCustomTime["Disable Custom Time in user_config"]
+    end
+    
+    ClearCustomTime --> End(["🎉 Output Activity Ready"])
+    SaveFailedLimit --> End
+    SaveFailedOverlap --> End
 ```
 
 ---
 
-## ⚙️ Device Metadata Hashing
+## 🔍 Garmin FIT SDK & ANT+ Device Mapping & Time Standards Flowchart
 
-String serial numbers are converted to 32-bit unsigned integers using the DJB2 hashing algorithm to comply with Garmin FIT binary requirements.
+This flowchart outlines how the Garmin FIT SDK and ANT+ Alliance specifications are utilized to map sport device profiles and synchronize timestamps securely.
 
 ```mermaid
-flowchart LR
-    StringSerial["String Serial:<br/>'grmn_sn_4982_xxxxxx'"] --> DJB2["DJB2 Hashing Algorithm"]
-    DJB2 --> UInt32Serial["Unsigned 32-bit Integer Serial"]
-    UInt32Serial --> FITHeader["Embedded into FIT File Header"]
+graph TD
+    DeviceType{"Is Device Brand Garmin?"}
+    DeviceType -->|Yes| MapGarmin["Set Manufacturer ID = 1<br/>Set Product ID = standard Garmin Product ID Enum<br/>Strava resolves device profile from internal database"]
+    DeviceType -->|No| MapNonGarmin["Set Manufacturer ID (Amazfit: 339, Coros: 264, Huawei: 348, Suunto: 23, Polar: 80, Strava: 265)<br/>Set Product ID = undefined<br/>Set product_name in device_info message<br/>Strava falls back to match watch model using product_name"]
+    
+    MapGarmin --> SerialHash["Generate Device Serial Number:<br/>Alphanumeric serial string hashed to uint32 using DJB2 algorithm"]
+    MapNonGarmin --> SerialHash
+    
+    SerialHash --> TimeEncode["Standardize Timestamps in File:<br/>1. Record all timestamps in seconds from FIT Epoch (Dec 31, 1989)<br/>2. Compute local_timestamp = start_time + 7 * 3600 (Vietnam GMT+7)<br/>This informs Strava of correct timezone display"]
 ```
-
----
-
-## 🔍 Garmin FIT SDK & ANT+ Device Mapping & Time Standards
-
-Dựa trên tài liệu chính thống của **Garmin FIT SDK** và **ANT+ Alliance (thisisant.com)**, dưới đây là các phát hiện quan trọng phục vụ cho việc sinh tệp FIT chuẩn hóa trên hệ thống:
-
-### 1. Cơ chế ánh xạ Thiết bị (Device Mapping Rule)
-* **Manufacturer ID (Mã nhà sản xuất)**: Được cấp phát độc quyền bởi ANT+ Alliance cho các hãng thành viên. Việc gửi đúng ID này là điều kiện tiên quyết để Strava hiển thị đúng logo thương hiệu và Sync Badge của ứng dụng kết nối tương ứng (ví dụ: `Zepp App` cho Amazfit, `Huawei Health` cho Huawei).
-* **Product ID (Mã sản phẩm)**:
-  * **Đối với Garmin (Manufacturer = 1)**: FIT SDK định nghĩa một danh sách Enum cụ thể (gọi là `garmin_product`). Gửi đúng mã sản phẩm (ví dụ: `4376` cho fēnix 7x Pro, `4315` cho Forerunner 965) sẽ giúp Strava map trực tiếp thiết bị đó từ database.
-  * **Đối với các hãng phi-Garmin (Huawei, Coros, Amazfit, Suunto)**: ANT+ không quản lý Product ID của họ trong FIT SDK. 
-  * **Bí quyết map thiết bị phi-Garmin**: Khi tạo tệp FIT, nếu thuộc tính `product` được bỏ qua hoặc để `undefined` trong message `file_id` and `device_info`, Strava sẽ tự động kích hoạt cơ chế Fallback: đối chiếu dựa trên thuộc tính **`product_name`** trong message **`device_info`** để hiển thị đúng tên thiết bị trên giao diện. Điều này giúp sửa lỗi thiết bị phi-Garmin bị nhận diện sai hoặc bị ẩn tên.
-
-### 2. Các tham số định danh chuẩn theo tài liệu FIT SDK
-Danh sách Manufacturer ID & Product ID chuẩn hóa cho các dòng thiết bị phổ biến được tích hợp vào hệ thống:
-* **Garmin (Manufacturer: 1)**
-  * fēnix 7: `3906` | fēnix 7x Pro: `4376`
-  * fēnix 8: `4536` | fēnix 8 Solar: `4533`
-  * Forerunner 945: `3113` | Forerunner 935: `2691`
-  * Forerunner 955: `4024` | Forerunner 965: `4315`
-  * Forerunner 255: `3992` | Forerunner 255S: `3993`
-  * Forerunner 265: `4257` | Forerunner 165: `4432`
-  * Venu 2: `3703` | Venu 2S: `3704` | Venu 2 Plus: `3851` | Venu Sq 2: `4115`
-  * Instinct 2X Solar: `4394` | Epix Pro (Gen 2): `4313`
-  * Garmin Connect app: `undefined` (hiển thị nguồn đồng bộ chung của Garmin)
-* **COROS (Manufacturer: 294)**: Product `undefined` (nhận diện qua tên thiết bị)
-* **Amazfit / Zepp (Manufacturer: 339)**: Product `undefined` (nhận diện qua tên thiết bị)
-* **Huawei (Manufacturer: 348)**: Product `undefined` (nhận diện qua tên thiết bị)
-* **Suunto (Manufacturer: 23)**: Product `undefined` (nhận diện qua tên thiết bị)
-* **Polar (Manufacturer: 80)**: Product `undefined` (nhận diện qua tên thiết bị)
-* **Xiaomi / Redmi (Manufacturer: 0)**: Product `undefined` (không có ID chính thức, khuyến nghị GPX)
-* **Strava (Manufacturer: 265)**: Product `265` (hoạt động ghi nhận trực tiếp bằng ứng dụng Strava)
-
-### 3. Chuẩn hóa thời gian (Time Standard) trong tệp FIT
-* Mọi timestamp trong tệp FIT (`time_created`, `start_time`, `timestamp`) bắt buộc phải theo định dạng **giây kể từ kỷ nguyên FIT epoch** (00:00:00 UTC ngày 31/12/1989).
-* Để Strava hiểu đúng múi giờ hiển thị của hoạt động, message `activity` cần ghi nhận thuộc tính `local_timestamp`. Đây là thời gian local tính bằng giây từ FIT epoch (bằng thời gian UTC cộng thêm offset múi giờ). Với múi giờ Việt Nam (GMT+7), công thức `local_timestamp = start_time + 7 * 3600` đang được áp dụng chuẩn xác.
-
-### 4. Thuật toán điều tuyến thông minh đến POI (Smart POI-to-POI Routing)
-Để tạo cảm giác chạy bộ chân thực (ví dụ: chạy từ Nhà/Công ty đến một hồ chạy bộ, chạy xung quanh đó rồi quay về, hoặc chạy từ địa điểm danh lam này sang địa điểm danh lam khác), hệ thống áp dụng các quy tắc sau:
-* **Start Point Context (Ngữ cảnh xuất phát):** 
-  * Nếu điểm xuất phát là một POI nổi tiếng, hệ thống có **30% tỉ lệ** sẽ di chuyển sang các POI khác gần đó (trong vòng 1.5km) và **70% tỉ lệ** chạy một vòng lặp xung quanh chính POI ban đầu.
-  * Nếu điểm xuất phát không phải là POI (ví dụ: bắt đầu ở Home/Work hoặc điểm ngẫu nhiên), hệ thống sẽ **luôn luôn hướng lộ trình** về phía POI nổi tiếng gần nhất (trong vòng 1.5km).
-* **Quy tắc kiểm tra cự ly (Target Distance Constraints):**
-  * Để hướng tuyến đi tới một POI khác có khoảng cách $d$ mét, cự ly sinh ra của hoạt động phải đủ lớn để đi và về: $\text{targetDistM} \ge 2.5 \times d$. Nếu không thỏa mãn, hệ thống sẽ tự động chạy vòng lặp hình học ngẫu nhiên quanh điểm xuất phát để bảo toàn cự ly.
-  * **Custom Time Bypass:** Khi tính năng Custom Time được kích hoạt, hệ thống sẽ ưu tiên giữ lịch trình thời gian tùy chỉnh, có thể không bị ràng buộc quá nghiêm ngặt bởi Target Distance nếu có xung đột để tránh làm sai lệch lịch trình sinh (schedule time).
-* **Hình học lộ trình (Route Geometry) & Khứ hồi linh hoạt:**
-  * **Không bắt buộc quay về điểm xuất phát:** Hệ thống loại bỏ ràng buộc 100% quay về điểm bắt đầu để tăng tính tự nhiên.
-  * Lộ trình **POI to POI**: Có ~70% khả năng sẽ kết thúc tại POI gần nhất hoặc loanh quanh khu vực đó.
-  * Lộ trình **Random to POI**: Có ~85% khả năng đi quanh POI đích và dừng luôn tại POI đó thay vì quay về.
-  * Lộ trình xuất phát từ **Home/Work** hoặc không có POI đích: Điểm kết thúc có thể được thả ngẫu nhiên ở một vị trí bất kỳ quanh khu vực, không cần ép buộc chạy lại về đích.
-  * **Cự ly ngắn ($\le 5 \times d$):** Hệ thống sinh một tam giác lộ trình thông minh gồm: `start` $\rightarrow$ `secondPoi` $\rightarrow$ `detourPt` (điểm đổi hướng lệch vuông góc từ trung điểm đi-về, tính bằng công thức Pythagore) $\rightarrow$ `end`.
-  * **Cự ly dài ($> 5 \times d$):** Hệ thống sinh chuỗi đường chạy đi từ `start` $\rightarrow$ `secondPoi` $\rightarrow$ chuỗi 3 điểm vòng quanh `secondPoi` $\rightarrow$ `end` để kéo dài cự ly mà không bị đè lặp vết chạy.
-
-
