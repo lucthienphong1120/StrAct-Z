@@ -232,7 +232,7 @@ graph TD
         RandToPoiReturn -->|85% Stop| StopPoi
         RandToPoiReturn -->|15% Return| LoopBack
         
-        ReturnCheck -->|Default Loop (No POI)| DefaultLoopReturn
+        ReturnCheck -->|Default Loop - No POI| DefaultLoopReturn
         DefaultLoopReturn -->|50% P2P| StopRand
         DefaultLoopReturn -->|50% Return| LoopBack
     end
