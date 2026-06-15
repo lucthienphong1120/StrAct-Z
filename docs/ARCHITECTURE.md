@@ -110,39 +110,59 @@ This comprehensive flowchart details the entire execution flow from trigger to t
 ```mermaid
 graph TD
     %% 1. Trigger & Limits
-    Start(["⚡ Start Generation"]) --> Trigger{"Trigger Type?"}
-    Trigger -->|Manual| ReadUI["Read Request Parameters<br/>(Target distance, type, format, custom time toggle, etc.)"]
-    Trigger -->|Scheduler| ReadSettings["Fetch User Config from DB"]
+    Start(["⚡ Start Generation"]) --> Trigger
     
-    ReadSettings --> RandSchedules["Read count limits (min/max config)<br/>Randomize activity count for today<br/>Register schedule time slots (Schedule 1 / Schedule 2)"]
-    RandSchedules --> SyncCache["Fetch & Sync activities cache with Strava Cloud<br/>Soft-delete missing local 'uploaded' activities as 'removed'"]
-    
-    SyncCache --> CheckLimit{"Daily Activity Limit Reached?<br/>(Active Local DB + Cached Strava Cloud today)"}
-    CheckLimit -->|Yes| SaveFailedLimit["Create DB Activity with Status: FAILED<br/>(Exit scheduler loop)"]
-    CheckLimit -->|No| AcquireLock["Acquire Concurrency Lock<br/>(Placeholder: 'generating')"]
+    subgraph Triggers ["⚡ Trigger, Schedule & Limits Evaluation"]
+        Trigger{"Trigger Type?"}
+        ReadUI["Read Request Parameters<br/>(Target distance, type, format, custom time toggle, etc.)"]
+        ReadSettings["Fetch User Config from DB"]
+        
+        ReadSettings --> RandSchedules["Read count limits (min/max config)<br/>Randomize activity count for today<br/>Register schedule time slots (Schedule 1 / Schedule 2)"]
+        RandSchedules --> SyncCache["Fetch & Sync activities cache with Strava Cloud<br/>Soft-delete missing local 'uploaded' activities as 'removed'"]
+        
+        SyncCache --> CheckLimit{"Daily Activity Limit Reached?<br/>(Active Local DB + Cached Strava Cloud today)"}
+        CheckLimit -->|Yes| SaveFailedLimit["Create DB Activity with Status: FAILED<br/>(Exit scheduler loop)"]
+        CheckLimit -->|No| AcquireLock["Acquire Concurrency Lock<br/>(Placeholder: 'generating')"]
+    end
     
     AcquireLock --> TimingMode
-    ReadUI --> TimingMode{"Custom Time Enabled?"}
+    ReadUI --> TimingMode
     
     %% 2. Timing & Date
-    TimingMode -->|Yes| CustomTime["Use Exact Custom Date & Time<br/>Bypass Global Random Bounds"]
-    TimingMode -->|No| RandomTime["Select Random Time within Bounds<br/>Check Avoid Workhours (T2-T6)"]
+    subgraph Timing ["⏰ Time Selection & Avoid Workhours"]
+        TimingMode{"Custom Time Enabled?"}
+        CustomTime["Use Exact Custom Date & Time<br/>Bypass Global Random Bounds"]
+        RandomTime["Select Random Time within Bounds<br/>Check Avoid Workhours (T2-T6)"]
+        
+        TimingMode -->|Yes| CustomTime
+        TimingMode -->|No| RandomTime
+    end
     
     CustomTime --> DistanceMode
-    RandomTime --> DistanceMode{"Is Scheduler & Last Run of Day & Target Distance Enabled?"}
+    RandomTime --> DistanceMode
     
     %% 3. Distance & Overlap
-    DistanceMode -->|Yes| TargetDistance["Calculate Remaining Target Distance today<br/>Set Distance to Remaining -100m to min_distance and +100m to max_distance"]
-    DistanceMode -->|No| StdDistance["Select Random Distance & Pace within limits<br/>Apply Activity Type Multiplier (Walk x0.7, Run x1.0, Ride x1.5)"]
+    subgraph DistanceOverlap ["📏 Distance Selection & Overlap Protection"]
+        DistanceMode{"Is Scheduler & Last Run of Day & Target Distance Enabled?"}
+        TargetDistance["Calculate Remaining Target Distance today<br/>Set Distance to Remaining -100m to min_distance and +100m to max_distance"]
+        StdDistance["Select Random Distance & Pace within limits<br/>Apply Activity Type Multiplier (Walk x0.7, Run x1.0, Ride x1.5)"]
+        
+        CheckOverlap["Check Overlaps against active activities today<br/>Using active overlap buffers:<br/>- Safe Time (Fixed minutes buffer)<br/>- Rest Time (% of activity duration)<br/>(User can configure either, both, or none)"]
+        
+        OverlapConflict{"Conflict?<br/>(Falls inside [aStart - SafeTime - RestTime(a),<br/>aEnd + SafeTime + RestTime(a)] or new activity's rest overlaps)"}
+        SaveFailedOverlap["Set status to FAILED / Show UI Error"]
+        
+        DistanceMode -->|Yes| TargetDistance
+        DistanceMode -->|No| StdDistance
+        
+        TargetDistance --> CheckOverlap
+        StdDistance --> CheckOverlap
+        
+        CheckOverlap --> OverlapConflict
+    end
     
-    TargetDistance --> OverlapCheck{"Overlap Protection Enabled?"}
-    StdDistance --> OverlapCheck
-    
-    OverlapCheck -->|Yes| CheckOverlap["Check Overlaps against active activities in<br/>(Start-SafeTime-RestTime to End+SafeTime+RestTime)"]
-    CheckOverlap --> OverlapConflict{"Conflict?"}
-    OverlapConflict -->|Yes| SaveFailedOverlap["Set status to FAILED / Show UI Error"]
+    OverlapConflict -->|Yes| SaveFailedOverlap
     OverlapConflict -->|No| SelectDistrict
-    OverlapCheck -->|No| SelectDistrict
     
     %% 4. District & Coordinate Selection
     subgraph Selection ["🎯 District & Start Coordinate Selection"]
@@ -181,18 +201,30 @@ graph TD
     end
     
     %% 6. Return & Stopping Probabilities
-    RouteShape --> ReturnCheck{"Determine Return / P2P Mode"}
-    ReturnCheck -->|POI-to-POI| PoiToPoiReturn{"Roll Return Probability"}
-    PoiToPoiReturn -->|70% Stop P2P| StopPoi["Stop at second POI (outbound path only)"]
-    PoiToPoiReturn -->|30% Return| LoopBack["Loop back to starting POI"]
-    
-    ReturnCheck -->|Random-to-POI| RandToPoiReturn{"Roll Return Probability"}
-    RandToPoiReturn -->|85% Stop P2P| StopPoi
-    RandToPoiReturn -->|15% Return| LoopBack
-    
-    ReturnCheck -->|Home/Work or No POI| StdReturn{"Roll Return Probability"}
-    StdReturn -->|50% P2P| StopRand["Stop at random point (outbound only)"]
-    StdReturn -->|50% Return| LoopBack
+    subgraph ReturnProbabilities ["🔄 Return & Stopping Probability Logic"]
+        ReturnCheck{"Determine Return / P2P Mode"}
+        PoiToPoiReturn{"Roll Return Probability"}
+        StopPoi["Stop at second POI (outbound path only)"]
+        LoopBack["Loop back to starting POI"]
+        
+        RandToPoiReturn{"Roll Return Probability"}
+        StdReturn{"Roll Return Probability"}
+        StopRand["Stop at random point (outbound only)"]
+        
+        RouteShape --> ReturnCheck
+        
+        ReturnCheck -->|POI-to-POI| PoiToPoiReturn
+        PoiToPoiReturn -->|70% Stop P2P| StopPoi
+        PoiToPoiReturn -->|30% Return| LoopBack
+        
+        ReturnCheck -->|Random-to-POI| RandToPoiReturn
+        RandToPoiReturn -->|85% Stop P2P| StopPoi
+        RandToPoiReturn -->|15% Return| LoopBack
+        
+        ReturnCheck -->|Home/Work or No POI| StdReturn
+        StdReturn -->|50% P2P| StopRand
+        StdReturn -->|50% Return| LoopBack
+    end
     
     StopPoi --> RoadSnapping
     StopRand --> RoadSnapping

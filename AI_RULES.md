@@ -64,10 +64,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **VIP Accounts**: Allowed to enter any custom free-text Device Name (trimmed, max 100 characters).
 - **Basic Accounts**: UI restricts custom entries, and the backend validates that their chosen device name strictly matches one of the preset choices in `limits.device_name.choices`.
 
-### 6. Duplicate Protection (Safe Time)
+### 6. Duplicate Protection (Safe Time & Rest Time)
 - **Concept**: Prevents new activities from being generated too close to existing ones (already uploaded or in Strava Cloud).
-- **Calculation**: Blocked intervals = `[Start - SafeTime, End + SafeTime]`. Selected random time must fall outside these intervals.
-- **SafeTime**: Default 30 minutes (configurable via `overlap_protection_minutes`).
+- **Calculation**: Blocked intervals around each existing activity `a` = `[aStart - SafeTime - RestTime(a), aEnd + SafeTime + RestTime(a)]`. The selected random start time (and end time including new activity buffers) must fall outside these intervals.
+- **Buffers Configuration**: The user can configure either, both, or none (by setting to 0):
+  - **Safe Time** (`overlap_protection_minutes`): A fixed time buffer in minutes (default 30m).
+  - **Rest Time** (`rest_time_percent`): A dynamic buffer calculated as a percentage of the activity's duration (default 40% of duration). Specifically, it uses the existing/uploaded activity duration for `RestTime(a)` and the new proposed activity duration for the check before `aStart`.
 - **Manual vs Scheduler Draft Filtering**: For manual generation (API endpoints `/generate` or `/generate-and-upload`), the generator bypasses overlap checks with local draft activities that have not been uploaded yet (`upload_status === 'generated'`). This ensures users can regenerate local manual activities freely without conflict. However, for the Scheduler cron runner, these `generated` drafts **MUST** block to prevent overlaps across multiple auto-generated tasks generated in a single loop iteration.
 
 ### 7. Map Persistence (v1.51.5+)
