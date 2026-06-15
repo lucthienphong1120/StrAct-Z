@@ -110,14 +110,12 @@ This comprehensive flowchart details the entire execution flow from trigger to t
 ```mermaid
 graph TD
     %% 1. Trigger & Limits
-    Start(["⚡ Start Generation"]) --> Trigger
-    
     subgraph Triggers ["⚡ Trigger, Schedule & Limits Evaluation"]
-        Trigger{"Trigger Type?"}
+        Start(["⚡ Start Generation"]) --> Trigger{"Trigger Type?"}
         ReadUI["Read Request Parameters<br/>(Target distance, type, format, custom time toggle, etc.)"]
         ReadSettings["Fetch User Config from DB"]
         
-        ReadSettings --> RandSchedules["Read count limits (min/max config)<br/>Randomize activity count for today<br/>Register schedule time slots (Schedule 1 / Schedule 2)"]
+        ReadSettings --> RandSchedules["Randomize count from min/max config &<br/>register Schedule 1 / 2 time slots"]
         RandSchedules --> SyncCache["Fetch & Sync activities cache with Strava Cloud<br/>Soft-delete missing local 'uploaded' activities as 'removed'"]
         
         SyncCache --> CheckLimit{"Daily Activity Limit Reached?<br/>(Active Local DB + Cached Strava Cloud today)"}
@@ -150,7 +148,6 @@ graph TD
         CheckOverlap["Check Overlaps against active activities today<br/>Using active overlap buffers:<br/>- Safe Time (Fixed minutes buffer)<br/>- Rest Time (% of activity duration)<br/>(User can configure either, both, or none)"]
         
         OverlapConflict{"Conflict?<br/>(Falls inside [aStart - SafeTime - RestTime(a),<br/>aEnd + SafeTime + RestTime(a)] or new activity's rest overlaps)"}
-        SaveFailedOverlap["Set status to FAILED / Show UI Error"]
         
         DistanceMode -->|Yes| TargetDistance
         DistanceMode -->|No| StdDistance
@@ -161,7 +158,7 @@ graph TD
         CheckOverlap --> OverlapConflict
     end
     
-    OverlapConflict -->|Yes| SaveFailedOverlap
+    OverlapConflict -->|Yes| SaveFailedOverlap["Set status to FAILED / Show UI Error"]
     OverlapConflict -->|No| SelectDistrict
     
     %% 4. District & Coordinate Selection
