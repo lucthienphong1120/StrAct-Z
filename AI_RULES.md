@@ -126,7 +126,22 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - **Random-to-POI**: 85% chance to finish at the POI (P2P), 15% chance to return to start.
   - **Home/Work / No POI**: 50% chance to finish at a random coordinate (P2P), 50% chance to return to start.
 
+### 15. Manual Request Overrides & One-off Customizations (v2.4.3+)
+- **Concept**: Users can type or toggle values on the frontend dashboard inputs (e.g. custom distance, custom pace, custom date/time, custom activity type, custom format) and click **⚡ Generate** or **🚀 Generate & Upload** *without* clicking "Save Configuration".
+- **Execution Flow**: 
+  - The client-side controller (`getOverrideConfig()` in `config.js`) captures the current state of all UI inputs into a dynamic `overrideConfig` payload (`req.body`).
+  - This payload is sent to the backend endpoints `/api/generate` or `/api/generate-and-upload` as overrides.
+  - The server reads the DB configurations (`db.getAllConfig`) and merges the custom manual overrides to execute the one-off task via `buildGeneratorConfig(config, overrides)`.
+  - **Non-persistence**: These parameters are NOT saved to the `user_config` table and are discarded immediately after execution (refreshing the page loads the saved database settings).
+
 ## 🛠️ Developer Rules
+
+### v2.4.3 (2026-06-15)
+- **Feature: Manual Override Verification & Documentation**:
+  - Restructured trigger logic and layout flow charts in `docs/ARCHITECTURE.md` to cleanly illustrate user config loading, cache synchronizations, and daily limit evaluations.
+  - Resolved Mermaid syntax rendering parser warnings by stripping parentheses from flowchart transition links.
+  - Documented manual UI override mechanisms (direct client payload request bodies bypassing persistent database storage) in `README.md` and `AI_RULES.md`.
+  - Bumped version to `v2.4.3` across `package.json`, `public/index.html`, `public/sw.js`, and `AI_RULES.md`.
 
 ### v2.4.2 (2026-06-15)
 - **Documentation Overhaul, Code Logic Refactoring & Version Bump**:

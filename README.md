@@ -20,6 +20,18 @@ It simulates human heart rate variability, weather effects, red light stops, and
 - **🔒 Secure Architecture:** Built with Express, JWT HttpOnly cookies, bcryptjs, and rate-limiting to prevent unauthorized access. First-time setup is handled via an intuitive UI wizard.
 - **👤 Account Management:** Users can update their passwords directly from the dashboard.
 
+## 💡 Configuration & Manual Overrides (Lưu ý về Cấu hình & Tạo thủ công)
+
+StrAct Z hỗ trợ hai cơ chế cấu hình và chạy:
+
+1. **Cấu hình Tự động (Scheduled Runs)**:
+   - Các cài đặt trong các thẻ cấu hình (Time Configuration, Route Configuration, v.v.) chỉ được lưu cố định vào Database (cho tiến trình Scheduler chạy ngầm hàng ngày) khi người dùng bấm nút **Lưu cấu hình (Save Configuration)** tương ứng ở mỗi thẻ.
+2. **Tạo thủ công & Ghi đè Tạm thời (Manual Overrides)**:
+   - Khi bạn thay đổi các thông số trực tiếp trên giao diện UI (ví dụ: kéo thanh khoảng cách, chọn loại hoạt động, bật custom time...) rồi bấm nút **⚡ Generate** hoặc **🚀 Generate & Upload** *mà không bấm Lưu cấu hình*:
+     - Client sẽ tự động đọc các giá trị đang hiển thị trên giao diện và gửi lên làm tham số ghi đè tạm thời (Overrides) trong body của request.
+     - Server sẽ dùng các giá trị tạm thời này để sinh hoạt động tương ứng một lần duy nhất (One-off) mà không làm ảnh hưởng/lưu đè lên cấu hình lưu trong Database.
+     - Nếu bạn F5 (tải lại trang), các giá trị tạm thời này sẽ mất và giao diện sẽ khôi phục lại cấu hình gốc từ Database.
+
 ## 📚 Documentation
 
 For detailed information, please refer to our documentation guides:
