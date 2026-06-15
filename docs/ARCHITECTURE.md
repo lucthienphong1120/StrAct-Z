@@ -112,8 +112,8 @@ graph TD
     %% 1. Trigger & Limits
     subgraph Triggers ["⚡ Trigger, Schedule & Limits Evaluation"]
         Start(["⚡ Start Generation"]) --> Trigger{"Trigger Type?"}
-        ReadUI["Read Request Parameters<br/>(Target distance, type, format, custom time toggle, etc.)"]
-        ReadSettings["Fetch User Config from DB"]
+        Trigger -->|Manual| ReadUI["Read Request Parameters<br/>(Target distance, type, format, custom time toggle, etc.)"]
+        Trigger -->|Scheduler| ReadSettings["Fetch User Config from DB"]
         
         ReadSettings --> RandSchedules["Randomize count from min/max config &<br/>register Schedule 1 / 2 time slots"]
         RandSchedules --> SyncCache["Fetch & Sync activities cache with Strava Cloud<br/>Soft-delete missing local 'uploaded' activities as 'removed'"]
