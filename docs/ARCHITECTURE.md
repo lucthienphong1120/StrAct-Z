@@ -123,37 +123,40 @@ graph TD
         CheckLimit -->|No| AcquireLock["Acquire Concurrency Lock<br/>(Placeholder: 'generating')"]
     end
     
-    AcquireLock --> TimingMode
-    ReadUI --> TimingMode
+    AcquireLock --> DistanceMode
+    ReadUI --> DistanceMode
     
-    %% 2. Timing & Date
-    subgraph Timing ["⏰ Time Selection & Avoid Workhours"]
+    %% 2. Distance & Pace Selection
+    subgraph DistanceSelection ["📏 Distance & Pace Selection"]
+        DistanceMode{"Is Scheduler & Last Run of Day & Target Distance Enabled?"}
+        TargetDistance["Calculate Remaining Target Distance today<br/>Set Distance to Remaining -100m to min_distance and +100m to max_distance"]
+        StdDistance["Select Random Distance & Pace within limits<br/>Apply Activity Type Multipliers"]
+        CalcDuration["Calculate Estimated Duration = Distance * Pace"]
+        
+        DistanceMode -->|Yes| TargetDistance
+        DistanceMode -->|No| StdDistance
+        
+        TargetDistance --> CalcDuration
+        StdDistance --> CalcDuration
+    end
+    
+    CalcDuration --> TimingMode
+    
+    %% 3. Time Selection & Overlap Protection
+    subgraph TimeSelection ["⏰ Time Selection & Overlap Protection"]
         TimingMode{"Custom Time Enabled?"}
         CustomTime["Use Exact Custom Date & Time<br/>Bypass Global Random Bounds"]
         RandomTime["Select Random Time within Bounds<br/>Check Avoid Workhours (T2-T6)"]
-        
-        TimingMode -->|Yes| CustomTime
-        TimingMode -->|No| RandomTime
-    end
-    
-    CustomTime --> DistanceMode
-    RandomTime --> DistanceMode
-    
-    %% 3. Distance & Overlap
-    subgraph DistanceOverlap ["📏 Distance Selection & Overlap Protection"]
-        DistanceMode{"Is Scheduler & Last Run of Day & Target Distance Enabled?"}
-        TargetDistance["Calculate Remaining Target Distance today<br/>Set Distance to Remaining -100m to min_distance and +100m to max_distance"]
-        StdDistance["Select Random Distance & Pace within limits<br/>Apply Activity Type Multiplier (Walk x0.7, Run x1.0, Ride x1.5)"]
         
         CheckOverlap["Check Overlaps against active activities today<br/>Using active overlap buffers:<br/>- Safe Time (Fixed minutes buffer)<br/>- Rest Time (% of activity duration)<br/>(User can configure either, both, or none)"]
         
         OverlapConflict{"Conflict?<br/>(Falls inside [aStart - SafeTime - RestTime(a),<br/>aEnd + SafeTime + RestTime(a)] or new activity's rest overlaps)"}
         
-        DistanceMode -->|Yes| TargetDistance
-        DistanceMode -->|No| StdDistance
+        TimingMode -->|Yes| CustomTime
+        TimingMode -->|No| RandomTime
         
-        TargetDistance --> CheckOverlap
-        StdDistance --> CheckOverlap
+        CustomTime --> CheckOverlap
+        RandomTime --> CheckOverlap
         
         CheckOverlap --> OverlapConflict
     end
