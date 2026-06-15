@@ -167,7 +167,7 @@ graph TD
         POILoopCheck -->|30% Yes| TargetPOI["Target neighboring POI within 1.5km"]
         POILoopCheck -->|70% No| GeometricLoop["Generate Classic Loop/Out-Back Route around start"]
         
-        RoutingEngine -->|No (Home/Work/Random)| TargetPoiNear{"POI within 1.5km?"}
+        RoutingEngine -->|No| TargetPoiNear{"POI within 1.5km?"}
         TargetPoiNear -->|Yes| CheckPoiDist{"Is target distance >= 2.5 * d?"}
         CheckPoiDist -->|Yes| TargetPOI
         CheckPoiDist -->|No| GeometricLoop
@@ -226,22 +226,4 @@ graph TD
     ClearCustomTime --> End(["🎉 Output Activity Ready"])
     SaveFailedLimit --> End
     SaveFailedOverlap --> End
-```
-
----
-
-## 🔍 Garmin FIT SDK & ANT+ Device Mapping & Time Standards Flowchart
-
-This flowchart outlines how the Garmin FIT SDK and ANT+ Alliance specifications are utilized to map sport device profiles and synchronize timestamps securely.
-
-```mermaid
-graph TD
-    DeviceType{"Is Device Brand Garmin?"}
-    DeviceType -->|Yes| MapGarmin["Set Manufacturer ID = 1<br/>Set Product ID = standard Garmin Product ID Enum<br/>Strava resolves device profile from internal database"]
-    DeviceType -->|No| MapNonGarmin["Set Manufacturer ID (Amazfit: 339, Coros: 264, Huawei: 348, Suunto: 23, Polar: 80, Strava: 265)<br/>Set Product ID = undefined<br/>Set product_name in device_info message<br/>Strava falls back to match watch model using product_name"]
-    
-    MapGarmin --> SerialHash["Generate Device Serial Number:<br/>Alphanumeric serial string hashed to uint32 using DJB2 algorithm"]
-    MapNonGarmin --> SerialHash
-    
-    SerialHash --> TimeEncode["Standardize Timestamps in File:<br/>1. Record all timestamps in seconds from FIT Epoch (Dec 31, 1989)<br/>2. Compute local_timestamp = start_time + 7 * 3600 (Vietnam GMT+7)<br/>This informs Strava of correct timezone display"]
 ```
