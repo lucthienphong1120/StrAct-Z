@@ -113,7 +113,7 @@ graph TD
     %% 1. Trigger & Limits
     subgraph Triggers ["⚡ Trigger, Schedule & Limits Evaluation"]
         Start(["⚡ Start Generation"]) --> Trigger{"Trigger Type?"}
-        Trigger -->|Manual| ReadUI["Fetch User Config from DB<br/>& Read Request Overrides"]
+        Trigger -->|Manual| ReadUI["Fetch User Config from DB<br/>& Read UI Parameters (Overrides)"]
         Trigger -->|Scheduler| ReadSettings["Fetch User Config from DB"]
         
         ReadSettings --> RandSchedules["Randomize count from min/max config &<br/>register Schedule 1 / 2 time slots"]
