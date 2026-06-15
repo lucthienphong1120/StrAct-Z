@@ -96,7 +96,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - The last schedule is determined as Schedule 1 if schedule count is 1, or Schedule 2 if schedule count is 2.
   - Strictly not applicable to manual generate actions (either from the dashboard's manual trigger buttons or API endpoints), ensuring manual runs behave normally based on the user's explicit manual inputs.
   - Computes the remaining distance by subtracting the total accumulated activity distance today (both local DB activities and Strava Cloud activities) from the target distance. Uses a 10-minute time-tolerance window to robustly deduplicate identical activities that exist in both the local SQLite DB and Strava Cloud.
-  - If remaining distance is positive, it sets the generated activity's distance to the remaining distance +/- 50m to 200m random variation.
+  - If remaining distance is positive, it sets the generated activity's distance to the remaining distance -100m to min_distance and +100m to max_distance.
   - The generated target distance is capped between the activity type's minimum and maximum constraints, and strictly capped by the user-configured random max distance (without being affected by the activity's distance multiplier itself) to ensure valid route generation.
 
 ### 11. Garmin FIT SDK & ANT+ Device Mapping Rules
@@ -127,10 +127,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 ## 🛠️ Developer Rules
 
 ### v2.4.2 (2026-06-15)
-- **Documentation Overhaul & Version Bump**:
+- **Documentation Overhaul, Code Logic Refactoring & Version Bump**:
   - Unified activity generation, weighted district selection, and POI routing logic into a single flowchart in `docs/ARCHITECTURE.md`.
   - Converted Garmin FIT SDK, ANT+ device mapping, and time standards from text descriptions to flowchart diagrams in `docs/ARCHITECTURE.md`.
   - Moved detailed theoretical references (device mapping, time standardization, POI routing weights) from `docs/ARCHITECTURE.md` to `AI_RULES.md` under core calculations.
+  - Refactored scheduler remaining target distance logic to `Remaining -100m to min_distance and +100m to max_distance` using user-configured `min_distance_km` and `max_distance_km` bounds.
   - Bumped version to `v2.4.2` across `package.json`, `public/index.html`, `public/sw.js`, and `AI_RULES.md`.
 
 ### v2.2.4 (2026-06-12)

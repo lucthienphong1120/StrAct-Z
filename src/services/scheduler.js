@@ -232,12 +232,11 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         let remainingDistance = dailyTarget - accumulatedDistanceForToday;
 
         if (remainingDistance > 0) {
-          const sign = Math.random() < 0.5 ? -1 : 1;
-          const offsetKm = sign * (Math.random() * (0.20 - 0.05) + 0.05); // +/- (50m to 200m)
-          const rawOverride = Math.max(0.1, remainingDistance + offsetKm);
+          const offsetKm = (Math.random() * 0.20) - 0.10; // random offset from -100m to +100m (-0.1km to +0.1km)
+          const minDist = parseFloat(config.min_distance_km || '0.5');
           const maxDist = parseFloat(config.max_distance_km || '8.0');
-          targetDistanceKmOverride = Math.min(maxDist, rawOverride);
-          console.log(`[Scheduler] Target distance: ${dailyTarget}km, Done: ${accumulatedDistanceForToday.toFixed(2)}km, Remaining: ${remainingDistance.toFixed(2)}km → Override: ${targetDistanceKmOverride.toFixed(2)}km (max: ${maxDist}km)`);
+          targetDistanceKmOverride = Math.max(minDist, Math.min(maxDist, remainingDistance + offsetKm));
+          console.log(`[Scheduler] Target distance: ${dailyTarget}km, Done: ${accumulatedDistanceForToday.toFixed(2)}km, Remaining: ${remainingDistance.toFixed(2)}km → Override: ${targetDistanceKmOverride.toFixed(2)}km (bounds: ${minDist} - ${maxDist}km)`);
         } else {
           console.log(`[Scheduler] Daily target ${dailyTarget}km already met (${accumulatedDistanceForToday.toFixed(2)}km). Basic random.`);
         }

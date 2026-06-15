@@ -126,13 +126,13 @@ graph TD
     
     %% 2. Timing & Date
     TimingMode -->|Yes| CustomTime["Use Exact Custom Date & Time<br/>Bypass Global Random Bounds"]
-    TimingMode -->|No| RandomTime["Select Random Time within Bounds<br/>Check Avoid Workhours (Mon-Fri only)"]
+    TimingMode -->|No| RandomTime["Select Random Time within Bounds<br/>Check Avoid Workhours (T2-T6)"]
     
     CustomTime --> DistanceMode
     RandomTime --> DistanceMode{"Is Scheduler & Last Run of Day & Target Distance Enabled?"}
     
     %% 3. Distance & Overlap
-    DistanceMode -->|Yes| TargetDistance["Calculate Remaining Target Distance today<br/>Set Distance to Remaining +/- 50-200m variation<br/>Clamp to min_distance and max_distance"]
+    DistanceMode -->|Yes| TargetDistance["Calculate Remaining Target Distance today<br/>Set Distance to Remaining -100m to min_distance and +100m to max_distance"]
     DistanceMode -->|No| StdDistance["Select Random Distance & Pace within limits<br/>Apply Activity Type Multiplier (Walk x0.7, Run x1.0, Ride x1.5)"]
     
     TargetDistance --> OverlapCheck{"Overlap Protection Enabled?"}
