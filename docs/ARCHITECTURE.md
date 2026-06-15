@@ -170,10 +170,10 @@ graph TD
         SelectDistrict --> RollDistrict["Select District via Weighted Random Selection"]
         RollDistrict --> FavorCheck{"Start Near Favorite Place Enabled?"}
         
-        FavorCheck -->|Yes| RollFavorite{"Roll Start Point Type"}
-        RollFavorite -->|55% Home/Work| HomeWorkStart["Start near Home or Work coordinate<br/>(+ random 100m-300m offset)"]
-        RollFavorite -->|35% POI| POIStart["Start near Scenic POI coordinate<br/>(+ random 0m-200m offset)"]
-        RollFavorite -->|10% Random| PolygonStart["Start at true random point in district polygon<br/>(Rejection sampling with bbox fallback)"]
+        FavorCheck -->|Yes| RollFavorite{"Roll Start Point Type<br/>(Ratios scale by Home/Work presence)"}
+        RollFavorite -->|Home/Work (40% - 60%)| HomeWorkStart["Start near Home or Work coordinate<br/>(+ random 100m-300m offset)"]
+        RollFavorite -->|Scenic POI (35% - 75%)| POIStart["Start near Scenic POI coordinate<br/>(+ random 0m-200m offset)"]
+        RollFavorite -->|Random inside district (5% - 25%)| PolygonStart["Start at true random point in district polygon<br/>(Rejection sampling with bbox fallback)"]
         
         FavorCheck -->|No| PolygonStart
     end
@@ -184,16 +184,21 @@ graph TD
     
     %% 5. Waypoint & Routing Engine
     subgraph Routing ["🚲 Route Generation & POI Targeting"]
-        RoutingEngine{"Is Start Point a POI?"}
+        RoutingEngine{"Start Point Type?"}
         
-        RoutingEngine -->|Yes| POILoopCheck{"Roll POI-to-POI Routing?"}
-        POILoopCheck -->|30% Yes| TargetPOI["Target neighboring POI within 1.5km"]
-        POILoopCheck -->|70% No| GeometricLoop["Generate Classic Loop/Out-Back Route around start"]
+        RoutingEngine -->|POI| POIRoll{"Roll POI-to-POI (30% Yes)"}
+        RoutingEngine -->|Home/Work| HWRoll{"Roll POI Target (40% Yes)"}
+        RoutingEngine -->|Random| RandRoll{"Roll POI Target (85% Yes)"}
         
-        RoutingEngine -->|No| TargetPoiNear{"POI within 1.5km?"}
-        TargetPoiNear -->|Yes| CheckPoiDist{"Is target distance >= 2.5 * d?"}
-        CheckPoiDist -->|Yes| TargetPOI
-        CheckPoiDist -->|No| GeometricLoop
+        POIRoll -->|Yes| TargetPoiNear{"POI within 1.5km & fits distance limits?"}
+        HWRoll -->|Yes| TargetPoiNear
+        RandRoll -->|Yes| TargetPoiNear
+        
+        POIRoll -->|No| GeometricLoop["Generate Classic Loop/Out-Back Route around start"]
+        HWRoll -->|No| GeometricLoop
+        RandRoll -->|No| GeometricLoop
+        
+        TargetPoiNear -->|Yes| TargetPOI["Target neighboring POI"]
         TargetPoiNear -->|No| GeometricLoop
         
         TargetPOI --> RouteShape{"Generate Route Points"}
@@ -202,28 +207,33 @@ graph TD
     
     %% 6. Return & Stopping Probabilities
     subgraph ReturnProbabilities ["🔄 Return & Stopping Probability Logic"]
-        ReturnCheck{"Determine Return / P2P Mode"}
-        PoiToPoiReturn{"Roll Return Probability"}
-        StopPoi["Stop at second POI (outbound path only)"]
-        LoopBack["Loop back to starting POI"]
+        ReturnCheck{"Start & End Combination?"}
+        PoiToPoiReturn{"Roll Return (30% Return)"}
+        HWToPoiReturn{"Roll Return (60% Return)"}
+        RandToPoiReturn{"Roll Return (15% Return)"}
+        DefaultLoopReturn{"Roll Return (50% Return)"}
         
-        RandToPoiReturn{"Roll Return Probability"}
-        StdReturn{"Roll Return Probability"}
-        StopRand["Stop at random point (outbound only)"]
+        StopPoi["Stop/Detour at second POI (outbound path only)"]
+        LoopBack["Loop back to starting point"]
+        StopRand["Stop at random point (outbound path only)"]
         
         RouteShape --> ReturnCheck
         
         ReturnCheck -->|POI-to-POI| PoiToPoiReturn
-        PoiToPoiReturn -->|70% Stop P2P| StopPoi
+        PoiToPoiReturn -->|70% Stop| StopPoi
         PoiToPoiReturn -->|30% Return| LoopBack
         
+        ReturnCheck -->|Home/Work-to-POI| HWToPoiReturn
+        HWToPoiReturn -->|40% Stop/Detour| StopPoi
+        HWToPoiReturn -->|60% Return| LoopBack
+        
         ReturnCheck -->|Random-to-POI| RandToPoiReturn
-        RandToPoiReturn -->|85% Stop P2P| StopPoi
+        RandToPoiReturn -->|85% Stop| StopPoi
         RandToPoiReturn -->|15% Return| LoopBack
         
-        ReturnCheck -->|Home/Work or No POI| StdReturn
-        StdReturn -->|50% P2P| StopRand
-        StdReturn -->|50% Return| LoopBack
+        ReturnCheck -->|Default Loop (No POI)| DefaultLoopReturn
+        DefaultLoopReturn -->|50% P2P| StopRand
+        DefaultLoopReturn -->|50% Return| LoopBack
     end
     
     StopPoi --> RoadSnapping
@@ -239,8 +249,8 @@ graph TD
         OSRMCall --> Resampling["Resample coordinates to uniform 10m spacing"]
         FallbackLine --> Resampling
         
-        Resampling --> HRZone["Calculate Target Heart Rate Zone by Activity Type:<br/>- Walk: 50-60% MHR<br/>- Ride: 60-70% MHR<br/>- Run: 70-85% MHR"]
-        HRZone --> SimulationRuns["Simulate Pace & biometrics:<br/>- 30% Hot Weather (+3 to 8 BPM)<br/>- 1.5% Red Light Stop (rest 15-60s, HR drops)<br/>- Elevation grade clamped to max 8%"]
+        Resampling --> HRZone["Calculate Target Heart Rate Zone by Activity Type:<br/>- Walk: 45-65% MHR (VIP) / 50-60% MHR (Basic)<br/>- Ride: 55-75% MHR (VIP) / 60-70% MHR (Basic)<br/>- Run: 65-90% MHR (VIP) / 70-85% MHR (Basic)"]
+        HRZone --> SimulationRuns["Simulate Pace & biometrics:<br/>- 30% Hot Weather (+5 to 15 BPM)<br/>- 1.5% Red Light Stop (rest 15-60s, HR drops)<br/>- Elevation grade clamped to max 8%"]
     end
     
     SimulationRuns --> BuildFormat
