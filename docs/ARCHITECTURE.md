@@ -113,19 +113,27 @@ graph TD
     %% 1. Trigger & Limits
     subgraph Triggers ["⚡ Trigger, Schedule & Limits Evaluation"]
         Start(["⚡ Start Generation"]) --> Trigger{"Trigger Type?"}
-        Trigger -->|Manual| ReadUI["Read Request Parameters<br/>(Target distance, type, format, custom time toggle, etc.)"]
+        Trigger -->|Manual| ReadUI["Fetch User Config from DB<br/>& Read Request Overrides"]
         Trigger -->|Scheduler| ReadSettings["Fetch User Config from DB"]
         
         ReadSettings --> RandSchedules["Randomize count from min/max config &<br/>register Schedule 1 / 2 time slots"]
-        RandSchedules --> SyncCache["Fetch & Sync activities cache with Strava Cloud<br/>Soft-delete missing local 'uploaded' activities as 'removed'"]
+        
+        ReadUI --> SyncCache["Fetch & Sync activities cache with Strava Cloud<br/>Soft-delete missing local 'uploaded' activities as 'removed'"]
+        RandSchedules --> SyncCache
         
         SyncCache --> CheckLimit{"Daily Activity Limit Reached?<br/>(Active Local DB + Cached Strava Cloud today)"}
-        CheckLimit -->|Yes| SaveFailedLimit["Create DB Activity with Status: FAILED<br/>(Exit scheduler loop)"]
-        CheckLimit -->|No| AcquireLock["Acquire Concurrency Lock<br/>(Placeholder: 'generating')"]
+        
+        CheckLimit -->|Yes| LimitReachedBranch{"Trigger Type?"}
+        LimitReachedBranch -->|Manual| HandleManualLimit["If Upload requested: Show UI Error & Save FAILED Activity"]
+        LimitReachedBranch -->|Scheduler| SaveFailedLimit["Create DB Activity with Status: FAILED<br/>(Exit scheduler loop)"]
+        
+        CheckLimit -->|No| CheckLock{"Is Scheduler?"}
+        CheckLock -->|Yes| AcquireLock["Acquire Concurrency Lock<br/>(Placeholder: 'generating')"]
+        CheckLock -->|No| DistanceMode
     end
     
     AcquireLock --> DistanceMode
-    ReadUI --> DistanceMode
+    CheckLock -->|No| DistanceMode
     
     %% 2. Distance & Pace Selection
     subgraph DistanceSelection ["📏 Distance & Pace Selection"]
@@ -272,6 +280,7 @@ graph TD
     ClearCustomTime --> End(["🎉 Output Activity Ready"])
     SaveFailedLimit --> End
     SaveFailedOverlap --> End
+    HandleManualLimit --> End
 ```
 
 ---
