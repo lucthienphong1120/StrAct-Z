@@ -180,11 +180,11 @@ graph TD
     %% 6. Return & Stopping Probabilities
     RouteShape --> ReturnCheck{"Determine Return / P2P Mode"}
     ReturnCheck -->|POI-to-POI| PoiToPoiReturn{"Roll Return Probability"}
-    PoiToPoiReturn -->|70% Stop (P2P)| StopPoi["Stop at second POI (outbound path only)"]
+    PoiToPoiReturn -->|70% Stop P2P| StopPoi["Stop at second POI (outbound path only)"]
     PoiToPoiReturn -->|30% Return| LoopBack["Loop back to starting POI"]
     
     ReturnCheck -->|Random-to-POI| RandToPoiReturn{"Roll Return Probability"}
-    RandToPoiReturn -->|85% Stop (P2P)| StopPoi
+    RandToPoiReturn -->|85% Stop P2P| StopPoi
     RandToPoiReturn -->|15% Return| LoopBack
     
     ReturnCheck -->|Home/Work or No POI| StdReturn{"Roll Return Probability"}
