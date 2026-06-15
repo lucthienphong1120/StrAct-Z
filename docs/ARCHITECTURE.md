@@ -111,10 +111,13 @@ This comprehensive flowchart details the entire execution flow from trigger to t
 graph TD
     %% 1. Trigger & Limits
     Start(["⚡ Start Generation"]) --> Trigger{"Trigger Type?"}
-    Trigger -->|Manual| ReadUI["Read UI Overrides (Target Date, Custom Time, etc.)"]
-    Trigger -->|Scheduler| ReadSettings["Fetch User Config & Slots from DB"]
+    Trigger -->|Manual| ReadUI["Read Request Parameters<br/>(Target distance, type, format, custom time toggle, etc.)"]
+    Trigger -->|Scheduler| ReadSettings["Fetch User Config from DB"]
     
-    ReadSettings --> CheckLimit{"Daily Activity Limit Reached?<br/>(Local DB + Strava Cloud)"}
+    ReadSettings --> RandSchedules["Read count limits (min/max config)<br/>Randomize activity count for today<br/>Register schedule time slots (Schedule 1 / Schedule 2)"]
+    RandSchedules --> SyncCache["Fetch & Sync activities cache with Strava Cloud<br/>Soft-delete missing local 'uploaded' activities as 'removed'"]
+    
+    SyncCache --> CheckLimit{"Daily Activity Limit Reached?<br/>(Active Local DB + Cached Strava Cloud today)"}
     CheckLimit -->|Yes| SaveFailedLimit["Create DB Activity with Status: FAILED<br/>(Exit scheduler loop)"]
     CheckLimit -->|No| AcquireLock["Acquire Concurrency Lock<br/>(Placeholder: 'generating')"]
     
@@ -227,3 +230,43 @@ graph TD
     SaveFailedLimit --> End
     SaveFailedOverlap --> End
 ```
+
+---
+
+## 🔄 Centralized Cache & Cloud Sync Flowchart
+
+This diagram explains the synchronization layer between local SQLite DB and Strava Cloud. It maps out how the in-memory cache behaves, when updates are fetched, and how "ghost" activities (removed from Strava) are soft-deleted locally.
+
+```mermaid
+graph TD
+    %% Cache Check
+    StartSync(["⚡ Request User Activities / Daily Limit Check"]) --> CacheCheck{"Cache Valid?<br/>(Within 30-min TTL)"}
+    
+    %% Cache Hit
+    CacheCheck -->|Yes| ServingCached["Serve from In-Memory Cache<br/>(userRecentActivities Map)"]
+    
+    %% Cache Miss
+    CacheCheck -->|No| FetchStrava["Fetch latest 50 activities from Strava API"]
+    
+    %% Update Cache & DB Sync
+    FetchStrava --> UpdateCache["Update userRecentActivities Map<br/>Set TTL timestamp = Now"]
+    UpdateCache --> DBCheck["Get local activities from SQLite DB"]
+    
+    %% Sync Loop
+    DBCheck --> SyncLoop["Loop through local DB activities in time window"]
+    SyncLoop --> FindStatus{"Is activity marked as 'uploaded'<br/>but missing on Strava Cloud?"}
+    
+    FindStatus -->|Yes| MarkRemoved["Soft-delete: Update status to 'removed' in local DB<br/>(Deduplicates 'ghost' activities)"]
+    FindStatus -->|No| CheckDiff{"Found on Strava: Any fields differ?<br/>(Start time, Name, Distance, Duration)"}
+    
+    CheckDiff -->|Yes| UpdateLocal["Update local DB activity fields to match Strava Cloud"]
+    CheckDiff -->|No| ContinueLoop["No action needed"]
+    
+    MarkRemoved --> ServingCacheCombined["Combine cached Cloud list with active local DB drafts"]
+    UpdateLocal --> ServingCacheCombined
+    ContinueLoop --> ServingCacheCombined
+    
+    ServingCached --> ServingCacheCombined
+    ServingCacheCombined --> EndSync(["Return Cached & Synced Activity List"])
+```
+
