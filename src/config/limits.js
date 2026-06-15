@@ -319,9 +319,9 @@ const LIMITS = {
     desc_extra: 'Tác dụng: Xác định giới hạn vùng nhịp tim dựa trên MHR theo từng loại hoạt động.',
     example: 'Ví dụ: một người 30 tuổi có MHR khoảng 190 bpm, khi đi bộ sẽ có nhịp tim từ 95-114 bpm (vùng Khởi động).',
     basic: {
-      Walk: { min: 0.50, max: 0.60 },
-      Ride: { min: 0.60, max: 0.70 },
-      Run: { min: 0.70, max: 0.85 }
+      Walk: { min: 0.45, max: 0.65 },
+      Ride: { min: 0.55, max: 0.75 },
+      Run: { min: 0.65, max: 0.90 }
     },
     vip: {
       Walk: { min: 0.45, max: 0.65 },

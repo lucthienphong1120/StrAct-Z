@@ -63,6 +63,7 @@ erDiagram
         string username
         string password_hash
         string role
+        string created_at
     }
     USERS {
         int id PK
@@ -171,9 +172,9 @@ graph TD
         RollDistrict --> FavorCheck{"Start Near Favorite Place Enabled?"}
         
         FavorCheck -->|Yes| RollFavorite{"Roll Start Point Type<br/>(Ratios scale by Home/Work presence)"}
-        RollFavorite -->|Home/Work (40% - 60%)| HomeWorkStart["Start near Home or Work coordinate<br/>(+ random 100m-300m offset)"]
-        RollFavorite -->|Scenic POI (35% - 75%)| POIStart["Start near Scenic POI coordinate<br/>(+ random 0m-200m offset)"]
-        RollFavorite -->|Random inside district (5% - 25%)| PolygonStart["Start at true random point in district polygon<br/>(Rejection sampling with bbox fallback)"]
+        RollFavorite -->|Home-Work 40% to 60%| HomeWorkStart["Start near Home or Work coordinate<br/>(+ random 100m-300m offset)"]
+        RollFavorite -->|Scenic POI 35% to 75%| POIStart["Start near Scenic POI coordinate<br/>(+ random 0m-200m offset)"]
+        RollFavorite -->|Random 5% to 25%| PolygonStart["Start at true random point in district polygon<br/>(Rejection sampling with bbox fallback)"]
         
         FavorCheck -->|No| PolygonStart
     end
@@ -249,7 +250,7 @@ graph TD
         OSRMCall --> Resampling["Resample coordinates to uniform 10m spacing"]
         FallbackLine --> Resampling
         
-        Resampling --> HRZone["Calculate Target Heart Rate Zone by Activity Type:<br/>- Walk: 45-65% MHR (VIP) / 50-60% MHR (Basic)<br/>- Ride: 55-75% MHR (VIP) / 60-70% MHR (Basic)<br/>- Run: 65-90% MHR (VIP) / 70-85% MHR (Basic)"]
+        Resampling --> HRZone["Calculate Target Heart Rate Zone by Activity Type:<br/>- Walk: 45-65% MHR<br/>- Ride: 55-75% MHR<br/>- Run: 65-90% MHR"]
         HRZone --> SimulationRuns["Simulate Pace & biometrics:<br/>- 30% Hot Weather (+5 to 15 BPM)<br/>- 1.5% Red Light Stop (rest 15-60s, HR drops)<br/>- Elevation grade clamped to max 8%"]
     end
     
