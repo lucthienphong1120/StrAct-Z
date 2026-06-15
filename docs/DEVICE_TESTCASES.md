@@ -32,16 +32,12 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Coros Vertix 2S** | 294 | ? | GPX OK |
 | **COROS** | 294 | ? | GPX OK |
 | **Suunto Vertical** | 23 | ? | GPX OK |
-| **Suunto Race** | 23 | ? | Không nhận thiết bị - bỏ |
-| **Suunto Ocean** | 23 | ? | Không nhận thiết bị - bỏ |
 | **Suunto 9 Peak** | 23 | ? | GPX OK |
 | **Suunto 9 Peak Pro** | 23 | ? | GPX OK |
 | **Amazfit Bip 6** | 339 | ? | GPX OK |
-| **Amazfit Cheetah** | 339 | ? | Nhận là Amazfit - bỏ |
 | **Amazfit T-Rex 3** | 339 | ? | GPX OK |
 | **Amazfit GTR 4** | 339 | ? | GPX OK |
 | **Amazfit Balance 2** | 339 | ? | GPX OK |
-| **Amazfit Active 2** | 339 | ? | Nhận là Amazfit Active - bỏ |
 | **Amazfit Active 3 Premium** | 339 | ? | GPX OK |
 | **Huawei Watch GT 6 Pro** | 348 | ? | GPX OK |
 | **Huawei Watch GT 6** | 348 | ? | GPX OK |
@@ -60,13 +56,7 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Samsung Health** | 258 | ? | GPX OK |
 | **Polar Vantage V3** | 80 | ? | GPX OK |
 | **Polar Grit X2 Pro** | 80 | ? | GPX OK |
-| **Polar Pacer** | 80 | ? | Nhận là Polar - bỏ |
 | **Polar Pacer Pro** | 80 | ? | GPX OK |
 | **Polar Ignite 3** | 80 | ? | GPX OK |
-| **Xiaomi Watch S5** | 0 | ? | Không nhận thiết bị - bỏ |
-| **Xiaomi Watch 2** | 0 | ? | Không nhận thiết bị - bỏ |
-| **Xiaomi Smart Band 10** | 0 | ? | Không nhận thiết bị - bỏ |
-| **Redmi Watch 6** | 0 | ? | Không nhận thiết bị - bỏ |
-| **Redmi Watch 5 Active** | 0 | ? | Không nhận thiết bị - bỏ |
 | **Strava App** | 265 | 265 | GPX OK |
 

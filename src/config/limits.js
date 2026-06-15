@@ -223,16 +223,12 @@ const LIMITS = {
       'COROS',
       // ── Suunto (GPX - source: device name) ──
       'Suunto Vertical',
-      'Suunto Race',
-      'Suunto Ocean',
       'Suunto 9 Peak Pro',
       // ── Amazfit (GPX - source: device name) ──
       'Amazfit Bip 6',
-      'Amazfit Cheetah',
       'Amazfit T-Rex 3',
       'Amazfit GTR 4',
       'Amazfit Balance 2',
-      'Amazfit Active 2',
       'Amazfit Active 3 Premium',
       // ── Huawei (GPX - source: Huawei Health, desc: device name) ──
       'Huawei Watch GT 6 Pro',
@@ -252,15 +248,9 @@ const LIMITS = {
       // ── Polar (GPX - source: device name) ──
       'Polar Vantage V3',
       'Polar Grit X2 Pro',
-      'Polar Pacer',
       'Polar Pacer Pro',
       'Polar Ignite 3',
       // ── Xiaomi / Redmi (GPX - source: device name) ──
-      'Xiaomi Watch S5',
-      'Xiaomi Watch 2',
-      'Xiaomi Smart Band 10',
-      'Redmi Watch 6',
-      'Redmi Watch 5 Active',
       // ── App Sources ──
       'Strava App',
       'Samsung Health',
