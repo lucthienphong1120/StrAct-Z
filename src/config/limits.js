@@ -264,7 +264,7 @@ const LIMITS = {
     type: 'float',
     default: 0.5,
     min: { basic: 0.5, vip: 0.2 },
-    max: { basic: 2.0, vip: 15.0 },
+    max: { basic: 5.0, vip: 10.0 },
     unit: 'km'
   },
   max_distance_km: {
@@ -272,7 +272,7 @@ const LIMITS = {
     type: 'float',
     default: 8.0,
     min: 2.0,
-    max: { basic: 10.0, vip: 15.0 },
+    max: { basic: 10.0, vip: 20.0 },
     unit: 'km'
   },
   dist_multipliers: {
