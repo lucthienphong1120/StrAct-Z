@@ -59,6 +59,8 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Variables**: Luôn khai báo rõ ràng các biến cục bộ (ví dụ: `let stravaActivities = []`) trong hàm thực thi scheduler để tránh rò rỉ dữ liệu qua biến toàn cục giữa các lần chạy.
 - **Target Date**: Tránh dùng giá trị đặc biệt phụ thuộc UI (như `'Hôm nay'`). Luôn lưu và xử lý `target_date` theo chuẩn `YYYY-MM-DD`. Nếu không có giá trị (null/undefined), fallback về `new Date().toLocaleDateString('sv-SE')` ngay tại thời điểm sử dụng để đảm bảo chính xác khi chuyển ngày (cross-midnight).
 - **Custom Time**: Cờ `custom_time_enabled` bị disable sau lần thực thi đầu tiên thành công. Đảm bảo config snapshot trong bộ nhớ được cập nhật để tránh cache stale.
+- **Daily Upload Limit**: Hoạt động có trạng thái `'removed'` (đã bị xóa trên Strava và soft-delete cục bộ) sẽ không bị tính vào tổng số lượng hoạt động trong ngày khi kiểm tra giới hạn upload (`totalActivitiesToday`). Điều này tránh việc người dùng test thủ công, xóa hoạt động trên Strava làm kẹt lịch chạy tự động tiếp theo.
+
 
 ### 5. Custom Device Names (v1.56.0)
 - **VIP Accounts**: Allowed to enter any custom free-text Device Name (trimmed, max 100 characters).
@@ -100,6 +102,8 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - Computes the remaining distance by subtracting the total accumulated activity distance today (both local DB activities and Strava Cloud activities) from the target distance. Uses a 10-minute time-tolerance window to robustly deduplicate identical activities that exist in both the local SQLite DB and Strava Cloud.
   - If remaining distance is positive, it sets the generated activity's distance to the remaining distance -100m to min_distance and +100m to max_distance.
   - The generated target distance is capped between the activity type's minimum and maximum constraints, and strictly capped by the user-configured random max distance (without being affected by the activity's distance multiplier itself) to ensure valid route generation.
+  - **Exact Distance Support (`min = max`)**: Hệ thống hỗ trợ cấu hình khoảng cách tối thiểu bằng khoảng cách tối đa (`min_distance_km = max_distance_km`) để tạo lộ trình với cự ly chính xác tuyệt đối. Cơ chế sinh số ngẫu nhiên (`randomInRange`) sẽ trả về chính xác khoảng cách này.
+  - **VIP Limits Upgrade**: Đối với tài khoản VIP, giá trị tối đa cho phép của `min_distance_km` được nâng lên `15.0km` (ngang bằng với giới hạn tối đa `max_distance_km` của VIP) để hỗ trợ thiết lập cự ly chạy chính xác cố định (ví dụ: chạy chính xác `10km` hàng ngày). Ràng buộc chéo `min_distance_km <= max_distance_km` được kiểm tra trên cả backend (`validation.js`) và frontend (`config.js`).
 
 ### 11. Garmin FIT SDK & ANT+ Device Mapping Rules
 - **Manufacturer ID**: Allocated by ANT+ Alliance to member companies. Sending the correct ID is required for Strava to display the correct brand sync logo/badge (e.g., `Zepp App` for Amazfit, `Huawei Health` for Huawei).
@@ -135,6 +139,23 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - **Non-persistence**: These parameters are NOT saved to the `user_config` table and are discarded immediately after execution (refreshing the page loads the saved database settings).
 
 ## 🛠️ Developer Rules
+
+### v2.4.6 (2026-06-16)
+- **Bug Fix & Distance Boundary Enhancements**:
+  - Fixed an issue where the background scheduler skipped runs due to daily upload limit checks counting `'removed'` (soft-deleted) activities.
+  - Raised the maximum limit of `"min_distance_km"` for VIP accounts from `5.0km` to `15.0km` in `limits.js` to support larger distance settings.
+  - Added cross-field validation for `min_distance_km <= max_distance_km` on the backend (`validation.js`) and relaxed frontend validation (`config.js`) to support exact distance configurations (`min = max`).
+  - Bumped version to `v2.4.6` across `package.json`, `public/index.html`, `public/sw.js`, and `AI_RULES.md`.
+
+### v2.4.5 (2026-06-15)
+- **Fix: Device Labels Alignment**:
+  - Updated device labels to strictly match testcase requirements.
+  - Bumped version to `v2.4.5`.
+
+### v2.4.4 (2026-06-15)
+- **Chore: Device Presets Maintenance**:
+  - Removed unsupported devices from selection options.
+  - Bumped version to `v2.4.4`.
 
 ### v2.4.3 (2026-06-15)
 - **Feature: Manual Override Verification & Documentation**:

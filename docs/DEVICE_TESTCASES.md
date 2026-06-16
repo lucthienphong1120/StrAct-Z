@@ -28,6 +28,7 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Garmin epix Pro (Gen 2) 47mm** | 1 | 4313 | Fit OK |
 | **Garmin Connect** | 1 | ? | GPX OK |
 | **Coros Pace 3** | 294 | ? | GPX OK |
+| **Coros Pace Pro** | 294 | ? | GPX OK |
 | **Coros Apex 2 Pro** | 294 | ? | GPX OK |
 | **Coros Vertix 2S** | 294 | ? | GPX OK |
 | **COROS** | 294 | ? | GPX OK |

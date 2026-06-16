@@ -161,6 +161,15 @@ function validateConfig(updates, role = 'basic') {
     }
   }
 
+  // Cross-field validation for min_distance_km and max_distance_km
+  const minDistVal = updates.min_distance_km !== undefined ? updates.min_distance_km : sanitized.min_distance_km;
+  const maxDistVal = updates.max_distance_km !== undefined ? updates.max_distance_km : sanitized.max_distance_km;
+  if (minDistVal !== undefined && maxDistVal !== undefined) {
+    if (parseFloat(minDistVal) > parseFloat(maxDistVal)) {
+      return { success: false, error: 'Khoảng cách tối thiểu không được lớn hơn khoảng cách tối đa.' };
+    }
+  }
+
   return { success: true, error: null, sanitized };
 }
 

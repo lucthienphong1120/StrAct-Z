@@ -159,7 +159,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     let totalActivitiesToday = 0;
     const seenTimesDailyCheck = [];
     for (const act of existingActivities) {
-      if (act.upload_status === 'failed' || act.upload_status === 'deleted' || act.upload_status === 'generating') continue;
+      if (act.upload_status === 'failed' || act.upload_status === 'deleted' || act.upload_status === 'generating' || act.upload_status === 'removed') continue;
       const startTime = act.start_date || act.route_start_time;
       if (!startTime) continue;
       const startMs = new Date(startTime).getTime();

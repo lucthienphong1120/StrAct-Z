@@ -218,6 +218,7 @@ const LIMITS = {
       'Garmin Connect',
       // ── COROS (GPX - source: COROS, desc: device name) ──
       'Coros Pace 3',
+      'Coros Pace Pro',
       'Coros Apex 2 Pro',
       'Coros Vertix 2S',
       'COROS',
@@ -263,7 +264,7 @@ const LIMITS = {
     type: 'float',
     default: 0.5,
     min: { basic: 0.5, vip: 0.2 },
-    max: { basic: 2.0, vip: 5.0 },
+    max: { basic: 2.0, vip: 15.0 },
     unit: 'km'
   },
   max_distance_km: {

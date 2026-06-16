@@ -253,4 +253,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] update docs/ARCHITECTURE.md: phần 🚀 Activity Generation Flowchart lỗi cú pháp mermaid (v2.4.2)
 + [x] update docs/ARCHITECTURE.md: tổng hợp chung vào 1 flowchart về tiến trình lựa chọn, thứ tự, tỉ lệ, các option khi gen hoạt động: 🚀 Activity Generation Flowchart, 🏡 Weighted District Selection & Boost Logic, Thuật toán điều tuyến thông minh đến POI (Smart POI-to-POI Routing) -> vào thành 1 cái chung thôi (v2.4.2)
 + [x] Xác minh và điều chỉnh tiến trình trigger tự động và thủ công của flowchart hoạt động, giải quyết cảnh báo Mermaid, cập nhật trường `created_at` trong ER diagram, và tài liệu hóa chi tiết cơ chế ghi đè tạm thời (Manual Overrides) tại README.md và AI_RULES.md (v2.4.3)
-+ [ ] cấu hình max, max distance lớn/nhỏ hơn hoặc bằng, min=max để random chính xác, nâng giới hạn vip lên min 10km
++ [x] cấu hình max, max distance lớn/nhỏ hơn hoặc bằng, min=max để random chính xác, nâng giới hạn vip lên min 10km

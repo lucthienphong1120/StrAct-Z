@@ -473,11 +473,11 @@ function validateInputs(config, isRealTime = false) {
   // Cross-field validation (Distance)
   const minDistEl = document.getElementById('cfgMinDist');
   const maxDistEl = document.getElementById('cfgMaxDist');
-  if (parseFloat(config.min_distance_km) >= parseFloat(config.max_distance_km)) {
+  if (parseFloat(config.min_distance_km) > parseFloat(config.max_distance_km)) {
     if (minDistEl) minDistEl.classList.add('invalid');
     if (maxDistEl) maxDistEl.classList.add('invalid');
     if (!isRealTime) {
-      showToast('Min Distance phải nhỏ hơn Max Distance', 'error');
+      showToast('Min Distance phải nhỏ hơn hoặc bằng Max Distance', 'error');
       return false;
     }
     isValid = false;
