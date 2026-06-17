@@ -34,9 +34,9 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **COROS** | 294 | ? | GPX OK |
 | **Suunto Vertical** | 23 | ? | GPX OK |
 | **Suunto Vertical 2** | 23 | ? | Chưa test |
-| **Suunto Race S Titanium** | 23 | ? | GPX OK |
-| **Suunto Race 2 Titanium** | 23 | ? | GPX OK |
-| **Suunto Run** | 23 | ? | GPX OK |
+| **Suunto Race S Titanium** | 23 | ? | Chưa test |
+| **Suunto Race 2 Titanium** | 23 | ? | Chưa test |
+| **Suunto Run** | 23 | ? | Chưa test |
 | **Suunto 9 Peak** | 23 | ? | GPX OK |
 | **Suunto 9 Peak Pro** | 23 | ? | GPX OK |
 | **Amazfit Bip 6** | 339 | ? | GPX OK |
