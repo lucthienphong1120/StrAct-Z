@@ -47,6 +47,8 @@ const DEFAULT_CONFIG = {
   schedule_time: systemLimits.schedule_time.default,
   schedule_count: String(systemLimits.schedule_count.default),
   schedule_time_2: systemLimits.schedule_time_2.default,
+  schedule_time_3: systemLimits.schedule_time_3.default,
+  limit_schedule_time_window: String(systemLimits.limit_schedule_time_window.default),
   schedule_count_min: String(systemLimits.schedule_count_min.default),
   schedule_count_max: String(systemLimits.schedule_count_max.default),
   target_distance_enabled: String(systemLimits.target_distance_enabled.default),
@@ -287,6 +289,18 @@ async function getDb() {
         console.log("[Migration] Updated default min_distance_km from 1.0 to 0.5");
       } catch (e) {
         console.error('[Migration] Failed to update min_distance_km value:', e.message);
+      }
+
+      // Seed missing default configs for all existing accounts
+      try {
+        const accounts = await db.all('SELECT id FROM accounts');
+        for (const account of accounts) {
+          await db.run("INSERT OR IGNORE INTO user_config (account_id, key, value) VALUES (?, 'schedule_time_3', ?)", [account.id, systemLimits.schedule_time_3.default]);
+          await db.run("INSERT OR IGNORE INTO user_config (account_id, key, value) VALUES (?, 'limit_schedule_time_window', ?)", [account.id, String(systemLimits.limit_schedule_time_window.default)]);
+        }
+        console.log("[Migration] Seeded schedule_time_3 and limit_schedule_time_window defaults");
+      } catch (e) {
+        console.error('[Migration] Failed to seed new defaults:', e.message);
       }
 
 

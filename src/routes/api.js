@@ -641,6 +641,8 @@ router.post('/scheduler', async (req, res) => {
     if (updates.time !== undefined) configToValidate.schedule_time = updates.time;
     if (updates.scheduleCount !== undefined) configToValidate.schedule_count = updates.scheduleCount;
     if (updates.time2 !== undefined) configToValidate.schedule_time_2 = updates.time2;
+    if (updates.time3 !== undefined) configToValidate.schedule_time_3 = updates.time3;
+    if (updates.limitScheduleTimeWindow !== undefined) configToValidate.limit_schedule_time_window = updates.limitScheduleTimeWindow;
     if (updates.countMin !== undefined) configToValidate.schedule_count_min = updates.countMin;
     if (updates.countMax !== undefined) configToValidate.schedule_count_max = updates.countMax;
     if (updates.targetDistanceEnabled !== undefined) configToValidate.target_distance_enabled = updates.targetDistanceEnabled;
@@ -662,7 +664,9 @@ router.post('/scheduler', async (req, res) => {
       s.schedule_count_min !== undefined ? parseInt(s.schedule_count_min) : undefined,
       s.schedule_count_max !== undefined ? parseInt(s.schedule_count_max) : undefined,
       s.target_distance_enabled !== undefined ? s.target_distance_enabled === 'true' : undefined,
-      s.target_distance_km !== undefined ? parseFloat(s.target_distance_km) : undefined
+      s.target_distance_km !== undefined ? parseFloat(s.target_distance_km) : undefined,
+      s.schedule_time_3,
+      s.limit_schedule_time_window !== undefined ? s.limit_schedule_time_window === 'true' : undefined
     );
 
     res.json(await scheduler.getStatus(req.user.id));

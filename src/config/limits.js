@@ -379,13 +379,19 @@ const LIMITS = {
     type: 'int',
     default: 1,
     min: 1,
-    max: { basic: 1, vip: 2 }
+    max: { basic: 2, vip: 3 }
   },
   schedule_time_2: {
     label: 'Mốc thời gian 2 (24h).',
     desc_extra: 'Thời gian hệ thống tự chạy hàng ngày 2. Định dạng 24:00',
     type: 'time',
     default: '14:00'
+  },
+  schedule_time_3: {
+    label: 'Mốc thời gian 3 (24h).',
+    desc_extra: 'Thời gian hệ thống tự chạy hàng ngày 3. Định dạng 24:00',
+    type: 'time',
+    default: '06:00'
   },
   schedule_count_min: {
     label: 'Số lượng hoạt động tối thiểu tạo tự động mỗi ngày.',
@@ -399,7 +405,13 @@ const LIMITS = {
     type: 'int',
     default: 1,
     min: 1,
-    max: 2
+    max: { basic: 2, vip: 3 }
+  },
+  limit_schedule_time_window: {
+    label: 'Giới hạn khung giờ liên quan cho Schedule.',
+    desc_extra: 'Tác dụng: Hoạt động tự động sẽ được tạo trong khoảng tối đa 8 tiếng trước mốc thời gian chạy (tương thích với Global bounds, Workhours, Safe/Rest time) tránh dồn lịch.',
+    type: 'bool',
+    default: true
   },
   target_distance_enabled: {
     label: 'Đặt mục tiêu cự ly hàng ngày.',

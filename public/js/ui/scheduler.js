@@ -6,17 +6,31 @@ async function loadSchedule() {
     document.getElementById('scheduleEnabled').checked = status.enabled;
     document.getElementById('scheduleTime').value = status.scheduleTime || (sysL?.schedule_time?.default) || '22:00';
     
+    const limitToggle = document.getElementById('cfgLimitScheduleTimeWindow');
+    if (limitToggle) {
+      limitToggle.checked = status.limitScheduleTimeWindow !== false;
+    }
+
     const slot2 = document.getElementById('scheduleSlot2');
-    const btnAdd = document.getElementById('btnAddSchedule');
+    const slot3 = document.getElementById('scheduleSlot3');
     const isVip = window.userRole === 'vip';
-    if (status.scheduleCount >= 2 && isVip) {
+    
+    document.getElementById('scheduleTime2').value = status.scheduleTime2 || (sysL?.schedule_time_2?.default) || '14:00';
+    if (document.getElementById('scheduleTime3')) {
+      document.getElementById('scheduleTime3').value = status.scheduleTime3 || (sysL?.schedule_time_3?.default) || '06:00';
+    }
+
+    if (status.scheduleCount === 2) {
       slot2.style.display = 'block';
-      btnAdd.style.display = 'none';
-      document.getElementById('scheduleTime2').value = status.scheduleTime2 || (sysL?.schedule_time_2?.default) || '14:00';
+      slot3.style.display = 'none';
+    } else if (status.scheduleCount >= 3 && isVip) {
+      slot2.style.display = 'block';
+      slot3.style.display = 'block';
     } else {
       slot2.style.display = 'none';
-      btnAdd.style.display = 'block';
+      slot3.style.display = 'none';
     }
+    updateAddButtonVisibility();
 
     document.getElementById('scheduleCountMin').value = (status.scheduleCountMin !== undefined && status.scheduleCountMin !== null) ? status.scheduleCountMin : ((sysL?.schedule_count_min?.default) !== undefined ? sysL.schedule_count_min.default : 1);
     document.getElementById('scheduleCountMax').value = (status.scheduleCountMax !== undefined && status.scheduleCountMax !== null) ? status.scheduleCountMax : ((sysL?.schedule_count_max?.default) !== undefined ? sysL.schedule_count_max.default : 2);
@@ -59,6 +73,12 @@ function updateScheduleDisplay(status) {
       let times = [];
       times.push(status.scheduleTime);
       if (status.scheduleCount >= 2) times.push(status.scheduleTime2);
+      if (status.scheduleCount >= 3) times.push(status.scheduleTime3);
+      const parseHM = (t) => {
+        const [h, m] = (t || '00:00').split(':').map(Number);
+        return h * 60 + m;
+      };
+      times.sort((a, b) => parseHM(a) - parseHM(b));
       timeDisplay.textContent = times.join(' & ');
       timeDisplay.style.background = '';
       timeDisplay.style.webkitTextFillColor = '';
@@ -94,13 +114,21 @@ async function updateSchedule(showToastOnSuccess = true) {
   const enabled = document.getElementById('scheduleEnabled').checked;
   const time = document.getElementById('scheduleTime').value;
   
-  let scheduleCount = document.getElementById('scheduleSlot2').style.display === 'block' ? 2 : 1;
-  if (window.userRole !== 'vip' && scheduleCount > 1) {
-    scheduleCount = 1;
-    document.getElementById('scheduleSlot2').style.display = 'none';
-    document.getElementById('btnAddSchedule').style.display = 'block';
+  const slot2Visible = document.getElementById('scheduleSlot2').style.display === 'block';
+  const slot3Visible = document.getElementById('scheduleSlot3').style.display === 'block';
+  
+  let scheduleCount = 1;
+  if (slot2Visible) scheduleCount = 2;
+  if (slot3Visible && window.userRole === 'vip') scheduleCount = 3;
+
+  const maxAllowed = window.userRole === 'vip' ? 3 : 2;
+  if (scheduleCount > maxAllowed) {
+    scheduleCount = maxAllowed;
   }
+  
   const time2 = document.getElementById('scheduleTime2').value;
+  const time3 = document.getElementById('scheduleTime3')?.value || '06:00';
+  const limitScheduleTimeWindow = document.getElementById('cfgLimitScheduleTimeWindow')?.checked !== false;
 
   const countMin = parseInt(document.getElementById('scheduleCountMin').value);
   const countMax = parseInt(document.getElementById('scheduleCountMax').value);
@@ -125,7 +153,21 @@ async function updateSchedule(showToastOnSuccess = true) {
   const targetDistanceEnabled = document.getElementById('cfgTargetDistanceEnabled')?.checked || false;
   const targetDistanceKm = parseFloat(document.getElementById('cfgTargetDistanceKm')?.value || '10.0');
   
-  const status = await api('/scheduler', { method: 'POST', body: { enabled, time, scheduleCount, time2, countMin, countMax, targetDistanceEnabled, targetDistanceKm } });
+  const status = await api('/scheduler', { 
+    method: 'POST', 
+    body: { 
+      enabled, 
+      time, 
+      scheduleCount, 
+      time2, 
+      time3, 
+      limitScheduleTimeWindow, 
+      countMin, 
+      countMax, 
+      targetDistanceEnabled, 
+      targetDistanceKm 
+    } 
+  });
   if (status.error) {
     showToast(status.error, 'error');
     return;
@@ -140,6 +182,12 @@ async function updateSchedule(showToastOnSuccess = true) {
     } else {
       let times = [time];
       if (scheduleCount >= 2) times.push(time2);
+      if (scheduleCount >= 3) times.push(time3);
+      const parseHM = (t) => {
+        const [h, m] = (t || '00:00').split(':').map(Number);
+        return h * 60 + m;
+      };
+      times.sort((a, b) => parseHM(a) - parseHM(b));
       msg = `Auto schedule saved and enabled at ${times.join(' & ')} (${countMin}-${countMax} acts)`;
     }
     showToast(msg, 'success');
@@ -167,7 +215,14 @@ function refreshScheduleDisplayFromUI() {
   
   const scheduleTime = document.getElementById('scheduleTime')?.value || '22:00';
   const scheduleTime2 = document.getElementById('scheduleTime2')?.value || '14:00';
-  const scheduleCount = document.getElementById('scheduleSlot2')?.style.display === 'block' ? 2 : 1;
+  const scheduleTime3 = document.getElementById('scheduleTime3')?.value || '06:00';
+  
+  const slot2Visible = document.getElementById('scheduleSlot2')?.style.display === 'block';
+  const slot3Visible = document.getElementById('scheduleSlot3')?.style.display === 'block';
+  
+  let scheduleCount = 1;
+  if (slot2Visible) scheduleCount = 2;
+  if (slot3Visible && window.userRole === 'vip') scheduleCount = 3;
   
   const dateText = targetDate;
   const customStartMs = new Date(`${dateText}T${targetTimeCustom}:00.000+07:00`).getTime();
@@ -182,6 +237,7 @@ function refreshScheduleDisplayFromUI() {
     customTimePending,
     scheduleTime,
     scheduleTime2,
+    scheduleTime3,
     scheduleCount
   };
   
@@ -190,8 +246,8 @@ function refreshScheduleDisplayFromUI() {
 
 function attachScheduleRealTimeListeners() {
   const inputs = [
-    'scheduleTime', 'scheduleTime2', 'scheduleCountMin', 'scheduleCountMax',
-    'cfgTargetDistanceEnabled', 'cfgTargetDistanceKm'
+    'scheduleTime', 'scheduleTime2', 'scheduleTime3', 'scheduleCountMin', 'scheduleCountMax',
+    'cfgTargetDistanceEnabled', 'cfgTargetDistanceKm', 'cfgLimitScheduleTimeWindow'
   ];
   inputs.forEach(id => {
     const el = document.getElementById(id);
@@ -204,6 +260,60 @@ function attachScheduleRealTimeListeners() {
   });
 }
 
+function addScheduleSlot() {
+  const slot2 = document.getElementById('scheduleSlot2');
+  const slot3 = document.getElementById('scheduleSlot3');
+  
+  if (slot2.style.display === 'none') {
+    slot2.style.display = 'block';
+  } else if (slot3.style.display === 'none') {
+    if (window.userRole !== 'vip') {
+      showToast('Khung giờ thứ 3 chỉ dành cho tài khoản VIP.', 'warning');
+      return;
+    }
+    slot3.style.display = 'block';
+  }
+  
+  updateAddButtonVisibility();
+  refreshScheduleDisplayFromUI();
+}
+
+function removeScheduleSlot(slotNum) {
+  if (slotNum === 2) {
+    const slot2 = document.getElementById('scheduleSlot2');
+    const slot3 = document.getElementById('scheduleSlot3');
+    if (slot3.style.display === 'block') {
+      // Shift slot 3 value to slot 2 and hide slot 3
+      document.getElementById('scheduleTime2').value = document.getElementById('scheduleTime3').value;
+      slot3.style.display = 'none';
+    } else {
+      slot2.style.display = 'none';
+    }
+  } else if (slotNum === 3) {
+    document.getElementById('scheduleSlot3').style.display = 'none';
+  }
+  
+  updateAddButtonVisibility();
+  refreshScheduleDisplayFromUI();
+}
+
+function updateAddButtonVisibility() {
+  const slot2Visible = document.getElementById('scheduleSlot2').style.display === 'block';
+  const slot3Visible = document.getElementById('scheduleSlot3').style.display === 'block';
+  const btnAdd = document.getElementById('btnAddSchedule');
+  const maxAllowed = window.userRole === 'vip' ? 3 : 2;
+  
+  let currentCount = 1;
+  if (slot2Visible) currentCount++;
+  if (slot3Visible) currentCount++;
+  
+  if (currentCount < maxAllowed) {
+    btnAdd.style.display = 'block';
+  } else {
+    btnAdd.style.display = 'none';
+  }
+}
+
 // Export to window
 window.loadSchedule = loadSchedule;
 window.updateScheduleDisplay = updateScheduleDisplay;
@@ -212,3 +322,6 @@ window.updateSchedule = updateSchedule;
 window.updateSchedulerBanner = updateSchedulerBanner;
 window.refreshScheduleDisplayFromUI = refreshScheduleDisplayFromUI;
 window.attachScheduleRealTimeListeners = attachScheduleRealTimeListeners;
+window.addScheduleSlot = addScheduleSlot;
+window.removeScheduleSlot = removeScheduleSlot;
+window.updateAddButtonVisibility = updateAddButtonVisibility;

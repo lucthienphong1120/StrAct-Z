@@ -29,7 +29,7 @@
         <div class="logo-icon">🏃</div>
         <span class="logo-text">StrAct Z</span>
         <small
-          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v2.4.6</small>
+          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v2.5.0</small>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -593,14 +593,26 @@
                   <div class="form-group" style="margin-bottom:0;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
                       <label class="form-label" style="margin-bottom:0;">Mốc thời gian 2 (24h)</label>
-                      <button type="button" class="btn btn-sm" onclick="removeSchedule2()"
+                      <button type="button" class="btn btn-sm" onclick="removeScheduleSlot(2)"
                         style="padding:2px 10px; font-size:0.75rem; color:var(--accent-red); background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); border-radius:6px; cursor:pointer;">Remove</button>
                     </div>
-                    <input type="time" id="scheduleTime2" class="form-input" value="14:00" lang="en-GB">
+                    <input type="time" id="scheduleTime2" class="form-input" value="14:00" lang="vi-VN">
                   </div>
                 </div>
 
-                <button id="btnAddSchedule" class="btn btn-sm btn-secondary" onclick="addSchedule2()"
+                <div id="scheduleSlot3"
+                  style="display:none; padding:16px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px dashed var(--border); margin-top:4px;">
+                  <div class="form-group" style="margin-bottom:0;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                      <label class="form-label" style="margin-bottom:0;">Mốc thời gian 3 (24h) <span class="tooltip-icon" id="tipScheduleTime3" data-tooltip="?">?</span></label>
+                      <button type="button" class="btn btn-sm" onclick="removeScheduleSlot(3)"
+                        style="padding:2px 10px; font-size:0.75rem; color:var(--accent-red); background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); border-radius:6px; cursor:pointer;">Remove</button>
+                    </div>
+                    <input type="time" id="scheduleTime3" class="form-input" value="06:00" lang="vi-VN">
+                  </div>
+                </div>
+
+                <button id="btnAddSchedule" class="btn btn-sm btn-secondary" onclick="addScheduleSlot()"
                   style="align-self:flex-start; font-size:0.75rem; padding:6px 14px; margin-top:4px; display:flex; align-items:center; gap:6px;">
                   <span style="font-size:1.1em">+</span> Add Time Slot
                 </button>
@@ -615,6 +627,19 @@
                   <label class="form-label">Max Count <span class="tooltip-icon tooltip-left" id="scheduleMax"
                       data-tooltip="?">?</span></label>
                   <input type="number" id="scheduleCountMax" class="form-input" value="2" min="1" max="3">
+                </div>
+              </div>
+
+              <!-- Limit Schedule Time Window -->
+              <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
+                <div class="form-group" style="margin-bottom:0;">
+                  <label class="toggle">
+                    <input type="checkbox" id="cfgLimitScheduleTimeWindow" checked>
+                    <div class="toggle-track"></div>
+                    <span class="toggle-label" style="font-size: 0.85rem;">Giới hạn khung giờ Schedule (8h) <span
+                        class="tooltip-icon tooltip-right" id="tipLimitScheduleTimeWindow"
+                        data-tooltip="?">?</span></span>
+                  </label>
                 </div>
               </div>
 
@@ -909,23 +934,7 @@
   <script src="/js/ui/scheduler.js"></script>
   <script src="/js/ui/dashboard.js"></script>
   <script src="/js/app.js"></script>
-  <script>
-    function addSchedule2() {
-      if (window.userRole !== 'vip') {
-        showToast('Khung giờ thứ 2 chỉ dành cho tài khoản VIP.', 'warning');
-        return;
-      }
-      document.getElementById('scheduleSlot2').style.display = 'block';
-      document.getElementById('btnAddSchedule').style.display = 'none';
-      if (window.refreshScheduleDisplayFromUI) window.refreshScheduleDisplayFromUI();
-    }
 
-    function removeSchedule2() {
-      document.getElementById('scheduleSlot2').style.display = 'none';
-      document.getElementById('btnAddSchedule').style.display = 'block';
-      if (window.refreshScheduleDisplayFromUI) window.refreshScheduleDisplayFromUI();
-    }
-  </script>
 
   <!-- Update Popup -->
   <div id="updatePopup" class="update-popup" style="display: none;">

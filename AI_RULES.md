@@ -140,6 +140,14 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.5.0 (2026-06-19)
+- **Feature: Expand Schedule Count Limits and Add 8-Hour Window Toggle**:
+  - Expanded schedule counts to support up to 2 slots for basic accounts and 3 slots for VIP accounts.
+  - Added the `limit_schedule_time_window` toggle option, restricting auto-generated activity times to an 8-hour relative window before the schedule's trigger time.
+  - Dynamically sort slot names chronologically (`Schedule 1`, `Schedule 2`, `Schedule 3`) based on earliest to latest active time.
+  - Enforced 24h format for schedule inputs with `lang="vi-VN"`.
+  - Bumped version to `v2.5.0` across `package.json`, `public/index.html`, `public/sw.js`, and `AI_RULES.md`.
+
 ### v2.4.6 (2026-06-16)
 - **Bug Fix & Distance Boundary Enhancements**:
   - Fixed an issue where the background scheduler skipped runs due to daily upload limit checks counting `'removed'` (soft-deleted) activities.

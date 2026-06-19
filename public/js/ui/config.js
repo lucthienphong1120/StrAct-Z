@@ -136,6 +136,8 @@ function updateDynamicTooltips() {
     sim_weather: 'tipSimWeather',
     sim_redlights: 'tipSimRedLights',
     schedule_time: 'tipScheduleTime',
+    schedule_time_3: 'tipScheduleTime3',
+    limit_schedule_time_window: 'tipLimitScheduleTimeWindow',
     schedule_count_min: 'tipScheduleMin',
     schedule_count_max: 'tipScheduleMax',
     target_distance_enabled: 'tipTargetDistanceEnabled',

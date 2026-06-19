@@ -46,6 +46,30 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
     const role = await db.getAccountRole(accountId);
     const limits = systemLimits[role] || systemLimits.basic;
 
+    // Resolve the scheduled slot time by sorting all active slots chronologically
+    const count = parseInt(config.schedule_count) || 1;
+    const parseHM = (t) => {
+      const [h, m] = (t || '00:00').split(':').map(Number);
+      return h * 60 + m;
+    };
+
+    const activeSlots = [];
+    activeSlots.push({ time: config.schedule_time || systemLimits.schedule_time.default });
+    if (count >= 2) {
+      activeSlots.push({ time: config.schedule_time_2 || systemLimits.schedule_time_2.default });
+    }
+    if (count >= 3) {
+      activeSlots.push({ time: config.schedule_time_3 || systemLimits.schedule_time_3.default });
+    }
+
+    activeSlots.sort((a, b) => parseHM(a.time) - parseHM(b.time));
+    activeSlots.forEach((slot, index) => {
+      slot.label = `Schedule ${index + 1}`;
+    });
+
+    const currentSlot = activeSlots.find(s => s.label === slotName);
+    const slotTime = currentSlot ? currentSlot.time : null;
+
     // Check if custom time is enabled and if we should wait
     if (config.custom_time_enabled === 'true') {
       const targetTimeStr = config.target_time_custom || '00:00';
@@ -189,7 +213,7 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
       // Counts Strava Cloud activities + StrAct-Z uploaded activities only (not generated/failed).
       // Only applies when target not yet met; if already exceeded, uses basic random.
       let targetDistanceKmOverride = null;
-      const isLastSchedule = (parseInt(config.schedule_count) === 1) || (slotName === 'Schedule 2');
+      const isLastSchedule = slotName === `Schedule ${parseInt(config.schedule_count) || 1}`;
       const targetDistanceEnabled = config.target_distance_enabled === 'true' && config.custom_time_enabled !== 'true';
 
       if (targetDistanceEnabled && isLastSchedule && (i === taskCount - 1)) {
@@ -251,6 +275,35 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
         } else {
           overrides.target_date = targetDate;
           overrides.custom_time_enabled = 'false';
+
+          // Apply 8-hour relative time bounds toggle logic
+          if (config.limit_schedule_time_window !== 'false' && slotTime) {
+            const slotMins = parseHM(slotTime);
+            const startMins = Math.max(0, slotMins - 8 * 60);
+
+            const toHHMM = (mins) => {
+              const hh = String(Math.floor(mins / 60)).padStart(2, '0');
+              const mm = String(mins % 60).padStart(2, '0');
+              return `${hh}:${mm}`;
+            };
+
+            const windowMinTime = toHHMM(startMins);
+            const windowMaxTime = slotTime;
+
+            const globalMinMins = parseHM(config.min_time || '04:30');
+            const globalMaxMins = parseHM(config.max_time || '22:30');
+
+            const intersectMinMins = Math.max(startMins, globalMinMins);
+            const intersectMaxMins = Math.min(slotMins, globalMaxMins);
+
+            if (intersectMinMins <= intersectMaxMins) {
+              overrides.min_time = toHHMM(intersectMinMins);
+              overrides.max_time = toHHMM(intersectMaxMins);
+              console.log(`[Scheduler] Limiting schedule time window for ${slotName} (${slotTime}): [${overrides.min_time} - ${overrides.max_time}] (8h window intersected with global bounds [${config.min_time} - ${config.max_time}])`);
+            } else {
+              console.log(`[Scheduler] 8h window for ${slotName} (${slotTime}) has no overlap with global bounds [${config.min_time} - ${config.max_time}]. Falling back to global bounds.`);
+            }
+          }
         }
 
         const genConfig = buildGeneratorConfig(config, overrides, lastUploaded, role);
@@ -440,50 +493,42 @@ async function startScheduler(accountId) {
   // Stop existing tasks
   stopScheduler(accountId);
 
+  const count = parseInt(config.schedule_count) || 1;
   const parseHM = (t) => {
     const [h, m] = (t || '00:00').split(':').map(Number);
     return h * 60 + m;
   };
 
-  const time1 = config.schedule_time || systemLimits.schedule_time.default;
-  const time2 = config.schedule_time_2 || systemLimits.schedule_time_2.default;
-  const min1 = parseHM(time1);
-  const min2 = parseHM(time2);
+  const activeSlots = [];
+  activeSlots.push({ time: config.schedule_time || systemLimits.schedule_time.default });
+  if (count >= 2) {
+    activeSlots.push({ time: config.schedule_time_2 || systemLimits.schedule_time_2.default });
+  }
+  if (count >= 3) {
+    activeSlots.push({ time: config.schedule_time_3 || systemLimits.schedule_time_3.default });
+  }
 
-  // Always label the earlier slot as "Schedule 1" and the later as "Schedule 2"
-  const slotA = min1 <= min2 ? { time: time1, label: 'Schedule 1' } : { time: time1, label: 'Schedule 2' };
-  const slotB = min1 <= min2 ? { time: time2, label: 'Schedule 2' } : { time: time2, label: 'Schedule 1' };
+  activeSlots.sort((a, b) => parseHM(a.time) - parseHM(b.time));
+  activeSlots.forEach((slot, index) => {
+    slot.label = `Schedule ${index + 1}`;
+  });
 
   if (config.schedule_enabled !== 'true') {
     console.log(`[Scheduler] Auto schedule is disabled for account ${accountId}.`);
     return false;
   }
 
-  // First schedule
-  const [hA, mA] = slotA.time.split(':');
-  const cronA = `${parseInt(mA)} ${parseInt(hA)} * * *`;
-  
-  if (cron.validate(cronA)) {
-    const taskA = cron.schedule(cronA, async () => {
-      console.log(`[Scheduler] ${slotA.label} triggered for account ${accountId}`);
-      await executeJob(accountId, slotA.label);
-    }, { timezone: 'Asia/Ho_Chi_Minh' });
-    tasks.push(taskA);
-    console.log(`[Scheduler] ${slotA.label} started for ${accountId}: ${cronA}`);
-  }
-
-  // Second schedule
-  if (parseInt(config.schedule_count) >= 2) {
-    const [hB, mB] = slotB.time.split(':');
-    const cronB = `${parseInt(mB)} ${parseInt(hB)} * * *`;
+  for (const slot of activeSlots) {
+    const [h, m] = slot.time.split(':');
+    const cronStr = `${parseInt(m)} ${parseInt(h)} * * *`;
     
-    if (cron.validate(cronB)) {
-      const taskB = cron.schedule(cronB, async () => {
-        console.log(`[Scheduler] ${slotB.label} triggered for account ${accountId}`);
-        await executeJob(accountId, slotB.label);
+    if (cron.validate(cronStr)) {
+      const task = cron.schedule(cronStr, async () => {
+        console.log(`[Scheduler] ${slot.label} triggered for account ${accountId}`);
+        await executeJob(accountId, slot.label);
       }, { timezone: 'Asia/Ho_Chi_Minh' });
-      tasks.push(taskB);
-      console.log(`[Scheduler] ${slotB.label} started for ${accountId}: ${cronB}`);
+      tasks.push(task);
+      console.log(`[Scheduler] ${slot.label} started for ${accountId}: ${cronStr}`);
     }
   }
 
@@ -538,6 +583,8 @@ async function getStatus(accountId) {
     scheduleTime: config.schedule_time || systemLimits.schedule_time.default,
     scheduleCount: count,
     scheduleTime2: config.schedule_time_2 || systemLimits.schedule_time_2.default,
+    scheduleTime3: config.schedule_time_3 || systemLimits.schedule_time_3.default,
+    limitScheduleTimeWindow: config.limit_schedule_time_window !== 'false',
     scheduleCountMin: parseInt(config.schedule_count_min) >= 0 ? parseInt(config.schedule_count_min) : systemLimits.schedule_count_min.default,
     scheduleCountMax: parseInt(config.schedule_count_max) >= 0 ? parseInt(config.schedule_count_max) : systemLimits.schedule_count_max.default,
     targetDistanceEnabled: config.target_distance_enabled === 'true',
@@ -554,12 +601,16 @@ async function getStatus(accountId) {
 /**
  * Update schedule for a specific account
  */
-async function updateSchedule(accountId, enabled1, time1, scheduleCount, time2, countMin, countMax, targetDistanceEnabled, targetDistanceKm) {
+async function updateSchedule(accountId, enabled1, time1, scheduleCount, time2, countMin, countMax, targetDistanceEnabled, targetDistanceKm, time3, limitScheduleTimeWindow) {
   if (enabled1 !== undefined) await db.setConfig(accountId, 'schedule_enabled', enabled1 ? 'true' : 'false');
   if (time1) await db.setConfig(accountId, 'schedule_time', time1);
   
   if (scheduleCount !== undefined) await db.setConfig(accountId, 'schedule_count', scheduleCount);
   if (time2) await db.setConfig(accountId, 'schedule_time_2', time2);
+  if (time3) await db.setConfig(accountId, 'schedule_time_3', time3);
+  if (limitScheduleTimeWindow !== undefined) {
+    await db.setConfig(accountId, 'limit_schedule_time_window', limitScheduleTimeWindow ? 'true' : 'false');
+  }
   
   if (countMin !== undefined && countMin !== null) await db.setConfig(accountId, 'schedule_count_min', countMin);
   if (countMax !== undefined && countMax !== null) await db.setConfig(accountId, 'schedule_count_max', countMax);
