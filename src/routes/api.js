@@ -441,7 +441,7 @@ router.post('/generate-and-upload', async (req, res) => {
 
     const finalStatus = await stravaApi.waitForUpload(req.user.id, uploadResult.id);
 
-    const visibility = config.strava_visibility || 'everyone';
+    const visibility = ov.strava_visibility || config.strava_visibility || 'everyone';
     if (visibility !== 'everyone' && finalStatus.activity_id) {
       try {
         console.log(`[Strava API] Updating activity ${finalStatus.activity_id} visibility to private/muted (hide_from_home: true)`);
@@ -539,7 +539,7 @@ router.post('/upload/:id', async (req, res) => {
 
     const finalStatus = await stravaApi.waitForUpload(req.user.id, uploadResult.id);
 
-    const visibility = config.strava_visibility || 'everyone';
+    const visibility = ov.strava_visibility || config.strava_visibility || 'everyone';
     if (visibility !== 'everyone' && finalStatus.activity_id) {
       try {
         console.log(`[Strava API] Updating activity ${finalStatus.activity_id} visibility to private/muted (hide_from_home: true)`);

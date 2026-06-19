@@ -186,7 +186,7 @@ const LIMITS = {
   },
   strava_visibility: {
     label: 'Chế độ hiển thị trên Strava.',
-    desc_extra: 'Tác dụng: Ngoại trừ chế độ công khai, các hoạt động sẽ không hiện lên trên Feed của bạn bè để phục vụ Dev/Test.',
+    desc_extra: 'Tác dụng: Thiết lập trạng thái hiển thị hoạt động. Lưu ý: Điều này không thay đổi trực tiếp quyền riêng tư mà sẽ Mute hoạt động (ẩn khỏi bảng tin trang chủ).',
     type: 'array',
     default: 'everyone',
     default_label: 'Mọi người',
