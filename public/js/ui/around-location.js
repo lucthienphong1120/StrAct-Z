@@ -57,7 +57,7 @@ function initAroundMap() {
   window.aroundMap = aroundMap;
 
   const mapType = document.getElementById('cfgMapType')?.value || (window.sysLimits?.map_type?.default) || 'carto_dark';
-  const layerCfg = window.MAP_LAYERS_CONFIG[mapType] || window.MAP_LAYERS_CONFIG.osm_standard;
+  const layerCfg = window.MAP_LAYERS_CONFIG[mapType] || window.MAP_LAYERS_CONFIG.carto_dark;
   window.aroundMapTileLayer = L.tileLayer(layerCfg.url, layerCfg.options).addTo(aroundMap);
 
   // Custom orange icon for selected custom location

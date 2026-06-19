@@ -65,7 +65,7 @@ const LIMITS = {
     desc_extra: 'Lựa chọn nguồn bản đồ hiển thị trên cả Bản đồ chính và Bản đồ xem trước.',
     type: 'string',
     default: 'carto_dark',
-    choices: ['carto_dark', 'osm_standard', 'carto_voyager', 'carto_positron', 'esri_satellite']
+    choices: ['carto_dark', 'carto_positron', 'carto_voyager', 'osm_standard', 'esri_satellite']
   },
   home_count: {
     label: 'Giới hạn điểm Nhà.',
