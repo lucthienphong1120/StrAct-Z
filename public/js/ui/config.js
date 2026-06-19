@@ -631,6 +631,13 @@ function getOverrideConfig() {
   const targetTimeCustomVal = document.getElementById('cfgCustomMinTime').value || '00:00';
   const isCustomTimeFixed = isCustomTime && targetTimeCustomVal !== '00:00';
   
+  const activityAreasData = window.activityCircles ? window.activityCircles.map(c => ({
+    lat: c.marker.getLatLng().lat,
+    lng: c.marker.getLatLng().lng,
+    radius: c.circle.getRadius(),
+    type: c.type
+  })) : [];
+
   const overrideConfig = {
     target_date: isCustomTime ? document.getElementById('cfgTargetDate').value : undefined,
     min_time: isCustomTimeFixed ? targetTimeCustomVal : document.getElementById('cfgRandMinTime').value,
@@ -660,6 +667,7 @@ function getOverrideConfig() {
     sim_redlights: document.getElementById('cfgSimRedLights')?.checked ? 'true' : 'false',
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value,
     rest_time_percent: document.getElementById('cfgRestTime')?.value,
+    activity_areas: JSON.stringify(activityAreasData),
     daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || '2',
   };
 

@@ -398,7 +398,7 @@ router.post('/generate-and-upload', async (req, res) => {
     const generator = format === 'gpx' ? gpxGenerator : fitGenerator;
     const activity = await generator.generateActivity(genConfig);
 
-    const dailyMaxActivity = parseInt(config.daily_max_activity || '2');
+    const dailyMaxActivity = parseInt(ov.daily_max_activity || config.daily_max_activity || '2');
     if (stravaActivities.length >= dailyMaxActivity) {
       const errMsg = `Giới hạn upload hàng ngày là ${dailyMaxActivity}. Vui lòng xóa bớt trên Strava để tiếp tục.`;
       await db.saveActivity(req.user.id, {
