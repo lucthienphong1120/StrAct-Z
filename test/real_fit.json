@@ -1,0 +1,147 @@
+{
+  "fileIdMesgs": [
+    {
+      "type": "activity",
+      "manufacturer": "strava",
+      "product": 102,
+      "timeCreated": "2026-06-10T11:49:15.000Z"
+    }
+  ],
+  "developerDataIdMesgs": [
+    {
+      "developerDataIndex": 0,
+      "applicationVersion": 12398082
+    }
+  ],
+  "fieldDescriptionMesgs": [
+    {
+      "developerDataIndex": 0,
+      "fieldDefinitionNumber": 0,
+      "fitBaseTypeId": 143,
+      "fieldName": "live_activity_id",
+      "key": 0
+    },
+    {
+      "developerDataIndex": 0,
+      "fieldDefinitionNumber": 1,
+      "fitBaseTypeId": 7,
+      "fieldName": "activity_type",
+      "key": 1
+    },
+    {
+      "developerDataIndex": 0,
+      "fieldDefinitionNumber": 2,
+      "fitBaseTypeId": 0,
+      "fieldName": "autopause_enabled",
+      "key": 2
+    },
+    {
+      "developerDataIndex": 0,
+      "fieldDefinitionNumber": 3,
+      "fitBaseTypeId": 7,
+      "fieldName": "mobile_app_version",
+      "key": 3
+    },
+    {
+      "developerDataIndex": 0,
+      "fieldDefinitionNumber": 6,
+      "fitBaseTypeId": 7,
+      "fieldName": "device_manufacturer",
+      "key": 4
+    },
+    {
+      "developerDataIndex": 0,
+      "fieldDefinitionNumber": 4,
+      "fitBaseTypeId": 7,
+      "fieldName": "device_model",
+      "key": 5
+    },
+    {
+      "developerDataIndex": 0,
+      "fieldDefinitionNumber": 5,
+      "fitBaseTypeId": 7,
+      "fieldName": "device_os_version",
+      "key": 6
+    }
+  ],
+  "deviceInfoMesgs": [
+    {
+      "manufacturer": "strava",
+      "product": 102,
+      "developerFields": {
+        "3": "466.12 (12398082)",
+        "4": "samsung",
+        "5": "SM-S908E",
+        "6": "15"
+      }
+    },
+    {
+      "manufacturer": "strava",
+      "product": 102
+    },
+    {
+      "manufacturer": "strava",
+      "product": 102
+    }
+  ],
+  "activityMesgs": [
+    {}
+  ],
+  "sessionMesgs": [
+    {
+      "sport": "walking",
+      "totalDistance": 90.1,
+      "startTime": "2026-06-10T11:44:48.000Z",
+      "totalAscent": 0,
+      "totalElapsedTime": 258,
+      "numLaps": 1,
+      "totalDescent": 0,
+      "totalTimerTime": 249,
+      "developerFields": {
+        "0": "0",
+        "1": "Walk",
+        "2": 0
+      }
+    }
+  ],
+  "lapMesgs": [
+    {
+      "timestamp": "2026-06-10T11:49:15.000Z",
+      "totalDistance": 90.1,
+      "startTime": "2026-06-10T11:44:48.000Z",
+      "totalElapsedTime": 266.938,
+      "totalTimerTime": 249.753
+    }
+  ],
+  "eventMesgs": [
+    {
+      "event": "timer",
+      "timestamp": "2026-06-10T11:44:48.000Z",
+      "data": 0,
+      "eventType": "start",
+      "timerTrigger": "manual"
+    },
+    {
+      "event": "timer",
+      "timestamp": "2026-06-10T11:44:53.000Z",
+      "data": 0,
+      "eventType": "stop",
+      "timerTrigger": "manual"
+    }
+  ],
+  "recordMesgs": [
+    {
+      "positionLat": 250403409,
+      "enhancedAltitude": -16.600000000000023,
+      "timestamp": "2026-06-10T11:44:51.000Z",
+      "positionLong": 1262739529,
+      "speed": 0.099,
+      "enhancedSpeed": 0.099,
+      "gpsAccuracy": 5
+    },
+    {
+      "distance": 0,
+      "timestamp": "2026-06-10T11:44:51.000Z"
+    }
+  ]
+}

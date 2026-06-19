@@ -36,7 +36,7 @@ function getGPXCreator(deviceName) {
   if (nameLower.includes('garmin') || nameLower === 'garmin connect') return 'Garmin Connect';
   if (nameLower.includes('coros')) return 'COROS';
   if (nameLower.includes('huawei')) return 'Huawei Health';
-  if (nameLower.includes('strava')) return 'Strava App';
+  if (nameLower.includes('strava')) return 'Strava Android App';
   // Suunto, Amazfit, Polar, Xiaomi, Redmi → use device name directly
   return deviceName || 'Strava App';
 }

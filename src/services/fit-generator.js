@@ -236,7 +236,7 @@ function resolveDeviceParams(deviceName) {
   }
   // ── Strava App ──
   else if (nameLower.includes('strava')) {
-    manufacturer = 265; product = 265; productName = deviceName || 'Strava App';
+    manufacturer = 265; product = 102; productName = deviceName || 'Strava App';
   }
   
   // ── Generic Brand Fallbacks ──
