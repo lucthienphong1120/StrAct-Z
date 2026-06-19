@@ -140,6 +140,15 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.7.0 (2026-06-19)
+- **Feature: Custom Map Layers Selection**:
+  - Implemented map layer selection option on the UI, supporting 5 styles: CartoDB Dark Matter, OpenStreetMap Standard, CartoDB Voyager, CartoDB Positron, and Esri World Imagery (Satellite).
+  - Saved `map_type` into `DEFAULT_CONFIG` inside `sqlite-db.js`, with validation constraints added to `limits.js` and `validation.js`.
+  - Dynamically switched active map layers on the main map and preview modal maps upon dropdown selection.
+  - Automatically saved map type configurations on select change.
+  - Aligned override params builder to merge `map_type` overrides during manual generations.
+  - Bumped version to `v2.7.0` across `package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`.
+
 ### v2.6.0 (2026-06-19)
 - **Feature: Generate Around Location (Tạo quanh vị trí)**:
   - Added a new button `📍 Generate around location` in the Quick Actions section.

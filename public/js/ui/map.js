@@ -2,15 +2,57 @@
  * StrAct Z - Map & Activity Areas Logic
  */
 
+const MAP_LAYERS_CONFIG = {
+  osm_standard: {
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    options: {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19
+    }
+  },
+  carto_dark: {
+    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    options: {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }
+  },
+  carto_voyager: {
+    url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+    options: {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }
+  },
+  carto_positron: {
+    url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+    options: {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }
+  },
+  esri_satellite: {
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    options: {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+      maxZoom: 18
+    }
+  }
+};
+
+window.MAP_LAYERS_CONFIG = MAP_LAYERS_CONFIG;
+
 function initMap() {
   if (window.map || !document.getElementById('activityMap')) return;
-  
+
   window.map = L.map('activityMap').setView([window.savedMapState.lat, window.savedMapState.lng], window.savedMapState.zoom);
-  
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 19
-  }).addTo(window.map);
+
+  const mapType = (window.savedMapState && window.savedMapState.map_type) || 'carto_dark';
+  const layerCfg = MAP_LAYERS_CONFIG[mapType] || MAP_LAYERS_CONFIG.osm_standard;
+  window.mapTileLayer = L.tileLayer(layerCfg.url, layerCfg.options).addTo(window.map);
 
   applyMapLock();
   renderDistrictBorders();
@@ -78,9 +120,9 @@ async function renderDistrictBorders() {
     const res = await fetch('/geo/hanoi_full_districts.geojson');
     if (!res.ok) throw new Error('Could not load districts GeoJSON');
     const geojson = await res.json();
-    
+
     if (window.districtGeoJsonLayer) window.map.removeLayer(window.districtGeoJsonLayer);
-    
+
     window.districtGeoJsonLayer = L.geoJSON(geojson, {
       style: feature => getDistrictStyle(feature),
       onEachFeature: (feature, layer) => {
@@ -102,11 +144,11 @@ async function renderDistrictBorders() {
 function getDistrictStyle(feature) {
   const isVipTheme = document.body.classList.contains('is-vip') && !document.body.classList.contains('theme-preview-basic');
   const borderColor = isVipTheme ? '#fbbf24' : '#22d3ee';
-  
+
   const name = feature.properties.name;
   const district = window.sysDistricts.find(d => name.includes(d.name));
   const isSelected = district && window.selectedDistrictKeys.includes(district.key);
-  
+
   return {
     color: borderColor,
     weight: isSelected ? 2 : 0.8,
@@ -148,7 +190,7 @@ function bindPopupToMarker(item, index) {
 
 function renderCircles(areasData) {
   if (!window.map) initMap();
-  
+
   window.activityCircles.forEach(item => {
     window.map.removeLayer(item.circle);
     window.map.removeLayer(item.marker);
@@ -161,14 +203,14 @@ function renderCircles(areasData) {
       createCircleLayer(area.lat, area.lng, area.radius, area.type);
     });
   } catch (e) { console.error('Error rendering circles:', e); }
-  
+
   applyMapLock();
   updateMapStatsUI();
 }
 
 function createCircleLayer(lat, lng, radius, type) {
   const color = type === 'home' ? '#ff7800' : '#3b82f6';
-  
+
   const circle = L.circle([lat, lng], {
     color: color,
     fillColor: color,
@@ -204,7 +246,7 @@ function addActivityCircle(type) {
 
   const count = window.activityCircles.filter(c => c.type === type).length;
   const max = type === 'home' ? window.sysLimits.home_count.max : window.sysLimits.work_count.max;
-  
+
   if (count >= max) {
     return showToast(`Bạn đã đạt giới hạn tối đa (${max}) khu vực ${type.toUpperCase()}`, 'warning');
   }
@@ -258,24 +300,26 @@ async function saveActivityAreas() {
   try {
     const startNearFavoriteEl = document.getElementById('cfgStartNearFavoritePlace');
     const start_near_favorite_place = startNearFavoriteEl ? (startNearFavoriteEl.checked ? 'true' : 'false') : 'true';
+    const map_type = document.getElementById('cfgMapType')?.value || 'osm_standard';
 
     const res = await api('/config', {
       method: 'POST',
-      body: { 
+      body: {
         activity_areas: JSON.stringify(data),
         map_lat: center.lat.toString(),
         map_lng: center.lng.toString(),
         map_zoom: zoom.toString(),
         map_locked: 'true',
-        start_near_favorite_place
+        start_near_favorite_place,
+        map_type
       }
     });
-    
+
     if (res.error) showToast(res.error, 'error');
     else {
       showToast('Activity areas & map view saved!', 'success');
-      window.savedMapState = { lat: center.lat, lng: center.lng, zoom: zoom };
-      
+      window.savedMapState = { lat: center.lat, lng: center.lng, zoom: zoom, map_type: map_type };
+
       // Auto-lock map after saving
       window.isMapLocked = true;
       applyMapLock();
@@ -284,6 +328,43 @@ async function saveActivityAreas() {
     }
   } catch (err) {
     showToast('Failed to save areas: ' + err.message, 'error');
+  }
+}
+
+async function changeMapType(newType, skipSave = false) {
+  const selectEl = document.getElementById('cfgMapType');
+  if (selectEl) selectEl.value = newType;
+
+  if (window.savedMapState) {
+    window.savedMapState.map_type = newType;
+  }
+
+  if (!window.map) return;
+
+  if (window.mapTileLayer) {
+    window.map.removeLayer(window.mapTileLayer);
+  }
+
+  const layerCfg = MAP_LAYERS_CONFIG[newType] || MAP_LAYERS_CONFIG.osm_standard;
+  window.mapTileLayer = L.tileLayer(layerCfg.url, layerCfg.options).addTo(window.map);
+  window.mapTileLayer.bringToBack();
+
+  // Also update around map if it is initialized
+  if (window.aroundMap && window.aroundMapTileLayer) {
+    window.aroundMap.removeLayer(window.aroundMapTileLayer);
+    window.aroundMapTileLayer = L.tileLayer(layerCfg.url, layerCfg.options).addTo(window.aroundMap);
+    window.aroundMapTileLayer.bringToBack();
+  }
+
+  if (!skipSave) {
+    try {
+      await api('/config', {
+        method: 'POST',
+        body: { map_type: newType }
+      });
+    } catch (err) {
+      console.error('Failed to auto-save map type:', err);
+    }
   }
 }
 
@@ -340,4 +421,5 @@ window.addActivityCircle = addActivityCircle;
 window.updateCircleRadius = updateCircleRadius;
 window.removeCircle = removeCircle;
 window.saveActivityAreas = saveActivityAreas;
+window.changeMapType = changeMapType;
 window.updateSelectedDistrictKeys = updateSelectedDistrictKeys;

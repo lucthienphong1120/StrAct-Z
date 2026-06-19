@@ -60,6 +60,13 @@ const LIMITS = {
     type: 'int',
     default: 12
   },
+  map_type: {
+    label: 'Loại bản đồ hiển thị.',
+    desc_extra: 'Lựa chọn nguồn bản đồ hiển thị trên cả Bản đồ chính và Bản đồ xem trước.',
+    type: 'string',
+    default: 'carto_dark',
+    choices: ['carto_dark', 'osm_standard', 'carto_voyager', 'carto_positron', 'esri_satellite']
+  },
   home_count: {
     label: 'Giới hạn điểm Nhà.',
     desc_extra: 'Tác dụng: Số lượng điểm Nhà tối đa bạn có thể đặt trên bản đồ.',

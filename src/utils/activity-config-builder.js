@@ -7,13 +7,13 @@ const systemLimits = require('../config/limits');
 
 function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role = 'basic') {
   const ov = overrides;
-  
+
   const customTimeEnabled = String(ov.custom_time_enabled !== undefined ? ov.custom_time_enabled : config.custom_time_enabled) === 'true';
   const targetTimeCustom = ov.target_time_custom || config.target_time_custom || '00:00';
-  
+
   let minTime = config.min_time;
   let maxTime = config.max_time;
-  
+
   if (customTimeEnabled && targetTimeCustom !== '00:00') {
     minTime = targetTimeCustom;
     maxTime = targetTimeCustom;
@@ -21,12 +21,12 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
     minTime = ov.min_time || config.min_time;
     maxTime = ov.max_time || config.max_time;
   }
-  
+
   const rawTargetDate = ov.target_date || (customTimeEnabled ? config.target_date : null);
   const targetDate = rawTargetDate
-    ? rawTargetDate 
+    ? rawTargetDate
     : new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' });
-  
+
   return {
     districtKey: null,
     selected_districts: ov.selected_districts || config.selected_districts,
@@ -61,6 +61,7 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
     nearMeLat: ov.near_me_lat ? parseFloat(ov.near_me_lat) : null,
     nearMeLng: ov.near_me_lng ? parseFloat(ov.near_me_lng) : null,
     locationName: ov.location_name || null,
+    mapType: ov.map_type || config.map_type || 'carto_dark',
   };
 }
 

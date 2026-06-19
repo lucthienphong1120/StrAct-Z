@@ -17,11 +17,11 @@ function openAroundLocationModal() {
   selectedLat = window.savedMapState?.lat || 21.0285;
   selectedLng = window.savedMapState?.lng || 105.8542;
   resolvedLocationName = "";
-  
+
   // Set default values from current config inputs if available
   const currentMinDist = document.getElementById('cfgMinDist')?.value || "5.0";
   document.getElementById('aroundDistance').value = currentMinDist;
-  
+
   document.getElementById('aroundActivityType').value = ""; // Default to System Config
 
   document.getElementById('aroundLocationText').textContent = "Đang xác định vị trí...";
@@ -54,11 +54,11 @@ function initAroundMap() {
   }
 
   aroundMap = L.map('aroundLocationMap').setView([selectedLat, selectedLng], 13);
+  window.aroundMap = aroundMap;
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 19
-  }).addTo(aroundMap);
+  const mapType = document.getElementById('cfgMapType')?.value || 'carto_dark';
+  const layerCfg = window.MAP_LAYERS_CONFIG[mapType] || window.MAP_LAYERS_CONFIG.osm_standard;
+  window.aroundMapTileLayer = L.tileLayer(layerCfg.url, layerCfg.options).addTo(aroundMap);
 
   // Custom orange icon for selected custom location
   const orangeIcon = L.icon({
@@ -144,22 +144,22 @@ async function reverseGeocode(lat, lng) {
     });
     if (!res.ok) throw new Error('OSM Nominatim lookup failed');
     const data = await res.json();
-    
+
     let locationStr = "";
     if (data.address) {
       const addr = data.address;
       // Resolve name elements hierarchically
       const district = addr.suburb || addr.quarter || addr.district || addr.city_district || addr.county || "";
       const city = addr.city || addr.town || addr.village || addr.state || "";
-      
+
       const parts = [district, city].map(p => p.trim()).filter(Boolean);
       locationStr = parts.join(", ");
-      
+
       if (!locationStr && addr.country) {
         locationStr = addr.country;
       }
     }
-    
+
     resolvedLocationName = locationStr || "Ngoài Hà Nội / Du lịch";
     displayLabel.textContent = `${resolvedLocationName} (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
   } catch (err) {
@@ -186,10 +186,10 @@ async function submitAroundLocationGen(upload = false) {
 
   const btnGen = document.getElementById('btnSubmitAroundGen');
   const btnUpload = document.getElementById('btnSubmitAroundUpload');
-  
+
   btnGen.disabled = true;
   btnUpload.disabled = true;
-  
+
   const originalTextGen = btnGen.textContent;
   const originalTextUpload = btnUpload.textContent;
 
@@ -225,7 +225,7 @@ async function submitAroundLocationGen(upload = false) {
         showToast(`Tạo nháp thành công! Lộ trình: ${result.activity?.name || resolvedLocationName}`, "success");
       }
       closeAroundLocationModal();
-      
+
       // Refresh dashboard datasets
       if (window.loadDashboard) {
         await window.loadDashboard(true);

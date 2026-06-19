@@ -59,6 +59,7 @@ const DEFAULT_CONFIG = {
   map_zoom: String(systemLimits.map_zoom.default),
   map_locked: String(systemLimits.map_locked.default),
   start_near_favorite_place: String(systemLimits.start_near_favorite_place.default),
+  map_type: String(systemLimits.map_type?.default || 'osm_standard'),
 };
 
 async function getDb() {

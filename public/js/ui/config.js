@@ -350,8 +350,26 @@ async function loadConfig() {
       window.savedMapState = {
         lat: parseFloat(config.map_lat),
         lng: parseFloat(config.map_lng),
-        zoom: parseInt(config.map_zoom)
+        zoom: parseInt(config.map_zoom),
+        map_type: config.map_type || 'osm_standard'
       };
+    } else {
+      if (window.savedMapState) {
+        window.savedMapState.map_type = config.map_type || 'osm_standard';
+      } else {
+        window.savedMapState = {
+          lat: 21.0285,
+          lng: 105.8542,
+          zoom: 12,
+          map_type: config.map_type || 'osm_standard'
+        };
+      }
+    }
+
+    if (config.map_type) {
+      const selectEl = document.getElementById('cfgMapType');
+      if (selectEl) selectEl.value = config.map_type;
+      if (window.changeMapType) window.changeMapType(config.map_type, true);
     }
 
     if (config.map_locked !== undefined) {
@@ -605,6 +623,7 @@ async function saveConfig() {
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || '30',
     rest_time_percent: document.getElementById('cfgRestTime')?.value || '40',
     daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || '2',
+    map_type: document.getElementById('cfgMapType')?.value || 'osm_standard',
   };
 
   if (!validateInputs(config)) return;
@@ -669,6 +688,7 @@ function getOverrideConfig() {
     rest_time_percent: document.getElementById('cfgRestTime')?.value,
     activity_areas: JSON.stringify(activityAreasData),
     daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || '2',
+    map_type: document.getElementById('cfgMapType')?.value || 'osm_standard',
   };
 
   if (!validateTimeBounds(overrideConfig.min_time, overrideConfig.max_time, overrideConfig.target_date, isCustomTime)) {

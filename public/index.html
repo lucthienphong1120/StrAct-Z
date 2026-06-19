@@ -29,7 +29,7 @@
         <div class="logo-icon">🏃</div>
         <span class="logo-text">StrAct Z</span>
         <small
-          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v2.6.0</small>
+          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v2.7.0</small>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -688,6 +688,20 @@
             <div class="card-body" style="padding: 15px 0 0 0;">
               <!-- Map Config Info -->
               <div style="padding: 0 15px 15px 15px;">
+                <div class="form-group" style="margin-bottom: 15px;">
+                  <label class="form-label" style="display:flex; align-items:center; gap:6px;">
+                    Loại bản đồ hiển thị
+                    <span id="tipMapType" class="tooltip-icon">?</span>
+                  </label>
+                  <select id="cfgMapType" class="form-select" onchange="if(window.changeMapType) window.changeMapType(this.value)">
+                    <option value="osm_standard">OpenStreetMap Standard</option>
+                    <option value="carto_dark">CartoDB Dark Matter</option>
+                    <option value="carto_voyager">CartoDB Voyager</option>
+                    <option value="carto_positron">CartoDB Positron</option>
+                    <option value="esri_satellite">Esri World Imagery (Vệ tinh)</option>
+                  </select>
+                </div>
+
                 <div
                   style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
                   📍 Hoạt động ưu tiên

@@ -90,6 +90,12 @@ function validateConfig(updates, role = 'basic') {
       }
     }
 
+    if (rule.choices !== undefined) {
+      if (!rule.choices.includes(String(val))) {
+        return { success: false, error: `Giá trị của trường ${label} không hợp lệ.` };
+      }
+    }
+
     // Special check for target_date max days ago / in future
     if (rule.type === 'date' && typeof rule.max === 'number') {
         const targetDate = new Date(value);
