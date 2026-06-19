@@ -64,5 +64,5 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Polar Grit X2 Pro** | 80 | ? | GPX OK |
 | **Polar Pacer Pro** | 80 | ? | GPX OK |
 | **Polar Ignite 3** | 80 | ? | GPX OK |
-| **Strava App** | 265 | 265 | GPX OK |
+| **Strava App** | 265 | 265 | Fit OK - nhưng chỉ hiện là Strava |
 
