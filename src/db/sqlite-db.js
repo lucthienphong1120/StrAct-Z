@@ -59,7 +59,7 @@ const DEFAULT_CONFIG = {
   map_zoom: String(systemLimits.map_zoom.default),
   map_locked: String(systemLimits.map_locked.default),
   start_near_favorite_place: String(systemLimits.start_near_favorite_place.default),
-  map_type: String(systemLimits.map_type?.default || 'osm_standard'),
+  map_type: String(systemLimits.map_type?.default || 'carto_dark'),
 };
 
 async function getDb() {
@@ -72,10 +72,10 @@ async function getDb() {
         filename: DB_FILE,
         driver: sqlite3.Database
       });
-      
+
       // Enable WAL mode for better concurrency
       await db.exec('PRAGMA journal_mode=WAL');
-      
+
       await db.exec(`
         CREATE TABLE IF NOT EXISTS config (
           key TEXT PRIMARY KEY,
@@ -153,36 +153,36 @@ async function getDb() {
           created_at TEXT
         );
       `);
-      
+
       // Migrate from JSON if SQLite config is empty
       const configCount = await db.get('SELECT COUNT(*) as c FROM config');
-      
+
       // Seed default VIP code
       try {
         await db.run("INSERT OR IGNORE INTO vip_codes (code, status) VALUES (?, ?)", ['CRF@2026', 'available']);
-      } catch (e) {}
+      } catch (e) { }
 
 
 
       try {
         await db.exec('ALTER TABLE activities ADD COLUMN route_start_time TEXT');
         console.log('[SQLite] Added route_start_time column');
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         await db.exec('ALTER TABLE activities ADD COLUMN district_keys TEXT');
         console.log('[SQLite] Added district_keys column');
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         await db.exec('ALTER TABLE activities ADD COLUMN account_id INTEGER DEFAULT 1');
         console.log('[SQLite] Added account_id to activities');
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         await db.exec('ALTER TABLE users ADD COLUMN account_id INTEGER DEFAULT 1');
         console.log('[SQLite] Added account_id to users');
-      } catch (e) {}
+      } catch (e) { }
 
       // Safe migration: rename activities.gpx_file to fit_file
       try {
@@ -234,7 +234,7 @@ async function getDb() {
               }
             }
             if (oldDb.tokens && oldDb.tokens.access_token) {
-              await db.run(`INSERT INTO users (access_token, refresh_token, expires_at, athlete_id, athlete_name, athlete_avatar, scope) VALUES (?, ?, ?, ?, ?, ?, ?)`, 
+              await db.run(`INSERT INTO users (access_token, refresh_token, expires_at, athlete_id, athlete_name, athlete_avatar, scope) VALUES (?, ?, ?, ?, ?, ?, ?)`,
                 [encryption.encrypt(oldDb.tokens.access_token), encryption.encrypt(oldDb.tokens.refresh_token), oldDb.tokens.expires_at, oldDb.tokens.athlete_id, oldDb.tokens.athlete_name, oldDb.tokens.athlete_avatar, oldDb.tokens.scope]);
             }
             if (oldDb.activities) {
@@ -270,11 +270,11 @@ async function getDb() {
           console.error('[SQLite] Failed to seed admin account', e);
         }
       }
-      
+
       try {
         await db.exec('ALTER TABLE activities ADD COLUMN created_by TEXT');
         console.log('[SQLite] Added created_by column');
-      } catch (e) {}
+      } catch (e) { }
 
       // Migrate old prioritize_centers config key to start_near_favorite_place
       try {
@@ -312,13 +312,13 @@ async function getDb() {
         const accounts = await db.all('SELECT id FROM accounts');
         for (const account of accounts) {
           const accId = account.id;
-          
+
           // Check if key exists
           const hasKey = await db.get(
             "SELECT 1 FROM user_config WHERE account_id = ? AND key = 'start_near_favorite_place'",
             [accId]
           );
-          
+
           if (!hasKey) {
             // Set default to 'true'
             await db.run(
@@ -403,7 +403,7 @@ async function getAllConfig(accountId) {
 async function saveTokens(accountId, data) {
   const db = await getDb();
   await db.run('DELETE FROM users WHERE account_id = ?', [accountId]);
-  await db.run(`INSERT INTO users (account_id, access_token, refresh_token, expires_at, athlete_id, athlete_name, athlete_avatar, scope) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+  await db.run(`INSERT INTO users (account_id, access_token, refresh_token, expires_at, athlete_id, athlete_name, athlete_avatar, scope) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     [accountId, encryption.encrypt(data.access_token), encryption.encrypt(data.refresh_token), data.expires_at, data.athlete_id, data.athlete_name, data.athlete_avatar, data.scope]);
 }
 
@@ -471,7 +471,7 @@ async function getActivitiesByDate(accountId, dateStr) {
     `SELECT * FROM activities 
      WHERE account_id = ? 
        AND route_start_time >= ? 
-       AND route_start_time <= ?`, 
+       AND route_start_time <= ?`,
     [accountId, startTimeUTC, endTimeUTC]
   );
 }
@@ -502,15 +502,15 @@ async function clearActivities(accountId) {
 async function getActivityStats(accountId) {
   const db = await getDb();
   const today = new Date().toISOString().slice(0, 10) + '%';
-  
+
   // Total Activities: all events in DB regardless of status/deletion
   const total = (await db.get('SELECT COUNT(*) as c FROM activities WHERE account_id = ?', [accountId])).c;
-  
+
   // Uploaded: activities strictly in 'uploaded' status
   const uploaded = (await db.get("SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND upload_status = 'uploaded'", [accountId])).c;
-  
+
   const failed = (await db.get("SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND upload_status = 'failed'", [accountId])).c;
-  
+
   // Sum distance and duration ONLY for 'uploaded' and 'generated' activities
   const sums = await db.get("SELECT SUM(distance_km) as dist, SUM(duration_min) as dur FROM activities WHERE account_id = ? AND upload_status IN ('uploaded', 'generated')", [accountId]);
   const todayCount = (await db.get('SELECT COUNT(*) as c FROM activities WHERE account_id = ? AND created_at LIKE ?', [accountId, today])).c;
@@ -537,7 +537,7 @@ async function createAccount(username, plainPassword) {
     'INSERT INTO accounts (username, password_hash, role, created_at) VALUES (?, ?, ?, ?)',
     [username, hash, 'basic', new Date().toISOString()]
   );
-  
+
   // Seed default configs for new account
   for (const [k, v] of Object.entries(DEFAULT_CONFIG)) {
     await db.run('INSERT OR IGNORE INTO user_config (account_id, key, value) VALUES (?, ?, ?)', [res.lastID, k, String(v)]);
@@ -571,7 +571,7 @@ async function getAccountRole(accountId) {
 async function activateVip(accountId, code) {
   const db = await getDb();
   const now = new Date().toISOString();
-  
+
   // 1. Check if user is already VIP
   const user = await db.get('SELECT role FROM accounts WHERE id = ?', [accountId]);
   if (user && user.role === 'vip') {
@@ -612,7 +612,7 @@ async function saveExternalTokens(accountId, provider, tokens) {
   const db = await getDb();
   const encryptedAccess = encryption.encrypt(tokens.access_token);
   const encryptedRefresh = tokens.refresh_token ? encryption.encrypt(tokens.refresh_token) : null;
-  
+
   await db.run(
     'INSERT OR REPLACE INTO external_tokens (account_id, provider, access_token, refresh_token, expires_at, scope) VALUES (?, ?, ?, ?, ?, ?)',
     [accountId, provider, encryptedAccess, encryptedRefresh, tokens.expires_at, tokens.scope]
@@ -624,7 +624,7 @@ async function getExternalTokens(accountId, provider) {
   const db = await getDb();
   const row = await db.get('SELECT * FROM external_tokens WHERE account_id = ? AND provider = ?', [accountId, provider]);
   if (!row) return null;
-  
+
   return {
     access_token: encryption.decrypt(row.access_token),
     refresh_token: row.refresh_token ? encryption.decrypt(row.refresh_token) : null,

@@ -351,17 +351,17 @@ async function loadConfig() {
         lat: parseFloat(config.map_lat),
         lng: parseFloat(config.map_lng),
         zoom: parseInt(config.map_zoom),
-        map_type: config.map_type || 'osm_standard'
+        map_type: config.map_type || 'carto_dark'
       };
     } else {
       if (window.savedMapState) {
-        window.savedMapState.map_type = config.map_type || 'osm_standard';
+        window.savedMapState.map_type = config.map_type || 'carto_dark';
       } else {
         window.savedMapState = {
           lat: 21.0285,
           lng: 105.8542,
           zoom: 12,
-          map_type: config.map_type || 'osm_standard'
+          map_type: config.map_type || 'carto_dark'
         };
       }
     }
@@ -623,7 +623,7 @@ async function saveConfig() {
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || '30',
     rest_time_percent: document.getElementById('cfgRestTime')?.value || '40',
     daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || '2',
-    map_type: document.getElementById('cfgMapType')?.value || 'osm_standard',
+    map_type: document.getElementById('cfgMapType')?.value || 'carto_dark',
   };
 
   if (!validateInputs(config)) return;
@@ -649,7 +649,7 @@ function getOverrideConfig() {
   const isCustomTime = document.getElementById('cfgCustomTime').checked;
   const targetTimeCustomVal = document.getElementById('cfgCustomMinTime').value || '00:00';
   const isCustomTimeFixed = isCustomTime && targetTimeCustomVal !== '00:00';
-  
+
   const activityAreasData = window.activityCircles ? window.activityCircles.map(c => ({
     lat: c.marker.getLatLng().lat,
     lng: c.marker.getLatLng().lng,
@@ -688,7 +688,7 @@ function getOverrideConfig() {
     rest_time_percent: document.getElementById('cfgRestTime')?.value,
     activity_areas: JSON.stringify(activityAreasData),
     daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || '2',
-    map_type: document.getElementById('cfgMapType')?.value || 'osm_standard',
+    map_type: document.getElementById('cfgMapType')?.value || 'carto_dark',
   };
 
   if (!validateTimeBounds(overrideConfig.min_time, overrideConfig.max_time, overrideConfig.target_date, isCustomTime)) {
