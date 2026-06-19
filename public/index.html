@@ -113,7 +113,7 @@
         <button id="btnGenerateUpload" class="btn btn-primary pulse" onclick="generateAndUpload()">
           🚀 Generate & Upload to Strava
         </button>
-        <button id="btnGenerateAround" class="btn btn-secondary" onclick="openAroundLocationModal()" style="background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; font-weight: 600;">
+        <button id="btnGenerateAround" class="btn btn-generate-around" onclick="openAroundLocationModal()">
           📍 Generate around location
         </button>
         <button class="btn btn-secondary" onclick="window.userRefresh()">
@@ -944,7 +944,7 @@
       </div>
       <div class="modal-body">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <span style="font-size:0.85rem; color:var(--text-secondary);">Thả ghim trên bản đồ để chọn tâm lộ trình chạy:</span>
+          <span style="font-size:0.85rem; color:var(--text-secondary);">Thả ghim trên bản đồ hoặc chia sẻ vị trí để tạo lộ trình hoạt động tùy chỉnh:</span>
           <button class="gps-btn" onclick="getGPSLocation()">
             🎯 Định vị GPS
           </button>
@@ -953,9 +953,13 @@
         <!-- Preview Map Div -->
         <div id="aroundLocationMap" style="width: 100%; height: 350px; border-radius: var(--radius-sm); border: 1px solid var(--border); margin-bottom: 12px; z-index:1;"></div>
         
-        <div class="location-preview-box">
+        <div class="location-preview-box" style="margin-bottom: 6px;">
           <span style="color: #10b981;">📍</span>
           <span id="aroundLocationText" style="color: var(--text-primary); font-weight:500;">Chưa xác định (Click bản đồ hoặc GPS)</span>
+        </div>
+        
+        <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 16px; line-height: 1.35; padding: 0 4px;">
+          💡 <strong>Lưu ý:</strong> Chức năng này áp dụng cho bất kỳ vị trí nào, kể cả trong Hà Nội và các quận đã cấu hình nếu bạn muốn chạy quanh vị trí hiện tại của mình.
         </div>
 
         <div class="form-row" style="margin-top: 16px;">
@@ -966,25 +970,11 @@
           <div class="form-group">
             <label class="form-label">Loại hoạt động</label>
             <select id="aroundActivityType" class="form-select">
-              <option value="Random (misc)">Ngẫu nhiên</option>
-              <option value="Run">Chạy bộ</option>
-              <option value="Walk">Đi bộ</option>
-              <option value="Ride">Đạp xe</option>
+              <option value="">Theo hệ thống (mặc định)</option>
+              <option value="Run">Chạy bộ (100%)</option>
+              <option value="Walk">Đi bộ (100%)</option>
+              <option value="Ride">Đạp xe (100%)</option>
             </select>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Định dạng tệp</label>
-            <select id="aroundExportFormat" class="form-select">
-              <option value="fit">FIT (Khuyên dùng)</option>
-              <option value="gpx">GPX</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Tốc độ (Pace min/km)</label>
-            <input type="text" id="aroundPaceDisplay" class="form-input" style="opacity:0.75;" readonly value="Theo cấu hình hệ thống">
           </div>
         </div>
       </div>

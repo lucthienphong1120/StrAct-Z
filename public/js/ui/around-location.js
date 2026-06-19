@@ -19,20 +19,10 @@ function openAroundLocationModal() {
   resolvedLocationName = "";
   
   // Set default values from current config inputs if available
-  const currentMinDist = document.getElementById('cfgMinDistance')?.value || "5.0";
+  const currentMinDist = document.getElementById('cfgMinDist')?.value || "5.0";
   document.getElementById('aroundDistance').value = currentMinDist;
   
-  const currentFormat = document.getElementById('cfgExportFormat')?.value || "fit";
-  document.getElementById('aroundExportFormat').value = currentFormat;
-  
-  const currentType = document.getElementById('cfgActivityType')?.value || "Random (misc)";
-  // If the selector contains choices not in options, fallback
-  const typeSelector = document.getElementById('aroundActivityType');
-  if (Array.from(typeSelector.options).some(opt => opt.value === currentType)) {
-    typeSelector.value = currentType;
-  } else {
-    typeSelector.value = "Random (misc)";
-  }
+  document.getElementById('aroundActivityType').value = ""; // Default to System Config
 
   document.getElementById('aroundLocationText').textContent = "Đang xác định vị trí...";
 
@@ -65,10 +55,9 @@ function initAroundMap() {
 
   aroundMap = L.map('aroundLocationMap').setView([selectedLat, selectedLng], 13);
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 20
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19
   }).addTo(aroundMap);
 
   // Custom orange icon for selected custom location
@@ -131,12 +120,16 @@ function getGPSLocation() {
     },
     (err) => {
       console.warn("GPS Geolocation failed:", err);
-      let errMsg = "Không thể lấy vị trí hiện tại. Vui lòng cấp quyền GPS.";
+      let errMsg = "Không thể lấy vị trí hiện tại của bạn. Vui lòng cấp quyền chia sẻ vị trí (GPS) cho trình duyệt và thiết bị.";
       if (err.code === err.PERMISSION_DENIED) {
-        errMsg = "Quyền truy cập GPS bị từ chối.";
+        errMsg = "⚠️ Quyền truy cập vị trí bị từ chối. Vui lòng cấp quyền chia sẻ GPS trong cài đặt trình duyệt để sử dụng tính năng này.";
+      } else if (err.code === err.POSITION_UNAVAILABLE) {
+        errMsg = "⚠️ Không có tín hiệu định vị hoặc GPS bị tắt. Bạn có thể thả ghim thủ công bằng cách click lên bản đồ.";
+      } else if (err.code === err.TIMEOUT) {
+        errMsg = "⚠️ Hết thời gian chờ định vị (GPS phản hồi chậm). Bạn có thể thử lại hoặc click ghim thủ công lên bản đồ.";
       }
       showToast(errMsg, "warning");
-      document.getElementById('aroundLocationText').textContent = resolvedLocationName || "Chưa xác định (Lỗi GPS)";
+      document.getElementById('aroundLocationText').textContent = resolvedLocationName || "Chưa định vị (Thử thả ghim thủ công)";
     },
     { enableHighAccuracy: true, timeout: 8000 }
   );
@@ -189,7 +182,7 @@ async function submitAroundLocationGen(upload = false) {
   }
 
   const activityType = document.getElementById('aroundActivityType').value;
-  const exportFormat = document.getElementById('aroundExportFormat').value;
+  const exportFormat = document.getElementById('cfgExportFormat')?.value || 'fit';
 
   const btnGen = document.getElementById('btnSubmitAroundGen');
   const btnUpload = document.getElementById('btnSubmitAroundUpload');

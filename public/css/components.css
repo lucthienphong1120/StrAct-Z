@@ -222,7 +222,7 @@ body.is-vip:not(.theme-preview-basic) .schedule-label {
   position: fixed;
   top: 70px;
   right: 24px;
-  z-index: 9999;
+  z-index: 10100;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -738,11 +738,20 @@ body.is-vip:not(.theme-preview-basic) .schedule-label {
 .modal-title {
   font-size: 1.1rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #10b981, #3b82f6);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: var(--text-primary);
+}
+
+.btn-generate-around {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+}
+
+.btn-generate-around:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
 
 .modal-close-btn {
