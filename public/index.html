@@ -630,13 +630,13 @@
                 </div>
               </div>
 
-              <!-- Limit Schedule Time Window -->
-              <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
+              <div class="form-row" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
+                <!-- Limit Schedule Time Window -->
                 <div class="form-group" style="margin-bottom: 5px;">
                   <label class="toggle">
                     <input type="checkbox" id="cfgLimitScheduleTimeWindow" checked>
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size: 0.85rem;">Limit Schedule Range (8h) <span
+                    <span class="toggle-label" style="font-size: 0.85rem;">Limit Schedule Range<span
                         class="tooltip-icon tooltip-right" id="tipLimitScheduleTimeWindow"
                         data-tooltip="?">?</span></span>
                   </label>
@@ -646,10 +646,12 @@
                   <label class="toggle">
                     <input type="checkbox" id="cfgTargetDistanceEnabled" onchange="toggleTargetDistanceInputs();">
                     <div class="toggle-track"></div>
-                    <span class="toggle-label" style="font-size: 0.85rem;">🎯 Daily Target Distance <span
+                    <span class="toggle-label" style="font-size: 0.85rem;">🎯 Daily Target Distance<span
                         class="tooltip-icon tooltip-right" id="tipTargetDistanceEnabled">?</span></span>
                   </label>
                 </div>
+              </div>
+              <div class="form-row">
                 <div id="targetDistanceInputs"
                   style="transition: opacity 0.3s ease; opacity: 0.5; pointer-events: none;">
                   <div class="form-group" style="margin-bottom:0;">
