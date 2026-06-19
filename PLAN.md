@@ -259,6 +259,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] mở 2 schedule count cho basic account, tăng max 3 schedule cho vip account
 + [x] cấu hình nút (default enable) giới hạn khung giờ liên quan cho shedule -> mỗi schedule sẽ có khoảng thời gian tạo ra hoạt động trước đó tối đa 8h thay vì schedule nào cũng random full ngày (tất nhiên vẫn tuân thủ gloabal time bound và workhour, safe time, rest time) -> mục đích ngày có 2 schedule sẽ tạo 2 hoạt động 1 sáng sớm, 1 tối, còn giờ làm việc thì vẫn skip, tránh tạo 2 hoạt động vào cùng buổi sáng nhưng tối mới đồng bộ hoặc tương tự
 + [x] cho phép tùy chỉnh loại bản đồ (5 loại): CartoDB Dark Matter, OpenStreetMap Standard, CartoDB Voyager, CartoDB Positron, Esri World Imagery. Đồng bộ cấu hình vào DB và hỗ trợ override param khi gen hoạt động manual. Nâng version lên v2.7.0 (v2.7.0)
-+ [ ] test tính năng generate around location
++ [ ] generate around location: đặt loại hoạt động theo hệ thống (mặc định) bị lỗi báo Please select at least 1 Loại hoạt động, Khoảng cách chạy không có validate
 + [x] fix lỗi tooltip Loại bản đồ hiển thị
 + [ ] check lại hàm lấy vị trí đang chưa đúng Phường Bến Thành, Thành phố Thủ Đức (10.7701, 106.6951) -> Thành phố hồ chí minh, ngoài ra một số khu vực chỉ có tên phường, ko có tên thành phố??? (Hà Nội, Nam Định, và các khu vực miền Trung,...)
