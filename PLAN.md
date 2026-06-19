@@ -261,4 +261,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] cho phép tùy chỉnh loại bản đồ (5 loại): CartoDB Dark Matter, OpenStreetMap Standard, CartoDB Voyager, CartoDB Positron, Esri World Imagery. Đồng bộ cấu hình vào DB và hỗ trợ override param khi gen hoạt động manual. Nâng version lên v2.7.0 (v2.7.0)
 + [ ] test tính năng generate around location
 + [x] fix lỗi tooltip Loại bản đồ hiển thị
-+ [ ] check lại hàm lấy vị trí đang chưa đúng Phường Bến Thành, Thành phố Thủ Đức (10.7701, 106.6951) -> Thành phố hồ chí minh
++ [ ] check lại hàm lấy vị trí đang chưa đúng Phường Bến Thành, Thành phố Thủ Đức (10.7701, 106.6951) -> Thành phố hồ chí minh, ngoài ra một số khu vực chỉ có tên phường, ko có tên thành phố??? (Hà Nội, Nam Định, và các khu vực miền Trung,...)
