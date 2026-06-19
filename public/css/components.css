@@ -1200,7 +1200,7 @@ body.is-vip:not(.theme-preview-basic) .schedule-label {
   color: var(--text-primary);
 }
 
-.btn-generate-around {
+.btn-success {
   background: linear-gradient(135deg, #10b981, #059669) !important;
   color: white !important;
   border: none !important;
@@ -1208,7 +1208,7 @@ body.is-vip:not(.theme-preview-basic) .schedule-label {
   box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
 }
 
-.btn-generate-around:hover:not(:disabled) {
+.btn-success:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
