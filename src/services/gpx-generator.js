@@ -238,6 +238,7 @@ async function generateActivity(config = {}) {
     deviceName = 'Garmin fēnix 7x Pro',
     simWeather = true,
     simRedLights = true,
+    bypass_workhours = false,
   } = config;
 
   const limits = systemLimits[userRole] || systemLimits.basic;
@@ -523,7 +524,7 @@ async function generateActivity(config = {}) {
       const dayOfWeek = targetDateObj.getDay();
       const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
 
-      const bypassWorkHours = (minMs === maxMs);
+      const bypassWorkHours = (minMs === maxMs) || bypass_workhours;
       if (!bypassWorkHours && isWeekday && isWorkOverlap(ms, msEnd)) return false;
       if (isOverlap(ms)) return false;
       return true;

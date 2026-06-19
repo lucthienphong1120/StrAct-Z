@@ -18,9 +18,9 @@ function openAroundLocationModal() {
   selectedLng = window.savedMapState?.lng || 105.8542;
   resolvedLocationName = "";
 
-  // Set default values from current config inputs if available
-  const currentMinDist = document.getElementById('cfgMinDist')?.value || "5.0";
-  document.getElementById('aroundDistance').value = currentMinDist;
+  // Reset bypass avoid workhours checkbox to unchecked
+  const bypassInput = document.getElementById('aroundBypassWorkhours');
+  if (bypassInput) bypassInput.checked = false;
 
   document.getElementById('aroundActivityType').value = ""; // Default to System Config
 
@@ -175,12 +175,7 @@ async function submitAroundLocationGen(upload = false) {
     return;
   }
 
-  const distanceVal = parseFloat(document.getElementById('aroundDistance').value);
-  if (isNaN(distanceVal) || distanceVal < 0.2 || distanceVal > 20.0) {
-    showToast("Khoảng cách chạy phải từ 0.2km đến 20km.", "warning");
-    return;
-  }
-
+  const bypassWorkhours = document.getElementById('aroundBypassWorkhours')?.checked || false;
   const activityType = document.getElementById('aroundActivityType').value;
   const exportFormat = document.getElementById('cfgExportFormat')?.value || 'fit';
 
@@ -206,10 +201,9 @@ async function submitAroundLocationGen(upload = false) {
       near_me_lat: selectedLat.toString(),
       near_me_lng: selectedLng.toString(),
       location_name: resolvedLocationName,
-      min_distance_km: distanceVal.toString(),
-      max_distance_km: distanceVal.toString(),
       activity_type: activityType,
-      export_format: exportFormat
+      export_format: exportFormat,
+      bypass_workhours: bypassWorkhours ? 'true' : 'false'
     };
 
     const endpoint = upload ? '/generate-and-upload' : '/generate';

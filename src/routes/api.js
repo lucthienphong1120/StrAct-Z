@@ -281,6 +281,12 @@ router.get('/strava-activities', async (req, res) => {
 router.post('/generate', async (req, res) => {
   try {
     const ov = req.body || {};
+    // Clean up empty override values to allow fallback to config
+    for (const key in ov) {
+      if (ov[key] === "" || ov[key] === null || ov[key] === undefined) {
+        delete ov[key];
+      }
+    }
     const validation = validateConfig(ov, req.user.role || 'basic');
     if (!validation.success) {
       return res.status(400).json({ error: validation.error });
@@ -368,6 +374,12 @@ router.post('/generate', async (req, res) => {
 router.post('/generate-and-upload', async (req, res) => {
   try {
     const ov = req.body || {};
+    // Clean up empty override values to allow fallback to config
+    for (const key in ov) {
+      if (ov[key] === "" || ov[key] === null || ov[key] === undefined) {
+        delete ov[key];
+      }
+    }
     const validation = validateConfig(ov, req.user.role || 'basic');
     if (!validation.success) {
       return res.status(400).json({ error: validation.error });
