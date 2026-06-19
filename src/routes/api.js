@@ -322,7 +322,7 @@ router.post('/generate', async (req, res) => {
       route_start_lng: activity.startLng,
       route_start_time: activity.startTime ? activity.startTime.toISOString() : new Date().toISOString(),
       district_keys: activity.districtKey,
-      created_by: 'Manual',
+      created_by: (ov.near_me_lat && ov.near_me_lng) ? 'Custom' : 'Manual',
     });
 
     res.json({
@@ -354,7 +354,7 @@ router.post('/generate', async (req, res) => {
           route_start_lng: null,
           route_start_time: new Date().toISOString(),
           district_keys: null,
-          created_by: 'Manual',
+          created_by: (ov.near_me_lat && ov.near_me_lng) ? 'Custom' : 'Manual',
           error_message: err.message,
         });
       } catch (_) { }
@@ -412,7 +412,7 @@ router.post('/generate-and-upload', async (req, res) => {
         route_start_lng: activity.startLng,
         route_start_time: activity.startTime ? activity.startTime.toISOString() : new Date().toISOString(),
         district_keys: activity.districtKey,
-        created_by: 'Manual',
+        created_by: (ov.near_me_lat && ov.near_me_lng) ? 'Custom' : 'Manual',
         error_message: errMsg,
       });
       return res.status(403).json({ error: errMsg });
@@ -429,7 +429,7 @@ router.post('/generate-and-upload', async (req, res) => {
       route_start_lng: activity.startLng,
       route_start_time: activity.startTime ? activity.startTime.toISOString() : new Date().toISOString(),
       district_keys: activity.districtKey,
-      created_by: 'Manual',
+      created_by: (ov.near_me_lat && ov.near_me_lng) ? 'Custom' : 'Manual',
     });
 
     const deviceName = ov.device_name || config.device_name || systemLimits.device_name.default;
@@ -484,7 +484,7 @@ router.post('/generate-and-upload', async (req, res) => {
           route_start_lng: null,
           route_start_time: new Date().toISOString(),
           district_keys: null,
-          created_by: 'Manual',
+          created_by: (ov.near_me_lat && ov.near_me_lng) ? 'Custom' : 'Manual',
           error_message: err.message,
         });
       } catch (_) { }

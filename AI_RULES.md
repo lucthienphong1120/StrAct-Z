@@ -140,6 +140,16 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.6.0 (2026-06-19)
+- **Feature: Generate Around Location (Tạo quanh vị trí)**:
+  - Added a new button `📍 Generate around location` in the Quick Actions section.
+  - Implemented a glassmorphic Popup Modal containing a Leaflet preview map.
+  - Users can select a custom location worldwide using either browser GPS (Geolocation API) or by clicking/dragging the orange marker.
+  - Integrates client-side reverse geocoding via OpenStreetMap Nominatim API to resolve city/province names.
+  - Bypasses Hanoi district check restrictions on the backend and generates routes snaps using the global Project-OSRM service.
+  - Saves the reverse geocoded location name into `district_keys` (with fallback to `ngoai_tinh`) and sets `created_by: 'Custom'`.
+  - Bumped version to `v2.6.0` across `package.json`, `public/index.html`, `public/sw.js`, and `AI_RULES.md`.
+
 ### v2.5.0 (2026-06-19)
 - **Feature: Expand Schedule Count Limits and Add 8-Hour Window Toggle**:
   - Expanded schedule counts to support up to 2 slots for basic accounts and 3 slots for VIP accounts.

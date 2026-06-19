@@ -58,6 +58,9 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
     target_distance_km: parseFloat(ov.target_distance_km || config.target_distance_km || '10.0'),
     activity_areas: ov.activity_areas || config.activity_areas,
     start_near_favorite_place: String(ov.start_near_favorite_place !== undefined ? ov.start_near_favorite_place : config.start_near_favorite_place) !== 'false',
+    nearMeLat: ov.near_me_lat ? parseFloat(ov.near_me_lat) : null,
+    nearMeLng: ov.near_me_lng ? parseFloat(ov.near_me_lng) : null,
+    locationName: ov.location_name || null,
   };
 }
 

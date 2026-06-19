@@ -1,4 +1,4 @@
-const CACHE_NAME = 'stract-z-v2.5.0';
+const CACHE_NAME = 'stract-z-v2.6.0';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -14,6 +14,7 @@ const ASSETS_TO_CACHE = [
   '/js/ui/config.js',
   '/js/ui/map.js',
   '/js/ui/scheduler.js',
+  '/js/ui/around-location.js',
   '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',

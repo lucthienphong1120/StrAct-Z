@@ -219,6 +219,9 @@ async function generateActivity(config = {}) {
   const {
     startLat = 21.0285,
     startLng = 105.8542,
+    nearMeLat = null,
+    nearMeLng = null,
+    locationName = null,
     districtKey = null,
     minDistanceKm = 0.5,
     maxDistanceKm = 10,
@@ -305,7 +308,9 @@ async function generateActivity(config = {}) {
   const allowedDistricts = config.selected_districts ? config.selected_districts.split(',').filter(Boolean) : Object.keys(HANOI_DISTRICTS);
   
   let chosenDistrictKeys = [];
-  if (!districtKey || districtKey === 'random') {
+  if (nearMeLat !== null && nearMeLng !== null) {
+    chosenDistrictKeys = [locationName || 'ngoai_tinh'];
+  } else if (!districtKey || districtKey === 'random') {
     const areas = config.activity_areas ? JSON.parse(config.activity_areas) : [];
     
     // Calculate weights for each allowed district (Base ratio 1:1)
@@ -588,13 +593,13 @@ async function generateActivity(config = {}) {
 
   // Generate route (OSRM road-snapped)
   let points = await generateRoute({
-    startLat,
-    startLng,
+    startLat: nearMeLat !== null ? nearMeLat : startLat,
+    startLng: nearMeLng !== null ? nearMeLng : startLng,
     distanceKm,
-    districtKeys: chosenDistrictKeys,
+    districtKeys: (nearMeLat !== null && nearMeLng !== null) ? [] : chosenDistrictKeys,
     useOSRM,
     activityAreas: config.activity_areas ? JSON.parse(config.activity_areas) : [],
-    startNearFavoritePlace: config.start_near_favorite_place !== false && config.start_near_favorite_place !== 'false',
+    startNearFavoritePlace: (nearMeLat !== null && nearMeLng !== null) ? false : (config.start_near_favorite_place !== false && config.start_near_favorite_place !== 'false'),
   });
 
   if (!points || points.length < 2) {
