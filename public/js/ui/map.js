@@ -50,8 +50,9 @@ function initMap() {
 
   window.map = L.map('activityMap').setView([window.savedMapState.lat, window.savedMapState.lng], window.savedMapState.zoom);
 
-  const mapType = (window.savedMapState && window.savedMapState.map_type) || 'carto_dark';
-  const layerCfg = MAP_LAYERS_CONFIG[mapType] || MAP_LAYERS_CONFIG.osm_standard;
+  const defaultMapType = (window.sysLimits?.map_type?.default) || 'carto_dark';
+  const mapType = (window.savedMapState && window.savedMapState.map_type) || defaultMapType;
+  const layerCfg = MAP_LAYERS_CONFIG[mapType] || MAP_LAYERS_CONFIG[defaultMapType] || MAP_LAYERS_CONFIG.carto_dark;
   window.mapTileLayer = L.tileLayer(layerCfg.url, layerCfg.options).addTo(window.map);
 
   applyMapLock();
@@ -345,7 +346,8 @@ async function changeMapType(newType, skipSave = false) {
     window.map.removeLayer(window.mapTileLayer);
   }
 
-  const layerCfg = MAP_LAYERS_CONFIG[newType] || MAP_LAYERS_CONFIG.osm_standard;
+  const defaultMapType = (window.sysLimits?.map_type?.default) || 'carto_dark';
+  const layerCfg = MAP_LAYERS_CONFIG[newType] || MAP_LAYERS_CONFIG[defaultMapType] || MAP_LAYERS_CONFIG.carto_dark;
   window.mapTileLayer = L.tileLayer(layerCfg.url, layerCfg.options).addTo(window.map);
   window.mapTileLayer.bringToBack();
 

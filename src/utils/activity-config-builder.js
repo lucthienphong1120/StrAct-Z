@@ -9,7 +9,7 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
   const ov = overrides;
 
   const customTimeEnabled = String(ov.custom_time_enabled !== undefined ? ov.custom_time_enabled : config.custom_time_enabled) === 'true';
-  const targetTimeCustom = ov.target_time_custom || config.target_time_custom || '00:00';
+  const targetTimeCustom = ov.target_time_custom || config.target_time_custom || systemLimits.target_time_custom?.default || '00:00';
 
   let minTime = config.min_time;
   let maxTime = config.max_time;
@@ -55,13 +55,13 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
     last_district_keys: lastUploaded ? lastUploaded.district_keys : null,
     deviceName: ov.device_name || config.device_name || systemLimits.device_name.default,
     target_distance_enabled: String(ov.target_distance_enabled !== undefined ? ov.target_distance_enabled : config.target_distance_enabled) === 'true',
-    target_distance_km: parseFloat(ov.target_distance_km || config.target_distance_km || '10.0'),
+    target_distance_km: parseFloat(ov.target_distance_km || config.target_distance_km || systemLimits.target_distance_km?.default || '10.0'),
     activity_areas: ov.activity_areas || config.activity_areas,
     start_near_favorite_place: String(ov.start_near_favorite_place !== undefined ? ov.start_near_favorite_place : config.start_near_favorite_place) !== 'false',
     nearMeLat: ov.near_me_lat ? parseFloat(ov.near_me_lat) : null,
     nearMeLng: ov.near_me_lng ? parseFloat(ov.near_me_lng) : null,
     locationName: ov.location_name || null,
-    mapType: ov.map_type || config.map_type || 'carto_dark',
+    mapType: ov.map_type || config.map_type || systemLimits.map_type?.default || 'carto_dark',
   };
 }
 

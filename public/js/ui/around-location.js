@@ -56,7 +56,7 @@ function initAroundMap() {
   aroundMap = L.map('aroundLocationMap').setView([selectedLat, selectedLng], 13);
   window.aroundMap = aroundMap;
 
-  const mapType = document.getElementById('cfgMapType')?.value || 'carto_dark';
+  const mapType = document.getElementById('cfgMapType')?.value || (window.sysLimits?.map_type?.default) || 'carto_dark';
   const layerCfg = window.MAP_LAYERS_CONFIG[mapType] || window.MAP_LAYERS_CONFIG.osm_standard;
   window.aroundMapTileLayer = L.tileLayer(layerCfg.url, layerCfg.options).addTo(aroundMap);
 

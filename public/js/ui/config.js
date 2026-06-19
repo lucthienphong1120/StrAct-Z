@@ -351,17 +351,17 @@ async function loadConfig() {
         lat: parseFloat(config.map_lat),
         lng: parseFloat(config.map_lng),
         zoom: parseInt(config.map_zoom),
-        map_type: config.map_type || 'carto_dark'
+        map_type: config.map_type || (sysL?.map_type?.default) || 'carto_dark'
       };
     } else {
       if (window.savedMapState) {
-        window.savedMapState.map_type = config.map_type || 'carto_dark';
+        window.savedMapState.map_type = config.map_type || (sysL?.map_type?.default) || 'carto_dark';
       } else {
         window.savedMapState = {
           lat: 21.0285,
           lng: 105.8542,
           zoom: 12,
-          map_type: config.map_type || 'carto_dark'
+          map_type: config.map_type || (sysL?.map_type?.default) || 'carto_dark'
         };
       }
     }
@@ -620,10 +620,10 @@ async function saveConfig() {
     custom_time_enabled: document.getElementById('cfgCustomTime').checked ? 'true' : 'false',
     target_date: document.getElementById('cfgTargetDate').value || new Date().toLocaleDateString('sv-SE'),
     target_time_custom: document.getElementById('cfgCustomMinTime').value,
-    overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || '30',
-    rest_time_percent: document.getElementById('cfgRestTime')?.value || '40',
-    daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || '2',
-    map_type: document.getElementById('cfgMapType')?.value || 'carto_dark',
+    overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || (window.sysLimits?.overlap_protection_minutes?.default ? String(window.sysLimits.overlap_protection_minutes.default) : '30'),
+    rest_time_percent: document.getElementById('cfgRestTime')?.value || (window.sysLimits?.rest_time_percent?.default ? String(window.sysLimits.rest_time_percent.default) : '40'),
+    daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || (window.sysLimits?.daily_max_activity?.default ? String(window.sysLimits.daily_max_activity.default) : '2'),
+    map_type: document.getElementById('cfgMapType')?.value || (window.sysLimits?.map_type?.default) || 'carto_dark',
   };
 
   if (!validateInputs(config)) return;
@@ -684,11 +684,10 @@ function getOverrideConfig() {
     max_heart_rate: document.getElementById('cfgMaxHR').value,
     sim_weather: document.getElementById('cfgSimWeather')?.checked ? 'true' : 'false',
     sim_redlights: document.getElementById('cfgSimRedLights')?.checked ? 'true' : 'false',
-    overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value,
-    rest_time_percent: document.getElementById('cfgRestTime')?.value,
-    activity_areas: JSON.stringify(activityAreasData),
-    daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || '2',
-    map_type: document.getElementById('cfgMapType')?.value || 'carto_dark',
+    overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || (window.sysLimits?.overlap_protection_minutes?.default ? String(window.sysLimits.overlap_protection_minutes.default) : undefined),
+    rest_time_percent: document.getElementById('cfgRestTime')?.value || (window.sysLimits?.rest_time_percent?.default ? String(window.sysLimits.rest_time_percent.default) : undefined),
+    daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || (window.sysLimits?.daily_max_activity?.default ? String(window.sysLimits.daily_max_activity.default) : undefined),
+    map_type: document.getElementById('cfgMapType')?.value || (window.sysLimits?.map_type?.default) || 'carto_dark',
   };
 
   if (!validateTimeBounds(overrideConfig.min_time, overrideConfig.max_time, overrideConfig.target_date, isCustomTime)) {
