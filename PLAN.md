@@ -267,4 +267,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [ ] nút định vị GPS chỉ lấy vị trí 1 lần tại lúc bấm nút và cập nhật vào vị trí của Preview Map -> đồng thời lưu previous saved location cho vị trí này
 + [ ] với hành động user tự move ghim vị trí thì không lưu previous saved location mà chỉ khi hoạt động generate around location được tạo (Nháp/Upload) thì mới lưu vị trí đó vào previous location
 + [ ] check lại hàm lấy vị trí đang chưa đúng Phường Bến Thành, Thành phố Thủ Đức (10.7701, 106.6951) -> Thành phố hồ chí minh, ngoài ra một số khu vực chỉ có tên phường, ko có tên thành phố??? (Hà Nội, Nam Định, và các khu vực miền Trung,...)
-+ [ ] quyền riêng tư đang sai, tôi đặt chỉ mình tôi nhưng hoạt động vẫn tạo công khai
++ [ ] [quan trọng] cấu hình tùy chỉnh quyền riêng tư đang sai, tôi đặt chỉ mình tôi nhưng hoạt động vẫn tạo ra vẫn là công khai
