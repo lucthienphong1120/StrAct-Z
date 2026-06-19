@@ -140,6 +140,16 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.8.3 (2026-06-19)
+- **Coordinate Memorization & Fallback for Preview Map**:
+  - Implemented client-side coordinate persistence using `localStorage` under `preview_saved_lat` and `preview_saved_lng`.
+  - Set default fallback coordinate of Preview Map to Hanoi's center: Bach Mai, Hai Ba Trung (`lat: 21.0035`, `lng: 105.8488`) when no previously saved coordinate exists.
+  - Triggered coordinate saving strictly on:
+    1. Successful GPS Geolocation (only queries once upon button click).
+    2. Successful activity generation (either Draft generation or Direct Upload).
+  - Explicitly avoided saving coordinate updates during manual marker drag or map click interactions.
+  - Bumped version to `v2.8.3` across `package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`.
+
 ### v2.8.2 (2026-06-19)
 - **Preview Map & Avoid Workhours Bypass**:
   - Renamed modal popup from "Generate around location" to "Preview Map".

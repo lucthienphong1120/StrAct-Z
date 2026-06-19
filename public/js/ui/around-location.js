@@ -13,9 +13,17 @@ function openAroundLocationModal() {
   const modal = document.getElementById('aroundLocationModal');
   if (!modal) return;
 
-  // Clear previous state or default to current view center
-  selectedLat = window.savedMapState?.lat || 21.0285;
-  selectedLng = window.savedMapState?.lng || 105.8542;
+  // Read previous saved location or fallback to Bach Mai, Hai Bae Trung, Hanoi
+  const savedLat = localStorage.getItem('preview_saved_lat');
+  const savedLng = localStorage.getItem('preview_saved_lng');
+  if (savedLat && savedLng) {
+    selectedLat = parseFloat(savedLat);
+    selectedLng = parseFloat(savedLng);
+  } else {
+    // Fallback: Bach Mai, Hai Ba Trung, Hanoi
+    selectedLat = 21.0035;
+    selectedLng = 105.8488;
+  }
   resolvedLocationName = "";
 
   // Reset bypass avoid workhours checkbox to unchecked
@@ -108,6 +116,13 @@ function getGPSLocation() {
     (position) => {
       selectedLat = position.coords.latitude;
       selectedLng = position.coords.longitude;
+
+      try {
+        localStorage.setItem('preview_saved_lat', selectedLat.toString());
+        localStorage.setItem('preview_saved_lng', selectedLng.toString());
+      } catch (e) {
+        console.error("Failed to save GPS location to localStorage:", e);
+      }
 
       if (aroundMap) {
         aroundMap.setView([selectedLat, selectedLng], 14);
@@ -213,6 +228,13 @@ async function submitAroundLocationGen(upload = false) {
     });
 
     if (result.success) {
+      try {
+        localStorage.setItem('preview_saved_lat', selectedLat.toString());
+        localStorage.setItem('preview_saved_lng', selectedLng.toString());
+      } catch (e) {
+        console.error("Failed to save generated location to localStorage:", e);
+      }
+
       if (upload) {
         showToast(`Tải lên thành công! Lộ trình: ${result.activity?.activityName || resolvedLocationName}`, "success");
       } else {
