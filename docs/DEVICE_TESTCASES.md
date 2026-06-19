@@ -31,6 +31,7 @@ Use this file to track testing of various devices and applications on Strava. Up
 | **Coros Pace Pro** | 294 | ? | GPX OK |
 | **Coros Apex 2 Pro** | 294 | ? | GPX OK |
 | **Coros Vertix 2S** | 294 | ? | GPX OK |
+| **Coros Vertix 2** | 294 | ? | Chưa test |
 | **COROS** | 294 | ? | GPX OK |
 | **Suunto Vertical** | 23 | ? | GPX OK |
 | **Suunto Vertical 2** | 23 | ? | Chưa test |
