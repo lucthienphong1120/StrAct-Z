@@ -140,6 +140,28 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.8.2 (2026-06-19)
+- **Preview Map & Avoid Workhours Bypass**:
+  - Renamed modal popup from "Generate around location" to "Preview Map".
+  - Removed "Khoảng cách chạy (km)" input field from the modal, falling back automatically to user's database configuration.
+  - Replaced it with a "Bypass avoid workhour" checkbox toggle (default off).
+  - Implemented backend routing and generator overrides to bypass working hours constraints when bypass toggle is enabled.
+  - Cleared empty override parameters from frontend payloads before backend validation to prevent validation exceptions for default values ("Theo hệ thống").
+  - Bumped version to `v2.8.2` across `package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`.
+
+### v2.8.1 (2026-06-19)
+- **Strava Visibility Override Fix & Info Tooltip**:
+  - Fixed a synchronization issue where backend manual run routes ignored the `strava_visibility` override value sent from the UI.
+  - Updated the visibility tooltip message in `limits.js` to clearly state that the API doesn't change privacy directly but instead mutes the activity.
+  - Bumped version to `v2.8.1` across `package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`.
+
+### v2.8.0 (2026-06-19)
+- **Strava App Device Source Compatibility Fix**:
+  - Restructured `DEVICE_TESTCASES.md` table to split `Tested Status` into separate `GPX Test` and `FIT Test` columns.
+  - Fixed FIT generator device parameters: updated the product ID of Strava device configuration from `265` to `102` to match the official Strava App.
+  - Fixed GPX generator device parameters: updated the creator field of Strava GPX files from `Strava App` to `Strava Android App` to bypass parser errors on Strava.
+  - Bumped version to `v2.8.0` across `package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`.
+
 ### v2.7.0 (2026-06-19)
 - **Feature: Custom Map Layers Selection**:
   - Implemented map layer selection option on the UI, supporting 5 styles: CartoDB Dark Matter, OpenStreetMap Standard, CartoDB Voyager, CartoDB Positron, and Esri World Imagery (Satellite).
