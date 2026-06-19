@@ -147,6 +147,7 @@ function updateDynamicTooltips() {
     pace_multipliers: 'tipPaceMultipliers',
     activity_areas: 'tipActivityAreas',
     map_locked: 'tipMapLocked',
+    map_type: 'tipMapType',
     home_count: 'tipHomePoints',
     work_count: 'tipWorkPoints',
     scale_radius: 'tipScaleRadius',
