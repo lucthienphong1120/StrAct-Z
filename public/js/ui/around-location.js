@@ -2,6 +2,71 @@
  * StrAct Z - Generate Around Location (Tạo quanh vị trí)
  * Modal Controller, Leaflet Preview Map, GPS Geolocation, and Reverse Geocoding via Nominatim
  */
+const VN_PROVINCE_CODES = {
+  'VN-HN': 'Thành phố Hà Nội',
+  'VN-SG': 'Thành phố Hồ Chí Minh',
+  'VN-DN': 'Thành phố Đà Nẵng',
+  'VN-HP': 'Thành phố Hải Phòng',
+  'VN-CT': 'Thành phố Cần Thơ',
+  'VN-01': 'Tỉnh Lai Châu',
+  'VN-02': 'Tỉnh Lào Cai',
+  'VN-03': 'Tỉnh Hà Giang',
+  'VN-04': 'Tỉnh Cao Bằng',
+  'VN-05': 'Tỉnh Sơn La',
+  'VN-06': 'Tỉnh Yên Bái',
+  'VN-07': 'Tỉnh Tuyên Quang',
+  'VN-09': 'Tỉnh Lạng Sơn',
+  'VN-13': 'Tỉnh Quảng Ninh',
+  'VN-14': 'Tỉnh Hòa Bình',
+  'VN-18': 'Tỉnh Ninh Bình',
+  'VN-20': 'Tỉnh Thái Bình',
+  'VN-21': 'Tỉnh Thanh Hóa',
+  'VN-22': 'Tỉnh Nghệ An',
+  'VN-23': 'Tỉnh Hà Tĩnh',
+  'VN-24': 'Tỉnh Quảng Bình',
+  'VN-25': 'Tỉnh Quảng Trị',
+  'VN-26': 'Tỉnh Thừa Thiên Huế',
+  'VN-27': 'Tỉnh Quảng Nam',
+  'VN-28': 'Tỉnh Kon Tum',
+  'VN-29': 'Tỉnh Quảng Ngãi',
+  'VN-30': 'Tỉnh Gia Lai',
+  'VN-31': 'Tỉnh Bình Định',
+  'VN-32': 'Tỉnh Phú Yên',
+  'VN-33': 'Tỉnh Đắk Lắk',
+  'VN-34': 'Tỉnh Khánh Hòa',
+  'VN-35': 'Tỉnh Lâm Đồng',
+  'VN-36': 'Tỉnh Ninh Thuận',
+  'VN-37': 'Tỉnh Tây Ninh',
+  'VN-39': 'Tỉnh Đồng Nai',
+  'VN-40': 'Tỉnh Bình Thuận',
+  'VN-41': 'Tỉnh Long An',
+  'VN-43': 'Tỉnh Bà Rịa - Vũng Tàu',
+  'VN-44': 'Tỉnh An Giang',
+  'VN-45': 'Tỉnh Đồng Tháp',
+  'VN-46': 'Tỉnh Tiền Giang',
+  'VN-47': 'Tỉnh Kiên Giang',
+  'VN-49': 'Tỉnh Vĩnh Long',
+  'VN-50': 'Tỉnh Bến Tre',
+  'VN-51': 'Tỉnh Trà Vinh',
+  'VN-52': 'Tỉnh Sóc Trăng',
+  'VN-53': 'Tỉnh Bắc Kạn',
+  'VN-54': 'Tỉnh Bắc Giang',
+  'VN-55': 'Tỉnh Bạc Liêu',
+  'VN-56': 'Tỉnh Bắc Ninh',
+  'VN-57': 'Tỉnh Bình Dương',
+  'VN-58': 'Tỉnh Bình Phước',
+  'VN-59': 'Tỉnh Cà Mau',
+  'VN-61': 'Tỉnh Hải Dương',
+  'VN-63': 'Tỉnh Hà Nam',
+  'VN-66': 'Tỉnh Hưng Yên',
+  'VN-67': 'Tỉnh Nam Định',
+  'VN-68': 'Tỉnh Phú Thọ',
+  'VN-69': 'Tỉnh Thái Nguyên',
+  'VN-70': 'Tỉnh Vĩnh Phúc',
+  'VN-71': 'Tỉnh Điện Biên',
+  'VN-72': 'Tỉnh Đắk Nông',
+  'VN-73': 'Tỉnh Hậu Giang'
+};
 
 let aroundMap = null;
 let aroundMarker = null;
@@ -163,12 +228,36 @@ async function reverseGeocode(lat, lng) {
     let locationStr = "";
     if (data.address) {
       const addr = data.address;
-      // Resolve name elements hierarchically
-      const district = addr.suburb || addr.quarter || addr.district || addr.city_district || addr.county || "";
-      const city = addr.city || addr.town || addr.village || addr.state || "";
+      // Resolve ward/district/suburb hierarchically
+      const district = addr.suburb || addr.quarter || addr.neighbourhood || addr.city_district || addr.district || addr.county || "";
+      const city = addr.city || addr.town || addr.village || "";
+      
+      let state = addr.state || addr.province || addr.region || "";
 
-      const parts = [district, city].map(p => p.trim()).filter(Boolean);
-      locationStr = parts.join(", ");
+      // Fallback/Correct state name from ISO3166-2-lvl4 mapping for Vietnam
+      const isVietnam = addr.country_code === 'vn' || (addr.country && (addr.country === 'Việt Nam' || addr.country === 'Vietnam'));
+      if (isVietnam && addr['ISO3166-2-lvl4']) {
+        const isoCode = addr['ISO3166-2-lvl4'].toUpperCase();
+        if (VN_PROVINCE_CODES[isoCode]) {
+          state = VN_PROVINCE_CODES[isoCode];
+        }
+      }
+
+      // Deduplicate parts case-insensitively while ignoring administrative prefixes
+      const uniqueParts = [];
+      const seen = new Set();
+      for (const p of [district, city, state]) {
+        if (!p) continue;
+        const norm = p.toLowerCase()
+          .replace(/^(tỉnh|thành phố|quận|huyện|phường|xã|thị trấn|thị xã)\s+/i, '')
+          .trim();
+        if (norm && !seen.has(norm)) {
+          seen.add(norm);
+          uniqueParts.push(p);
+        }
+      }
+
+      locationStr = uniqueParts.join(", ");
 
       if (!locationStr && addr.country) {
         locationStr = addr.country;

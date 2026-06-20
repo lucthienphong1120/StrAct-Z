@@ -140,6 +140,16 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.8.4 (2026-06-20)
+- **Geocoding Location Resolution & City/Province Detection Fix**:
+  - Implemented `VN_PROVINCE_CODES` lookup dictionary mapping ISO 3166-2:VN codes to their standard Vietnamese names.
+  - Rewrote Nominatim reverse geocoding parser in `around-location.js` to combine suburb, city_district, and state elements hierarchically.
+  - Resolved `10.7701, 106.6951` coordinate to correctly include "Thành phố Hồ Chí Minh" (via VN-SG lookup fallback).
+  - Ensured all other regions (Hanoi, Nam Dinh, central Vietnam) always resolve city/province names correctly without omission.
+  - Implemented case-insensitive deduplication of administrative name components (ward, district, city, state).
+  - Checked off "fix lỗi hiển thị strava app" from the plan backlog.
+  - Bumped version to `v2.8.4` across `package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`.
+
 ### v2.8.3 (2026-06-19)
 - **Coordinate Memorization & Fallback for Preview Map**:
   - Implemented client-side coordinate persistence using `localStorage` under `preview_saved_lat` and `preview_saved_lng`.
