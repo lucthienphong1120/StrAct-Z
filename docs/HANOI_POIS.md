@@ -157,17 +157,30 @@ Vibrant university grounds, athletic stadium loops, and high school loops:
 ## 🏙️ Urban Districts & Apartment Complexes (Khu đô thị & Khu tập thể)
 Modern residential areas with wide avenues, pedestrian sidewalks, and low traffic:
 *   **Bán đảo Linh Đàm** (Hoàng Mai) - `20.9658, 105.8290`
-*   **Khu đô thị Vinhomes Riverside** (Long Biên) - `21.0395, 105.9080`
-*   **Hồ điều hòa Harmony** (Long Biên) - `21.0380, 105.9015`
-*   **Khu đô thị Starlake Tây Hồ Tây** (Bắc Từ Liêm) - `21.0552, 105.7990`
-*   **Đường chạy Ciputra** (Bắc Từ Liêm) - `21.0825, 105.8020`
 *   **Khu vực Landmark 72** (Nam Từ Liêm) - `21.0168, 105.7838`
 *   **Khu đô thị Mễ Trì Hạ** (Nam Từ Liêm) - `21.0144, 105.7822`
-*   **Công viên Vinhomes Smart City** (Nam Từ Liêm) - `21.0080, 105.7485`
-*   **Vinhomes Ocean Park** (Gia Lâm) - `20.9930, 105.9520`
-*   **Đường chạy Park City** (Hà Đông) - `20.9575, 105.7595`
 *   **Khu đô thị Splendora An Khánh** (Hoài Đức) - `21.0090, 105.7220`
 *   **Khu đô thị sinh thái The Phoenix Garden** (Đan Phượng) - `21.1070, 105.6790`
+*   **Hồ điều hòa Harmony** (Long Biên) - `21.0380, 105.9015`
+
+### 📍 Khu vực Tây Hồ - Bắc Từ Liêm - Cầu Giấy
+*   **Khu đô thị Starlake Tây Hồ Tây** (Bắc Từ Liêm) - `21.0552, 105.7990`
+*   **Công viên hồ điều hòa Ngoại Giao Đoàn** (Bắc Từ Liêm) - `21.0665, 105.7985` (KĐT Ngoại Giao Đoàn)
+*   **Đường chạy Ciputra** (Bắc Từ Liêm) - `21.0825, 105.8020` (KĐT Ciputra Nam Thăng Long)
+
+### 📍 Khu vực Hà Đông - Nam Từ Liêm
+*   **Công viên Thiên văn học (Dương Nội)** (Hà Đông) - `20.9815, 105.7485` (KĐT Dương Nội)
+*   **Đường chạy Park City** (Hà Đông) - `20.9575, 105.7595` (KĐT ParkCity Hanoi)
+*   **Công viên Vinhomes Smart City** (Nam Từ Liêm) - `21.0080, 105.7485` (KĐT Vinhomes Smart City)
+
+### 📍 Khu vực Hoàng Mai - Thanh Trì
+*   **Khu đô thị The Manor Central Park** (Thanh Trì) - `20.9750, 105.8080` (Nguyễn Xiển)
+*   **Khu đô thị Gamuda Gardens** (Hoàng Mai) - `20.9760, 105.8750` (KĐT Gamuda Gardens)
+
+### 📍 Khu vực Gia Lâm - Long Biên (Sát vách Hà Nội)
+*   **Khu đô thị Ecopark** (Gia Lâm) - `20.9580, 105.9320` (KĐT Ecopark)
+*   **Vinhomes Ocean Park** (Gia Lâm) - `20.9930, 105.9520` (Vinhomes Ocean Park 1)
+*   **Khu đô thị Vinhomes Riverside** (Long Biên) - `21.0395, 105.9080` (Vinhomes Riverside)
 
 ---
 
@@ -177,21 +190,3 @@ Paths running along Hanoi's rivers and dikes:
 *   **Đường ven sông Kim Ngưu (Thanh Nhàn)** (Hai Bà Trưng) - `21.0048, 105.8625`
 *   **Cầu Long Biên** (Hoàn Kiếm) - `21.0401, 105.8588`
 *   **Đê sông Hồng (Long Biên)** (Long Biên) - `21.0360, 105.8710`
-
----
-
-## 📋 Hanoi High-Quality Running Zones & Spaces Verification Matrix
-
-This matrix maps high-quality running urban spaces, lakes, and parks to their respective configuration coordinates inside the `route-engine.js` codebase:
-
-| Location Name | District Key | Coordinates | Registry Status in `route-engine.js` |
-| :--- | :--- | :--- | :--- |
-| **Vinhomes Ocean Park** | `gia_lam` | `20.9930, 105.9520` | Active |
-| **Khu đô thị Ciputra** | `bac_tu_liem` | `21.0825, 105.8020` | Active |
-| **Vinhomes Smart City** | `nam_tu_liem` | `21.0080, 105.7485` | Active |
-| **Khu đô thị Vinhomes Riverside** | `long_bien` | `21.0395, 105.9080` | Active |
-| **Hồ Tây (West Lake)** | `tay_ho` | `21.0558, 105.8083` | Active |
-| **Công viên Yên Sở** | `hoang_mai` | `20.9664, 105.8521` | Active |
-| **Hồ Hoàn Kiếm (Hồ Gươm)** | `hoan_kiem` | `21.0285, 105.8542` | Active |
-| **Đê sông Hồng (Long Biên)** | `long_bien` | `21.0360, 105.8710` | Active |
-| **Sân vận động Mỹ Đình** | `nam_tu_liem` | `21.0200, 105.7640` | Active |

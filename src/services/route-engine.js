@@ -129,7 +129,8 @@ const RUNNING_POIS = {
     { name: 'Công viên Bắc Linh Đàm', lat: 20.9692, lng: 105.8338 },
     { name: 'Đài Tưởng Niệm Chủ Tịch Hồ Chí Minh', lat: 20.9676, lng: 105.8398 },
     { name: 'Đường ven Hồ Linh Đàm', lat: 20.9608, lng: 105.8340 },
-    { name: 'Hồ Đầm Sòi', lat: 20.9918, lng: 105.8300 }
+    { name: 'Hồ Đầm Sòi', lat: 20.9918, lng: 105.8300 },
+    { name: 'Khu đô thị Gamuda Gardens', lat: 20.9760, lng: 105.8750 }
   ],
   long_bien: [
     { name: 'Khu đô thị Vinhomes Riverside', lat: 21.0395, lng: 105.9080 },
@@ -184,14 +185,16 @@ const RUNNING_POIS = {
     { name: 'Hồ Triều Khúc', lat: 20.9818, lng: 105.8075 },
     { name: 'Sân vận động huyện Thanh Trì', lat: 20.9535, lng: 105.8450 },
     { name: 'Hồ đầm tròn Thanh Trì', lat: 20.9425, lng: 105.8510 },
-    { name: 'Hồ điều hòa Văn Điển', lat: 20.9500, lng: 105.8400 }
+    { name: 'Hồ điều hòa Văn Điển', lat: 20.9500, lng: 105.8400 },
+    { name: 'Khu đô thị The Manor Central Park', lat: 20.9750, lng: 105.8080 }
   ],
   gia_lam: [
     { name: 'Vinhomes Ocean Park', lat: 20.9930, lng: 105.9520 },
     { name: 'Hồ Sài Đồng', lat: 21.0255, lng: 105.9220 },
     { name: 'Trường Đại học Nông nghiệp Việt Nam (VNUA)', lat: 21.0045, lng: 105.9335 },
     { name: 'Hồ điều hòa Trâu Quỳ', lat: 21.0070, lng: 105.9395 },
-    { name: 'Công viên Gia Lâm', lat: 21.0350, lng: 105.9300 }
+    { name: 'Công viên Gia Lâm', lat: 21.0350, lng: 105.9300 },
+    { name: 'Khu đô thị Ecopark', lat: 20.9580, lng: 105.9320 }
   ],
   dong_anh: [
     { name: 'Công viên Thị trấn Đông Anh', lat: 21.1390, lng: 105.8455 },
