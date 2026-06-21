@@ -60,6 +60,10 @@ For detailed information, please refer to our documentation guides:
 
 ## 📋 Changelog
 
+### v2.8.9 (2026-06-21)
+- **FIT Label Color**: Changed FIT tag color from green to cyan/teal (`#06b6d4`) to avoid conflict with SCHEDULE green. GPX remains orange.
+- **District Tag**: Font-size `0.7em` + `text-transform: capitalize`.
+
 ### v2.8.8 (2026-06-21)
 - **POI Probability Tuning**: Increased scenic POI targeting rates across all route generation paths:
   - Start point (no home/work): POI probability `75%` → `80%`, random fallback `25%` → `20%`.

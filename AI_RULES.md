@@ -140,6 +140,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.8.9 (2026-06-21)
+- **FIT Label Color Update**: Changed FIT format tag from green (`#10b981`) to cyan/teal (`#06b6d4`) to avoid visual conflict with the SCHEDULE label (also green).
+  - District tag font-size tweaked to `0.7em` with `text-transform: capitalize`.
+  - Bumped version to `v2.8.9` across `package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`.
+
 ### v2.8.8 (2026-06-21)
 - **POI Probability Tuning**:
   - `getDistrictTargetCenter` (no home/work): POI start probability `75%` → `80%`, random fallback `25%` → `20%`.

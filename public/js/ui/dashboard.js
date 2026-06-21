@@ -303,7 +303,7 @@ async function loadActivities(logDistance = false) {
       const isGpx = a.fit_file && a.fit_file.endsWith('.gpx');
       const formatTag = isGpx 
         ? `<span class="status-badge" style="background: rgba(249, 115, 22, 0.1); color: #f97316; padding: 2px 6px; font-weight: bold; border: 1px solid rgba(249, 115, 22, 0.2);">GPX</span>`
-        : `<span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green); padding: 2px 6px; font-weight: bold; border: 1px solid rgba(16, 185, 129, 0.2);">FIT</span>`;
+        : `<span class="status-badge" style="background: rgba(6, 182, 212, 0.1); color: #06b6d4; padding: 2px 6px; font-weight: bold; border: 1px solid rgba(6, 182, 212, 0.25);">FIT</span>`;
 
       return `
         <div class="activity-item">
