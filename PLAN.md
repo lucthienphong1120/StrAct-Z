@@ -269,4 +269,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] check lại hàm lấy vị trí đang chưa đúng Phường Bến Thành, Thành phố Thủ Đức (10.7701, 106.6951) -> Thành phố hồ chí minh, ngoài ra một số khu vực chỉ có tên phường, ko có tên thành phố??? (Hà Nội, Nam Định, và các khu vực miền Trung,...)
 + [x] cấu hình tùy chỉnh quyền riêng tư đang sai, tôi đặt chỉ mình tôi nhưng hoạt động vẫn tạo ra vẫn là công khai (v2.8.1)
 + [x] fix lỗi hiển thị strava app (v2.8.0)
-+ [ ] 
++ [x] Bổ sung các địa danh chạy bộ thiếu vào registry, xóa bỏ giới hạn quận (Cross-District POI), và tăng tính đa dạng bằng cách chọn ngẫu nhiên weighted top 3 POI gần nhất (v2.8.5)

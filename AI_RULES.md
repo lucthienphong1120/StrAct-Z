@@ -140,6 +140,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.8.5 (2026-06-21)
+- **Hanoi POIs Registry Expansion & Cross-District Routing Upgrades**:
+  - Expanded `RUNNING_POIS` in `route-engine.js` with comprehensive scenic coordinates for all existing districts in Hanoi.
+  - Implemented cross-district POI matching by globally pooling all POIs across all districts during waypoint generation, removing administrative border locks.
+  - Designed weighted top-3 POI selection to introduce route variety while preserving proximity preferences (60% chance for closest, 30% for second, 10% for third).
+  - Bumped version to `v2.8.5` across `package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`.
+
 ### v2.8.4 (2026-06-20)
 - **Geocoding Location Resolution & City/Province Detection Fix**:
   - Implemented `VN_PROVINCE_CODES` lookup dictionary mapping ISO 3166-2:VN codes to their standard Vietnamese names.

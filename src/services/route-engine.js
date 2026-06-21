@@ -24,7 +24,9 @@ const RUNNING_POIS = {
     { name: 'Nhà hát Lớn Hà Nội', lat: 21.0245, lng: 105.8588 },
     { name: 'Vườn hoa Lý Thái Tổ', lat: 21.0274, lng: 105.8562 },
     { name: 'Quảng trường Đông Kinh Nghĩa Thục', lat: 21.0306, lng: 105.8524 },
-    { name: 'Trường THPT Việt Đức', lat: 21.0227, lng: 105.8525 }
+    { name: 'Trường THPT Việt Đức', lat: 21.0227, lng: 105.8525 },
+    { name: 'Vườn hoa Diên Hồng', lat: 21.0260, lng: 105.8570 },
+    { name: 'Cầu Long Biên (Hoàn Kiếm)', lat: 21.0401, lng: 105.8588 }
   ],
   hai_ba_trung: [
     { name: 'Công viên Thống Nhất', lat: 21.0163, lng: 105.8458 },
@@ -33,7 +35,9 @@ const RUNNING_POIS = {
     { name: 'Đại học Kinh tế Quốc dân (NEU)', lat: 21.0016, lng: 105.8423 },
     { name: 'Hồ Thiền Quang', lat: 21.0185, lng: 105.8475 },
     { name: 'Đại học Xây dựng', lat: 21.0035, lng: 105.8428 },
-    { name: 'Sân vận động Bách Khoa', lat: 21.0055, lng: 105.8465 }
+    { name: 'Sân vận động Bách Khoa', lat: 21.0055, lng: 105.8465 },
+    { name: 'Hồ Quỳnh', lat: 21.0085, lng: 105.8582 },
+    { name: 'Đường ven sông Kim Ngưu (Thanh Nhàn)', lat: 21.0048, lng: 105.8625 }
   ],
   ba_dinh: [
     { name: 'Công viên Bách Thảo', lat: 21.0425, lng: 105.8285 },
@@ -43,7 +47,9 @@ const RUNNING_POIS = {
     { name: 'Hồ Ngọc Khánh', lat: 21.0276, lng: 105.8095 },
     { name: 'Hồ Thành Công', lat: 21.0195, lng: 105.8130 },
     { name: 'Công viên Thủ Lệ', lat: 21.0322, lng: 105.8080 },
-    { name: 'Trường THPT Chu Văn An', lat: 21.0441, lng: 105.8315 }
+    { name: 'Trường THPT Chu Văn An', lat: 21.0441, lng: 105.8315 },
+    { name: 'Hồ Hữu Tiệp (Hồ B52)', lat: 21.0381, lng: 105.8236 },
+    { name: 'Cung thể thao Quần Ngựa', lat: 21.0405, lng: 105.8155 }
   ],
   tay_ho: [
     { name: 'Đường ven Hồ Tây (Trích Sài)', lat: 21.0558, lng: 105.8083 },
@@ -52,7 +58,10 @@ const RUNNING_POIS = {
     { name: 'Đường Thanh Niên', lat: 21.0436, lng: 105.8372 },
     { name: 'Đường ven Hồ Tây (Vệ Hồ)', lat: 21.0725, lng: 105.8288 },
     { name: 'Hồ Quảng Bá', lat: 21.0664, lng: 105.8260 },
-    { name: 'Thung lũng hoa Hồ Tây', lat: 21.0745, lng: 105.8210 }
+    { name: 'Thung lũng hoa Hồ Tây', lat: 21.0745, lng: 105.8210 },
+    { name: 'Phố đi bộ Trịnh Công Sơn', lat: 21.0734, lng: 105.8158 },
+    { name: 'Chùa Trấn Quốc', lat: 21.0478, lng: 105.8368 },
+    { name: 'Phủ Tây Hồ', lat: 21.0610, lng: 105.8306 }
   ],
   cau_giay: [
     { name: 'Công viên Cầu Giấy', lat: 21.0205, lng: 105.7905 },
@@ -61,7 +70,9 @@ const RUNNING_POIS = {
     { name: 'Trường THPT Chuyên Hà Nội - Amsterdam', lat: 21.0099, lng: 105.7985 },
     { name: 'Đại học Sư phạm Hà Nội', lat: 21.0365, lng: 105.7850 },
     { name: 'Hồ Nghĩa Tân', lat: 21.0410, lng: 105.7930 },
-    { name: 'Đại học Thương mại', lat: 21.0366, lng: 105.7745 }
+    { name: 'Đại học Thương mại', lat: 21.0366, lng: 105.7745 },
+    { name: 'Công viên hồ điều hòa Mai Dịch', lat: 21.0335, lng: 105.7725 },
+    { name: 'Bảo tàng Dân tộc học Việt Nam', lat: 21.0405, lng: 105.7985 }
   ],
   dong_da: [
     { name: 'Văn Miếu Quốc Tử Giám', lat: 21.0285, lng: 105.8355 },
@@ -73,7 +84,9 @@ const RUNNING_POIS = {
     { name: 'Đại học Ngoại thương (FTU)', lat: 21.0225, lng: 105.8048 },
     { name: 'Đại học Y Hà Nội', lat: 21.0038, lng: 105.8285 },
     { name: 'Học viện Ngoại giao', lat: 21.0232, lng: 105.8045 },
-    { name: 'Sân vận động Hàng Đẫy', lat: 21.0290, lng: 105.8315 }
+    { name: 'Sân vận động Hàng Đẫy', lat: 21.0290, lng: 105.8315 },
+    { name: 'Hồ Giám (Văn Miếu)', lat: 21.0272, lng: 105.8350 },
+    { name: 'Hồ Hào Nam', lat: 21.0232, lng: 105.8260 }
   ],
   thanh_xuan: [
     { name: 'Công viên Thanh Xuân', lat: 20.9982, lng: 105.8008 },
@@ -81,7 +94,9 @@ const RUNNING_POIS = {
     { name: 'Hồ Khương Đình', lat: 20.9858, lng: 105.8190 },
     { name: 'Đại học Hà Nội (HANU)', lat: 20.9845, lng: 105.7955 },
     { name: 'Đại học Khoa học Tự nhiên', lat: 20.9995, lng: 105.8090 },
-    { name: 'Hồ Hạ Đình', lat: 20.9865, lng: 105.8095 }
+    { name: 'Hồ Hạ Đình', lat: 20.9865, lng: 105.8095 },
+    { name: 'Ao Xóm Hồng', lat: 20.9856, lng: 105.8197 },
+    { name: 'Hồ Rùa (Khương Trung)', lat: 20.9930, lng: 105.8285 }
   ],
   hoang_mai: [
     { name: 'Công viên Yên Sở', lat: 20.9664, lng: 105.8521 },
@@ -90,7 +105,14 @@ const RUNNING_POIS = {
     { name: 'Hồ Vĩnh Hoàng', lat: 20.9835, lng: 105.8640 },
     { name: 'Trường Đại học Thăng Long', lat: 20.9760, lng: 105.8160 },
     { name: 'Hồ Định Công', lat: 20.9785, lng: 105.8250 },
-    { name: 'Công viên Hoàng Văn Thụ', lat: 20.9902, lng: 105.8492 }
+    { name: 'Công viên Hoàng Văn Thụ', lat: 20.9902, lng: 105.8492 },
+    { name: 'Vườn hoa Định Công', lat: 20.9823, lng: 105.8278 },
+    { name: 'Đầm Dỗi', lat: 20.9828, lng: 105.8238 },
+    { name: 'Đường ven sông Lừ (Định Công)', lat: 20.9840, lng: 105.8250 },
+    { name: 'Công viên Linh Đàm', lat: 20.9634, lng: 105.8312 },
+    { name: 'Công viên Bắc Linh Đàm', lat: 20.9692, lng: 105.8338 },
+    { name: 'Đài Tưởng Niệm Chủ Tịch Hồ Chí Minh', lat: 20.9676, lng: 105.8398 },
+    { name: 'Đường ven Hồ Linh Đàm', lat: 20.9608, lng: 105.8340 }
   ],
   long_bien: [
     { name: 'Khu đô thị Vinhomes Riverside', lat: 21.0395, lng: 105.9080 },
@@ -98,7 +120,9 @@ const RUNNING_POIS = {
     { name: 'Hồ Thạch Bàn', lat: 21.0185, lng: 105.8980 },
     { name: 'Hồ Cầu Tình', lat: 21.0505, lng: 105.8750 },
     { name: 'Đê sông Hồng (Long Biên)', lat: 21.0360, lng: 105.8710 },
-    { name: 'Trường THPT Nguyễn Gia Thiều', lat: 21.0465, lng: 105.8785 }
+    { name: 'Trường THPT Nguyễn Gia Thiều', lat: 21.0465, lng: 105.8785 },
+    { name: 'Công viên Long Biên', lat: 21.0425, lng: 105.8905 },
+    { name: 'Hồ điều hòa Harmony', lat: 21.0380, lng: 105.9015 }
   ],
   ha_dong: [
     { name: 'Công viên hồ Phùng Hưng', lat: 20.9652, lng: 105.7901 },
@@ -107,14 +131,18 @@ const RUNNING_POIS = {
     { name: 'Học viện Công nghệ Bưu chính Viễn thông (PTIT)', lat: 20.9808, lng: 105.7885 },
     { name: 'Học viện An ninh Nhân dân', lat: 20.9840, lng: 105.7870 },
     { name: 'Hồ Đầm Khê', lat: 20.9675, lng: 105.7760 },
-    { name: 'Công viên thể thao Hà Đông', lat: 20.9570, lng: 105.7710 }
+    { name: 'Công viên thể thao Hà Đông', lat: 20.9570, lng: 105.7710 },
+    { name: 'Hồ điều hòa Mỗ Lao', lat: 20.9808, lng: 105.7830 },
+    { name: 'Đường chạy Park City', lat: 20.9575, lng: 105.7595 }
   ],
   bac_tu_liem: [
     { name: 'Công viên Hòa Bình', lat: 21.0694, lng: 105.7915 },
     { name: 'Đại học Mỏ - Địa chất', lat: 21.0722, lng: 105.7740 },
     { name: 'Học viện Tài chính', lat: 21.0760, lng: 105.7785 },
     { name: 'Đại học Công nghiệp Hà Nội', lat: 21.0535, lng: 105.7350 },
-    { name: 'Công viên hồ điều hòa Ngoại Giao Đoàn', lat: 21.0665, lng: 105.7985 }
+    { name: 'Công viên hồ điều hòa Ngoại Giao Đoàn', lat: 21.0665, lng: 105.7985 },
+    { name: 'Đường chạy Ciputra', lat: 21.0825, lng: 105.8020 },
+    { name: 'Công viên hồ điều hòa Thành phố Giao lưu', lat: 21.0560, lng: 105.7815 }
   ],
   nam_tu_liem: [
     { name: 'Sân vận động Quốc gia Mỹ Đình', lat: 21.0205, lng: 105.7635 },
@@ -122,17 +150,21 @@ const RUNNING_POIS = {
     { name: 'Công viên Mễ Trì', lat: 21.0125, lng: 105.7815 },
     { name: 'Cung điền kinh trong nhà Mỹ Đình', lat: 21.0225, lng: 105.7605 },
     { name: 'Đại học Quốc gia Hà Nội (Kí túc xá Mỹ Đình)', lat: 21.0275, lng: 105.7695 },
-    { name: 'Trường đua F1 Mỹ Đình', lat: 21.0175, lng: 105.7610 }
+    { name: 'Trường đua F1 Mỹ Đình', lat: 21.0175, lng: 105.7610 },
+    { name: 'Công viên hồ điều hòa Phùng Khoang', lat: 20.9875, lng: 105.7925 },
+    { name: 'Công viên Vinhomes Smart City', lat: 21.0080, lng: 105.7485 }
   ],
   thanh_tri: [
     { name: 'Công viên Chu Văn An', lat: 20.9725, lng: 105.8115 },
     { name: 'Hồ Triều Khúc', lat: 20.9818, lng: 105.8075 },
-    { name: 'Sân vận động huyện Thanh Trì', lat: 20.9535, lng: 105.8450 }
+    { name: 'Sân vận động huyện Thanh Trì', lat: 20.9535, lng: 105.8450 },
+    { name: 'Hồ đầm tròn Thanh Trì', lat: 20.9425, lng: 105.8510 }
   ],
   gia_lam: [
     { name: 'Vinhomes Ocean Park', lat: 20.9930, lng: 105.9520 },
     { name: 'Hồ Sài Đồng', lat: 21.0255, lng: 105.9220 },
-    { name: 'Trường Đại học Nông nghiệp Việt Nam (VNUA)', lat: 21.0045, lng: 105.9335 }
+    { name: 'Trường Đại học Nông nghiệp Việt Nam (VNUA)', lat: 21.0045, lng: 105.9335 },
+    { name: 'Hồ điều hòa Trâu Quỳ', lat: 21.0070, lng: 105.9395 }
   ],
   dong_anh: [
     { name: 'Công viên Thị trấn Đông Anh', lat: 21.1390, lng: 105.8455 },
@@ -419,13 +451,16 @@ function generateLoopWaypoints(centerLat, centerLng, targetDistKm, districtKey =
   };
 
   // Check if we can target a POI
-  if (!districtKey || !RUNNING_POIS[districtKey] || !shouldTargetPoi) {
+  if (!districtKey || !shouldTargetPoi) {
     return generateDefaultLoop();
   }
 
-  // 2. Find eligible POIs within 1.5km
+  // 2. Find eligible POIs within 1.5km globally across all districts
   const startPt = { lat: centerLat, lng: centerLng };
-  const allPois = RUNNING_POIS[districtKey] || [];
+  const allPois = [];
+  for (const key in RUNNING_POIS) {
+    allPois.push(...RUNNING_POIS[key]);
+  }
   const eligiblePois = [];
 
   // Roll whether we should return to start:
@@ -468,9 +503,26 @@ function generateLoopWaypoints(centerLat, centerLng, targetDistKm, districtKey =
     return generateDefaultLoop();
   }
 
-  // Pick the nearest POI
+  // Sort eligible POIs by distance ascending
   eligiblePois.sort((a, b) => a.d - b.d);
-  const chosen = eligiblePois[0];
+  
+  // Pick one with weight prioritizing closer ones
+  let chosen;
+  if (eligiblePois.length === 1) {
+    chosen = eligiblePois[0];
+  } else if (eligiblePois.length === 2) {
+    const r = Math.random();
+    chosen = r < 0.70 ? eligiblePois[0] : eligiblePois[1];
+  } else {
+    const r = Math.random();
+    if (r < 0.60) {
+      chosen = eligiblePois[0];
+    } else if (r < 0.90) {
+      chosen = eligiblePois[1];
+    } else {
+      chosen = eligiblePois[2];
+    }
+  }
   const secondPoi = chosen.poi;
   const d = chosen.d;
 
@@ -599,12 +651,15 @@ function generateOutBackWaypoints(centerLat, centerLng, targetDistKm, districtKe
   };
 
   // Check if we can target a POI
-  if (!districtKey || !RUNNING_POIS[districtKey] || !shouldTargetPoi) {
+  if (!districtKey || !shouldTargetPoi) {
     return generateDefaultOutBack();
   }
 
   const startPt = { lat: centerLat, lng: centerLng };
-  const allPois = RUNNING_POIS[districtKey] || [];
+  const allPois = [];
+  for (const key in RUNNING_POIS) {
+    allPois.push(...RUNNING_POIS[key]);
+  }
   const eligiblePois = [];
 
   const maxOutboundDistM = shouldReturn ? (targetDistM / 2 / 1.35) : (targetDistM / 1.35);
@@ -624,9 +679,26 @@ function generateOutBackWaypoints(centerLat, centerLng, targetDistKm, districtKe
     return generateDefaultOutBack();
   }
 
-  // Pick nearest eligible POI
+  // Sort eligible POIs by distance ascending
   eligiblePois.sort((a, b) => a.d - b.d);
-  const chosen = eligiblePois[0];
+  
+  // Pick one with weight prioritizing closer ones
+  let chosen;
+  if (eligiblePois.length === 1) {
+    chosen = eligiblePois[0];
+  } else if (eligiblePois.length === 2) {
+    const r = Math.random();
+    chosen = r < 0.70 ? eligiblePois[0] : eligiblePois[1];
+  } else {
+    const r = Math.random();
+    if (r < 0.60) {
+      chosen = eligiblePois[0];
+    } else if (r < 0.90) {
+      chosen = eligiblePois[1];
+    } else {
+      chosen = eligiblePois[2];
+    }
+  }
   const targetPoi = chosen.poi;
   const d = chosen.d;
 
