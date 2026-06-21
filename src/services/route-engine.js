@@ -28,7 +28,8 @@ const RUNNING_POIS = {
     { name: 'Vườn hoa Diên Hồng', lat: 21.0260, lng: 105.8570 },
     { name: 'Cầu Long Biên (Hoàn Kiếm)', lat: 21.0401, lng: 105.8588 },
     { name: 'Vườn hoa Tao Đàn', lat: 21.0183, lng: 105.8553 },
-    { name: 'Vườn hoa Bác Cổ', lat: 21.0250, lng: 105.8594 }
+    { name: 'Vườn hoa Bác Cổ', lat: 21.0250, lng: 105.8594 },
+    { name: 'Phố đi bộ Hoàn Kiếm', lat: 21.0285, lng: 105.8542 }
   ],
   hai_ba_trung: [
     { name: 'Công viên Thống Nhất', lat: 21.0163, lng: 105.8458 },
@@ -41,7 +42,8 @@ const RUNNING_POIS = {
     { name: 'Hồ Quỳnh', lat: 21.0085, lng: 105.8582 },
     { name: 'Đường ven sông Kim Ngưu (Thanh Nhàn)', lat: 21.0048, lng: 105.8625 },
     { name: 'Vườn hoa Pasteur', lat: 21.0136, lng: 105.8569 },
-    { name: 'Vườn hoa Yersin (Yéc-xanh)', lat: 21.0163, lng: 105.8554 }
+    { name: 'Vườn hoa Yersin (Yéc-xanh)', lat: 21.0163, lng: 105.8554 },
+    { name: 'Hồ Bảy Mẫu', lat: 21.0150, lng: 105.8450 }
   ],
   ba_dinh: [
     { name: 'Công viên Bách Thảo', lat: 21.0425, lng: 105.8285 },
@@ -56,7 +58,9 @@ const RUNNING_POIS = {
     { name: 'Cung thể thao Quần Ngựa', lat: 21.0405, lng: 105.8155 },
     { name: 'Vườn hoa Lênin', lat: 21.0317, lng: 105.8394 },
     { name: 'Vườn hoa Mai Xuân Thưởng', lat: 21.0426, lng: 105.8340 },
-    { name: 'Lăng Chủ tịch Hồ Chí Minh', lat: 21.0368, lng: 105.8346 }
+    { name: 'Lăng Chủ tịch Hồ Chí Minh', lat: 21.0368, lng: 105.8346 },
+    { name: 'Đường đôi Kim Mã', lat: 21.0315, lng: 105.8190 },
+    { name: 'Trục đường Hoàng Diệu - Phan Đình Phùng', lat: 21.0395, lng: 105.8390 }
   ],
   tay_ho: [
     { name: 'Đường ven Hồ Tây (Trích Sài)', lat: 21.0558, lng: 105.8083 },
@@ -71,7 +75,8 @@ const RUNNING_POIS = {
     { name: 'Phủ Tây Hồ', lat: 21.0610, lng: 105.8306 },
     { name: 'Vườn hoa Lý Tự Trọng', lat: 21.0483, lng: 105.8361 },
     { name: 'Hồ Đầm Trị', lat: 21.0722, lng: 105.8175 },
-    { name: 'Vườn hoa Lạc Long Quân', lat: 21.0690, lng: 105.8118 }
+    { name: 'Vườn hoa Lạc Long Quân', lat: 21.0690, lng: 105.8118 },
+    { name: 'Tuyến đê sông Hồng (Nghi Tàm - Âu Cơ)', lat: 21.0600, lng: 105.8290 }
   ],
   cau_giay: [
     { name: 'Công viên Cầu Giấy', lat: 21.0205, lng: 105.7905 },
@@ -217,6 +222,11 @@ const RUNNING_POIS = {
   ],
   thuong_tin: [
     { name: 'Khu vực trung tâm Thường Tín', lat: 20.8520, lng: 105.8970 }
+  ],
+  ngoai_tinh: [
+    { name: 'Hồ Đồng Đò (Sóc Sơn)', lat: 21.3142, lng: 105.7723 },
+    { name: 'Hồ Hàm Lợn (Sóc Sơn)', lat: 21.3129, lng: 105.7984 },
+    { name: 'Thành cổ Sơn Tây', lat: 21.1358, lng: 105.5050 }
   ]
 };
 
