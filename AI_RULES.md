@@ -6,7 +6,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 > **AI CORE MANDATE (BẮT BUỘC):**
 > Hãy luôn đọc file `AI_RULES.md` trong thư mục gốc để nắm bắt kiến trúc dự án, các quy tắc logic vận hành, các tiêu chuẩn versioning của dự án, và file `PLAN.md` để nắm bắt tiến độ thực hiện các tính năng. Luôn tuân thủ các quy tắc trong đó khi bắt đầu phiên làm việc (session) mới và tiếp tục thực hiện các nhiệm vụ tiếp theo.
 >
-> **Lưu ý:** Mỗi khi thay đổi một logic cốt lõi nào đó, hãy cập nhật nó vào `AI_RULES.md` để "bộ nhớ" này luôn luôn mới nhất! Đồng thời cập nhật tiến độ hoàn thành các tính năng vào `PLAN.md` và thực hiện `git add`, `git commit`, `git push` để đồng bộ hóa kho mã nguồn lên GitHub immediately!
+> **Lưu ý:** Mỗi khi thay đổi một logic cốt lõi nào đó, hãy cập nhật nó vào `AI_RULES.md` để "bộ nhớ" này luôn luôn mới nhất! Đồng thời cập nhật tiến độ hoàn thành các tính năng vào `PLAN.md`, tài liệu kỹ thuật tại `docs/ARCHITECTURE.md` và `docs/HANOI_POIS.md`, rồi thực hiện `git add`, `git commit`, `git push` để đồng bộ hóa kho mã nguồn lên GitHub immediately!
 
 
 ## 🎨 Theme Standards (v1.50.31+)

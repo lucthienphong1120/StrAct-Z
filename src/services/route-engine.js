@@ -55,7 +55,8 @@ const RUNNING_POIS = {
     { name: 'Hồ Hữu Tiệp (Hồ B52)', lat: 21.0381, lng: 105.8236 },
     { name: 'Cung thể thao Quần Ngựa', lat: 21.0405, lng: 105.8155 },
     { name: 'Vườn hoa Lênin', lat: 21.0317, lng: 105.8394 },
-    { name: 'Vườn hoa Mai Xuân Thưởng', lat: 21.0426, lng: 105.8340 }
+    { name: 'Vườn hoa Mai Xuân Thưởng', lat: 21.0426, lng: 105.8340 },
+    { name: 'Lăng Chủ tịch Hồ Chí Minh', lat: 21.0368, lng: 105.8346 }
   ],
   tay_ho: [
     { name: 'Đường ven Hồ Tây (Trích Sài)', lat: 21.0558, lng: 105.8083 },

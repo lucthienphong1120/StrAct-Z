@@ -36,9 +36,10 @@ StrAct Z hỗ trợ hai cơ chế cấu hình và chạy:
 
 For detailed information, please refer to our documentation guides:
 
-1. [**System Architecture**](docs/ARCHITECTURE.md) - Deep dive into the backend design, database schema, and GPX generation engine.
+1. [**System Architecture**](docs/ARCHITECTURE.md) - Deep dive into the backend design, database schema, and FIT/GPX generation engine.
 2. [**Setup & Deployment Guide**](docs/SETUP_GUIDE.md) - Instructions on how to install, configure, and run StrAct Z using `npm` and Node.js.
-3. [**User Guide**](docs/USER_GUIDE.md) - How to use the dashboard, configure activities, link Strava, and interpret the generated data.
+3. [**Hanoi Running POIs Registry**](docs/HANOI_POIS.md) - Complete list of parks, gardens, lakes, university campuses, and residential areas in Hanoi used for route generation.
+4. [**Device Integration Test Cases**](docs/DEVICE_TESTCASES.md) - FIT & GPX device mappings, compatibility matrix, and test cases.
 
 ## 🚀 Quick Start (Development)
 
@@ -57,6 +58,16 @@ For detailed information, please refer to our documentation guides:
 4. Visit `http://localhost:3000`. If this is the first run, you will be redirected to the Setup Wizard to create your Admin account.
 
 ## 📋 Changelog
+
+### v2.8.6 (2026-06-21)
+- **Hanoi POIs Registry Further Expansion**: Expanded the running POIs with even more lakes, parks, gardens, stadiums, and university campuses.
+- **Prompt Recalls**: Updated system files (`PLAN.md` and `AI_RULES.md`) prompt recall mandate blocks to reference the Hanoi POIs documentation.
+
+### v2.8.5 (2026-06-21)
+- **Hanoi POIs Expansion & Cross-District Routing Upgrades**:
+  - Expanded `RUNNING_POIS` in `route-engine.js` with comprehensive coordinates across Hanoi.
+  - Implemented cross-district POI matching by globally pooling all POIs across all districts during waypoint generation, removing administrative border locks.
+  - Designed weighted top-3 POI selection to introduce route variety while preserving proximity preferences.
 
 ### v2.0.0 (2026-06-10)
 - **Big Update: GPX to FIT Migration**: Thay thế hoàn toàn công cụ tạo lộ trình GPX cũ bằng công cụ sinh tệp nhị phân `.fit` chuẩn Garmin FIT (sử dụng thư viện `@markw65/fit-file-writer`).

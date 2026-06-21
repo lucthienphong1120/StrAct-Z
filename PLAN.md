@@ -1,7 +1,7 @@
 ## Prompt:
 ```
 "Hãy luôn đọc file AI_RULES.md trong thư mục gốc để nắm bắt kiến trúc dự án, các quy tắc logic vận hành, các tiêu chuẩn versioning của dự án, và file PLAN.md để nắm bắt tiến độ thực hiện các tính năng. Luôn tuân thủ các quy tắc trong đó khi bắt đầu phiên làm việc (session) mới và tiếp tục thực hiện các nhiệm vụ tiếp theo."
-Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay đổi công thức tính MHR), hãy cập nhật nó vào AI_RULES.md để "bộ nhớ" này luôn luôn mới nhất! Khi hoàn thành mỗi task nhớ commit và push lên git, đồng thời update các docs cần thiết và đánh version để track. Ngoài ra còn có tài liệu kỹ thuật bằng flowchart, mindmap dạng markdown tại docs/ARCHITECTURE.md, cập nhật nếu thay đổi lớn liên quan đến kiến trúc hệ thống.
+Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay đổi công thức tính MHR), hãy cập nhật nó vào AI_RULES.md để "bộ nhớ" này luôn luôn mới nhất! Khi hoàn thành mỗi task nhớ commit và push lên git, đồng thời update các docs cần thiết và đánh version để track. Ngoài ra còn có tài liệu kỹ thuật bằng flowchart, mindmap dạng markdown tại docs/ARCHITECTURE.md và danh sách địa danh tại docs/HANOI_POIS.md, cập nhật nếu thay đổi lớn liên quan đến kiến trúc hệ thống hoặc danh sách địa danh.
 ```
 
 ## Features:
