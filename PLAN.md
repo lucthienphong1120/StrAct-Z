@@ -275,4 +275,10 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Điều chỉnh tỉ lệ xác suất chọn POI trong route-engine.js: điểm xuất phát POI→80%/20%, waypoint POI-to-POI→60%, Home/Work-to-POI→75%, Random-to-POI→90%; cập nhật weighted top-3 selection thành 50%/30%/20% (v2.8.8)
 + [ ] sắp xếp lại các địa danh trong HANOI_POIS.md theo từng quận trong HANOI DISTRICTS
 + [ ] test và check chéo mapping vị trí các địa danh trong HANOI_POIS.md với tọa độ thực tế trên bản đồ có đúng với các quận được khai báo trong POI nổi tiếng trong code không
++ [ ] ver 3.0.0: Làm endpoint trigger để tạo hoạt động theo location hiện tại, payload gồm user token và định vị (lat/lon)
++ [ ] Thêm chức năng liên quan đến user token để tự động hóa khi không cần login, publish một số api, đảm bảo an toàn, bảo mật, tránh brute force, cógiao diện tạo token, revoke token
++ [ ] các hoạt động tạo bằng API sẽ có Label type: API (ngoài MANUAL, CUSTOM, SCHEDULE 1,2,3)
++ [ ] đổi css cho hiển thị nhãn Label type (MANUAL/API/CUSTOM/SCHEDULE1,2,3) cho dễ phân biệt và thẩm mỹ hơn trong Local Generated History
++ [ ] các nhãn vị trí của các hoạt động trong Local Generated History move lên cạnh tên hoạt động
++ [ ]
 

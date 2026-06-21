@@ -255,8 +255,25 @@ async function loadActivities(logDistance = false) {
          const keys = a.district_keys.split(',');
           districtTags = keys.map(k => {
             const name = window.sysDistricts.find(d => d.key === k)?.name || k;
-            return `<span class="status-badge" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); padding: 2px 6px;">📍 ${name}</span>`;
+            return '<span class="status-badge" style="font-size:0.6em; background: rgba(255,255,255,0.04); color: var(--text-secondary); border: 1px solid var(--border); padding: 1px 5px; border-radius: 4px; vertical-align: middle;">' + String.fromCodePoint(0x1F4CD) + ' ' + name + '</span>';
           }).join('');
+      }
+
+      // Label type tag with color by source group
+      let labelTypeTag = '';
+      if (a.created_by) {
+        const cb = a.created_by.toUpperCase();
+        let labelStyle = '';
+        if (cb.startsWith('SCHEDULE')) {
+          labelStyle = 'background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.3);';
+        } else if (cb === 'CUSTOM') {
+          labelStyle = 'background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.3);';
+        } else if (cb === 'API') {
+          labelStyle = 'background: rgba(249,115,22,0.12); color: #fb923c; border: 1px solid rgba(249,115,22,0.3);';
+        } else {
+          labelStyle = 'background: rgba(148,163,184,0.10); color: #94a3b8; border: 1px solid rgba(148,163,184,0.25);';
+        }
+        labelTypeTag = `<span class="status-badge" style="${labelStyle} padding: 2px 7px; font-weight: 600; letter-spacing: 0.03em;">${a.created_by}</span>`;
       }
 
       const isUploadedLocal = (a.upload_status === 'uploaded' || !!a.strava_activity_id);
@@ -291,12 +308,14 @@ async function loadActivities(logDistance = false) {
       return `
         <div class="activity-item">
           <div>
-            <div class="activity-name">${a.activity_name || 'Unnamed'}</div>
+            <div class="activity-name" style="display:flex; flex-wrap:wrap; align-items:center; gap:5px;">
+              <span>${a.activity_name || 'Unnamed'}</span>
+              ${districtTags}
+            </div>
             <div class="activity-date" style="display:flex; gap:6px; margin-top:4px; flex-wrap:wrap; align-items:center;">
                <span class="status-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); padding: 2px 6px;">🕒 ${timeStr} ${dateOnlyStr}</span>
                ${formatTag}
-               ${districtTags}
-               ${a.created_by ? `<span class="status-badge" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); padding: 2px 6px;">${a.created_by}</span>` : ''}
+               ${labelTypeTag}
             </div>
           </div>
           <div class="activity-meta">${a.distance_km?.toFixed(1)} km</div>
