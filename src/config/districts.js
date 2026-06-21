@@ -26,6 +26,8 @@ const DISTRICTS = [
   { key: 'chuong_my', name: 'Chương Mỹ', lat: 20.9241, lng: 105.7041, radiusKm: 6.0, groups: ['suburban'] },
   { key: 'thanh_oai', name: 'Thanh Oai', lat: 20.8920, lng: 105.7830, radiusKm: 4.5, groups: ['suburban'] },
   { key: 'thuong_tin', name: 'Thường Tín', lat: 20.8500, lng: 105.9000, radiusKm: 5.0, groups: ['suburban'] },
+  { key: 'soc_son', name: 'Sóc Sơn', lat: 21.2891, lng: 105.8122, radiusKm: 10.0, groups: ['suburban'] },
+  { key: 'son_tay', name: 'Sơn Tây', lat: 21.1358, lng: 105.5050, radiusKm: 5.0, groups: ['suburban'] },
   { key: 'ngoai_tinh', name: 'Ngoại tỉnh', lat: 21.0300, lng: 105.8551, radiusKm: 0.1, groups: ['suburban'] }
 ];
 
@@ -44,12 +46,14 @@ const ADJACENT_DISTRICTS = {
   'nam_tu_liem': ['cau_giay', 'thanh_xuan', 'ha_dong', 'bac_tu_liem', 'hoai_duc'],
   'thanh_tri': ['hoang_mai', 'thanh_xuan', 'ha_dong', 'thanh_oai', 'thuong_tin', 'gia_lam'],
   'gia_lam': ['long_bien', 'dong_anh', 'thanh_tri', 'thuong_tin'],
-  'dong_anh': ['tay_ho', 'long_bien', 'gia_lam', 'bac_tu_liem', 'dan_phuong'],
+  'dong_anh': ['tay_ho', 'long_bien', 'gia_lam', 'bac_tu_liem', 'dan_phuong', 'soc_son'],
   'hoai_duc': ['bac_tu_liem', 'nam_tu_liem', 'ha_dong', 'dan_phuong', 'chuong_my'],
   'dan_phuong': ['bac_tu_liem', 'hoai_duc', 'dong_anh'],
   'chuong_my': ['ha_dong', 'hoai_duc', 'thanh_oai'],
   'thanh_oai': ['ha_dong', 'chuong_my', 'thanh_tri', 'thuong_tin'],
-  'thuong_tin': ['thanh_tri', 'thanh_oai', 'gia_lam']
+  'thuong_tin': ['thanh_tri', 'thanh_oai', 'gia_lam'],
+  'soc_son': ['dong_anh'],
+  'son_tay': []
 };
 
 module.exports = {

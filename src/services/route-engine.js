@@ -199,7 +199,8 @@ const RUNNING_POIS = {
     { name: 'Trường Đại học Nông nghiệp Việt Nam (VNUA)', lat: 21.0045, lng: 105.9335 },
     { name: 'Hồ điều hòa Trâu Quỳ', lat: 21.0070, lng: 105.9395 },
     { name: 'Công viên Gia Lâm', lat: 21.0350, lng: 105.9300 },
-    { name: 'Khu đô thị Ecopark', lat: 20.9580, lng: 105.9320 }
+    { name: 'Khu đô thị Ecopark', lat: 20.9580, lng: 105.9320 },
+    { name: 'Tuyến đê sông Đuống', lat: 21.0450, lng: 105.9550 }
   ],
   dong_anh: [
     { name: 'Công viên Thị trấn Đông Anh', lat: 21.1390, lng: 105.8455 },
@@ -223,11 +224,14 @@ const RUNNING_POIS = {
   thuong_tin: [
     { name: 'Khu vực trung tâm Thường Tín', lat: 20.8520, lng: 105.8970 }
   ],
-  ngoai_tinh: [
+  soc_son: [
     { name: 'Hồ Đồng Đò (Sóc Sơn)', lat: 21.3142, lng: 105.7723 },
-    { name: 'Hồ Hàm Lợn (Sóc Sơn)', lat: 21.3129, lng: 105.7984 },
+    { name: 'Hồ Hàm Lợn (Sóc Sơn)', lat: 21.3129, lng: 105.7984 }
+  ],
+  son_tay: [
     { name: 'Thành cổ Sơn Tây', lat: 21.1358, lng: 105.5050 }
-  ]
+  ],
+  ngoai_tinh: []
 };
 
 function getDistrictTargetCenter(districtKey, activityAreas = [], startNearFavoritePlace = true) {

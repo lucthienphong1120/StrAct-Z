@@ -875,12 +875,14 @@ async function debugDistrictWeightRatios() {
       'nam_tu_liem': ['cau_giay', 'thanh_xuan', 'ha_dong', 'bac_tu_liem', 'hoai_duc'],
       'thanh_tri': ['hoang_mai', 'thanh_xuan', 'ha_dong', 'thanh_oai', 'thuong_tin', 'gia_lam'],
       'gia_lam': ['long_bien', 'dong_anh', 'thanh_tri', 'thuong_tin'],
-      'dong_anh': ['tay_ho', 'long_bien', 'gia_lam', 'bac_tu_liem', 'dan_phuong'],
+      'dong_anh': ['tay_ho', 'long_bien', 'gia_lam', 'bac_tu_liem', 'dan_phuong', 'soc_son'],
       'hoai_duc': ['bac_tu_liem', 'nam_tu_liem', 'ha_dong', 'dan_phuong', 'chuong_my'],
       'dan_phuong': ['bac_tu_liem', 'hoai_duc', 'dong_anh'],
       'chuong_my': ['ha_dong', 'hoai_duc', 'thanh_oai'],
       'thanh_oai': ['ha_dong', 'chuong_my', 'thanh_tri', 'thuong_tin'],
-      'thuong_tin': ['thanh_tri', 'thanh_oai', 'gia_lam']
+      'thuong_tin': ['thanh_tri', 'thanh_oai', 'gia_lam'],
+      'soc_son': ['dong_anh'],
+      'son_tay': []
     };
 
     const details = [];

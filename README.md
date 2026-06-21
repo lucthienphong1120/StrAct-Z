@@ -60,6 +60,14 @@ For detailed information, please refer to our documentation guides:
 
 ## 📋 Changelog
 
+### v2.8.7 (2026-06-21)
+- **Hanoi POIs Registry Integration, Restoration and Outlying Districts Keys**:
+  - Restored all deleted and missing running POIs across all commits in `docs/HANOI_POIS.md`.
+  - Configured Sóc Sơn (`soc_son`) and Sơn Tây (`son_tay`) as official districts instead of outlying areas.
+  - Moved landmarks `Hồ Đồng Đò`, `Hồ Hàm Lợn`, and `Thành cổ Sơn Tây` to their respective district keys in `route-engine.js`.
+  - Registered `Tuyến đê sông Đuống` coordinate pair (`21.0450, 105.9550`) in `route-engine.js` under the `gia_lam` district list.
+  - Fully synchronized all coordinate pairs between documentation and backend registry code.
+
 ### v2.8.6 (2026-06-21)
 - **Hanoi POIs Registry Further Expansion**: Expanded the running POIs with even more lakes, parks, gardens, stadiums, and university campuses.
 - **Prompt Recalls**: Updated system files (`PLAN.md` and `AI_RULES.md`) prompt recall mandate blocks to reference the Hanoi POIs documentation.

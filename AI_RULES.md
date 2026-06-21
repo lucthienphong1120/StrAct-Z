@@ -140,6 +140,15 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.8.7 (2026-06-21)
+- **Hanoi POIs Registry Integration, Restoration and Outlying Districts Keys**:
+  - Restored all deleted and missing running POIs across all commits in `docs/HANOI_POIS.md`, totaling 149 unique landmarks.
+  - Defined Sóc Sơn (`soc_son`) and Sơn Tây (`son_tay`) as official districts in `src/config/districts.js` and `public/js/ui/dashboard.js`.
+  - Moved outlying landmarks (`Hồ Đồng Đò`, `Hồ Hàm Lợn`, `Thành cổ Sơn Tây`) out of the generic `ngoai_tinh` key into their respective `soc_son` and `son_tay` keys in `src/services/route-engine.js`.
+  - Registered `Tuyến đê sông Đuống` coordinate pair (`21.0450, 105.9550`) in `route-engine.js` under the `gia_lam` district list.
+  - Synchronized and verified all coordinate pairs between documentation and the active backend code.
+  - Bumped version to `v2.8.7` across `package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`.
+
 ### v2.8.6 (2026-06-21)
 - **Hanoi POIs Registry Further Expansion**:
   - Expanded `RUNNING_POIS` in `route-engine.js` with even more comprehensive scenic coordinates, parks, lakes, and gardens (e.g. Vườn hoa Tao Đàn, Vườn hoa Bác Cổ, Vườn hoa Pasteur, Vườn hoa Yersin, Vườn hoa Lênin, Vườn hoa Lý Tự Trọng, Hồ Đầm Trị, Vườn hoa Lạc Long Quân, CV1, Hồ Nghĩa Tân, Hồ Nam Đồng, Hồ Văn Chương, Công viên Nhân Chính, Công viên Phùng Khoang, Hồ Đầm Sòi, Vườn hoa Gia Lâm, Hồ Ngọc Thụy, Công viên Thiên văn học, Vườn hoa Hà Đông, Sân vận động Hà Đông, Starlake, Mỹ Đình, Hồ điều hòa Văn Điển, Công viên Gia Lâm).
