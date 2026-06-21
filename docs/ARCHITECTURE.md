@@ -181,8 +181,8 @@ graph TD
         
         FavorCheck -->|Yes| RollFavorite{"Roll Start Point Type<br/>(Ratios scale by Home/Work presence)"}
         RollFavorite -->|Home-Work 40% to 60%| HomeWorkStart["Start near Home or Work coordinate<br/>(+ random 100m-300m offset)"]
-        RollFavorite -->|Scenic POI 35% to 75%| POIStart["Start near Scenic POI coordinate<br/>(+ random 0m-200m offset)"]
-        RollFavorite -->|Random 5% to 25%| PolygonStart["Start at true random point in district polygon<br/>(Rejection sampling with bbox fallback)"]
+        RollFavorite -->|"Scenic POI 35% to 80%"| POIStart["Start near Scenic POI coordinate<br/>(+ random 0m-200m offset)"]
+        RollFavorite -->|"Random 5% to 20%"| PolygonStart["Start at true random point in district polygon<br/>(Rejection sampling with bbox fallback)"]
         
         FavorCheck -->|No| PolygonStart
     end
@@ -195,9 +195,9 @@ graph TD
     subgraph Routing ["🚲 Route Generation & POI Targeting"]
         RoutingEngine{"Start Point Type?"}
         
-        RoutingEngine -->|POI| POIRoll{"Roll POI-to-POI (30% Yes)"}
-        RoutingEngine -->|Home/Work| HWRoll{"Roll POI Target (40% Yes)"}
-        RoutingEngine -->|Random| RandRoll{"Roll POI Target (85% Yes)"}
+        RoutingEngine -->|POI| POIRoll{"Roll POI-to-POI (60% Yes)"}
+        RoutingEngine -->|"Home/Work"| HWRoll{"Roll POI Target (75% Yes)"}
+        RoutingEngine -->|Random| RandRoll{"Roll POI Target (90% Yes)"}
         
         POIRoll -->|Yes| TargetPoiNear{"POI within 1.5km & fits distance limits?"}
         HWRoll -->|Yes| TargetPoiNear

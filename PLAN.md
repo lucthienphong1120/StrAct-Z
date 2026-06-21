@@ -272,4 +272,7 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Bổ sung các địa danh chạy bộ thiếu vào registry, xóa bỏ giới hạn quận (Cross-District POI), và tăng tính đa dạng bằng cách chọn ngẫu nhiên weighted top 3 POI gần nhất (v2.8.5)
 + [x] Bổ sung thêm nhiều công viên, vườn hoa, hồ nước nổi tiếng ở Hà Nội vào registry cho tất cả các quận (v2.8.6)
 + [x] Khôi phục toàn bộ các địa danh chạy bộ đã xóa trong docs/HANOI_POIS.md, cấu hình Sóc Sơn (soc_son) và Sơn Tây (son_tay) thành các quận chính thức thay vì ngoại tỉnh, đồng thời đồng bộ hóa hoàn toàn danh sách tọa độ với backend code route-engine.js (v2.8.7)
++ [x] Điều chỉnh tỉ lệ xác suất chọn POI trong route-engine.js: điểm xuất phát POI→80%/20%, waypoint POI-to-POI→60%, Home/Work-to-POI→75%, Random-to-POI→90%; cập nhật weighted top-3 selection thành 50%/30%/20% (v2.8.8)
++ [ ] sắp xếp lại các địa danh trong HANOI_POIS.md theo từng quận trong HANOI DISTRICTS
++ [ ] test và check chéo mapping vị trí các địa danh trong HANOI_POIS.md với tọa độ thực tế trên bản đồ có đúng với các quận được khai báo trong POI nổi tiếng trong code không
 

@@ -60,6 +60,13 @@ For detailed information, please refer to our documentation guides:
 
 ## 📋 Changelog
 
+### v2.8.8 (2026-06-21)
+- **POI Probability Tuning**: Increased scenic POI targeting rates across all route generation paths:
+  - Start point (no home/work): POI probability `75%` → `80%`, random fallback `25%` → `20%`.
+  - Waypoint targeting: POI-to-POI `30%` → `60%`, Home/Work-to-POI `40%` → `75%`, Random-to-POI `85%` → `90%`.
+  - Weighted top-3 closest POI selection updated to `50% / 30% / 20%` (was `60% / 30% / 10%`).
+  - Updated `docs/ARCHITECTURE.md` flowchart to reflect new values.
+
 ### v2.8.7 (2026-06-21)
 - **Hanoi POIs Registry Integration, Restoration and Outlying Districts Keys**:
   - Restored all deleted and missing running POIs across all commits in `docs/HANOI_POIS.md`.

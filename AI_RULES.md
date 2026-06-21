@@ -140,6 +140,14 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.8.8 (2026-06-21)
+- **POI Probability Tuning**:
+  - `getDistrictTargetCenter` (no home/work): POI start probability `75%` → `80%`, random fallback `25%` → `20%`.
+  - `generateLoopWaypoints` & `generateOutBackWaypoints`: POI-to-POI targeting `30%` → `60%`, Home/Work-to-POI `40%` → `75%`, Random-to-POI `85%` → `90%`.
+  - Weighted top-3 POI selection updated to `50% / 30% / 20%` (3+ eligible); `60% / 40%` (2 eligible); unchanged at `100%` (1 eligible).
+  - Updated `docs/ARCHITECTURE.md` Mermaid flowchart to reflect new probability values.
+  - Bumped version to `v2.8.8` across `package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`.
+
 ### v2.8.7 (2026-06-21)
 - **Hanoi POIs Registry Integration, Restoration and Outlying Districts Keys**:
   - Restored all deleted and missing running POIs across all commits in `docs/HANOI_POIS.md`, totaling 149 unique landmarks.

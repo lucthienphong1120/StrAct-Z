@@ -248,8 +248,8 @@ function getDistrictTargetCenter(districtKey, activityAreas = [], startNearFavor
   const hasWork = containingAreas.some(a => a.type === 'work');
 
   let pCenter = 0;
-  let pPoi = 0.75;
-  let pRandom = 0.25;
+  let pPoi = 0.80;
+  let pRandom = 0.20;
 
   if (startNearFavoritePlace && containingAreas.length > 0) {
     if (hasHome && hasWork) {
@@ -263,8 +263,8 @@ function getDistrictTargetCenter(districtKey, activityAreas = [], startNearFavor
     }
   } else {
     pCenter = 0;
-    pPoi = 0.75;
-    pRandom = 0.25;
+    pPoi = 0.80;
+    pRandom = 0.20;
   }
 
   const roll = Math.random();
@@ -449,11 +449,11 @@ function generateLoopWaypoints(centerLat, centerLng, targetDistKm, districtKey =
   // 1. Determine if we should target a POI
   let shouldTargetPoi = false;
   if (isStartPoi) {
-    shouldTargetPoi = Math.random() < 0.30; // 30% chance to target another POI
+    shouldTargetPoi = Math.random() < 0.60; // 60% chance to target another POI
   } else if (isStartHomeWork) {
-    shouldTargetPoi = Math.random() < 0.40; // 40% chance to target a POI
+    shouldTargetPoi = Math.random() < 0.75; // 75% chance to target a POI
   } else {
-    shouldTargetPoi = Math.random() < 0.85; // 85% chance to target a POI
+    shouldTargetPoi = Math.random() < 0.90; // 90% chance to target a POI
   }
 
   // Default fallback behavior: standard geometric loop
@@ -556,15 +556,15 @@ function generateLoopWaypoints(centerLat, centerLng, targetDistKm, districtKey =
     chosen = eligiblePois[0];
   } else if (eligiblePois.length === 2) {
     const r = Math.random();
-    chosen = r < 0.70 ? eligiblePois[0] : eligiblePois[1];
+    chosen = r < 0.60 ? eligiblePois[0] : eligiblePois[1]; // 60% closest, 40% second
   } else {
     const r = Math.random();
-    if (r < 0.60) {
-      chosen = eligiblePois[0];
-    } else if (r < 0.90) {
-      chosen = eligiblePois[1];
+    if (r < 0.50) {
+      chosen = eligiblePois[0]; // 50% closest
+    } else if (r < 0.80) {
+      chosen = eligiblePois[1]; // 30% second closest
     } else {
-      chosen = eligiblePois[2];
+      chosen = eligiblePois[2]; // 20% third closest
     }
   }
   const secondPoi = chosen.poi;
@@ -643,11 +643,11 @@ function generateOutBackWaypoints(centerLat, centerLng, targetDistKm, districtKe
   // 1. Determine if we should target a POI
   let shouldTargetPoi = false;
   if (isStartPoi) {
-    shouldTargetPoi = Math.random() < 0.30; // 30% chance to target another POI
+    shouldTargetPoi = Math.random() < 0.60; // 60% chance to target another POI
   } else if (isStartHomeWork) {
-    shouldTargetPoi = Math.random() < 0.40; // 40% chance to target a POI
+    shouldTargetPoi = Math.random() < 0.75; // 75% chance to target a POI
   } else {
-    shouldTargetPoi = Math.random() < 0.85; // 85% chance to target a POI
+    shouldTargetPoi = Math.random() < 0.90; // 90% chance to target a POI
   }
 
   // 2. Determine whether we should return to start:
@@ -732,15 +732,15 @@ function generateOutBackWaypoints(centerLat, centerLng, targetDistKm, districtKe
     chosen = eligiblePois[0];
   } else if (eligiblePois.length === 2) {
     const r = Math.random();
-    chosen = r < 0.70 ? eligiblePois[0] : eligiblePois[1];
+    chosen = r < 0.60 ? eligiblePois[0] : eligiblePois[1]; // 60% closest, 40% second
   } else {
     const r = Math.random();
-    if (r < 0.60) {
-      chosen = eligiblePois[0];
-    } else if (r < 0.90) {
-      chosen = eligiblePois[1];
+    if (r < 0.50) {
+      chosen = eligiblePois[0]; // 50% closest
+    } else if (r < 0.80) {
+      chosen = eligiblePois[1]; // 30% second closest
     } else {
-      chosen = eligiblePois[2];
+      chosen = eligiblePois[2]; // 20% third closest
     }
   }
   const targetPoi = chosen.poi;
