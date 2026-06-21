@@ -177,3 +177,31 @@ Paths running along Hanoi's rivers and dikes:
 *   **Đường ven sông Kim Ngưu (Thanh Nhàn)** (Hai Bà Trưng) - `21.0048, 105.8625`
 *   **Cầu Long Biên** (Hoàn Kiếm) - `21.0401, 105.8588`
 *   **Đê sông Hồng (Long Biên)** (Long Biên) - `21.0360, 105.8710`
+
+---
+
+## 🌟 High-Quality Running Urban Space (Khu đô thị chất lượng cao) Criteria
+
+A residential area or urban space is considered a high-quality running zone when it satisfies the following criteria:
+1. **Large Route Length (Chiều dài cung đường đủ lớn):** Sufficiently large to allow continuous loops of 2 km to 5 km+ without requiring frequent U-turns or repetitive short loops.
+2. **Safe Traffic Infrastructure (Hạ tầng giao thông nội khu an toàn):** Wide, unobstructed sidewalks, dedicated running/walking paths (ideal), minimal external vehicle traffic, and no major intersections or continuous traffic lights.
+3. **Low Construction Density & Green Cover (Mật độ xây dựng thấp & nhiều mảng xanh):** Abundant green cover, central parks, and lakes/ponds to reduce the heat island effect and filter the air.
+4. **Open & Secure Connectivity (Không gian mở kết nối):** Well-lit paths at night, 24/7 security patrols to ensure safety for early morning or late night runners.
+
+---
+
+## 📋 Hanoi High-Quality Running Zones & Spaces Verification Matrix
+
+This matrix maps high-quality, large-scale (over 2,000 m²) running urban spaces, lakes, and parks to their respective configuration coordinates inside the `route-engine.js` codebase:
+
+| Location Name | District Key | Area / Size | Coordinates | Registry Status in `route-engine.js` |
+| :--- | :--- | :--- | :--- | :--- |
+| **Vinhomes Ocean Park** | `gia_lam` | ~4,200,000 m² (420 ha) | `20.9930, 105.9520` | Active |
+| **Khu đô thị Ciputra** | `bac_tu_liem` | ~3,010,000 m² (301 ha) | `21.0825, 105.8020` | Active |
+| **Vinhomes Smart City** | `nam_tu_liem` | ~2,800,000 m² (280 ha) | `21.0080, 105.7485` | Active |
+| **Khu đô thị Vinhomes Riverside** | `long_bien` | ~2,800,000 m² (280 ha) | `21.0395, 105.9080` | Active |
+| **Hồ Tây (West Lake)** | `tay_ho` | ~5,260,000 m² (526 ha) | `21.0558, 105.8083` | Active |
+| **Công viên Yên Sở** | `hoang_mai` | ~3,230,000 m² (323 ha) | `20.9664, 105.8521` | Active |
+| **Hồ Hoàn Kiếm (Hồ Gươm)** | `hoan_kiem` | ~120,000 m² (12 ha) | `21.0285, 105.8542` | Active |
+| **Đê sông Hồng (Long Biên)** | `long_bien` | (Linear Dike) | `21.0360, 105.8710` | Active |
+| **Sân vận động Mỹ Đình** | `nam_tu_liem` | ~170,000 m² (17 ha) | `21.0200, 105.7640` | Active |
