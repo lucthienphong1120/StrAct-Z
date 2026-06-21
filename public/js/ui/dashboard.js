@@ -255,7 +255,7 @@ async function loadActivities(logDistance = false) {
          const keys = a.district_keys.split(',');
           districtTags = keys.map(k => {
             const name = window.sysDistricts.find(d => d.key === k)?.name || k;
-            return '<span class="status-badge" style="font-size:0.6em; background: rgba(255,255,255,0.04); color: var(--text-secondary); border: 1px solid var(--border); padding: 1px 5px; border-radius: 4px; vertical-align: middle;">' + String.fromCodePoint(0x1F4CD) + ' ' + name + '</span>';
+            return '<span class="status-badge" style="font-size:0.7em; text-transform: capitalize; background: rgba(255,255,255,0.04); color: var(--text-secondary); border: 1px solid var(--border); padding: 1px 5px; border-radius: 4px; vertical-align: middle;">' + String.fromCodePoint(0x1F4CD) + ' ' + name + '</span>';
           }).join('');
       }
 
