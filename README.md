@@ -39,7 +39,8 @@ For detailed information, please refer to our documentation guides:
 1. [**System Architecture**](docs/ARCHITECTURE.md) - Deep dive into the backend design, database schema, and FIT/GPX generation engine.
 2. [**Setup & Deployment Guide**](docs/SETUP_GUIDE.md) - Instructions on how to install, configure, and run StrAct Z using `npm` and Node.js.
 3. [**Hanoi Running POIs Registry**](docs/HANOI_POIS.md) - Complete list of parks, gardens, lakes, university campuses, and residential areas in Hanoi used for route generation.
-4. [**Device Integration Test Cases**](docs/DEVICE_TESTCASES.md) - FIT & GPX device mappings, compatibility matrix, and test cases.
+4. [**Premium Running Spaces**](docs/RUNNING_SPACES.md) - Evaluation criteria and spatial footprints of premier Hanoi running estates, lakes, and parks.
+5. [**Device Integration Test Cases**](docs/DEVICE_TESTCASES.md) - FIT & GPX device mappings, compatibility matrix, and test cases.
 
 ## 🚀 Quick Start (Development)
 
