@@ -270,3 +270,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] cấu hình tùy chỉnh quyền riêng tư đang sai, tôi đặt chỉ mình tôi nhưng hoạt động vẫn tạo ra vẫn là công khai (v2.8.1)
 + [x] fix lỗi hiển thị strava app (v2.8.0)
 + [x] Bổ sung các địa danh chạy bộ thiếu vào registry, xóa bỏ giới hạn quận (Cross-District POI), và tăng tính đa dạng bằng cách chọn ngẫu nhiên weighted top 3 POI gần nhất (v2.8.5)
++ [x] Bổ sung thêm nhiều công viên, vườn hoa, hồ nước nổi tiếng ở Hà Nội vào registry cho tất cả các quận (v2.8.6)

@@ -140,6 +140,11 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.8.6 (2026-06-21)
+- **Hanoi POIs Registry Further Expansion**:
+  - Expanded `RUNNING_POIS` in `route-engine.js` with even more comprehensive scenic coordinates, parks, lakes, and gardens (e.g. Vườn hoa Tao Đàn, Vườn hoa Bác Cổ, Vườn hoa Pasteur, Vườn hoa Yersin, Vườn hoa Lênin, Vườn hoa Lý Tự Trọng, Hồ Đầm Trị, Vườn hoa Lạc Long Quân, CV1, Hồ Nghĩa Tân, Hồ Nam Đồng, Hồ Văn Chương, Công viên Nhân Chính, Công viên Phùng Khoang, Hồ Đầm Sòi, Vườn hoa Gia Lâm, Hồ Ngọc Thụy, Công viên Thiên văn học, Vườn hoa Hà Đông, Sân vận động Hà Đông, Starlake, Mỹ Đình, Hồ điều hòa Văn Điển, Công viên Gia Lâm).
+  - Bumped version to `v2.8.6` across `package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`.
+
 ### v2.8.5 (2026-06-21)
 - **Hanoi POIs Registry Expansion & Cross-District Routing Upgrades**:
   - Expanded `RUNNING_POIS` in `route-engine.js` with comprehensive scenic coordinates for all existing districts in Hanoi.
