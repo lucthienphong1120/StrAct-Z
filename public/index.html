@@ -29,7 +29,7 @@
         <div class="logo-icon">🏃</div>
         <span class="logo-text">StrAct Z</span>
         <small
-          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v2.9.0</small>
+          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v3.0.0</small>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -826,6 +826,53 @@
             </div>
           </div>
 
+          <!-- API Token Management Card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔑 API Access Tokens</div>
+            </div>
+            <div class="card-body">
+              <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
+                Tạo và quản lý mã Access Token để tự động hóa việc gọi API sinh hoạt động mà không cần đăng nhập hệ thống.
+              </p>
+              
+              <!-- Token List Table -->
+              <div id="apiTokensContainer" style="margin-bottom: 16px; display: none;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem; color: var(--text-secondary); background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 6px; overflow: hidden;">
+                  <thead>
+                    <tr style="background: rgba(255, 255, 255, 0.05); border-bottom: 1px solid var(--border); text-align: left;">
+                      <th style="padding: 6px 10px; font-weight: 600;">Tên</th>
+                      <th style="padding: 6px 10px; font-weight: 600;">Xem trước</th>
+                      <th style="padding: 6px 10px; font-weight: 600; text-align: center;">Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody id="apiTokensList">
+                    <!-- Tokens loaded here -->
+                  </tbody>
+                </table>
+              </div>
+              <div id="noApiTokensText" style="text-align: center; padding: 12px; color: var(--text-muted); font-size: 0.8rem; background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 16px;">
+                Chưa có API Token nào được tạo.
+              </div>
+              
+              <!-- Create Token Form -->
+              <div style="border-top: 1px solid var(--border); padding-top: 15px; display: flex; flex-direction: column; gap: 10px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" style="font-size: 0.8rem;">Tên Token</label>
+                  <input type="text" id="newTokenName" class="form-input" placeholder="Ví dụ: Home Assistant, Garmin App" style="width: 100%;">
+                </div>
+                <div class="form-group" id="tokenWhitelistGroup" style="margin-bottom: 0;">
+                  <label class="form-label" style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem;">
+                    IP Whitelist (Chỉ dành cho VIP)
+                    <span class="tooltip-icon tooltip-right" data-tooltip="Danh sách IP được phép gọi API bằng Token này, phân tách bằng dấu phẩy. Để trống nếu cho phép tất cả IP.">?</span>
+                  </label>
+                  <input type="text" id="newTokenIpWhitelist" class="form-input" placeholder="Ví dụ: 192.168.1.100, 1.2.3.4" style="width: 100%;">
+                </div>
+                <button class="btn btn-sm btn-primary btn-block" onclick="createTokenClick()" style="margin-top: 5px;">⚡ Tạo Token Mới</button>
+              </div>
+            </div>
+          </div>
+
           <!-- Strava Account -->
           <div class="card">
             <div class="card-header"
@@ -985,11 +1032,11 @@
         </div>
 
         <div class="form-row" style="margin-top: 16px;">
-          <div class="form-group" style="justify-content: flex-end; padding-bottom: 8px;">
-            <label class="form-label"
-              style="display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;">
-              <input type="checkbox" id="aroundBypassWorkhours" style="width: 18px; height: 18px; cursor: pointer;">
-              Bypass avoid workhour
+          <div class="form-group" style="align-items: center; margin-bottom: 5px;">
+            <label class="toggle">
+              <input type="checkbox" id="aroundBypassWorkhours">
+              <div class="toggle-track"></div>
+              <span class="toggle-label" style="font-size: 0.85rem;">Bypass Avoid Workhours</span>
             </label>
           </div>
           <div class="form-group">
@@ -1009,6 +1056,29 @@
           nháp</button>
         <button id="btnSubmitAroundUpload" class="btn btn-primary" onclick="submitAroundLocationGen(true)">🚀 Tạo &
           Upload</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Token Modal -->
+  <div id="apiTokenModal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🔑 Đã tạo API Access Token thành công!</h3>
+        <button class="modal-close-btn" onclick="closeApiTokenModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:15px; line-height: 1.4;">
+          Đây là mã API token của bạn. Bạn có thể sao chép nó ngay tại đây hoặc copy lại bất kỳ lúc nào từ bảng quản lý Token.
+        </p>
+        
+        <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 6px; padding: 12px; font-family: monospace; font-size: 0.9rem; word-break: break-all; color: #f59e0b; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+          <span id="generatedTokenText" style="flex: 1; user-select: all;">stz_token_value_placeholder</span>
+          <button class="btn btn-sm btn-secondary" onclick="copyGeneratedToken()" style="padding: 4px 8px; margin-left: 10px; flex-shrink: 0;">📋 Copy</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-block" onclick="closeApiTokenModal()">Đóng cửa sổ</button>
       </div>
     </div>
   </div>

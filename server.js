@@ -12,6 +12,7 @@ const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 
 const authRoutes = require('./src/routes/auth');
+const publicApiRoutes = require('./src/routes/publicApi');
 const apiRoutes = require('./src/routes/api');
 const db = require('./src/db/database');
 const scheduler = require('./src/services/scheduler');
@@ -37,8 +38,9 @@ app.use((req, res, next) => {
 // Global Rate Limiting (Prevent DDoS)
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1000, // Limit each IP to 1000 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.',
+  max: 500, // Limit each IP to 500 requests per windowMs (reduced from 1000)
+  message: { error: 'Too many requests from this IP, please try again later.', code: 'GLOBAL_RATE_LIMIT_EXCEEDED' },
+  statusCode: 429,
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -49,7 +51,8 @@ const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 20, // Limit each IP to 20 failed auth attempts per windowMs
   skipSuccessfulRequests: true, // Only count failed attempts
-  message: 'Too many failed login attempts, your IP has been temporarily locked out.',
+  message: { error: 'Too many failed login attempts, your IP has been temporarily locked out.', code: 'AUTH_BRUTE_FORCE_LOCKOUT' },
+  statusCode: 429,
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -89,6 +92,9 @@ app.use('/auth/system/login', authLimiter);
 
 // Auth Routes (connect, callback, login, logout are public, others might need auth)
 app.use('/auth', authRoutes);
+
+// Public API Routes (Token Authenticated)
+app.use('/api/public', publicApiRoutes);
 
 // Protect API routes
 app.use('/api', authenticateToken, apiRoutes);

@@ -140,6 +140,15 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v3.0.0 (2026-06-22)
+- **Programmatic API Access & Auto Token Authentication**:
+  - Implemented secure API token authentication using SHA-256 database hashing for lookup and AES-256-CBC encryption for recovery/copy.
+  - Implemented public routes `/api/public/activities/generate` (5 reqs/15 mins rate limit), `/api/public/activities` and `/api/public/stats` (60 reqs/15 mins rate limit).
+  - Added SQLite IP Lockout brute-force tracking: locks IP for 24 hours after 10 consecutive failed attempts.
+  - Built an API Token Management dashboard panel under Account Settings, supporting token generation, IP whitelisting for VIPs, listing, copy, and revocation.
+  - Added reverse geocoding inside API trigger using OpenStreetMap Nominatim with a fallback mechanism.
+  - Bumped version to `v3.0.0` across system files.
+
 ### v2.9.0 (2026-06-22)
 - **Hanoi POIs Reorganization & Boundary Sync**:
   - Reorganized `docs/HANOI_POIS.md` to be grouped by district instead of categories to align with project standards.

@@ -14,6 +14,17 @@ const stravaApi = require('../services/strava-api');
 const googleFit = require('../services/google-fit');
 const systemLimits = require('../config/limits');
 const { buildGeneratorConfig } = require('../utils/activity-config-builder');
+const rateLimit = require('express-rate-limit');
+
+// Rate limiter for private write operations (POST /generate, POST /generate-and-upload, POST /config)
+const apiWriteLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 30, // Limit each IP to 30 requests per 15 minutes
+  message: { error: 'Too many configuration updates or activity generations from this IP, please try again later.', code: 'API_WRITE_LIMIT_EXCEEDED' },
+  statusCode: 429,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 const { DISTRICTS } = require('../config/districts');
 
@@ -49,7 +60,7 @@ router.get('/config', async (req, res) => {
 
 const { validateConfig } = require('../utils/validation');
 
-router.post('/config', async (req, res) => {
+router.post('/config', apiWriteLimiter, async (req, res) => {
   try {
     const updates = req.body;
     const role = req.user.role || 'basic';
@@ -278,7 +289,7 @@ router.get('/strava-activities', async (req, res) => {
 
 
 // Generate FIT only (no upload)
-router.post('/generate', async (req, res) => {
+router.post('/generate', apiWriteLimiter, async (req, res) => {
   try {
     const ov = req.body || {};
     // Clean up empty override values to allow fallback to config
@@ -371,7 +382,7 @@ router.post('/generate', async (req, res) => {
 });
 
 // Generate and upload
-router.post('/generate-and-upload', async (req, res) => {
+router.post('/generate-and-upload', apiWriteLimiter, async (req, res) => {
   try {
     const ov = req.body || {};
     // Clean up empty override values to allow fallback to config
@@ -750,6 +761,63 @@ router.post('/account/activate-vip', async (req, res) => {
     }
   } catch (err) {
     console.error('VIP activation error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+const crypto = require('crypto');
+
+// ─── API Token Management ──────────────────────────────────────────────────────
+
+router.get('/api-tokens', async (req, res) => {
+  try {
+    const tokens = await db.getApiTokens(req.user.id);
+    res.json(tokens);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/api-tokens', async (req, res) => {
+  try {
+    const { name, ip_whitelist } = req.body;
+    if (!name || name.trim() === '') {
+      return res.status(400).json({ error: 'Tên Token không được để trống.' });
+    }
+
+    if (name.length > 100) {
+      return res.status(400).json({ error: 'Tên Token không được vượt quá 100 ký tự.' });
+    }
+
+    if (ip_whitelist) {
+      if (req.user.role !== 'vip') {
+        return res.status(403).json({ error: 'Chỉ tài khoản VIP mới được cấu hình IP Whitelist.' });
+      }
+      if (ip_whitelist.length > 200) {
+        return res.status(400).json({ error: 'IP Whitelist không được vượt quá 200 ký tự.' });
+      }
+      if (!/^[a-fA-F0-9.:,\s]*$/.test(ip_whitelist)) {
+        return res.status(400).json({ error: 'IP Whitelist chứa ký tự không hợp lệ.' });
+      }
+    }
+
+    const plainToken = 'stz_' + crypto.randomBytes(30).toString('hex');
+    await db.createApiToken(req.user.id, name.trim(), ip_whitelist ? ip_whitelist.trim() : null, plainToken);
+
+    res.json({
+      success: true,
+      token: plainToken
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.delete('/api-tokens/:id', async (req, res) => {
+  try {
+    await db.revokeApiToken(req.user.id, req.params.id);
+    res.json({ success: true, message: 'Đã thu hồi Token thành công.' });
+  } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });

@@ -15,6 +15,7 @@ async function loadDashboard(forceRefresh = false) {
   
   // loadActivities depends on latestStravaActivities
   await loadActivities(true);
+  await loadApiTokens();
 
   if (forceRefresh) {
     showToast('All data refreshed!', 'success');
@@ -1038,3 +1039,145 @@ async function userRefresh() {
   await loadDashboard(true);
 }
 window.userRefresh = userRefresh;
+
+// ─── API Token UI Management ───────────────────────────────────────────
+
+async function loadApiTokens() {
+  try {
+    const tokens = await getApiTokens();
+    const container = document.getElementById('apiTokensContainer');
+    const tbody = document.getElementById('apiTokensList');
+    const noTokensText = document.getElementById('noApiTokensText');
+    
+    const ipInput = document.getElementById('newTokenIpWhitelist');
+    if (ipInput) {
+      if (window.userRole !== 'vip') {
+        ipInput.disabled = true;
+        ipInput.placeholder = 'Tính năng chỉ dành cho VIP';
+        ipInput.value = '';
+      } else {
+        ipInput.disabled = false;
+        ipInput.placeholder = 'Ví dụ: 192.168.1.100, 1.2.3.4';
+      }
+    }
+
+    if (!tokens || tokens.error || !Array.isArray(tokens) || tokens.length === 0) {
+      if (container) container.style.display = 'none';
+      if (noTokensText) noTokensText.style.display = 'block';
+      return;
+    }
+
+    if (noTokensText) noTokensText.style.display = 'none';
+    if (container) container.style.display = 'block';
+    
+    if (tbody) {
+      tbody.innerHTML = tokens.map(t => {
+        const escapedToken = (t.token || '').replace(/"/g, '&quot;');
+        const escapedName = (t.name || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const escapedWhitelist = (t.ip_whitelist || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        
+        const whitelistHtml = t.ip_whitelist 
+          ? `<div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Whitelist: ${escapedWhitelist}</div>` 
+          : '';
+          
+        return `
+          <tr style="border-bottom: 1px solid rgba(255,255,255,0.03); text-align: left;">
+            <td style="padding: 8px 10px; font-weight: 500;">
+              <div>${escapedName}</div>
+              ${whitelistHtml}
+            </td>
+            <td style="padding: 8px 10px; font-family: monospace;">${t.token_preview}</td>
+            <td style="padding: 8px 10px; text-align: center; white-space: nowrap;">
+              <button class="btn btn-sm btn-secondary" onclick="copyTokenValue('${escapedToken}')" style="padding: 2px 8px; margin-right: 6px;" title="Sao chép Token">📋 Copy</button>
+              <button class="btn btn-sm btn-outline-danger" onclick="revokeTokenClick(${t.id})" style="padding: 2px 8px;" title="Thu hồi Token">Revoke</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+  } catch (err) {
+    console.error('Error loading API tokens:', err);
+  }
+}
+
+async function createTokenClick() {
+  const nameInput = document.getElementById('newTokenName');
+  const ipInput = document.getElementById('newTokenIpWhitelist');
+  
+  const name = nameInput ? nameInput.value.trim() : '';
+  const ipWhitelist = ipInput ? ipInput.value.trim() : '';
+  
+  if (!name) {
+    showToast('Vui lòng nhập tên Token.', 'warning');
+    return;
+  }
+
+  showToast('Đang tạo Token...', 'info');
+  try {
+    const res = await createApiToken(name, ipWhitelist);
+    if (res.success && res.token) {
+      showToast('Tạo Token thành công!', 'success');
+      if (nameInput) nameInput.value = '';
+      if (ipInput) ipInput.value = '';
+      
+      const modal = document.getElementById('apiTokenModal');
+      const tokenText = document.getElementById('generatedTokenText');
+      if (modal && tokenText) {
+        tokenText.textContent = res.token;
+        modal.classList.add('active');
+      }
+      
+      await loadApiTokens();
+    } else {
+      showToast(res.error || 'Tạo Token thất bại.', 'error');
+    }
+  } catch (err) {
+    showToast('Error creating token: ' + err.message, 'error');
+  }
+}
+
+function copyTokenValue(tokenVal) {
+  if (!tokenVal) return;
+  navigator.clipboard.writeText(tokenVal).then(() => {
+    showToast('Đã copy API Token vào clipboard!', 'success');
+  }).catch(err => {
+    showToast('Không thể copy: ' + err.message, 'error');
+  });
+}
+
+function copyGeneratedToken() {
+  const text = document.getElementById('generatedTokenText')?.textContent;
+  copyTokenValue(text);
+}
+
+function closeApiTokenModal() {
+  const modal = document.getElementById('apiTokenModal');
+  if (modal) modal.classList.remove('active');
+}
+
+async function revokeTokenClick(tokenId) {
+  if (!confirm('Bạn có chắc chắn muốn thu hồi Token này? Sau khi thu hồi, bất kỳ hệ thống nào sử dụng Token này sẽ không thể gọi API được nữa.')) {
+    return;
+  }
+  
+  showToast('Đang thu hồi Token...', 'info');
+  try {
+    const res = await revokeApiToken(tokenId);
+    if (res.success) {
+      showToast('Đã thu hồi Token!', 'success');
+      await loadApiTokens();
+    } else {
+      showToast(res.error || 'Thu hồi Token thất bại.', 'error');
+    }
+  } catch (err) {
+    showToast('Error revoking token: ' + err.message, 'error');
+  }
+}
+
+// Export to window
+window.loadApiTokens = loadApiTokens;
+window.createTokenClick = createTokenClick;
+window.copyTokenValue = copyTokenValue;
+window.copyGeneratedToken = copyGeneratedToken;
+window.closeApiTokenModal = closeApiTokenModal;
+window.revokeTokenClick = revokeTokenClick;

@@ -276,10 +276,12 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Đổi màu tag FIT từ xanh lá sang cyan/teal (#06b6d4) để tránh trùng với SCHEDULE; tag quận font-size 0.7em + capitalize; label type giữ nguyên uppercase (v2.8.9)
 + [x] sắp xếp lại các địa danh trong HANOI_POIS.md theo từng quận trong HANOI DISTRICTS (v2.9.0)
 + [x] test và check chéo mapping vị trí các địa danh trong HANOI_POIS.md với tọa độ thực tế trên bản đồ có đúng với các quận được khai báo trong POI nổi tiếng trong code không (v2.9.0)
-+ [ ] ver 3.0.0: Làm endpoint trigger để tạo hoạt động theo location hiện tại, payload gồm user token và định vị (lat/lon)
-+ [ ] Thêm chức năng liên quan đến user token để tự động hóa khi không cần login, publish một số api, đảm bảo an toàn, bảo mật, tránh brute force, cógiao diện tạo token, revoke token
-+ [ ] các hoạt động tạo bằng API sẽ có Label type: API (ngoài MANUAL, CUSTOM, SCHEDULE 1,2,3)
++ [x] big update: Làm endpoint trigger để tạo hoạt động theo location hiện tại, payload gồm user token và định vị (lat/lon) (v3.0.0)
++ [x] Thêm chức năng liên quan đến user token để tự động hóa khi không cần login, publish một số api, đảm bảo an toàn, bảo mật, tránh brute force, cógiao diện tạo token, revoke token (v3.0.0)
++ [x] các hoạt động tạo bằng API sẽ có Label type: API (ngoài MANUAL, CUSTOM, SCHEDULE 1,2,3) (v3.0.0)
 + [x] đổi css cho hiển thị nhãn Label type (MANUAL/API/CUSTOM/SCHEDULE1,2,3) cho dễ phân biệt và thẩm mỹ hơn trong Local Generated History
 + [x] các nhãn vị trí của các hoạt động trong Local Generated History move lên cạnh tên hoạt động
-+ [ ]
-
++ [x] review và điều chỉnh lại global rate limiter đang là bao nhiêu cho phù hợp với việc tạo hoạt động liên tục, tránh bị block nhưng cũng không quá nhiều (1000req), đặt rate limit theo từng đầu api và lượng nhỏ, phù hợp với user action, ngoài ra các endpoint dạng POST cũng phải đẩy thấp hơn (v3.0.0)
++ [x] thiết kế trang block và mã status trả về cho các loại security violation (403, 429, 500) (v3.0.0)
++ [x] thiết kế lại nút bypass workhour trong generate around location thành dạng toggle giống mẫu config chung của dự án (viết/update tài liệu về quy định thiết kế của dự án để nhớ) (v3.0.0)
++ [ ] review lại thiết kế các chức năng basic account không có thì chỉ disable thôi, không hidden để cho user biết mà tò mò chứ 

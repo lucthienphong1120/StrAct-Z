@@ -54,6 +54,26 @@ function showToast(message, type = 'info') {
   setTimeout(dismiss, TOAST_DURATION[type] || 4000);
 }
 
+async function getApiTokens() {
+  return api('/api-tokens');
+}
+
+async function createApiToken(name, ipWhitelist) {
+  return api('/api-tokens', {
+    method: 'POST',
+    body: { name, ip_whitelist: ipWhitelist }
+  });
+}
+
+async function revokeApiToken(tokenId) {
+  return api(`/api-tokens/${tokenId}`, {
+    method: 'DELETE'
+  });
+}
+
 // Export to window
 window.api = api;
 window.showToast = showToast;
+window.getApiTokens = getApiTokens;
+window.createApiToken = createApiToken;
+window.revokeApiToken = revokeApiToken;

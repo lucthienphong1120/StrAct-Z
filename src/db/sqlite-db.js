@@ -3,6 +3,7 @@ const { open } = require('sqlite');
 const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const encryption = require('../utils/encryption');
 const systemLimits = require('../config/limits');
 
@@ -152,6 +153,24 @@ async function getDb() {
           ip TEXT,
           created_at TEXT
         );
+        CREATE TABLE IF NOT EXISTS api_tokens (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          account_id INTEGER NOT NULL,
+          token_hash TEXT NOT NULL UNIQUE,
+          token_encrypted TEXT NOT NULL,
+          token_preview TEXT NOT NULL,
+          name TEXT NOT NULL,
+          ip_whitelist TEXT,
+          created_at TEXT NOT NULL,
+          last_used_at TEXT,
+          FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
+        );
+        CREATE TABLE IF NOT EXISTS failed_token_attempts (
+          ip TEXT PRIMARY KEY,
+          attempts INTEGER DEFAULT 0,
+          last_attempt_at TEXT NOT NULL,
+          locked_until TEXT
+        );
       `);
 
       // Migrate from JSON if SQLite config is empty
@@ -167,6 +186,11 @@ async function getDb() {
       try {
         await db.exec('ALTER TABLE activities ADD COLUMN route_start_time TEXT');
         console.log('[SQLite] Added route_start_time column');
+      } catch (e) { }
+
+      try {
+        await db.exec('ALTER TABLE api_tokens ADD COLUMN token_encrypted TEXT');
+        console.log('[SQLite] Added token_encrypted column to api_tokens');
       } catch (e) { }
 
       try {
@@ -639,6 +663,107 @@ async function deleteExternalTokens(accountId, provider) {
   return true;
 }
 
+async function createApiToken(accountId, name, ipWhitelist, plainToken) {
+  const db = await getDb();
+  const tokenHash = crypto.createHash('sha256').update(plainToken).digest('hex');
+  const tokenEncrypted = encryption.encrypt(plainToken);
+  const preview = plainToken.slice(0, 8) + '...' + plainToken.slice(-4);
+  const now = new Date().toISOString();
+  await db.run(
+    'INSERT INTO api_tokens (account_id, token_hash, token_encrypted, token_preview, name, ip_whitelist, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [accountId, tokenHash, tokenEncrypted, preview, name, ipWhitelist || null, now]
+  );
+  return true;
+}
+
+async function getApiTokens(accountId) {
+  const db = await getDb();
+  const rows = await db.all('SELECT id, token_preview, token_encrypted, name, ip_whitelist, created_at, last_used_at FROM api_tokens WHERE account_id = ? ORDER BY id DESC', [accountId]);
+  return rows.map(r => ({
+    id: r.id,
+    token_preview: r.token_preview,
+    token: encryption.decrypt(r.token_encrypted),
+    name: r.name,
+    ip_whitelist: r.ip_whitelist,
+    created_at: r.created_at,
+    last_used_at: r.last_used_at
+  }));
+}
+
+async function revokeApiToken(accountId, tokenId) {
+  const db = await getDb();
+  await db.run('DELETE FROM api_tokens WHERE id = ? AND account_id = ?', [tokenId, accountId]);
+  return true;
+}
+
+async function validateApiToken(tokenHash) {
+  const db = await getDb();
+  const token = await db.get(
+    `SELECT t.*, a.username, a.role 
+     FROM api_tokens t 
+     JOIN accounts a ON t.account_id = a.id 
+     WHERE t.token_hash = ?`,
+    [tokenHash]
+  );
+  if (!token) return null;
+  
+  const now = new Date().toISOString();
+  await db.run('UPDATE api_tokens SET last_used_at = ? WHERE id = ?', [now, token.id]);
+  
+  return {
+    id: token.account_id,
+    username: token.username,
+    role: token.role,
+    token_id: token.id,
+    name: token.name,
+    ip_whitelist: token.ip_whitelist
+  };
+}
+
+async function isIpLocked(ip) {
+  const db = await getDb();
+  const row = await db.get('SELECT locked_until FROM failed_token_attempts WHERE ip = ?', [ip]);
+  if (!row || !row.locked_until) return false;
+  
+  const lockedUntil = new Date(row.locked_until);
+  if (lockedUntil > new Date()) {
+    return true;
+  }
+  return false;
+}
+
+async function incrementFailedAttempts(ip) {
+  const db = await getDb();
+  const now = new Date().toISOString();
+  const row = await db.get('SELECT attempts FROM failed_token_attempts WHERE ip = ?', [ip]);
+  
+  if (!row) {
+    await db.run(
+      'INSERT INTO failed_token_attempts (ip, attempts, last_attempt_at) VALUES (?, 1, ?)',
+      [ip, now]
+    );
+  } else {
+    const newAttempts = row.attempts + 1;
+    if (newAttempts >= 10) {
+      const lockedUntil = new Date(Date.now() + 24 * 3600 * 1000).toISOString();
+      await db.run(
+        'UPDATE failed_token_attempts SET attempts = ?, last_attempt_at = ?, locked_until = ? WHERE ip = ?',
+        [newAttempts, now, lockedUntil, ip]
+      );
+    } else {
+      await db.run(
+        'UPDATE failed_token_attempts SET attempts = ?, last_attempt_at = ? WHERE ip = ?',
+        [newAttempts, now, ip]
+      );
+    }
+  }
+}
+
+async function resetFailedAttempts(ip) {
+  const db = await getDb();
+  await db.run('DELETE FROM failed_token_attempts WHERE ip = ?', [ip]);
+}
+
 async function closeDb() {
   if (dbInstance) {
     try {
@@ -661,4 +786,6 @@ module.exports = {
   getActivityStats, deleteActivity, clearActivities,
   getUserByUsername, createAccount, getAccountCount, getAllAccounts, updateAccountPassword,
   activateVip, checkBruteForce, getAccountRole, resetConfig,
+  createApiToken, getApiTokens, revokeApiToken, validateApiToken,
+  isIpLocked, incrementFailedAttempts, resetFailedAttempts
 };
