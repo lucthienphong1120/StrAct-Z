@@ -1042,9 +1042,26 @@ window.userRefresh = userRefresh;
 
 // ─── API Token UI Management ───────────────────────────────────────────
 
+function formatDateOnly(isoString) {
+  if (!isoString) return '--';
+  const d = new Date(isoString);
+  if (isNaN(d.getTime())) return '--';
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
+}
+
+function formatDateTime(isoString) {
+  if (!isoString) return 'Chưa sử dụng';
+  const d = new Date(isoString);
+  if (isNaN(d.getTime())) return '--';
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${pad(d.getHours())}:${pad(d.getMinutes())} ${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
+}
+
 async function loadApiTokens() {
   try {
     const tokens = await getApiTokens();
+    window.apiTokens = tokens; // Cache tokens in window for popup details
     const container = document.getElementById('apiTokensContainer');
     const tbody = document.getElementById('apiTokensList');
     const noTokensText = document.getElementById('noApiTokensText');
@@ -1060,38 +1077,19 @@ async function loadApiTokens() {
     
     if (tbody) {
       tbody.innerHTML = tokens.map(t => {
-        const escapedToken = (t.token || '').replace(/"/g, '&quot;');
         const escapedName = (t.name || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        const escapedWhitelist = (t.ip_whitelist || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        
-        const isVip = window.userRole === 'vip';
-        const whitelistDisplay = t.ip_whitelist 
-          ? `<span style="color: var(--accent-green); font-size: 0.65rem;">\u{1f6e1}\ufe0f ${escapedWhitelist}</span>` 
-          : `<span style="color: var(--text-muted); font-size: 0.65rem;">All IP</span>`;
-        
-        const editBtn = isVip 
-          ? `<button class="btn btn-sm btn-secondary" onclick="toggleIpEdit(${t.id}, '${escapedWhitelist}')" style="padding: 1px 5px; font-size: 0.65rem;" title="Edit IP Whitelist">\u270f\ufe0f</button>` 
-          : '';
+        const createdDate = formatDateOnly(t.created_at);
 
         return `
           <tr style="border-bottom: 1px solid rgba(255,255,255,0.03); text-align: left;">
-            <td style="padding: 8px 10px;">
-              <div style="font-weight: 500;">${escapedName}</div>
-              <div style="display: flex; align-items: center; gap: 4px; margin-top: 2px;">
-                ${whitelistDisplay} ${editBtn}
-              </div>
-              <div id="ipEditRow_${t.id}" style="display: none; margin-top: 6px;">
-                <div style="display: flex; gap: 4px; align-items: center;">
-                  <input type="text" id="ipEditInput_${t.id}" class="form-input" value="${escapedWhitelist}" placeholder="IP1, IP2, ..." style="flex: 1; font-size: 0.7rem; padding: 3px 6px; height: 26px;">
-                  <button class="btn btn-sm btn-primary" onclick="saveIpWhitelist(${t.id})" style="padding: 2px 6px; font-size: 0.65rem; height: 26px;">\u{1f4be}</button>
-                  <button class="btn btn-sm btn-secondary" onclick="toggleIpEdit(${t.id})" style="padding: 2px 6px; font-size: 0.65rem; height: 26px;">\u2715</button>
-                </div>
-              </div>
+            <td style="padding: 8px 10px; font-weight: 500; max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+              ${escapedName}
             </td>
-            <td style="padding: 8px 10px; font-family: monospace;">${t.token_preview}</td>
-            <td style="padding: 8px 10px; text-align: center; white-space: nowrap;">
-              <button class="btn btn-sm btn-secondary" onclick="copyTokenValue('${escapedToken}')" style="padding: 2px 8px; margin-right: 6px;" title="Copy Token">\u{1f4cb} Copy</button>
-              <button class="btn btn-sm btn-outline-danger" onclick="revokeTokenClick(${t.id})" style="padding: 2px 8px;" title="Revoke Token">Revoke</button>
+            <td style="padding: 8px 10px; color: var(--text-muted); font-size: 0.7rem;">
+              ${createdDate}
+            </td>
+            <td style="padding: 8px 10px; text-align: center;">
+              <button class="btn btn-sm btn-secondary" onclick="openTokenDetailModal(${t.id})" style="padding: 2px 8px; font-size: 0.75rem;" title="Chi tiết Token">⚙️</button>
             </td>
           </tr>
         `;
@@ -1102,29 +1100,96 @@ async function loadApiTokens() {
   }
 }
 
-function toggleIpEdit(tokenId, currentValue) {
-  const row = document.getElementById(`ipEditRow_${tokenId}`);
-  if (!row) return;
-  const isVisible = row.style.display !== 'none';
-  row.style.display = isVisible ? 'none' : 'block';
-  if (!isVisible && currentValue !== undefined) {
-    const input = document.getElementById(`ipEditInput_${tokenId}`);
-    if (input) input.focus();
+function openTokenDetailModal(tokenId) {
+  const token = (window.apiTokens || []).find(t => t.id === tokenId);
+  if (!token) return;
+
+  const modal = document.getElementById('tokenDetailModal');
+  if (!modal) return;
+
+  const detailTokenId = document.getElementById('detailTokenId');
+  const detailTokenName = document.getElementById('detailTokenName');
+  const detailTokenMasked = document.getElementById('detailTokenMasked');
+  const btnCopyDetailToken = document.getElementById('btnCopyDetailToken');
+  const detailIpInput = document.getElementById('detailIpInput');
+  const btnSaveDetailIp = document.getElementById('btnSaveDetailIp');
+  const detailIpVipBadge = document.getElementById('detailIpVipBadge');
+  const detailCreatedAt = document.getElementById('detailCreatedAt');
+  const detailLastUsedAt = document.getElementById('detailLastUsedAt');
+  const btnRevokeDetailToken = document.getElementById('btnRevokeDetailToken');
+
+  if (detailTokenId) detailTokenId.value = token.id;
+  if (detailTokenName) detailTokenName.textContent = token.name;
+
+  // Format masked token: first 8 + last 4, with **** in between
+  const rawToken = token.token || '';
+  let masked = '';
+  if (rawToken.length >= 12) {
+    masked = rawToken.slice(0, 8) + '****' + rawToken.slice(-4);
+  } else {
+    masked = token.token_preview ? token.token_preview.replace('...', '****') : 'stz_****';
   }
+  if (detailTokenMasked) detailTokenMasked.textContent = masked;
+
+  // Setup Copy
+  if (btnCopyDetailToken) {
+    btnCopyDetailToken.onclick = () => {
+      copyTokenValue(rawToken);
+    };
+  }
+
+  // Setup IP Whitelist by Role
+  const isVip = window.userRole === 'vip';
+  if (detailIpInput) {
+    detailIpInput.value = token.ip_whitelist || '';
+    detailIpInput.disabled = !isVip;
+  }
+  if (btnSaveDetailIp) {
+    btnSaveDetailIp.disabled = !isVip;
+    btnSaveDetailIp.onclick = () => {
+      saveIpWhitelistFromModal(token.id);
+    };
+  }
+  if (detailIpVipBadge) {
+    detailIpVipBadge.style.display = isVip ? 'none' : 'inline-block';
+  }
+
+  // Setup Dates
+  if (detailCreatedAt) detailCreatedAt.textContent = formatDateTime(token.created_at);
+  if (detailLastUsedAt) detailLastUsedAt.textContent = formatDateTime(token.last_used_at);
+
+  // Setup Revoke
+  if (btnRevokeDetailToken) {
+    btnRevokeDetailToken.onclick = () => {
+      revokeTokenClick(token.id);
+    };
+  }
+
+  modal.classList.add('active');
 }
 
-async function saveIpWhitelist(tokenId) {
-  const input = document.getElementById(`ipEditInput_${tokenId}`);
+function closeTokenDetailModal() {
+  const modal = document.getElementById('tokenDetailModal');
+  if (modal) modal.classList.remove('active');
+}
+
+async function saveIpWhitelistFromModal(tokenId) {
+  const input = document.getElementById('detailIpInput');
   if (!input) return;
   const value = input.value.trim();
   
   try {
     const res = await updateApiTokenWhitelist(tokenId, value);
     if (res.success) {
-      showToast('\u0110\u00e3 c\u1eadp nh\u1eadt IP Whitelist!', 'success');
+      showToast('Đã cập nhật IP Whitelist!', 'success');
       await loadApiTokens();
+      // Keep modal open, update cached/input values
+      const updatedToken = (window.apiTokens || []).find(t => t.id === tokenId);
+      if (updatedToken) {
+        input.value = updatedToken.ip_whitelist || '';
+      }
     } else {
-      showToast(res.error || 'C\u1eadp nh\u1eadt th\u1ea5t b\u1ea1i.', 'error');
+      showToast(res.error || 'Cập nhật thất bại.', 'error');
     }
   } catch (err) {
     showToast('Error: ' + err.message, 'error');
@@ -1136,15 +1201,15 @@ async function createTokenClick() {
   const name = nameInput ? nameInput.value.trim() : '';
   
   if (!name) {
-    showToast('Vui l\u00f2ng nh\u1eadp t\u00ean Token.', 'warning');
+    showToast('Vui lòng nhập tên Token.', 'warning');
     return;
   }
 
-  showToast('\u0110ang t\u1ea1o Token...', 'info');
+  showToast('Đang tạo Token...', 'info');
   try {
     const res = await createApiToken(name, '');
     if (res.success && res.token) {
-      showToast('T\u1ea1o Token th\u00e0nh c\u00f4ng!', 'success');
+      showToast('Tạo Token thành công!', 'success');
       if (nameInput) nameInput.value = '';
       
       const modal = document.getElementById('apiTokenModal');
@@ -1156,7 +1221,7 @@ async function createTokenClick() {
       
       await loadApiTokens();
     } else {
-      showToast(res.error || 'T\u1ea1o Token th\u1ea5t b\u1ea1i.', 'error');
+      showToast(res.error || 'Tạo Token thất bại.', 'error');
     }
   } catch (err) {
     showToast('Error creating token: ' + err.message, 'error');
@@ -1166,9 +1231,9 @@ async function createTokenClick() {
 function copyTokenValue(tokenVal) {
   if (!tokenVal) return;
   navigator.clipboard.writeText(tokenVal).then(() => {
-    showToast('\u0110\u00e3 copy API Token v\u00e0o clipboard!', 'success');
+    showToast('Đã copy API Token vào clipboard!', 'success');
   }).catch(err => {
-    showToast('Kh\u00f4ng th\u1ec3 copy: ' + err.message, 'error');
+    showToast('Không thể copy: ' + err.message, 'error');
   });
 }
 
@@ -1183,18 +1248,19 @@ function closeApiTokenModal() {
 }
 
 async function revokeTokenClick(tokenId) {
-  if (!confirm('B\u1ea1n c\u00f3 ch\u1eafc ch\u1eafn mu\u1ed1n thu h\u1ed3i Token n\u00e0y? Sau khi thu h\u1ed3i, b\u1ea5t k\u1ef3 h\u1ec7 th\u1ed1ng n\u00e0o s\u1eed d\u1ee5ng Token n\u00e0y s\u1ebd kh\u00f4ng th\u1ec3 g\u1ecdi API \u0111\u01b0\u1ee3c n\u1eefa.')) {
+  if (!confirm('Bạn có chắc chắn muốn thu hồi Token này? Sau khi thu hồi, bất kỳ hệ thống nào sử dụng Token này sẽ không thể gọi API được nữa.')) {
     return;
   }
   
-  showToast('\u0110ang thu h\u1ed3i Token...', 'info');
+  showToast('Đang thu hồi Token...', 'info');
   try {
     const res = await revokeApiToken(tokenId);
     if (res.success) {
-      showToast('\u0110\u00e3 thu h\u1ed3i Token!', 'success');
+      showToast('Đã thu hồi Token!', 'success');
+      closeTokenDetailModal(); // Close detail modal on revoke success
       await loadApiTokens();
     } else {
-      showToast(res.error || 'Thu h\u1ed3i Token th\u1ea5t b\u1ea1i.', 'error');
+      showToast(res.error || 'Thu hồi Token thất bại.', 'error');
     }
   } catch (err) {
     showToast('Error revoking token: ' + err.message, 'error');
@@ -1208,5 +1274,6 @@ window.copyTokenValue = copyTokenValue;
 window.copyGeneratedToken = copyGeneratedToken;
 window.closeApiTokenModal = closeApiTokenModal;
 window.revokeTokenClick = revokeTokenClick;
-window.toggleIpEdit = toggleIpEdit;
-window.saveIpWhitelist = saveIpWhitelist;
+window.openTokenDetailModal = openTokenDetailModal;
+window.closeTokenDetailModal = closeTokenDetailModal;
+window.saveIpWhitelistFromModal = saveIpWhitelistFromModal;

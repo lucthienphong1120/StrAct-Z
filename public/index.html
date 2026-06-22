@@ -29,7 +29,7 @@
         <div class="logo-icon">🏃</div>
         <span class="logo-text">StrAct Z</span>
         <small
-          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v3.1.0</small>
+          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v3.2.0</small>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -572,9 +572,9 @@
                 <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem; color: var(--text-secondary); background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 6px; overflow: hidden;">
                   <thead>
                     <tr style="background: rgba(255, 255, 255, 0.05); border-bottom: 1px solid var(--border); text-align: left;">
-                      <th style="padding: 6px 10px; font-weight: 600;">Tên</th>
-                      <th style="padding: 6px 10px; font-weight: 600;">Xem trước</th>
-                      <th style="padding: 6px 10px; font-weight: 600; text-align: center;">Hành động</th>
+                      <th style="padding: 6px 10px; font-weight: 600;">Tên Token</th>
+                      <th style="padding: 6px 10px; font-weight: 600;">Ngày tạo</th>
+                      <th style="padding: 6px 10px; font-weight: 600; text-align: center; width: 60px;">Chi tiết</th>
                     </tr>
                   </thead>
                   <tbody id="apiTokensList">
@@ -1073,6 +1073,64 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary btn-block" onclick="closeApiTokenModal()">Đóng cửa sổ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Token Detail Modal -->
+  <div id="tokenDetailModal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">⚙️ Chi tiết API Token</h3>
+        <button class="modal-close-btn" onclick="closeTokenDetailModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <input type="hidden" id="detailTokenId">
+        
+        <!-- Token Name -->
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" style="font-size: 0.8rem; font-weight: 600;">Tên Token</label>
+          <div id="detailTokenName" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; font-weight: 500; color: var(--text-primary);"></div>
+        </div>
+        
+        <!-- Masked Token Value & Copy Button -->
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" style="font-size: 0.8rem; font-weight: 600;">Mã API Token</label>
+          <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border); border-radius: 6px; padding: 12px; font-family: monospace; font-size: 0.9rem; word-break: break-all; color: #f59e0b; display: flex; align-items: center; justify-content: space-between;">
+            <span id="detailTokenMasked" style="flex: 1; user-select: none;">stz_xxxx...xxxx</span>
+            <button class="btn btn-sm btn-secondary" id="btnCopyDetailToken" style="padding: 4px 8px; margin-left: 10px; flex-shrink: 0;">📋 Copy</button>
+          </div>
+          <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">Mã token được ẩn để bảo mật. Bấm nút Copy để sử dụng.</div>
+        </div>
+
+        <!-- IP Whitelist Info / Edit -->
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" style="font-size: 0.8rem; font-weight: 600; display: flex; justify-content: space-between;">
+            <span>IP Whitelist</span>
+            <span id="detailIpVipBadge" style="font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: rgba(234, 179, 8, 0.1); color: #eab308; display: none;">🔒 VIP Only</span>
+          </label>
+          <div id="detailIpEditArea" style="display: flex; gap: 8px; align-items: center;">
+            <input type="text" id="detailIpInput" class="form-input" placeholder="Ví dụ: 1.2.3.4, 5.6.7.8" style="flex: 1;">
+            <button class="btn btn-sm btn-primary" id="btnSaveDetailIp" style="height: 34px; white-space: nowrap;">💾 Lưu</button>
+          </div>
+          <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">Ngăn cách nhiều IP bằng dấu phẩy. Bỏ trống để cho phép mọi IP.</div>
+        </div>
+
+        <!-- Meta info -->
+        <div style="font-size: 0.75rem; color: var(--text-muted); display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border); border-radius: 6px; padding: 10px;">
+          <div>
+            <div style="font-size: 0.65rem; text-transform: uppercase;">Ngày tạo</div>
+            <div id="detailCreatedAt" style="font-weight: 500; color: var(--text-secondary); margin-top: 2px;">--</div>
+          </div>
+          <div>
+            <div style="font-size: 0.65rem; text-transform: uppercase;">Sử dụng lần cuối</div>
+            <div id="detailLastUsedAt" style="font-weight: 500; color: var(--text-secondary); margin-top: 2px;">--</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid var(--border);">
+        <button class="btn btn-outline-danger" id="btnRevokeDetailToken" style="padding: 6px 14px; font-size: 0.8rem;">🗑️ Thu hồi Token</button>
+        <button class="btn btn-secondary btn-sm" onclick="closeTokenDetailModal()">Đóng</button>
       </div>
     </div>
   </div>

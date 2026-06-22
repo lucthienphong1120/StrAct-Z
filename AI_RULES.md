@@ -140,6 +140,15 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v3.2.0 (2026-06-22)
+- **API Token Management UI Redesign**:
+  - Redesigned the API Token card layout to display only the Token Name and Creation Date.
+  - Added a detail popup modal (`#tokenDetailModal`) to view, manage, and edit API Token details.
+  - Visually masked the token string in the detail popup (format: `abcd****xyz`) with a dedicated "Copy" button (no show/hide toggle).
+  - Centralized token details in the modal, enabling IP Whitelist saving and Token revocation within the popup frame.
+  - Restricted IP Whitelist input in the modal dynamically using account role checks (`window.userRole`).
+  - Bumped version to `v3.2.0` across system files (`package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`).
+
 ### v3.1.0 (2026-06-22)
 - **Rate Limiter Tuning & Fine-Grained API Endpoint Limits**:
   - Reduced global rate limiter in `server.js` from `1000` to `300` requests per 15 minutes per IP to avoid spam while keeping it friendly for PWA static asset serving.
