@@ -284,4 +284,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] review và điều chỉnh lại global rate limiter đang là bao nhiêu cho phù hợp với việc tạo hoạt động liên tục, tránh bị block nhưng cũng không quá nhiều (1000req), đặt rate limit theo từng đầu api và lượng nhỏ, phù hợp với user action, ngoài ra các endpoint dạng POST cũng phải đẩy thấp hơn (v3.0.0)
 + [x] thiết kế trang block và mã status trả về cho các loại security violation (403, 429, 500) (v3.0.0)
 + [x] thiết kế lại nút bypass workhour trong generate around location thành dạng toggle giống mẫu config chung của dự án (viết/update tài liệu về quy định thiết kế của dự án để nhớ) (v3.0.0)
-+ [ ] review lại thiết kế các chức năng basic account không có thì chỉ disable thôi, không hidden để cho user biết mà tò mò chứ 
++ [x] review lại thiết kế các chức năng basic account không có thì chỉ disable thôi, không hidden để cho user biết mà tò mò chứ (v3.0.0)
+

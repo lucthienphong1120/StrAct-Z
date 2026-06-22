@@ -23,13 +23,14 @@ async function loadSchedule() {
     if (status.scheduleCount === 2) {
       slot2.style.display = 'block';
       slot3.style.display = 'none';
-    } else if (status.scheduleCount >= 3 && isVip) {
+    } else if (status.scheduleCount >= 3) {
       slot2.style.display = 'block';
       slot3.style.display = 'block';
     } else {
       slot2.style.display = 'none';
       slot3.style.display = 'none';
     }
+    checkSlot3DisabledState();
     updateAddButtonVisibility();
 
     document.getElementById('scheduleCountMin').value = (status.scheduleCountMin !== undefined && status.scheduleCountMin !== null) ? status.scheduleCountMin : ((sysL?.schedule_count_min?.default) !== undefined ? sysL.schedule_count_min.default : 1);
@@ -260,6 +261,34 @@ function attachScheduleRealTimeListeners() {
   });
 }
 
+function checkSlot3DisabledState() {
+  const time3Input = document.getElementById('scheduleTime3');
+  const slot3 = document.getElementById('scheduleSlot3');
+  if (!time3Input || !slot3) return;
+  
+  const isVip = window.userRole === 'vip';
+  if (!isVip) {
+    time3Input.disabled = true;
+    time3Input.style.opacity = '0.6';
+    time3Input.style.cursor = 'not-allowed';
+    slot3.style.opacity = '0.7';
+    
+    const label = slot3.querySelector('.form-label');
+    if (label && !label.innerHTML.includes('🔒')) {
+      label.innerHTML = 'Time Slot 3 <span style="color:var(--vip-gold, #f59e0b); font-size:0.75rem; font-weight:600; margin-left:5px;">🔒 VIP Only</span>';
+    }
+  } else {
+    time3Input.disabled = false;
+    time3Input.style.opacity = '';
+    time3Input.style.cursor = '';
+    slot3.style.opacity = '1';
+    const label = slot3.querySelector('.form-label');
+    if (label) {
+      label.innerHTML = 'Time Slot 3 <span class="tooltip-icon" id="tipScheduleTime3" data-tooltip="?">?</span>';
+    }
+  }
+}
+
 function addScheduleSlot() {
   const slot2 = document.getElementById('scheduleSlot2');
   const slot3 = document.getElementById('scheduleSlot3');
@@ -267,13 +296,13 @@ function addScheduleSlot() {
   if (slot2.style.display === 'none') {
     slot2.style.display = 'block';
   } else if (slot3.style.display === 'none') {
-    if (window.userRole !== 'vip') {
-      showToast('Khung giờ thứ 3 chỉ dành cho tài khoản VIP.', 'warning');
-      return;
-    }
     slot3.style.display = 'block';
+    if (window.userRole !== 'vip') {
+      showToast('Khung giờ thứ 3 chỉ dành cho tài khoản VIP. Vui lòng kích hoạt VIP để chỉnh sửa.', 'warning');
+    }
   }
   
+  checkSlot3DisabledState();
   updateAddButtonVisibility();
   refreshScheduleDisplayFromUI();
 }
@@ -293,6 +322,7 @@ function removeScheduleSlot(slotNum) {
     document.getElementById('scheduleSlot3').style.display = 'none';
   }
   
+  checkSlot3DisabledState();
   updateAddButtonVisibility();
   refreshScheduleDisplayFromUI();
 }
@@ -301,7 +331,7 @@ function updateAddButtonVisibility() {
   const slot2Visible = document.getElementById('scheduleSlot2').style.display === 'block';
   const slot3Visible = document.getElementById('scheduleSlot3').style.display === 'block';
   const btnAdd = document.getElementById('btnAddSchedule');
-  const maxAllowed = window.userRole === 'vip' ? 3 : 2;
+  const maxAllowed = 3; // Keep visible for basic users to allow showing Slot 3 with VIP lock!
   
   let currentCount = 1;
   if (slot2Visible) currentCount++;

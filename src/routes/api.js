@@ -80,7 +80,7 @@ router.post('/config', apiWriteLimiter, async (req, res) => {
   }
 });
 
-router.post('/config/reset', async (req, res) => {
+router.post('/config/reset', apiWriteLimiter, async (req, res) => {
   try {
     await db.resetConfig(req.user.id);
     stravaApi.clearActivityCache(req.user.id);
@@ -518,7 +518,7 @@ router.post('/generate-and-upload', apiWriteLimiter, async (req, res) => {
 });
 
 // Upload existing activity by local DB id
-router.post('/upload/:id', async (req, res) => {
+router.post('/upload/:id', apiWriteLimiter, async (req, res) => {
   try {
     const activities = await db.getActivities(req.user.id, 200);
     const activity = activities.find(a => a.id === parseInt(req.params.id));
@@ -595,7 +595,7 @@ router.post('/upload/:id', async (req, res) => {
 // ─── Delete Activity ─────────────────────────────────────────────────────────
 
 // DELETE /api/activities/:id?strava=true  - delete from local DB (and optionally Strava)
-router.delete('/activities/:id', async (req, res) => {
+router.delete('/activities/:id', apiWriteLimiter, async (req, res) => {
   const id = parseInt(req.params.id);
   const deleteFromStrava = req.query.strava === 'true';
 
@@ -654,7 +654,7 @@ router.get('/scheduler', async (req, res) => {
   }
 });
 
-router.post('/scheduler', async (req, res) => {
+router.post('/scheduler', apiWriteLimiter, async (req, res) => {
   try {
     const updates = req.body;
     const role = req.user.role || 'basic';
@@ -699,7 +699,7 @@ router.post('/scheduler', async (req, res) => {
   }
 });
 
-router.post('/scheduler/trigger', async (req, res) => {
+router.post('/scheduler/trigger', apiWriteLimiter, async (req, res) => {
   try {
     const result = await scheduler.executeJob(req.user.id);
     res.json(result);
@@ -728,7 +728,7 @@ router.get('/fit/:filename', async (req, res) => {
 
 // ─── Account Management ───────────────────────────────────────────────────────
 
-router.put('/account/password', async (req, res) => {
+router.put('/account/password', apiWriteLimiter, async (req, res) => {
   try {
     const { newPassword } = req.body;
     if (!newPassword || newPassword.length < 5) {
@@ -742,7 +742,7 @@ router.put('/account/password', async (req, res) => {
   }
 });
 
-router.post('/account/activate-vip', async (req, res) => {
+router.post('/account/activate-vip', apiWriteLimiter, async (req, res) => {
   try {
     const { code } = req.body;
     if (!code) return res.status(400).json({ error: 'Code is required' });
@@ -778,7 +778,7 @@ router.get('/api-tokens', async (req, res) => {
   }
 });
 
-router.post('/api-tokens', async (req, res) => {
+router.post('/api-tokens', apiWriteLimiter, async (req, res) => {
   try {
     const { name, ip_whitelist } = req.body;
     if (!name || name.trim() === '') {
@@ -813,7 +813,7 @@ router.post('/api-tokens', async (req, res) => {
   }
 });
 
-router.delete('/api-tokens/:id', async (req, res) => {
+router.delete('/api-tokens/:id', apiWriteLimiter, async (req, res) => {
   try {
     await db.revokeApiToken(req.user.id, req.params.id);
     res.json({ success: true, message: 'Đã thu hồi Token thành công.' });
