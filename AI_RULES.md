@@ -140,6 +140,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v2.9.0 (2026-06-22)
+- **Hanoi POIs Reorganization & Boundary Sync**:
+  - Reorganized `docs/HANOI_POIS.md` to be grouped by district instead of categories to align with project standards.
+  - Adjusted coordinates of border POIs (e.g. Đại học Bách Khoa, NEU, Xây dựng, Bách Thảo, Mai Xuân Thưởng, Hồ Tây Trích Sài, Đường Thanh Niên, Mai Dịch, CV1, Hồ Rùa, Công viên Nhân Chính, Phùng Khoang, Chu Văn An park, The Manor Central Park) by small offsets (5m - 280m) to strictly lie inside their respective district polygons in `hanoi_full_districts.geojson`.
+  - Relocated mismapped POIs in both `route-engine.js` and `HANOI_POIS.md` to match their actual location: `Trường THPT Chu Văn An` and `Đường chạy Ciputra` moved to `tay_ho`; `Hồ Sài Đồng` and `Công viên Gia Lâm` moved to `long_bien`.
+  - Bumped version to `v2.9.0` across `package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`.
+
 ### v2.8.9 (2026-06-21)
 - **FIT Label Color Update**: Changed FIT format tag from green (`#10b981`) to cyan/teal (`#06b6d4`) to avoid visual conflict with the SCHEDULE label (also green).
   - District tag font-size tweaked to `0.7em` with `text-transform: capitalize`.

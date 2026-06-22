@@ -274,8 +274,8 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] Khôi phục toàn bộ các địa danh chạy bộ đã xóa trong docs/HANOI_POIS.md, cấu hình Sóc Sơn (soc_son) và Sơn Tây (son_tay) thành các quận chính thức thay vì ngoại tỉnh, đồng thời đồng bộ hóa hoàn toàn danh sách tọa độ với backend code route-engine.js (v2.8.7)
 + [x] Điều chỉnh tỉ lệ xác suất chọn POI trong route-engine.js: điểm xuất phát POI→80%/20%, waypoint POI-to-POI→60%, Home/Work-to-POI→75%, Random-to-POI→90%; cập nhật weighted top-3 selection thành 50%/30%/20% (v2.8.8)
 + [x] Đổi màu tag FIT từ xanh lá sang cyan/teal (#06b6d4) để tránh trùng với SCHEDULE; tag quận font-size 0.7em + capitalize; label type giữ nguyên uppercase (v2.8.9)
-+ [ ] sắp xếp lại các địa danh trong HANOI_POIS.md theo từng quận trong HANOI DISTRICTS
-+ [ ] test và check chéo mapping vị trí các địa danh trong HANOI_POIS.md với tọa độ thực tế trên bản đồ có đúng với các quận được khai báo trong POI nổi tiếng trong code không
++ [x] sắp xếp lại các địa danh trong HANOI_POIS.md theo từng quận trong HANOI DISTRICTS (v2.9.0)
++ [x] test và check chéo mapping vị trí các địa danh trong HANOI_POIS.md với tọa độ thực tế trên bản đồ có đúng với các quận được khai báo trong POI nổi tiếng trong code không (v2.9.0)
 + [ ] ver 3.0.0: Làm endpoint trigger để tạo hoạt động theo location hiện tại, payload gồm user token và định vị (lat/lon)
 + [ ] Thêm chức năng liên quan đến user token để tự động hóa khi không cần login, publish một số api, đảm bảo an toàn, bảo mật, tránh brute force, cógiao diện tạo token, revoke token
 + [ ] các hoạt động tạo bằng API sẽ có Label type: API (ngoài MANUAL, CUSTOM, SCHEDULE 1,2,3)

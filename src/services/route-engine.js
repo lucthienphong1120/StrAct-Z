@@ -26,7 +26,7 @@ const RUNNING_POIS = {
     { name: 'Quảng trường Đông Kinh Nghĩa Thục', lat: 21.0306, lng: 105.8524 },
     { name: 'Trường THPT Việt Đức', lat: 21.0227, lng: 105.8525 },
     { name: 'Vườn hoa Diên Hồng', lat: 21.0260, lng: 105.8570 },
-    { name: 'Cầu Long Biên (Hoàn Kiếm)', lat: 21.0401, lng: 105.8588 },
+    { name: 'Cầu Long Biên (Hoàn Kiếm)', lat: 21.0399, lng: 105.8585 },
     { name: 'Vườn hoa Tao Đàn', lat: 21.0183, lng: 105.8553 },
     { name: 'Vườn hoa Bác Cổ', lat: 21.0250, lng: 105.8594 },
     { name: 'Phố đi bộ Hoàn Kiếm', lat: 21.0285, lng: 105.8542 }
@@ -34,10 +34,10 @@ const RUNNING_POIS = {
   hai_ba_trung: [
     { name: 'Công viên Thống Nhất', lat: 21.0163, lng: 105.8458 },
     { name: 'Công viên Tuổi Trẻ', lat: 21.0068, lng: 105.8601 },
-    { name: 'Đại học Bách Khoa Hà Nội', lat: 21.0062, lng: 105.8431 },
-    { name: 'Đại học Kinh tế Quốc dân (NEU)', lat: 21.0016, lng: 105.8423 },
+    { name: 'Đại học Bách Khoa Hà Nội', lat: 21.0062, lng: 105.8434 },
+    { name: 'Đại học Kinh tế Quốc dân (NEU)', lat: 21.0016, lng: 105.8434 },
     { name: 'Hồ Thiền Quang', lat: 21.0185, lng: 105.8475 },
-    { name: 'Đại học Xây dựng', lat: 21.0035, lng: 105.8428 },
+    { name: 'Đại học Xây dựng', lat: 21.0035, lng: 105.8434 },
     { name: 'Sân vận động Bách Khoa', lat: 21.0055, lng: 105.8465 },
     { name: 'Hồ Quỳnh', lat: 21.0085, lng: 105.8582 },
     { name: 'Đường ven sông Kim Ngưu (Thanh Nhàn)', lat: 21.0048, lng: 105.8625 },
@@ -46,27 +46,26 @@ const RUNNING_POIS = {
     { name: 'Hồ Bảy Mẫu', lat: 21.0150, lng: 105.8450 }
   ],
   ba_dinh: [
-    { name: 'Công viên Bách Thảo', lat: 21.0425, lng: 105.8285 },
+    { name: 'Công viên Bách Thảo', lat: 21.0407, lng: 105.8305 },
     { name: 'Hồ Trúc Bạch', lat: 21.0416, lng: 105.8385 },
     { name: 'Quảng trường Ba Đình', lat: 21.0360, lng: 105.8347 },
     { name: 'Hồ Giảng Võ', lat: 21.0270, lng: 105.8166 },
     { name: 'Hồ Ngọc Khánh', lat: 21.0276, lng: 105.8095 },
     { name: 'Hồ Thành Công', lat: 21.0195, lng: 105.8130 },
     { name: 'Công viên Thủ Lệ', lat: 21.0322, lng: 105.8080 },
-    { name: 'Trường THPT Chu Văn An', lat: 21.0441, lng: 105.8315 },
     { name: 'Hồ Hữu Tiệp (Hồ B52)', lat: 21.0381, lng: 105.8236 },
     { name: 'Cung thể thao Quần Ngựa', lat: 21.0405, lng: 105.8155 },
     { name: 'Vườn hoa Lênin', lat: 21.0317, lng: 105.8394 },
-    { name: 'Vườn hoa Mai Xuân Thưởng', lat: 21.0426, lng: 105.8340 },
+    { name: 'Vườn hoa Mai Xuân Thưởng', lat: 21.0417, lng: 105.8337 },
     { name: 'Lăng Chủ tịch Hồ Chí Minh', lat: 21.0368, lng: 105.8346 },
     { name: 'Đường đôi Kim Mã', lat: 21.0315, lng: 105.8190 },
     { name: 'Trục đường Hoàng Diệu - Phan Đình Phùng', lat: 21.0395, lng: 105.8390 }
   ],
   tay_ho: [
-    { name: 'Đường ven Hồ Tây (Trích Sài)', lat: 21.0558, lng: 105.8083 },
+    { name: 'Đường ven Hồ Tây (Trích Sài)', lat: 21.0560, lng: 105.8094 },
     { name: 'Đường ven Hồ Tây (Nguyễn Đình Thi)', lat: 21.0478, lng: 105.8236 },
     { name: 'Công viên Nước Hồ Tây', lat: 21.0762, lng: 105.8175 },
-    { name: 'Đường Thanh Niên', lat: 21.0436, lng: 105.8372 },
+    { name: 'Đường Thanh Niên', lat: 21.0439, lng: 105.8361 },
     { name: 'Đường ven Hồ Tây (Vệ Hồ)', lat: 21.0725, lng: 105.8288 },
     { name: 'Hồ Quảng Bá', lat: 21.0664, lng: 105.8260 },
     { name: 'Thung lũng hoa Hồ Tây', lat: 21.0745, lng: 105.8210 },
@@ -76,7 +75,9 @@ const RUNNING_POIS = {
     { name: 'Vườn hoa Lý Tự Trọng', lat: 21.0483, lng: 105.8361 },
     { name: 'Hồ Đầm Trị', lat: 21.0722, lng: 105.8175 },
     { name: 'Vườn hoa Lạc Long Quân', lat: 21.0690, lng: 105.8118 },
-    { name: 'Tuyến đê sông Hồng (Nghi Tàm - Âu Cơ)', lat: 21.0600, lng: 105.8290 }
+    { name: 'Tuyến đê sông Hồng (Nghi Tàm - Âu Cơ)', lat: 21.0600, lng: 105.8290 },
+    { name: 'Trường THPT Chu Văn An', lat: 21.0441, lng: 105.8315 },
+    { name: 'Đường chạy Ciputra', lat: 21.0825, lng: 105.8020 }
   ],
   cau_giay: [
     { name: 'Công viên Cầu Giấy', lat: 21.0205, lng: 105.7905 },
@@ -86,9 +87,9 @@ const RUNNING_POIS = {
     { name: 'Đại học Sư phạm Hà Nội', lat: 21.0365, lng: 105.7850 },
     { name: 'Hồ Nghĩa Tân', lat: 21.0410, lng: 105.7930 },
     { name: 'Đại học Thương mại', lat: 21.0366, lng: 105.7745 },
-    { name: 'Công viên hồ điều hòa Mai Dịch', lat: 21.0335, lng: 105.7725 },
+    { name: 'Công viên hồ điều hòa Mai Dịch', lat: 21.0340, lng: 105.7730 },
     { name: 'Bảo tàng Dân tộc học Việt Nam', lat: 21.0405, lng: 105.7985 },
-    { name: 'Công viên hồ điều hòa CV1 (Cầu Giấy)', lat: 21.0069, lng: 105.7891 },
+    { name: 'Công viên hồ điều hòa CV1 (Cầu Giấy)', lat: 21.0070, lng: 105.7895 },
     { name: 'Công viên hồ Nghĩa Tân', lat: 21.0410, lng: 105.7925 }
   ],
   dong_da: [
@@ -115,9 +116,9 @@ const RUNNING_POIS = {
     { name: 'Đại học Khoa học Tự nhiên', lat: 20.9995, lng: 105.8090 },
     { name: 'Hồ Hạ Đình', lat: 20.9865, lng: 105.8095 },
     { name: 'Ao Xóm Hồng', lat: 20.9856, lng: 105.8197 },
-    { name: 'Hồ Rùa (Khương Trung)', lat: 20.9930, lng: 105.8285 },
-    { name: 'Công viên Nhân Chính (Thanh Xuân)', lat: 21.0044, lng: 105.7981 },
-    { name: 'Công viên hồ điều hòa Phùng Khoang (Thanh Xuân)', lat: 20.9875, lng: 105.7925 }
+    { name: 'Hồ Rùa (Khương Trung)', lat: 20.9940, lng: 105.8296 },
+    { name: 'Công viên Nhân Chính (Thanh Xuân)', lat: 21.0042, lng: 105.7981 },
+    { name: 'Công viên hồ điều hòa Phùng Khoang (Thanh Xuân)', lat: 20.9856, lng: 105.7945 }
   ],
   hoang_mai: [
     { name: 'Công viên Yên Sở', lat: 20.9664, lng: 105.8521 },
@@ -147,7 +148,9 @@ const RUNNING_POIS = {
     { name: 'Công viên Long Biên', lat: 21.0425, lng: 105.8905 },
     { name: 'Hồ điều hòa Harmony', lat: 21.0380, lng: 105.9015 },
     { name: 'Vườn hoa Gia Lâm', lat: 21.0428, lng: 105.8776 },
-    { name: 'Hồ Ngọc Thụy', lat: 21.0543, lng: 105.8617 }
+    { name: 'Hồ Ngọc Thụy', lat: 21.0543, lng: 105.8617 },
+    { name: 'Hồ Sài Đồng', lat: 21.0255, lng: 105.9220 },
+    { name: 'Công viên Gia Lâm', lat: 21.0350, lng: 105.9300 }
   ],
   ha_dong: [
     { name: 'Công viên hồ Phùng Hưng', lat: 20.9652, lng: 105.7901 },
@@ -169,7 +172,6 @@ const RUNNING_POIS = {
     { name: 'Học viện Tài chính', lat: 21.0760, lng: 105.7785 },
     { name: 'Đại học Công nghiệp Hà Nội', lat: 21.0535, lng: 105.7350 },
     { name: 'Công viên hồ điều hòa Ngoại Giao Đoàn', lat: 21.0665, lng: 105.7985 },
-    { name: 'Đường chạy Ciputra', lat: 21.0825, lng: 105.8020 },
     { name: 'Công viên hồ điều hòa Thành phố Giao lưu', lat: 21.0560, lng: 105.7815 },
     { name: 'Công viên Starlake Tây Hồ Tây', lat: 21.0552, lng: 105.7990 }
   ],
@@ -186,19 +188,17 @@ const RUNNING_POIS = {
     { name: 'Công viên điều hòa Mễ Trì Hạ', lat: 21.0144, lng: 105.7822 }
   ],
   thanh_tri: [
-    { name: 'Công viên Chu Văn An', lat: 20.9725, lng: 105.8115 },
+    { name: 'Công viên Chu Văn An', lat: 20.9714, lng: 105.8110 },
     { name: 'Hồ Triều Khúc', lat: 20.9818, lng: 105.8075 },
     { name: 'Sân vận động huyện Thanh Trì', lat: 20.9535, lng: 105.8450 },
     { name: 'Hồ đầm tròn Thanh Trì', lat: 20.9425, lng: 105.8510 },
     { name: 'Hồ điều hòa Văn Điển', lat: 20.9500, lng: 105.8400 },
-    { name: 'Khu đô thị The Manor Central Park', lat: 20.9750, lng: 105.8080 }
+    { name: 'Khu đô thị The Manor Central Park', lat: 20.9753, lng: 105.8071 }
   ],
   gia_lam: [
     { name: 'Vinhomes Ocean Park', lat: 20.9930, lng: 105.9520 },
-    { name: 'Hồ Sài Đồng', lat: 21.0255, lng: 105.9220 },
     { name: 'Trường Đại học Nông nghiệp Việt Nam (VNUA)', lat: 21.0045, lng: 105.9335 },
     { name: 'Hồ điều hòa Trâu Quỳ', lat: 21.0070, lng: 105.9395 },
-    { name: 'Công viên Gia Lâm', lat: 21.0350, lng: 105.9300 },
     { name: 'Khu đô thị Ecopark', lat: 20.9580, lng: 105.9320 },
     { name: 'Tuyến đê sông Đuống', lat: 21.0450, lng: 105.9550 }
   ],
