@@ -1,7 +1,12 @@
 ## Prompt:
 ```
-"Hãy luôn đọc file AI_RULES.md trong thư mục gốc để nắm bắt kiến trúc dự án, các quy tắc logic vận hành, các tiêu chuẩn versioning của dự án, và file PLAN.md để nắm bắt tiến độ thực hiện các tính năng. Luôn tuân thủ các quy tắc trong đó khi bắt đầu phiên làm việc (session) mới và tiếp tục thực hiện các nhiệm vụ tiếp theo."
-Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay đổi công thức tính MHR), hãy cập nhật nó vào AI_RULES.md để "bộ nhớ" này luôn luôn mới nhất! Khi hoàn thành mỗi task nhớ commit và push lên git, đồng thời update các docs cần thiết và đánh version để track. Ngoài ra còn có tài liệu kỹ thuật bằng flowchart, mindmap dạng markdown tại docs/ARCHITECTURE.md và danh sách địa danh tại docs/HANOI_POIS.md, cập nhật nếu thay đổi lớn liên quan đến kiến trúc hệ thống hoặc danh sách địa danh.
+"Hãy luôn đọc file AI_RULES.md trong thư mục gốc để nắm bắt kiến trúc dự án, các quy tắc logic vận hành, các tiêu chuẩn versioning của dự án, và file PLAN.md để nắm bắt tiến độ thực hiện các tính năng. Luôn tuân thủ các quy tắc trong đó khi bắt đầu phiên làm việc (session) mới và tiếp tục thực hiện các nhiệm vụ tiếp theo.
+Lưu ý về vai trò các tài liệu:
+- README.md: Dành cho người dùng/dev/client xem tổng quan, cách cài đặt và sử dụng cơ bản.
+- docs/ARCHITECTURE.md: Chỉ chứa diagram và flowchart kiến trúc hệ thống dạng Mermaid (không chứa text tài liệu).
+- docs/HANOI_POIS.md: Danh sách địa danh danh lam thắng cảnh Hà Nội.
+- AI_RULES.md: Chứa toàn bộ logic kỹ thuật chi tiết, công thức, tham số cấu hình, quy định phát triển và toàn bộ lịch sử thay đổi (detailed changelog) làm bộ nhớ cho AI assistant làm việc."
+Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay đổi công thức tính MHR), hãy cập nhật nó vào AI_RULES.md để "bộ nhớ" này luôn luôn mới nhất! Khi hoàn thành mỗi task nhớ commit và push lên git, đồng thời update các docs cần thiết và đánh version để track. Ngoài ra còn có danh sách địa danh tại docs/HANOI_POIS.md, cập nhật nếu thay đổi liên quan đến danh sách địa danh.
 ```
 
 ## Features:
