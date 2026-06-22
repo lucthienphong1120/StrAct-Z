@@ -32,6 +32,27 @@ StrAct Z hỗ trợ hai cơ chế cấu hình và chạy:
      - Server sẽ dùng các giá trị tạm thời này để sinh hoạt động tương ứng một lần duy nhất (One-off) mà không làm ảnh hưởng/lưu đè lên cấu hình lưu trong Database.
      - Nếu bạn F5 (tải lại trang), các giá trị tạm thời này sẽ mất và giao diện sẽ khôi phục lại cấu hình gốc từ Database.
 
+## 🔑 Programmatic API & Access Tokens (v3.3.0)
+
+StrAct Z supports programmatic endpoints under the `/api/public` routing namespace for integration with external automation tools (e.g. Home Assistant, Tasker, custom scheduling scripts).
+
+### 1. Hardened Token Authentication
+API requests are authenticated against user-generated access tokens. The authentication middleware (`authenticateApiToken`) accepts token inputs from strictly two hardened sources:
+1. **HTTP Authorization Header (Recommended):** `Authorization: Bearer <your_token>`
+2. **URL Query Parameter:** `?token=<your_token>`
+
+*Other input mechanisms (such as custom HTTP headers or request body parameters) are explicitly rejected to reduce parameters pollution vectors.*
+
+### 2. Cryptographic Storage & Validation
+- **One-way hashing:** Token lookups in the SQLite database are performed against a **SHA-256 hash** of the plain token (`token_hash`), preventing token exposure in the event of database leaks.
+- **AES-256-CBC Encryption:** The plain token is encrypted and stored in `token_encrypted` to allow safe user recovery/copying on the dashboard details popup.
+- **IP Lockout:** Bruteforce attempts are mitigated by tracking failed API login attempts by IP. 10 consecutive failures result in a **24-hour IP ban**.
+
+### 3. Endpoint Specifications
+- **`GET /api/public/stats`** (Limit: 60req/15min): Fetch account metadata, local activity stats, and third-party sync connectivity states.
+- **`GET /api/public/activities`** (Limit: 60req/15min): Retrieve lists of generated activities with paginated `limit` & `offset` values.
+- **`POST /api/public/activities/generate`** (Limit: 5req/15min): Triggers a manual generation based on coordinates (`lat`, `lon`/`lng`) and optional `upload` boolean flags. Supports reverse-geocoding resolution using OSM Nominatim.
+
 ## 📚 Documentation
 
 For detailed information, please refer to our documentation guides:
@@ -59,6 +80,20 @@ For detailed information, please refer to our documentation guides:
 4. Visit `http://localhost:3000`. If this is the first run, you will be redirected to the Setup Wizard to create your Admin account.
 
 ## 📋 Changelog
+
+### v3.3.0 (2026-06-22)
+- **API Security Hardening**: Restrained token query lookup sources to strictly `Authorization: Bearer <token>` header and query string `?token=<token>`. Removed `X-API-Token` header and request body checks.
+- **Integrated Help Docs**: Built a Glassmorphism API Documentation modal accessible directly from the dashboard Token card header to display endpoint requirements and dynamic curl snippets.
+
+### v3.2.0 (2026-06-22)
+- **API Token UI Redesign**: Re-engineered the dashboard Token card to list only name and creation date. Detailed actions (viewing masked token, clipboard copying, updating IP whitelist, and revocation) are moved into a clean detail modal.
+- **Bug Fix**: Fixed a client-side ReferenceError during token creation by explicitly prefixing helpers with window scope and applying SW cache-busting params.
+
+### v3.1.0 (2026-06-22)
+- **Granular Rate Limiting**: Tuned global limiter to 300req/15m and replaced broad write limiters with action-specific endpoints limiters (config, generate, deletion, sensitive).
+
+### v3.0.0 (2026-06-22)
+- **Programmatic API Access & Auto Token Auth**: Built auto-token authentication, public routes (`/api/public/*`), IP lockouts, and Nominatim reverse-geocoding resolution.
 
 ### v2.8.9 (2026-06-21)
 - **FIT Label Color**: Changed FIT tag color from green to cyan/teal (`#06b6d4`) to avoid conflict with SCHEDULE green. GPX remains orange.

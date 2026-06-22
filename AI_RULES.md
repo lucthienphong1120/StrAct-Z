@@ -140,6 +140,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v3.3.0 (2026-06-22)
+- **API Token Security Hardening & Integrated Documentation Modal**:
+  - Hardened the `authenticateApiToken` middleware by removing `X-API-Token` header and request body parameter check sources. Only `Authorization: Bearer <token>` and `?token=<token>` query parameters are accepted.
+  - Added a `📄 Hướng dẫn` (API Documentation) button in the API Token card header.
+  - Added an integrated `#apiDocsModal` modal detailing authentication mechanisms, endpoints, payload formats, and copyable dynamic `curl` commands matching the current domain.
+  - Bumped version to `v3.3.0` across system files (`package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`).
+
 ### v3.2.0 (2026-06-22)
 - **API Token Management UI Redesign**:
   - Redesigned the API Token card layout to display only the Token Name and Creation Date.

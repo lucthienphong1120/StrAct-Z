@@ -56,23 +56,13 @@ async function authenticateApiToken(req, res, next) {
       return res.status(403).json({ error: 'Your IP is temporarily locked out due to too many failed API authentication attempts. Please try again after 24 hours.' });
     }
 
-    // 2. Extract token from multiple sources
+    // 2. Extract token from multiple sources (Authorization header and Query parameter only)
     let token = null;
     
     // Check Authorization header
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.toLowerCase().startsWith('bearer ')) {
       token = authHeader.substring(7).trim();
-    }
-    
-    // Check X-API-Token header
-    if (!token && req.headers['x-api-token']) {
-      token = req.headers['x-api-token'];
-    }
-    
-    // Check request body
-    if (!token && req.body && req.body.token) {
-      token = req.body.token;
     }
     
     // Check query parameter

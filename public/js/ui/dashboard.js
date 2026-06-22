@@ -1267,6 +1267,24 @@ async function revokeTokenClick(tokenId) {
   }
 }
 
+function openApiDocsModal() {
+  const modal = document.getElementById('apiDocsModal');
+  if (!modal) return;
+  
+  // Dynamically set current domain/host for copyable curl commands
+  const placeholders = document.querySelectorAll('.domain-placeholder');
+  placeholders.forEach(el => {
+    el.textContent = window.location.host;
+  });
+  
+  modal.classList.add('active');
+}
+
+function closeApiDocsModal() {
+  const modal = document.getElementById('apiDocsModal');
+  if (modal) modal.classList.remove('active');
+}
+
 // Export to window
 window.loadApiTokens = loadApiTokens;
 window.createTokenClick = createTokenClick;
@@ -1277,3 +1295,5 @@ window.revokeTokenClick = revokeTokenClick;
 window.openTokenDetailModal = openTokenDetailModal;
 window.closeTokenDetailModal = closeTokenDetailModal;
 window.saveIpWhitelistFromModal = saveIpWhitelistFromModal;
+window.openApiDocsModal = openApiDocsModal;
+window.closeApiDocsModal = closeApiDocsModal;

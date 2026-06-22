@@ -321,4 +321,3 @@ graph TD
     ServingCached --> ServingCacheCombined
     ServingCacheCombined --> EndSync(["Return Cached & Synced Activity List"])
 ```
-

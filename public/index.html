@@ -29,7 +29,7 @@
         <div class="logo-icon">🏃</div>
         <span class="logo-text">StrAct Z</span>
         <small
-          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v3.2.0</small>
+          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v3.3.0</small>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -560,11 +560,12 @@
 
           <!-- API Token Management Card -->
           <div class="card">
-            <div class="card-header">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
               <div class="card-title" style="display: flex; align-items: center; gap: 6px;">🔑 Quản lý Token
                 <span class="tooltip-icon tooltip-right"
                   data-tooltip="Tạo và quản lý mã Access Token để tự động hóa việc gọi API sinh hoạt động mà không cần đăng nhập hệ thống.">?</span>
               </div>
+              <button class="btn btn-sm btn-secondary" onclick="openApiDocsModal()" style="font-size: 0.75rem; padding: 4px 10px; height: 28px;">📄 Hướng dẫn</button>
             </div>
             <div class="card-body">
 
@@ -988,14 +989,14 @@
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- App Scripts -->
-  <script src="/js/core/api.js"></script>
-  <script src="/js/core/auth.js"></script>
-  <script src="/js/ui/map.js"></script>
-  <script src="/js/ui/config.js"></script>
-  <script src="/js/ui/scheduler.js"></script>
-  <script src="/js/ui/around-location.js"></script>
-  <script src="/js/ui/dashboard.js"></script>
-  <script src="/js/app.js"></script>
+  <script src="/js/core/api.js?v=3.3.0"></script>
+  <script src="/js/core/auth.js?v=3.3.0"></script>
+  <script src="/js/ui/map.js?v=3.3.0"></script>
+  <script src="/js/ui/config.js?v=3.3.0"></script>
+  <script src="/js/ui/scheduler.js?v=3.3.0"></script>
+  <script src="/js/ui/around-location.js?v=3.3.0"></script>
+  <script src="/js/ui/dashboard.js?v=3.3.0"></script>
+  <script src="/js/app.js?v=3.3.0"></script>
 
 
   <!-- Generate Around Location Modal -->
@@ -1155,6 +1156,91 @@
         <button class="btn btn-outline-danger" id="btnRevokeDetailToken"
           style="padding: 6px 14px; font-size: 0.8rem;">🗑️ Thu hồi Token</button>
         <button class="btn btn-secondary btn-sm" onclick="closeTokenDetailModal()">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Documentation Help Modal -->
+  <div id="apiDocsModal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title">📄 Tài liệu Hướng dẫn API</h3>
+        <button class="modal-close-btn" onclick="closeApiDocsModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 20px; max-height: 70vh; overflow-y: auto;">
+        
+        <!-- Intro -->
+        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
+          Hệ thống cung cấp giao diện lập trình (Programmatic API) giúp tự động hóa việc sinh hoạt động từ xa (ví dụ qua Home Assistant, phím tắt điện thoại...). Tất cả endpoint đều bắt đầu bằng tiền tố <code>/api/public</code>.
+        </p>
+
+        <!-- Authentication section -->
+        <div style="border-bottom: 1px solid var(--border); padding-bottom: 14px; margin-bottom: 14px;">
+          <div class="form-label" style="color: var(--accent-blue); font-size: 0.9rem; margin-bottom: 8px; font-weight: 600;">🔑 Cơ chế xác thực</div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">
+            Để bảo mật, hệ thống chỉ chấp nhận xác thực Token qua 2 nguồn sau:
+          </p>
+          <ul style="font-size: 0.8rem; color: var(--text-secondary); padding-left: 20px; line-height: 1.4;">
+            <li><strong>Authorization Header (Khuyên dùng):</strong> Gửi header <code>Authorization: Bearer &lt;Mã_Token&gt;</code></li>
+            <li><strong>URL Query Parameter:</strong> Đính kèm tham số vào link <code>?token=&lt;Mã_Token&gt;</code></li>
+          </ul>
+        </div>
+
+        <!-- Endpoints section -->
+        <div>
+          <div class="form-label" style="color: var(--accent-blue); font-size: 0.9rem; margin-bottom: 10px; font-weight: 600;">📡 Danh sách Endpoint</div>
+          
+          <!-- stats -->
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-bottom: 12px;">
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 0.7rem; font-weight: bold; background: #10b981; color: #fff; padding: 2px 6px; border-radius: 4px;">GET</span>
+              <strong style="font-size: 0.85rem; color: var(--text-primary);">/api/public/stats</strong>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4;">
+              Lấy trạng thái kết nối tài khoản & các số liệu thống kê (số bước chân, tổng quãng đường đã sinh).
+            </div>
+            <pre style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; font-family: monospace; font-size: 0.7rem; color: #fb923c; margin-top: 6px; overflow-x: auto;">curl -X GET "https://<span class="domain-placeholder">domain</span>/api/public/stats" \
+     -H "Authorization: Bearer your_token_here"</pre>
+          </div>
+
+          <!-- activities -->
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-bottom: 12px;">
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 0.7rem; font-weight: bold; background: #10b981; color: #fff; padding: 2px 6px; border-radius: 4px;">GET</span>
+              <strong style="font-size: 0.85rem; color: var(--text-primary);">/api/public/activities</strong>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 4px;">
+              Lấy danh sách các hoạt động đã tạo của bạn trên hệ thống.
+            </div>
+            <div style="font-size: 0.7rem; color: var(--text-muted); line-height: 1.3;">
+              * Tham số query tùy chọn: <code>limit</code> (Mặc định 50, tối đa 100) và <code>offset</code>.
+            </div>
+            <pre style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; font-family: monospace; font-size: 0.7rem; color: #fb923c; margin-top: 6px; overflow-x: auto;">curl -X GET "https://<span class="domain-placeholder">domain</span>/api/public/activities?limit=10" \
+     -H "Authorization: Bearer your_token_here"</pre>
+          </div>
+
+          <!-- generate -->
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-bottom: 8px;">
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 0.7rem; font-weight: bold; background: #3b82f6; color: #fff; padding: 2px 6px; border-radius: 4px;">POST</span>
+              <strong style="font-size: 0.85rem; color: var(--text-primary);">/api/public/activities/generate</strong>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 4px;">
+              Tự động sinh một hoạt động chạy bộ/đạp xe ngẫu nhiên xung quanh tọa độ GPS chỉ định.
+            </div>
+            <div style="font-size: 0.7rem; color: var(--text-muted); line-height: 1.3;">
+              * Body (JSON): <code>lat</code> (Vĩ độ, số thực), <code>lon</code> hoặc <code>lng</code> (Kinh độ, số thực) và <code>upload</code> (boolean, đặt <code>true</code> để tạo xong đồng bộ lên Strava ngay).
+            </div>
+            <pre style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; font-family: monospace; font-size: 0.7rem; color: #fb923c; margin-top: 6px; overflow-x: auto; white-space: pre-wrap; word-break: break-all;">curl -X POST "https://<span class="domain-placeholder">domain</span>/api/public/activities/generate" \
+     -H "Authorization: Bearer your_token_here" \
+     -H "Content-Type: application/json" \
+     -d '{"lat": 21.0035, "lon": 105.8488, "upload": true}'</pre>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer" style="padding-top: 15px; border-top: 1px solid var(--border);">
+        <button class="btn btn-primary btn-block" onclick="closeApiDocsModal()">Đóng hướng dẫn</button>
       </div>
     </div>
   </div>
