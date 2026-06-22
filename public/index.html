@@ -558,6 +558,45 @@
             </div>
           </div>
 
+          <!-- API Token Management Card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title" style="display: flex; align-items: center; gap: 6px;">🔑 Quản lý Token
+                <span class="tooltip-icon tooltip-right" data-tooltip="Tạo và quản lý mã Access Token để tự động hóa việc gọi API sinh hoạt động mà không cần đăng nhập hệ thống.">?</span>
+              </div>
+            </div>
+            <div class="card-body">
+              
+              <!-- Token List Table -->
+              <div id="apiTokensContainer" style="margin-bottom: 16px; display: none;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem; color: var(--text-secondary); background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 6px; overflow: hidden;">
+                  <thead>
+                    <tr style="background: rgba(255, 255, 255, 0.05); border-bottom: 1px solid var(--border); text-align: left;">
+                      <th style="padding: 6px 10px; font-weight: 600;">Tên</th>
+                      <th style="padding: 6px 10px; font-weight: 600;">Xem trước</th>
+                      <th style="padding: 6px 10px; font-weight: 600; text-align: center;">Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody id="apiTokensList">
+                    <!-- Tokens loaded here -->
+                  </tbody>
+                </table>
+              </div>
+              <div id="noApiTokensText" style="text-align: center; padding: 12px; color: var(--text-muted); font-size: 0.8rem; background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 16px;">
+                Chưa có API Token nào được tạo.
+              </div>
+              
+              <!-- Create Token Form (simplified - no IP whitelist) -->
+              <div style="border-top: 1px solid var(--border); padding-top: 15px; display: flex; gap: 8px; align-items: flex-end;">
+                <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                  <label class="form-label" style="font-size: 0.8rem;">Tên Token</label>
+                  <input type="text" id="newTokenName" class="form-input" placeholder="Ví dụ: Home Assistant, Garmin" style="width: 100%;">
+                </div>
+                <button class="btn btn-sm btn-primary" onclick="createTokenClick()" style="white-space: nowrap; height: 34px;">⚡ Tạo mới</button>
+              </div>
+            </div>
+          </div>
+
         </div> <!-- End Left Column -->
 
         <!-- Right Column -->
@@ -826,52 +865,7 @@
             </div>
           </div>
 
-          <!-- API Token Management Card -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">🔑 API Access Tokens</div>
-            </div>
-            <div class="card-body">
-              <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
-                Tạo và quản lý mã Access Token để tự động hóa việc gọi API sinh hoạt động mà không cần đăng nhập hệ thống.
-              </p>
-              
-              <!-- Token List Table -->
-              <div id="apiTokensContainer" style="margin-bottom: 16px; display: none;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem; color: var(--text-secondary); background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 6px; overflow: hidden;">
-                  <thead>
-                    <tr style="background: rgba(255, 255, 255, 0.05); border-bottom: 1px solid var(--border); text-align: left;">
-                      <th style="padding: 6px 10px; font-weight: 600;">Tên</th>
-                      <th style="padding: 6px 10px; font-weight: 600;">Xem trước</th>
-                      <th style="padding: 6px 10px; font-weight: 600; text-align: center;">Hành động</th>
-                    </tr>
-                  </thead>
-                  <tbody id="apiTokensList">
-                    <!-- Tokens loaded here -->
-                  </tbody>
-                </table>
-              </div>
-              <div id="noApiTokensText" style="text-align: center; padding: 12px; color: var(--text-muted); font-size: 0.8rem; background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 16px;">
-                Chưa có API Token nào được tạo.
-              </div>
-              
-              <!-- Create Token Form -->
-              <div style="border-top: 1px solid var(--border); padding-top: 15px; display: flex; flex-direction: column; gap: 10px;">
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label class="form-label" style="font-size: 0.8rem;">Tên Token</label>
-                  <input type="text" id="newTokenName" class="form-input" placeholder="Ví dụ: Home Assistant, Garmin App" style="width: 100%;">
-                </div>
-                <div class="form-group" id="tokenWhitelistGroup" style="margin-bottom: 0;">
-                  <label class="form-label" style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem;">
-                    IP Whitelist (Chỉ dành cho VIP)
-                    <span class="tooltip-icon tooltip-right" data-tooltip="Danh sách IP được phép gọi API bằng Token này, phân tách bằng dấu phẩy. Để trống nếu cho phép tất cả IP.">?</span>
-                  </label>
-                  <input type="text" id="newTokenIpWhitelist" class="form-input" placeholder="Ví dụ: 192.168.1.100, 1.2.3.4" style="width: 100%;">
-                </div>
-                <button class="btn btn-sm btn-primary btn-block" onclick="createTokenClick()" style="margin-top: 5px;">⚡ Tạo Token Mới</button>
-              </div>
-            </div>
-          </div>
+
 
           <!-- Strava Account -->
           <div class="card">

@@ -872,4 +872,27 @@ router.delete('/api-tokens/:id', apiSensitiveLimiter, async (req, res) => {
   }
 });
 
+router.patch('/api-tokens/:id', apiSensitiveLimiter, async (req, res) => {
+  try {
+    const { ip_whitelist } = req.body;
+    
+    if (ip_whitelist && ip_whitelist.trim() !== '') {
+      if (req.user.role !== 'vip') {
+        return res.status(403).json({ error: 'Chỉ tài khoản VIP mới được cấu hình IP Whitelist.' });
+      }
+      if (ip_whitelist.length > 200) {
+        return res.status(400).json({ error: 'IP Whitelist không được vượt quá 200 ký tự.' });
+      }
+      if (!/^[a-fA-F0-9.:,\s]*$/.test(ip_whitelist)) {
+        return res.status(400).json({ error: 'IP Whitelist chứa ký tự không hợp lệ.' });
+      }
+    }
+
+    await db.updateApiTokenWhitelist(req.user.id, req.params.id, ip_whitelist ? ip_whitelist.trim() : null);
+    res.json({ success: true, message: 'Đã cập nhật IP Whitelist.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

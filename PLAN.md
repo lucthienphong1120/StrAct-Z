@@ -285,4 +285,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] thiết kế trang block và mã status trả về cho các loại security violation (403, 429, 500) (v3.0.0)
 + [x] thiết kế lại nút bypass workhour trong generate around location thành dạng toggle giống mẫu config chung của dự án (viết/update tài liệu về quy định thiết kế của dự án để nhớ) (v3.0.0)
 + [x] review lại thiết kế các chức năng basic account không có thì chỉ disable thôi, không hidden để cho user biết mà tò mò chứ (v3.0.0)
++ [ ] giao diện quản lý và edit danh sách api token tôi nghĩ nên để popup lên cho gọn, edit inline tại bảng thế không tối ưu, ngoài ra whitelist IP là dạng mảng nữa nên khá dài, cũng không nên view luôn ở giao diện, phần view sẵn chỉ cần hiển thị tên với thời hạn là được, muốn xem chi tiết, sửa, xóa, edit, copy thì ấn 1 nút sẽ hiện popup lên xong làm gì thì làm
 

@@ -696,6 +696,12 @@ async function revokeApiToken(accountId, tokenId) {
   return true;
 }
 
+async function updateApiTokenWhitelist(accountId, tokenId, ipWhitelist) {
+  const db = await getDb();
+  await db.run('UPDATE api_tokens SET ip_whitelist = ? WHERE id = ? AND account_id = ?', [ipWhitelist || null, tokenId, accountId]);
+  return true;
+}
+
 async function validateApiToken(tokenHash) {
   const db = await getDb();
   const token = await db.get(
@@ -786,6 +792,6 @@ module.exports = {
   getActivityStats, deleteActivity, clearActivities,
   getUserByUsername, createAccount, getAccountCount, getAllAccounts, updateAccountPassword,
   activateVip, checkBruteForce, getAccountRole, resetConfig,
-  createApiToken, getApiTokens, revokeApiToken, validateApiToken,
+  createApiToken, getApiTokens, revokeApiToken, updateApiTokenWhitelist, validateApiToken,
   isIpLocked, incrementFailedAttempts, resetFailedAttempts
 };

@@ -71,9 +71,17 @@ async function revokeApiToken(tokenId) {
   });
 }
 
+async function updateApiTokenWhitelist(tokenId, ipWhitelist) {
+  return api(`/api-tokens/${tokenId}`, {
+    method: 'PATCH',
+    body: { ip_whitelist: ipWhitelist }
+  });
+}
+
 // Export to window
 window.api = api;
 window.showToast = showToast;
 window.getApiTokens = getApiTokens;
 window.createApiToken = createApiToken;
 window.revokeApiToken = revokeApiToken;
+window.updateApiTokenWhitelist = updateApiTokenWhitelist;

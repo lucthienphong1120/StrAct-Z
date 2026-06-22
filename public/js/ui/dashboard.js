@@ -1048,18 +1048,6 @@ async function loadApiTokens() {
     const container = document.getElementById('apiTokensContainer');
     const tbody = document.getElementById('apiTokensList');
     const noTokensText = document.getElementById('noApiTokensText');
-    
-    const ipInput = document.getElementById('newTokenIpWhitelist');
-    if (ipInput) {
-      if (window.userRole !== 'vip') {
-        ipInput.disabled = true;
-        ipInput.placeholder = 'Tính năng chỉ dành cho VIP';
-        ipInput.value = '';
-      } else {
-        ipInput.disabled = false;
-        ipInput.placeholder = 'Ví dụ: 192.168.1.100, 1.2.3.4';
-      }
-    }
 
     if (!tokens || tokens.error || !Array.isArray(tokens) || tokens.length === 0) {
       if (container) container.style.display = 'none';
@@ -1076,20 +1064,34 @@ async function loadApiTokens() {
         const escapedName = (t.name || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         const escapedWhitelist = (t.ip_whitelist || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         
-        const whitelistHtml = t.ip_whitelist 
-          ? `<div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;">Whitelist: ${escapedWhitelist}</div>` 
+        const isVip = window.userRole === 'vip';
+        const whitelistDisplay = t.ip_whitelist 
+          ? `<span style="color: var(--accent-green); font-size: 0.65rem;">\u{1f6e1}\ufe0f ${escapedWhitelist}</span>` 
+          : `<span style="color: var(--text-muted); font-size: 0.65rem;">All IP</span>`;
+        
+        const editBtn = isVip 
+          ? `<button class="btn btn-sm btn-secondary" onclick="toggleIpEdit(${t.id}, '${escapedWhitelist}')" style="padding: 1px 5px; font-size: 0.65rem;" title="Edit IP Whitelist">\u270f\ufe0f</button>` 
           : '';
-          
+
         return `
           <tr style="border-bottom: 1px solid rgba(255,255,255,0.03); text-align: left;">
-            <td style="padding: 8px 10px; font-weight: 500;">
-              <div>${escapedName}</div>
-              ${whitelistHtml}
+            <td style="padding: 8px 10px;">
+              <div style="font-weight: 500;">${escapedName}</div>
+              <div style="display: flex; align-items: center; gap: 4px; margin-top: 2px;">
+                ${whitelistDisplay} ${editBtn}
+              </div>
+              <div id="ipEditRow_${t.id}" style="display: none; margin-top: 6px;">
+                <div style="display: flex; gap: 4px; align-items: center;">
+                  <input type="text" id="ipEditInput_${t.id}" class="form-input" value="${escapedWhitelist}" placeholder="IP1, IP2, ..." style="flex: 1; font-size: 0.7rem; padding: 3px 6px; height: 26px;">
+                  <button class="btn btn-sm btn-primary" onclick="saveIpWhitelist(${t.id})" style="padding: 2px 6px; font-size: 0.65rem; height: 26px;">\u{1f4be}</button>
+                  <button class="btn btn-sm btn-secondary" onclick="toggleIpEdit(${t.id})" style="padding: 2px 6px; font-size: 0.65rem; height: 26px;">\u2715</button>
+                </div>
+              </div>
             </td>
             <td style="padding: 8px 10px; font-family: monospace;">${t.token_preview}</td>
             <td style="padding: 8px 10px; text-align: center; white-space: nowrap;">
-              <button class="btn btn-sm btn-secondary" onclick="copyTokenValue('${escapedToken}')" style="padding: 2px 8px; margin-right: 6px;" title="Sao chép Token">📋 Copy</button>
-              <button class="btn btn-sm btn-outline-danger" onclick="revokeTokenClick(${t.id})" style="padding: 2px 8px;" title="Thu hồi Token">Revoke</button>
+              <button class="btn btn-sm btn-secondary" onclick="copyTokenValue('${escapedToken}')" style="padding: 2px 8px; margin-right: 6px;" title="Copy Token">\u{1f4cb} Copy</button>
+              <button class="btn btn-sm btn-outline-danger" onclick="revokeTokenClick(${t.id})" style="padding: 2px 8px;" title="Revoke Token">Revoke</button>
             </td>
           </tr>
         `;
@@ -1100,25 +1102,50 @@ async function loadApiTokens() {
   }
 }
 
+function toggleIpEdit(tokenId, currentValue) {
+  const row = document.getElementById(`ipEditRow_${tokenId}`);
+  if (!row) return;
+  const isVisible = row.style.display !== 'none';
+  row.style.display = isVisible ? 'none' : 'block';
+  if (!isVisible && currentValue !== undefined) {
+    const input = document.getElementById(`ipEditInput_${tokenId}`);
+    if (input) input.focus();
+  }
+}
+
+async function saveIpWhitelist(tokenId) {
+  const input = document.getElementById(`ipEditInput_${tokenId}`);
+  if (!input) return;
+  const value = input.value.trim();
+  
+  try {
+    const res = await updateApiTokenWhitelist(tokenId, value);
+    if (res.success) {
+      showToast('\u0110\u00e3 c\u1eadp nh\u1eadt IP Whitelist!', 'success');
+      await loadApiTokens();
+    } else {
+      showToast(res.error || 'C\u1eadp nh\u1eadt th\u1ea5t b\u1ea1i.', 'error');
+    }
+  } catch (err) {
+    showToast('Error: ' + err.message, 'error');
+  }
+}
+
 async function createTokenClick() {
   const nameInput = document.getElementById('newTokenName');
-  const ipInput = document.getElementById('newTokenIpWhitelist');
-  
   const name = nameInput ? nameInput.value.trim() : '';
-  const ipWhitelist = ipInput ? ipInput.value.trim() : '';
   
   if (!name) {
-    showToast('Vui lòng nhập tên Token.', 'warning');
+    showToast('Vui l\u00f2ng nh\u1eadp t\u00ean Token.', 'warning');
     return;
   }
 
-  showToast('Đang tạo Token...', 'info');
+  showToast('\u0110ang t\u1ea1o Token...', 'info');
   try {
-    const res = await createApiToken(name, ipWhitelist);
+    const res = await createApiToken(name, '');
     if (res.success && res.token) {
-      showToast('Tạo Token thành công!', 'success');
+      showToast('T\u1ea1o Token th\u00e0nh c\u00f4ng!', 'success');
       if (nameInput) nameInput.value = '';
-      if (ipInput) ipInput.value = '';
       
       const modal = document.getElementById('apiTokenModal');
       const tokenText = document.getElementById('generatedTokenText');
@@ -1129,7 +1156,7 @@ async function createTokenClick() {
       
       await loadApiTokens();
     } else {
-      showToast(res.error || 'Tạo Token thất bại.', 'error');
+      showToast(res.error || 'T\u1ea1o Token th\u1ea5t b\u1ea1i.', 'error');
     }
   } catch (err) {
     showToast('Error creating token: ' + err.message, 'error');
@@ -1139,9 +1166,9 @@ async function createTokenClick() {
 function copyTokenValue(tokenVal) {
   if (!tokenVal) return;
   navigator.clipboard.writeText(tokenVal).then(() => {
-    showToast('Đã copy API Token vào clipboard!', 'success');
+    showToast('\u0110\u00e3 copy API Token v\u00e0o clipboard!', 'success');
   }).catch(err => {
-    showToast('Không thể copy: ' + err.message, 'error');
+    showToast('Kh\u00f4ng th\u1ec3 copy: ' + err.message, 'error');
   });
 }
 
@@ -1156,18 +1183,18 @@ function closeApiTokenModal() {
 }
 
 async function revokeTokenClick(tokenId) {
-  if (!confirm('Bạn có chắc chắn muốn thu hồi Token này? Sau khi thu hồi, bất kỳ hệ thống nào sử dụng Token này sẽ không thể gọi API được nữa.')) {
+  if (!confirm('B\u1ea1n c\u00f3 ch\u1eafc ch\u1eafn mu\u1ed1n thu h\u1ed3i Token n\u00e0y? Sau khi thu h\u1ed3i, b\u1ea5t k\u1ef3 h\u1ec7 th\u1ed1ng n\u00e0o s\u1eed d\u1ee5ng Token n\u00e0y s\u1ebd kh\u00f4ng th\u1ec3 g\u1ecdi API \u0111\u01b0\u1ee3c n\u1eefa.')) {
     return;
   }
   
-  showToast('Đang thu hồi Token...', 'info');
+  showToast('\u0110ang thu h\u1ed3i Token...', 'info');
   try {
     const res = await revokeApiToken(tokenId);
     if (res.success) {
-      showToast('Đã thu hồi Token!', 'success');
+      showToast('\u0110\u00e3 thu h\u1ed3i Token!', 'success');
       await loadApiTokens();
     } else {
-      showToast(res.error || 'Thu hồi Token thất bại.', 'error');
+      showToast(res.error || 'Thu h\u1ed3i Token th\u1ea5t b\u1ea1i.', 'error');
     }
   } catch (err) {
     showToast('Error revoking token: ' + err.message, 'error');
@@ -1181,3 +1208,5 @@ window.copyTokenValue = copyTokenValue;
 window.copyGeneratedToken = copyGeneratedToken;
 window.closeApiTokenModal = closeApiTokenModal;
 window.revokeTokenClick = revokeTokenClick;
+window.toggleIpEdit = toggleIpEdit;
+window.saveIpWhitelist = saveIpWhitelist;
