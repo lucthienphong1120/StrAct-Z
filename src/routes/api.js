@@ -16,11 +16,61 @@ const systemLimits = require('../config/limits');
 const { buildGeneratorConfig } = require('../utils/activity-config-builder');
 const rateLimit = require('express-rate-limit');
 
-// Rate limiter for private write operations (POST /generate, POST /generate-and-upload, POST /config)
-const apiWriteLimiter = rateLimit({
+// Rate limiter for private read operations (GET endpoints)
+const apiReadLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 30, // Limit each IP to 30 requests per 15 minutes
-  message: { error: 'Too many configuration updates or activity generations from this IP, please try again later.', code: 'API_WRITE_LIMIT_EXCEEDED' },
+  max: 100, // Limit each IP to 100 read requests per 15 minutes
+  message: { error: 'Too many read requests from this IP, please try again later.', code: 'API_READ_LIMIT_EXCEEDED' },
+  statusCode: 429,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Rate limiter for configuration updates
+const apiConfigLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { error: 'Too many configuration updates from this IP, please try again later.', code: 'API_CONFIG_LIMIT_EXCEEDED' },
+  statusCode: 429,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Rate limiter for activity generations & uploads
+const apiGenerateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 15,
+  message: { error: 'Too many activity generation attempts from this IP, please try again later.', code: 'API_GENERATE_LIMIT_EXCEEDED' },
+  statusCode: 429,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Rate limiter for scheduler operations
+const apiSchedulerLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { error: 'Too many scheduler update or trigger attempts from this IP, please try again later.', code: 'API_SCHEDULER_LIMIT_EXCEEDED' },
+  statusCode: 429,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Rate limiter for activity deletions
+const apiDeleteLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 15,
+  message: { error: 'Too many activity deletion attempts from this IP, please try again later.', code: 'API_DELETE_LIMIT_EXCEEDED' },
+  statusCode: 429,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Rate limiter for highly sensitive actions (password, VIP, tokens)
+const apiSensitiveLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: { error: 'Too many sensitive account/token changes from this IP, please try again later.', code: 'API_SENSITIVE_LIMIT_EXCEEDED' },
   statusCode: 429,
   standardHeaders: true,
   legacyHeaders: false,
@@ -31,12 +81,12 @@ const { DISTRICTS } = require('../config/districts');
 
 // ─── Districts ──────────────────────────────────────────────────────────────
 
-router.get('/districts', (req, res) => {
+router.get('/districts', apiReadLimiter, (req, res) => {
   res.json(DISTRICTS);
 });
 
 // ─── System / Version ───────────────────────────────────────────────────────
-router.get('/version', (req, res) => {
+router.get('/version', apiReadLimiter, (req, res) => {
   try {
     const pkg = require('../../package.json');
     res.json({ version: pkg.version });
@@ -47,7 +97,7 @@ router.get('/version', (req, res) => {
 
 // ─── Configuration ──────────────────────────────────────────────────────────
 
-router.get('/config', async (req, res) => {
+router.get('/config', apiReadLimiter, async (req, res) => {
   try {
     res.json(await db.getAllConfig(req.user.id));
   } catch (err) {
@@ -60,7 +110,7 @@ router.get('/config', async (req, res) => {
 
 const { validateConfig } = require('../utils/validation');
 
-router.post('/config', apiWriteLimiter, async (req, res) => {
+router.post('/config', apiConfigLimiter, async (req, res) => {
   try {
     const updates = req.body;
     const role = req.user.role || 'basic';
@@ -80,7 +130,7 @@ router.post('/config', apiWriteLimiter, async (req, res) => {
   }
 });
 
-router.post('/config/reset', apiWriteLimiter, async (req, res) => {
+router.post('/config/reset', apiConfigLimiter, async (req, res) => {
   try {
     await db.resetConfig(req.user.id);
     stravaApi.clearActivityCache(req.user.id);
@@ -91,7 +141,7 @@ router.post('/config/reset', apiWriteLimiter, async (req, res) => {
   }
 });
 
-router.get('/system-limits', (req, res) => {
+router.get('/system-limits', apiReadLimiter, (req, res) => {
   const role = req.user.role || 'basic';
   res.json(systemLimits.getLimits(role));
 });
@@ -159,12 +209,12 @@ router.get('/auth/google/callback', async (req, res) => {
   }
 });
 
-router.delete('/auth/google', async (req, res) => {
+router.delete('/auth/google', apiSensitiveLimiter, async (req, res) => {
   await googleFit.disconnect(req.user.id);
   res.json({ success: true });
 });
 
-router.get('/google-fit/stats', async (req, res) => {
+router.get('/google-fit/stats', apiReadLimiter, async (req, res) => {
   try {
     const refresh = req.query.refresh === 'true';
     const stats = await googleFit.getTodayStats(req.user.id, refresh);
@@ -177,7 +227,7 @@ router.get('/google-fit/stats', async (req, res) => {
 
 // ─── Stats ──────────────────────────────────────────────────────────────────
 
-router.get('/stats', async (req, res) => {
+router.get('/stats', apiReadLimiter, async (req, res) => {
   try {
     const stats = await db.getActivityStats(req.user.id);
     const scheduleStatus = await scheduler.getStatus(req.user.id);
@@ -198,7 +248,7 @@ router.get('/stats', async (req, res) => {
   }
 });
 
-router.get('/insights', async (req, res) => {
+router.get('/insights', apiReadLimiter, async (req, res) => {
   try {
     const days = parseInt(req.query.days) || 14;
     const now = new Date();
@@ -238,7 +288,7 @@ router.get('/insights', async (req, res) => {
 
 // ─── Activities ─────────────────────────────────────────────────────────────
 
-router.get('/activities', async (req, res) => {
+router.get('/activities', apiReadLimiter, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 100;
     const offset = parseInt(req.query.offset) || 0;
@@ -250,7 +300,7 @@ router.get('/activities', async (req, res) => {
   }
 });
 
-router.get('/strava-activities', async (req, res) => {
+router.get('/strava-activities', apiReadLimiter, async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const perPage = parseInt(req.query.per_page) || 10;
@@ -289,7 +339,7 @@ router.get('/strava-activities', async (req, res) => {
 
 
 // Generate FIT only (no upload)
-router.post('/generate', apiWriteLimiter, async (req, res) => {
+router.post('/generate', apiGenerateLimiter, async (req, res) => {
   try {
     const ov = req.body || {};
     // Clean up empty override values to allow fallback to config
@@ -382,7 +432,7 @@ router.post('/generate', apiWriteLimiter, async (req, res) => {
 });
 
 // Generate and upload
-router.post('/generate-and-upload', apiWriteLimiter, async (req, res) => {
+router.post('/generate-and-upload', apiGenerateLimiter, async (req, res) => {
   try {
     const ov = req.body || {};
     // Clean up empty override values to allow fallback to config
@@ -518,7 +568,7 @@ router.post('/generate-and-upload', apiWriteLimiter, async (req, res) => {
 });
 
 // Upload existing activity by local DB id
-router.post('/upload/:id', apiWriteLimiter, async (req, res) => {
+router.post('/upload/:id', apiGenerateLimiter, async (req, res) => {
   try {
     const activities = await db.getActivities(req.user.id, 200);
     const activity = activities.find(a => a.id === parseInt(req.params.id));
@@ -595,7 +645,7 @@ router.post('/upload/:id', apiWriteLimiter, async (req, res) => {
 // ─── Delete Activity ─────────────────────────────────────────────────────────
 
 // DELETE /api/activities/:id?strava=true  - delete from local DB (and optionally Strava)
-router.delete('/activities/:id', apiWriteLimiter, async (req, res) => {
+router.delete('/activities/:id', apiDeleteLimiter, async (req, res) => {
   const id = parseInt(req.params.id);
   const deleteFromStrava = req.query.strava === 'true';
 
@@ -645,7 +695,7 @@ router.delete('/activities/:id', apiWriteLimiter, async (req, res) => {
 
 // ─── Scheduler ───────────────────────────────────────────────────────────────
 
-router.get('/scheduler', async (req, res) => {
+router.get('/scheduler', apiReadLimiter, async (req, res) => {
   try {
     res.json(await scheduler.getStatus(req.user.id));
   } catch (err) {
@@ -654,7 +704,7 @@ router.get('/scheduler', async (req, res) => {
   }
 });
 
-router.post('/scheduler', apiWriteLimiter, async (req, res) => {
+router.post('/scheduler', apiSchedulerLimiter, async (req, res) => {
   try {
     const updates = req.body;
     const role = req.user.role || 'basic';
@@ -699,7 +749,7 @@ router.post('/scheduler', apiWriteLimiter, async (req, res) => {
   }
 });
 
-router.post('/scheduler/trigger', apiWriteLimiter, async (req, res) => {
+router.post('/scheduler/trigger', apiSchedulerLimiter, async (req, res) => {
   try {
     const result = await scheduler.executeJob(req.user.id);
     res.json(result);
@@ -728,7 +778,7 @@ router.get('/fit/:filename', async (req, res) => {
 
 // ─── Account Management ───────────────────────────────────────────────────────
 
-router.put('/account/password', apiWriteLimiter, async (req, res) => {
+router.put('/account/password', apiSensitiveLimiter, async (req, res) => {
   try {
     const { newPassword } = req.body;
     if (!newPassword || newPassword.length < 5) {
@@ -742,7 +792,7 @@ router.put('/account/password', apiWriteLimiter, async (req, res) => {
   }
 });
 
-router.post('/account/activate-vip', apiWriteLimiter, async (req, res) => {
+router.post('/account/activate-vip', apiSensitiveLimiter, async (req, res) => {
   try {
     const { code } = req.body;
     if (!code) return res.status(400).json({ error: 'Code is required' });
@@ -769,7 +819,7 @@ const crypto = require('crypto');
 
 // ─── API Token Management ──────────────────────────────────────────────────────
 
-router.get('/api-tokens', async (req, res) => {
+router.get('/api-tokens', apiReadLimiter, async (req, res) => {
   try {
     const tokens = await db.getApiTokens(req.user.id);
     res.json(tokens);
@@ -778,7 +828,7 @@ router.get('/api-tokens', async (req, res) => {
   }
 });
 
-router.post('/api-tokens', apiWriteLimiter, async (req, res) => {
+router.post('/api-tokens', apiSensitiveLimiter, async (req, res) => {
   try {
     const { name, ip_whitelist } = req.body;
     if (!name || name.trim() === '') {
@@ -813,7 +863,7 @@ router.post('/api-tokens', apiWriteLimiter, async (req, res) => {
   }
 });
 
-router.delete('/api-tokens/:id', apiWriteLimiter, async (req, res) => {
+router.delete('/api-tokens/:id', apiSensitiveLimiter, async (req, res) => {
   try {
     await db.revokeApiToken(req.user.id, req.params.id);
     res.json({ success: true, message: 'Đã thu hồi Token thành công.' });

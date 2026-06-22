@@ -140,6 +140,21 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v3.1.0 (2026-06-22)
+- **Rate Limiter Tuning & Fine-Grained API Endpoint Limits**:
+  - Reduced global rate limiter in `server.js` from `1000` to `300` requests per 15 minutes per IP to avoid spam while keeping it friendly for PWA static asset serving.
+  - Tightened authentication login limiter (`authLoginLimiter` for failed login attempts) to `5` per 15 minutes.
+  - Added registration limiter (`authRegisterLimiter`) at `5` per 15 minutes and OAuth general limiter (`authGeneralLimiter`) at `15` per 15 minutes.
+  - Replaced the single private write limiter (30req/15min) in `src/routes/api.js` with fine-grained action-specific rate limiters:
+    - `apiReadLimiter` (GET routes): `100` reqs/15 mins.
+    - `apiConfigLimiter` (configuration updates): `10` reqs/15 mins.
+    - `apiGenerateLimiter` (activity generation/uploads): `15` reqs/15 mins.
+    - `apiSchedulerLimiter` (scheduler updates/triggers): `10` reqs/15 mins.
+    - `apiDeleteLimiter` (activity deletions): `15` reqs/15 mins.
+    - `apiSensitiveLimiter` (password updates, VIP activation, token CRUD): `5` reqs/15 mins.
+  - Reordered route execution in `src/routes/publicApi.js` to run public rate limiters BEFORE token authentication, protecting cryptographic hashing and database calls from unauthenticated spam.
+  - Bumped version to `v3.1.0` across system files (`package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`).
+
 ### v3.0.0 (2026-06-22)
 - **Programmatic API Access & Auto Token Authentication**:
   - Implemented secure API token authentication using SHA-256 database hashing for lookup and AES-256-CBC encryption for recovery/copy.

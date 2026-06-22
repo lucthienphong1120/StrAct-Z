@@ -38,6 +38,11 @@ const publicPostLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+// Apply rate limiters before authentication to protect token validation logic from DDoS
+router.use('/activities', publicGetLimiter);
+router.use('/stats', publicGetLimiter);
+router.use('/activities/generate', publicPostLimiter);
+
 // Apply API Token Authentication to all endpoints under /api/public
 router.use(authenticateApiToken);
 
@@ -163,7 +168,7 @@ async function reverseGeocode(lat, lon) {
 // ─── Endpoints ───────────────────────────────────────────────────────────────
 
 // 1. Get Generated Activities (Read-only, Rate limit: 60/15min)
-router.get('/activities', publicGetLimiter, async (req, res) => {
+router.get('/activities', async (req, res) => {
   try {
     const limit = Math.min(100, parseInt(req.query.limit) || 50);
     const offset = parseInt(req.query.offset) || 0;
@@ -175,7 +180,7 @@ router.get('/activities', publicGetLimiter, async (req, res) => {
 });
 
 // 2. Get Account Connection and Statistics (Read-only, Rate limit: 60/15min)
-router.get('/stats', publicGetLimiter, async (req, res) => {
+router.get('/stats', async (req, res) => {
   try {
     const stats = await db.getActivityStats(req.user.id);
     const tokens = await db.getTokens(req.user.id);
@@ -198,7 +203,7 @@ router.get('/stats', publicGetLimiter, async (req, res) => {
 });
 
 // 3. Trigger Activity Generation (Write-intensive, Rate limit: 5/15min)
-router.post('/activities/generate', publicPostLimiter, async (req, res) => {
+router.post('/activities/generate', async (req, res) => {
   try {
     const lat = parseFloat(req.body.lat);
     const lon = parseFloat(req.body.lon || req.body.lng);

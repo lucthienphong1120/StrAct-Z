@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 // Global Rate Limiting (Prevent DDoS)
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1000, // Limit each IP to 1000 requests per windowMs to prevent blocking during continuous generation/syncs
+  max: 300, // Limit each IP to 300 requests per windowMs to prevent blocking during continuous generation/syncs
   message: { error: 'Too many requests from this IP, please try again later.', code: 'GLOBAL_RATE_LIMIT_EXCEEDED' },
   statusCode: 429,
   standardHeaders: true,
@@ -46,16 +46,37 @@ const globalLimiter = rateLimit({
 });
 app.use(globalLimiter);
 
-// Anti-Brute Force for Authentication
-const authLimiter = rateLimit({
+// Anti-Brute Force for Authentication (Login)
+const authLoginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // Limit each IP to 20 failed auth attempts per windowMs
+  max: 5, // Limit each IP to 5 failed auth attempts per windowMs
   skipSuccessfulRequests: true, // Only count failed attempts
   message: { error: 'Too many failed login attempts, your IP has been temporarily locked out.', code: 'AUTH_BRUTE_FORCE_LOCKOUT' },
   statusCode: 429,
   standardHeaders: true,
   legacyHeaders: false,
 });
+
+// Prevention of registration spam
+const authRegisterLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 registrations per windowMs
+  message: { error: 'Too many registration attempts from this IP, please try again later.', code: 'AUTH_REGISTER_LIMIT_EXCEEDED' },
+  statusCode: 429,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Limit OAuth & connection actions to prevent loop abuse
+const authGeneralLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 15, // Limit each IP to 15 connection requests per windowMs
+  message: { error: 'Too many auth connection attempts from this IP, please try again later.', code: 'AUTH_GENERAL_LIMIT_EXCEEDED' },
+  statusCode: 429,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 
 app.use(cookieParser());
 app.use(cors({
@@ -87,8 +108,12 @@ app.get('/health', (req, res) => {
 app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 
 // Routes
-// Apply strict brute force protection ONLY to login endpoint
-app.use('/auth/system/login', authLimiter);
+// Apply strict brute force protection and rate limiters to authentication endpoints
+app.use('/auth/system/login', authLoginLimiter);
+app.use('/auth/system/register', authRegisterLimiter);
+app.use('/auth/connect', authGeneralLimiter);
+app.use('/auth/callback', authGeneralLimiter);
+app.use('/auth/disconnect', authGeneralLimiter);
 
 // Auth Routes (connect, callback, login, logout are public, others might need auth)
 app.use('/auth', authRoutes);
