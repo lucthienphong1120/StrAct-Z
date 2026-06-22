@@ -1060,7 +1060,7 @@ function formatDateTime(isoString) {
 
 async function loadApiTokens() {
   try {
-    const tokens = await getApiTokens();
+    const tokens = await window.getApiTokens();
     window.apiTokens = tokens; // Cache tokens in window for popup details
     const container = document.getElementById('apiTokensContainer');
     const tbody = document.getElementById('apiTokensList');
@@ -1179,7 +1179,7 @@ async function saveIpWhitelistFromModal(tokenId) {
   const value = input.value.trim();
   
   try {
-    const res = await updateApiTokenWhitelist(tokenId, value);
+    const res = await window.updateApiTokenWhitelist(tokenId, value);
     if (res.success) {
       showToast('Đã cập nhật IP Whitelist!', 'success');
       await loadApiTokens();
@@ -1207,7 +1207,7 @@ async function createTokenClick() {
 
   showToast('Đang tạo Token...', 'info');
   try {
-    const res = await createApiToken(name, '');
+    const res = await window.createApiToken(name, '');
     if (res.success && res.token) {
       showToast('Tạo Token thành công!', 'success');
       if (nameInput) nameInput.value = '';
@@ -1254,7 +1254,7 @@ async function revokeTokenClick(tokenId) {
   
   showToast('Đang thu hồi Token...', 'info');
   try {
-    const res = await revokeApiToken(tokenId);
+    const res = await window.revokeApiToken(tokenId);
     if (res.success) {
       showToast('Đã thu hồi Token!', 'success');
       closeTokenDetailModal(); // Close detail modal on revoke success
