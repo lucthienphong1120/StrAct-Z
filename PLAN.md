@@ -293,4 +293,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 + [x] giao diện quản lý và edit danh sách api token tôi nghĩ nên để popup lên cho gọn, edit inline tại bảng thế không tối ưu, ngoài ra whitelist IP là dạng mảng nữa nên khá dài, cũng không nên view luôn ở giao diện, phần view sẵn chỉ cần hiển thị tên với thời hạn là được, muốn xem chi tiết, sửa, xóa, edit, copy thì ấn 1 nút sẽ hiện popup lên xong làm gì thì làm (v3.2.0)
 + [x] fix lỗi Error creating token: createApiToken is not defined (v3.2.0)
 + [x] cấu hình tối giản cơ chế xác thực Token (chỉ giữ Authorization Bearer & query parameter) và tích hợp Modal hướng dẫn sử dụng API trên giao diện (v3.3.0)
-+ [ ] fix lại device name của Strava App cho hoạt đônng chạy bộ chưa đúng, hoạt động đi bộ thì chuẩn rồi, đạp xe ko rõ
++ [x] fix lại device name của Strava App cho hoạt động chạy bộ (chuẩn hóa gpxActivityType: running/walking/cycling & Strava App creator/FIT mapping) (v3.3.1)

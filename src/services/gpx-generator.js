@@ -644,9 +644,13 @@ async function generateActivity(config = {}) {
   const activityName = generateActivityName(finalActivityType, activityStartTime);
 
   // Build GPX
+  let gpxActivityType = 'running';
+  if (finalActivityType === 'Walk') gpxActivityType = 'walking';
+  else if (finalActivityType === 'Ride') gpxActivityType = 'cycling';
+
   const gpxContent = buildGPX(points, {
     activityName,
-    activityType: finalActivityType.toLowerCase(),
+    activityType: gpxActivityType,
     includeHeartRate: heartRateEnabled,
     includeCadence: true,
     deviceName: deviceName ? deviceName.replace(/\s*★$/, '') : '', // Strip trailing star if any

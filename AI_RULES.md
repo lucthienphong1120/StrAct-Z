@@ -146,6 +146,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v3.3.1 (2026-07-26)
+- **GPX Activity Type Standardization for Running/Walking/Cycling**:
+  - Standardized `gpxActivityType` in `gpx-generator.js` to pass standard GPX activity strings (`'running'`, `'walking'`, `'cycling'`) to the GPX builder instead of raw lowercased strings (`'run'`, `'walk'`, `'ride'`).
+  - Correctly ensures Strava GPX parser parses running activities under standard `running` tag when using Strava App or non-Garmin devices.
+  - Bumped version to `v3.3.1` across system files (`package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`).
+
 ### v3.3.0 (2026-06-22)
 - **API Token Security Hardening & Integrated Documentation Modal**:
   - Hardened the `authenticateApiToken` middleware by removing `X-API-Token` header and request body parameter check sources. Only `Authorization: Bearer <token>` and `?token=<token>` query parameters are accepted.
