@@ -20,7 +20,7 @@ const isRunning = new Map(); // accountId -> boolean
 /**
  * Execute the auto-generate and upload flow for a specific account
  */
-async function executeJob(accountId, slotName = 'Schedule 1') {
+async function executeJob(accountId, slotName = 'Schedule 1', force = false) {
   if (isRunning.get(accountId)) {
     console.log(`[Scheduler] Job already running for account ${accountId}, skipping...`);
     return { success: false, message: 'Job already running' };
@@ -32,6 +32,15 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
   let lockActivityId = null;
 
   try {
+    const config = await db.getAllConfig(accountId);
+
+    // Guard: Check if auto schedule is disabled
+    if (!force && String(config.schedule_enabled) !== 'true') {
+      console.log(`[Scheduler] Auto schedule is disabled for account ${accountId}. Skipping execution.`);
+      isRunning.set(accountId, false);
+      return { success: false, message: 'Tự động tạo hoạt động (Auto schedule) đang bị tắt.' };
+    }
+
     // Check if authenticated
     if (!(await stravaApi.isAuthenticated(accountId))) {
       throw new Error('Not authenticated with Strava. Please connect your account.');
@@ -42,7 +51,6 @@ async function executeJob(accountId, slotName = 'Schedule 1') {
 
     // Note: Scheduled activities are NOT limited by daily_upload_limit.
     // They are only limited by schedule_count_min and schedule_count_max config.
-    const config = await db.getAllConfig(accountId);
     const role = await db.getAccountRole(accountId);
     const limits = systemLimits[role] || systemLimits.basic;
 

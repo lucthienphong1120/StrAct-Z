@@ -123,6 +123,11 @@ router.post('/config', apiConfigLimiter, async (req, res) => {
     for (const [key, value] of Object.entries(validation.sanitized)) {
       await db.setConfig(req.user.id, key, value);
     }
+
+    if ('schedule_enabled' in validation.sanitized || 'schedule_time' in validation.sanitized || 'schedule_count' in validation.sanitized) {
+      await scheduler.startScheduler(req.user.id);
+    }
+
     res.json({ success: true, config: await db.getAllConfig(req.user.id) });
   } catch (err) {
     console.error(`[Config API] Error saving config for user ${req.user?.id}:`, err);
@@ -751,7 +756,7 @@ router.post('/scheduler', apiSchedulerLimiter, async (req, res) => {
 
 router.post('/scheduler/trigger', apiSchedulerLimiter, async (req, res) => {
   try {
-    const result = await scheduler.executeJob(req.user.id);
+    const result = await scheduler.executeJob(req.user.id, 'Schedule 1', true);
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

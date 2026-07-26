@@ -146,6 +146,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v3.3.2 (2026-07-26)
+- **Fix Bug: Block Activity Generation when Auto Schedule is Disabled**:
+  - Added strict guard check in `executeJob(accountId, slotName, force)` inside `src/services/scheduler.js` to inspect `config.schedule_enabled` before generating activities.
+  - Returns early if `schedule_enabled !== 'true'` unless `force` is explicitly passed (such as manual `/scheduler/trigger`).
+  - Added automatic `startScheduler(req.user.id)` trigger in `POST /config` route whenever schedule-related configuration settings are updated.
+  - Bumped version to `v3.3.2` across system files (`package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`).
+
 ### v3.3.1 (2026-07-26)
 - **GPX Activity Type Standardization for Running/Walking/Cycling**:
   - Standardized `gpxActivityType` in `gpx-generator.js` to pass standard GPX activity strings (`'running'`, `'walking'`, `'cycling'`) to the GPX builder instead of raw lowercased strings (`'run'`, `'walk'`, `'ride'`).
