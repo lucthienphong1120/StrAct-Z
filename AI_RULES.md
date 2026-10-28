@@ -146,6 +146,17 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v3.4.0 (2026-10-28)
+- **Comprehensive Pre-Deployment Stability & Logic Fixes**:
+  - **Fix Runtime Error in Activity Upload (`POST /upload/:id`)**: Defined `const ov = req.body || {};` in `src/routes/api.js` to eliminate `ReferenceError: ov is not defined` when uploading existing draft activities from history.
+  - **Fix Timezone UTC Mismatch in Scheduler Concurrency Lock**: Replaced local date string `route_start_time LIKE ?` with exact UTC timezone window (`route_start_time >= startTimeUTC AND route_start_time <= endTimeUTC`) for `activeLocks` query in `src/services/scheduler.js`, ensuring distributed placeholder locks correctly match early morning runs (00:00 - 06:59:59 AM UTC+7).
+  - **Fix Scheduler Draft Overlap Protection**: Updated `activeActivities` filtering in `fit-generator.js` and `gpx-generator.js` to block `upload_status === 'generated'` activities during scheduler runs (`!config.isManual`), strictly enforcing rule #6 so multi-task schedules in the same slot do not overlap. Synchronized status updates back to in-memory `existingActivities` in `scheduler.js`.
+  - **Standardize Public API Error Status**: Updated `POST /api/public/activities/generate` to return standard `409 Conflict` on `NO_VALID_TIME_SLOT` matching private APIs.
+  - **Service Worker POST Safeguard**: Added `event.request.method === 'GET'` check in `public/sw.js` for dynamic local assets caching to prevent unsupported method errors.
+  - **VPS Performance & Index Optimization**: Added composite SQLite indexes (`idx_activities_account_route_time`, `idx_activities_account_status`, `idx_activities_account_strava_id`, `idx_api_tokens_account_id`) in `src/db/sqlite-db.js` to eliminate full table scans.
+  - **Process Resilience**: Added global `unhandledRejection` and `uncaughtException` listeners in `server.js` to prevent unhandled background exceptions from abruptly terminating the server on VPS.
+  - Bumped version to `v3.4.0` across system files (`package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`).
+
 ### v3.3.2 (2026-07-26)
 - **Fix Bug: Block Activity Generation when Auto Schedule is Disabled**:
   - Added strict guard check in `executeJob(accountId, slotName, force)` inside `src/services/scheduler.js` to inspect `config.schedule_enabled` before generating activities.

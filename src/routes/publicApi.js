@@ -403,7 +403,7 @@ router.post('/activities/generate', async (req, res) => {
           error_message: err.message,
         });
       } catch (_) { }
-      return res.status(499).json({ error: err.message, code: err.code });
+      return res.status(409).json({ error: err.message, code: err.code });
     }
     res.status(500).json({ error: err.message });
   }

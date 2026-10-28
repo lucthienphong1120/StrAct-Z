@@ -171,6 +171,10 @@ async function getDb() {
           last_attempt_at TEXT NOT NULL,
           locked_until TEXT
         );
+        CREATE INDEX IF NOT EXISTS idx_activities_account_route_time ON activities(account_id, route_start_time);
+        CREATE INDEX IF NOT EXISTS idx_activities_account_status ON activities(account_id, upload_status);
+        CREATE INDEX IF NOT EXISTS idx_activities_account_strava_id ON activities(account_id, strava_activity_id);
+        CREATE INDEX IF NOT EXISTS idx_api_tokens_account_id ON api_tokens(account_id);
       `);
 
       // Migrate from JSON if SQLite config is empty

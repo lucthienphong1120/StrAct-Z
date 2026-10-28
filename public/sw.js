@@ -1,4 +1,4 @@
-const CACHE_NAME = 'stract-z-v3.3.2';
+const CACHE_NAME = 'stract-z-v3.4.0';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -88,7 +88,7 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
-          if (response && response.status === 200) {
+          if (event.request.method === 'GET' && response && response.status === 200) {
             const responseClone = response.clone();
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(event.request, responseClone);

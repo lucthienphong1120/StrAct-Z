@@ -152,11 +152,12 @@ async function executeJob(accountId, slotName = 'Schedule 1', force = false) {
     const activeLocks = await dbInstance.all(
       `SELECT id FROM activities 
        WHERE account_id = ? 
-         AND route_start_time LIKE ? 
+         AND route_start_time >= ? 
+         AND route_start_time <= ? 
          AND created_by = ? 
          AND upload_status = 'generating'
        ORDER BY id ASC`,
-      [accountId, `${targetDate}%`, slotName]
+      [accountId, startTimeUTC, endTimeUTC, slotName]
     );
 
     // If our lock is not the first one, we lost the race
@@ -438,6 +439,10 @@ async function executeJob(accountId, slotName = 'Schedule 1', force = false) {
           upload_status: 'uploaded',
         });
 
+        if (existingActivities.length > 0) {
+          existingActivities[existingActivities.length - 1].upload_status = 'uploaded';
+        }
+
         stravaApi.clearActivityCache(accountId);
 
         successCount++;
@@ -453,6 +458,9 @@ async function executeJob(accountId, slotName = 'Schedule 1', force = false) {
           upload_status: 'failed',
           error_message: typeof uploadErr === 'object' ? JSON.stringify(uploadErr.body || uploadErr.message || uploadErr) : String(uploadErr),
         });
+        if (existingActivities.length > 0) {
+          existingActivities[existingActivities.length - 1].upload_status = 'failed';
+        }
       }
 
       // Brief delay between activities if multiple

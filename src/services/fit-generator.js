@@ -490,6 +490,7 @@ async function generateActivity(config = {}) {
     const activeActivities = (config.existingActivities || []).filter(a => {
       if (a.upload_status !== undefined) {
         if (a.upload_status === 'uploaded') return true;
+        if (!config.isManual && a.upload_status === 'generated') return true;
         return false;
       }
       return true;

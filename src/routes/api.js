@@ -575,6 +575,7 @@ router.post('/generate-and-upload', apiGenerateLimiter, async (req, res) => {
 // Upload existing activity by local DB id
 router.post('/upload/:id', apiGenerateLimiter, async (req, res) => {
   try {
+    const ov = req.body || {};
     const activities = await db.getActivities(req.user.id, 200);
     const activity = activities.find(a => a.id === parseInt(req.params.id));
     if (!activity) return res.status(404).json({ error: 'Activity not found' });

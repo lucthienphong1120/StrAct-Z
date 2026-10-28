@@ -297,3 +297,4 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 - [x] cấu hình tối giản cơ chế xác thực Token (chỉ giữ Authorization Bearer & query parameter) và tích hợp Modal hướng dẫn sử dụng API trên giao diện (v3.3.0)
 - [x] fix lại device name của Strava App cho hoạt động chạy bộ (chuẩn hóa gpxActivityType: running/walking/cycling & Strava App creator/FIT mapping) (v3.3.1)
 - [x] Fix lỗi tắt schedule vẫn tạo hoạt động (kiểm tra schedule_enabled trong executeJob & tự động đồng bộ in-memory cron) (v3.3.2)
+- [x] Tổng rà soát hệ thống trước khi deploy VPS: Sửa lỗi runtime ov is not defined ở POST /upload/:id, sửa lỗi timezone trong distributed lock scheduler, khắc phục logic chống trùng lặp hoạt động scheduler đa slot, chuẩn hóa HTTP status 409 cho public API, bổ sung index SQLite và exception handling, nâng phiên bản lên v3.4.0 (v3.4.0)
