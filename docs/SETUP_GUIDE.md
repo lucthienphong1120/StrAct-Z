@@ -214,28 +214,30 @@ sudo apt install -y nginx certbot python3-certbot-nginx
 
 ### Configure Nginx Server Block
 
-Create a configuration file for your domain:
+Create a configuration file in `/etc/nginx/conf.d/` (standard across Linux distributions):
 ```bash
-sudo nano /etc/nginx/sites-available/stract-z
+sudo nano /etc/nginx/conf.d/stract-z.conf
 ```
+*(Alternatively, on Debian/Ubuntu systems with `sites-available`, you can use `/etc/nginx/sites-available/stract-z` and symlink to `sites-enabled/`).*
 
 Paste the following configuration (replace `run.yourdomain.com` with your domain):
 
 ```nginx
 server {
+    listen 80;
     server_name run.yourdomain.com;
 
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
         
-        # Essential Proxy Headers
+        # Essential Proxy Headers for Auth, Rate Limiter & Geocoding
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
-        # WebSocket support (if needed)
+        # WebSocket support & PWA caching bypass
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
         proxy_cache_bypass $http_upgrade;
@@ -246,7 +248,7 @@ server {
         proxy_read_timeout 60s;
     }
 
-    # Static assets caching (optional, optimizes PWA delivery)
+    # Static assets caching (optimizes PWA delivery)
     location ~* \.(css|js|png|jpg|jpeg|gif|ico|svg|geojson)$ {
         proxy_pass http://127.0.0.1:3000;
         proxy_set_header Host $host;
@@ -258,9 +260,8 @@ server {
 }
 ```
 
-Enable the configuration and reload Nginx:
+Verify syntax and reload Nginx:
 ```bash
-sudo ln -s /etc/nginx/sites-available/stract-z /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
