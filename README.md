@@ -76,6 +76,8 @@ For detailed information, please refer to our documentation guides:
 
 ## 📋 Changelog
 
+- **v3.5.0 (2026-10-30)**: Officially certified and upgraded for Node.js 22 LTS & npm 10.x, declared engines in `package.json`, added verification npm scripts (`verify:pois`, `test:api`, `test:limits`), and upgraded production setup documentation.
+- **v3.4.0 (2026-10-28)**: Pre-deployment stability fixes, scheduler lock timezone resolution, overlap protection, and SQLite query indexes.
 - **v3.3.0 (2026-06-22)**: API token authentication security hardening and integrated documentation help modal.
 - **v3.2.0 (2026-06-22)**: Redesigned token management UI with detailed details popup modal.
 - **v3.1.0 (2026-06-22)**: Fine-grained rate limiters for write actions and public routes.

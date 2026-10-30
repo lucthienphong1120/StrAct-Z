@@ -299,4 +299,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 - [x] Fix lỗi tắt schedule vẫn tạo hoạt động (kiểm tra schedule_enabled trong executeJob & tự động đồng bộ in-memory cron) (v3.3.2)
 - [x] Tổng rà soát hệ thống trước khi deploy VPS: Sửa lỗi runtime ov is not defined ở POST /upload/:id, sửa lỗi timezone trong distributed lock scheduler, khắc phục logic chống trùng lặp hoạt động scheduler đa slot, chuẩn hóa HTTP status 409 cho public API, bổ sung index SQLite và exception handling, nâng phiên bản lên v3.4.0 (v3.4.0)
 - [x] Dọn dẹp thư mục gốc, chuyển verify_pois.js vào scripts/verify_pois.js, bổ sung npm scripts (verify:pois, test:api, test:limits) vào package.json, và hoàn thiện hướng dẫn triển khai server mới tại docs/SETUP_GUIDE.md (v3.4.0)
+- [x] Nâng cấp và rà soát tương thích toàn diện cho Node.js 22 LTS (v22.23.4) & npm 10.x, khai báo engines trong package.json, nâng cấp CACHE_NAME service worker, cập nhật tài liệu cài đặt Node 22, và nâng phiên bản lên v3.5.0 (v3.5.0)
 

@@ -23,16 +23,16 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install -y git curl wget build-essential
 ```
 
-### Install Node.js (v20 LTS recommended)
+### Install Node.js (v22 LTS recommended)
 
 ```bash
-# Setup NodeSource repository for Node.js 20 LTS
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+# Setup NodeSource repository for Node.js 22 LTS (Active LTS)
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 sudo apt install -y nodejs
 
 # Verify installation
-node -v   # Expected: v20.x or higher
-npm -v    # Expected: 10.x or higher
+node -v   # Expected: v22.x or higher (e.g. v22.23.4)
+npm -v    # Expected: 10.x or higher (e.g. 10.9.9)
 ```
 
 ---
