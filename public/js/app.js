@@ -49,10 +49,17 @@ document.addEventListener('DOMContentLoaded', () => {
     hrToggle.addEventListener('change', toggleHRInputs);
   }
 
-  // PWA Service Worker Registration
+  // Clear any legacy client CacheStorage to prevent stale frontend assets
+  if ('caches' in window) {
+    caches.keys().then((names) => {
+      names.forEach((name) => caches.delete(name));
+    });
+  }
+
+  // PWA Service Worker Registration (Network-Only mode)
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
-      .then((reg) => console.log('Service Worker registered', reg))
+      .then((reg) => console.log('Service Worker registered (Network-Only)', reg))
       .catch((err) => console.error('Service Worker registration failed', err));
   }
 });

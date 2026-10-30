@@ -110,8 +110,15 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', uptime: process.uptime() });
 });
 
-// Protect static files
-app.use(express.static(path.join(__dirname, 'public'), { index: false }));
+// Serve static files with strict no-cache headers to ensure clients always get latest assets
+app.use(express.static(path.join(__dirname, 'public'), {
+  index: false,
+  setHeaders: (res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+}));
 
 // Routes
 // Apply strict brute force protection and rate limiters to authentication endpoints

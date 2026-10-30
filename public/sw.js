@@ -1,126 +1,27 @@
-const CACHE_NAME = 'stract-z-v3.5.1';
-const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/login.html',
-  '/register.html',
-  '/css/theme.css',
-  '/css/layout.css',
-  '/css/components.css',
-  '/js/app.js',
-  '/js/core/api.js',
-  '/js/core/auth.js',
-  '/js/ui/dashboard.js',
-  '/js/ui/config.js',
-  '/js/ui/map.js',
-  '/js/ui/scheduler.js',
-  '/js/ui/around-location.js',
-  '/manifest.json',
-  '/favicon.svg',
-  '/icons/runner.svg',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
-  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
-  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
-  'https://cdn.jsdelivr.net/npm/chart.js'
-];
+/**
+ * StrAct Z - Service Worker (Network-Only PWA Mode)
+ * Maintained strictly for PWA installation capability without caching frontend assets.
+ * All requests pass directly to the network.
+ */
+
+const CACHE_NAME = 'stract-z-v3.6.0';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
-  );
 });
 
 self.addEventListener('activate', (event) => {
+  // Clear ALL existing caches in CacheStorage across all versions
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
+        cacheNames.map((cacheName) => caches.delete(cacheName))
       );
-    }).then(() => {
-      return self.clients.claim();
-    })
+    }).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', (event) => {
-  const url = event.request.url;
-
-  // Skip non-http(s) requests (e.g. chrome-extension://) — Cache API doesn't support them
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    return;
-  }
-
-  // We only intercept caching for resources listed in ASSETS_TO_CACHE (checking exact path)
-  let urlObj;
-  try {
-    urlObj = new URL(url);
-  } catch (e) {
-    return;
-  }
-  const pathname = urlObj.pathname;
-  const isCachedAsset = ASSETS_TO_CACHE.some(asset => {
-    if (asset.startsWith('http')) {
-      return url === asset;
-    }
-    return pathname === asset || (asset === '/' && pathname === '/');
-  });
-
-  if (!isCachedAsset) {
-    event.respondWith(
-      fetch(event.request).catch(() => {
-        return caches.match(event.request);
-      })
-    );
-    return;
-  }
-
-  // Check if it's a dynamic local asset (HTML, JS, CSS, JSON)
-  const isDynamicLocal = url.endsWith('.html') || url.includes('/js/') || url.includes('/css/') || url.endsWith('.json') || url === self.location.origin || url === self.location.origin + '/';
-
-  if (isDynamicLocal) {
-    // Network-first strategy: try network, fallback to cache, and update cache if network succeeds
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          if (event.request.method === 'GET' && response && response.status === 200) {
-            const responseClone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseClone);
-            });
-          }
-          return response;
-        })
-        .catch(() => {
-          return caches.match(event.request);
-        })
-    );
-  } else {
-    // Kiểm tra nếu KHÔNG PHẢI là request GET thì tải thẳng từ network, không cache
-    if (event.request.method !== 'GET') {
-      event.respondWith(fetch(event.request));
-      return;
-    }
-    // Luồng xử lý Cache-first hiện tại của bạn dành riêng cho static resources (GET)
-    event.respondWith(
-      caches.match(event.request).then((response) => {
-        return response || fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const responseClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseClone); // Dòng 94 cũ, giờ đã an toàn
-            });
-          }
-          return networkResponse;
-        });
-      })
-    );
-  }
+  // Pure Network-Only: fetch directly from server without saving to cache
+  event.respondWith(fetch(event.request));
 });

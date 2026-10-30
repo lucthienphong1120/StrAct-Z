@@ -24,6 +24,8 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Form Layout Consistency**: Settings input fields (such as 'Daily Upload Limit') must occupy the full width of their card wrapper (100% width) for layout harmony. Avoid wrapping single-input groups in `.form-row` grid templates which limits their width to 50% and causes visual mismatch.
 - **Favicon Standard**: The official application favicon is the original **SVG runner emoji (`🏃`) on a transparent background**, hosted statically at `public/icons/runner.svg` and `public/favicon.svg` with cache-busting `?v=...`. Avoid adding opaque colored circle backgrounds.
 - **Map Layers Standard (v3.5.1+)**: Map tiles use **OpenStreetMap** (Standard and CSS-inversion Dark Mode) and **Esri Satellite**, requiring **NO API KEY** and free from third-party watermarks. Legacy CartoDB keys (`carto_dark`, `carto_positron`, `carto_voyager`) are seamlessly aliased to OSM layers for 100% backward compatibility.
+- **Frontend Cache Policy (v3.6.0+)**: Browser client-side caching is completely disabled (`no-store, no-cache, must-revalidate, max-age=0` via Express static headers). The Service Worker operates strictly in **Network-Only** mode to maintain PWA installability without storing assets in `CacheStorage`. All performance caching is centralized on the backend (Strava API 30m TTL cache, Google Fit 10m TTL cache, and in-memory GeoJSON).
+- **Account Cards Layout (v3.6.0+)**: Third-party connection cards (**Strava Account** and **Google Fit Account**) are placed together in the **Right Column**, balancing the dashboard visual weight with the Left Column settings.
 
 ## 🚀 Workflow & Deployment
 - **Repository**: The `StrAct-Z` workspace is a public Git repository.

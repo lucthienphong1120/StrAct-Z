@@ -303,4 +303,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 - [x] Bổ sung mục Troubleshooting & Production Gotchas vào docs/SETUP_GUIDE.md hướng dẫn xử lý xung đột port (EADDRINUSE), CPU 100%, cập nhật biến môi trường PM2 (--update-env), xung đột lockfile git pull, và cảnh báo tránh dùng npm audit fix --force (v3.5.0)
 - [x] Khôi phục favicon SVG nguyên bản (emoji 🏃 trên nền trong suốt), loại bỏ hoàn toàn nền tròn cam, bổ sung cache-busting (?v=3.5.1) để client browser cập nhật ngay lập tức (v3.5.1)
 - [x] Khắc phục triệt để lỗi bản đồ CartoDB yêu cầu API key ("API KEY REQUIRED") bằng cách chuyển layer sang OpenStreetMap (Standard & Dark Mode với CSS inversion) và Esri Satellite hoàn toàn miễn phí, không watermark, tương thích ngược toàn bộ cấu hình cũ trong CSDL (v3.5.1)
+- [x] Bỏ hoàn toàn cơ chế cache trình duyệt ở frontend (chuyển Service Worker sang Network-Only PWA mode, dọn sạch CacheStorage, cấu hình no-cache strict headers cho Express static) và tận dụng triệt để cache dữ liệu tập trung ở backend/query/data (v3.6.0)
+- [x] Di chuyển thẻ Google Fit Account sang cột bên phải ngay dưới thẻ Strava Account để đồng nhất nhóm dịch vụ kết nối tài khoản và tối ưu không gian giao diện (v3.6.0)
 

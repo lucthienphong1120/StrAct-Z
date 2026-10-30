@@ -28,7 +28,7 @@
         <div class="logo-icon">🏃</div>
         <span class="logo-text">StrAct Z</span>
         <small
-          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v3.5.1</small>
+          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v3.6.0</small>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -514,49 +514,6 @@
             </div>
           </div>
 
-          <!-- Google Fit Account -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">📉 Google Fit Account</div>
-            </div>
-            <div class="card-body" id="googleFitInfo">
-              <div id="gfDisconnected">
-                <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">Đồng bộ dữ liệu hoạt động
-                  và số bước chân sang Google Fit.</p>
-                <button onclick="connectGoogleFit()" class="btn btn-block btn-secondary" style="gap:10px;">
-                  <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
-                    style="width:18px; height:18px; object-fit:contain;" alt="">
-                  Connect Google Fit
-                </button>
-              </div>
-              <div id="gfConnected" style="display:none;">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-                  <div
-                    style="width:40px; height:40px; background:rgba(66,133,244,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#4285F4; font-size:1.2rem;">
-                    <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
-                      style="width:32px; height:32px; object-fit:contain;" alt="Google Fit">
-                  </div>
-                  <div>
-                    <div style="font-weight:600; font-size:0.9rem; color:var(--text-primary);">Connected</div>
-                    <div style="font-size:0.75rem; color:var(--text-muted);" id="gfStatusText">Fetching data...</div>
-                  </div>
-                </div>
-                <div id="gfStats"
-                  style="margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border);">
-                  <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:0.8rem; color:var(--text-secondary);">Today's Steps:</span>
-                    <span style="font-weight:700; color:var(--accent-blue);" id="gfTodaySteps">0</span>
-                  </div>
-                  <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:0.7rem; color:var(--text-muted);" id="gfLastSync">Last sync: --:--</span>
-                  </div>
-                </div>
-                <button onclick="disconnectGoogleFit()" class="btn btn-block btn-outline-danger btn-sm">Disconnect
-                  Google Fit</button>
-              </div>
-            </div>
-          </div>
-
           <!-- API Token Management Card -->
           <div class="card">
             <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
@@ -902,6 +859,49 @@
               <button class="btn btn-block btn-outline-danger btn-sm" onclick="disconnect()">Disconnect Strava</button>
             </div>
           </div>
+
+          <!-- Google Fit Account -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📉 Google Fit Account</div>
+            </div>
+            <div class="card-body" id="googleFitInfo">
+              <div id="gfDisconnected">
+                <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px;">Đồng bộ dữ liệu hoạt động
+                  và số bước chân sang Google Fit.</p>
+                <button onclick="connectGoogleFit()" class="btn btn-block btn-secondary" style="gap:10px;">
+                  <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
+                    style="width:18px; height:18px; object-fit:contain;" alt="">
+                  Connect Google Fit
+                </button>
+              </div>
+              <div id="gfConnected" style="display:none;">
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+                  <div
+                    style="width:40px; height:40px; background:rgba(66,133,244,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#4285F4; font-size:1.2rem;">
+                    <img src="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
+                      style="width:32px; height:32px; object-fit:contain;" alt="Google Fit">
+                  </div>
+                  <div>
+                    <div style="font-weight:600; font-size:0.9rem; color:var(--text-primary);">Connected</div>
+                    <div style="font-size:0.75rem; color:var(--text-muted);" id="gfStatusText">Fetching data...</div>
+                  </div>
+                </div>
+                <div id="gfStats"
+                  style="margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border);">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.8rem; color:var(--text-secondary);">Today's Steps:</span>
+                    <span style="font-weight:700; color:var(--accent-blue);" id="gfTodaySteps">0</span>
+                  </div>
+                  <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.7rem; color:var(--text-muted);" id="gfLastSync">Last sync: --:--</span>
+                  </div>
+                </div>
+                <button onclick="disconnectGoogleFit()" class="btn btn-block btn-outline-danger btn-sm">Disconnect
+                  Google Fit</button>
+              </div>
+            </div>
+          </div>
         </div> <!-- End Right Column -->
 
         <!-- Activity History (Local) -->
@@ -987,14 +987,14 @@
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- App Scripts -->
-  <script src="/js/core/api.js?v=3.5.1"></script>
-  <script src="/js/core/auth.js?v=3.5.1"></script>
-  <script src="/js/ui/map.js?v=3.5.1"></script>
-  <script src="/js/ui/config.js?v=3.5.1"></script>
-  <script src="/js/ui/scheduler.js?v=3.5.1"></script>
-  <script src="/js/ui/around-location.js?v=3.5.1"></script>
-  <script src="/js/ui/dashboard.js?v=3.5.1"></script>
-  <script src="/js/app.js?v=3.5.1"></script>
+  <script src="/js/core/api.js?v=3.6.0"></script>
+  <script src="/js/core/auth.js?v=3.6.0"></script>
+  <script src="/js/ui/map.js?v=3.6.0"></script>
+  <script src="/js/ui/config.js?v=3.6.0"></script>
+  <script src="/js/ui/scheduler.js?v=3.6.0"></script>
+  <script src="/js/ui/around-location.js?v=3.6.0"></script>
+  <script src="/js/ui/dashboard.js?v=3.6.0"></script>
+  <script src="/js/app.js?v=3.6.0"></script>
 
 
   <!-- Generate Around Location Modal -->
