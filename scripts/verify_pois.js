@@ -7,20 +7,20 @@
  * 3. Uses point-in-polygon ray-casting with public/geo/hanoi_full_districts.geojson to verify
  *    if the coordinates of each POI actually fall inside the geographic boundary of its declared district.
  * 
- * Usage: node verify_pois.js
+ * Usage: node scripts/verify_pois.js
  */
 
 const fs = require('fs');
 const path = require('path');
 
-const { DISTRICTS } = require('./src/config/districts');
-const geoUtils = require('./src/utils/geo');
+const { DISTRICTS } = require('../src/config/districts');
+const geoUtils = require('../src/utils/geo');
 const { getDistrictKeyForCoordinate } = geoUtils;
 
 // 1. Resolve paths
-const routeEnginePath = path.join(__dirname, 'src', 'services', 'route-engine.js');
-const poisMdPath = path.join(__dirname, 'docs', 'HANOI_POIS.md');
-const geojsonPath = path.join(__dirname, 'public', 'geo', 'hanoi_full_districts.geojson');
+const routeEnginePath = path.join(__dirname, '..', 'src', 'services', 'route-engine.js');
+const poisMdPath = path.join(__dirname, '..', 'docs', 'HANOI_POIS.md');
+const geojsonPath = path.join(__dirname, '..', 'public', 'geo', 'hanoi_full_districts.geojson');
 
 console.log('=== StrAct Z: Hanoi POIs Cross-Mapping & Boundary Test ===\n');
 

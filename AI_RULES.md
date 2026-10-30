@@ -155,6 +155,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
   - **Service Worker POST Safeguard**: Added `event.request.method === 'GET'` check in `public/sw.js` for dynamic local assets caching to prevent unsupported method errors.
   - **VPS Performance & Index Optimization**: Added composite SQLite indexes (`idx_activities_account_route_time`, `idx_activities_account_status`, `idx_activities_account_strava_id`, `idx_api_tokens_account_id`) in `src/db/sqlite-db.js` to eliminate full table scans.
   - **Process Resilience**: Added global `unhandledRejection` and `uncaughtException` listeners in `server.js` to prevent unhandled background exceptions from abruptly terminating the server on VPS.
+  - **Project Maintenance & Setup Guide**: Moved `verify_pois.js` from root into `scripts/verify_pois.js` with path resolution updates, added convenient npm scripts (`verify:pois`, `test:api`, `test:limits`) in `package.json`, and upgraded `docs/SETUP_GUIDE.md` with complete end-to-end production server deployment instructions (Node 20, PM2/Systemd, Nginx reverse proxy, SSL Let's Encrypt, UFW, Strava API).
   - Bumped version to `v3.4.0` across system files (`package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, and `PLAN.md`).
 
 ### v3.3.2 (2026-07-26)

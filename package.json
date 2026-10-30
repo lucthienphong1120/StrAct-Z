@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "verify:pois": "node scripts/verify_pois.js",
+    "test:api": "node scripts/test_public_api.js",
+    "test:limits": "node scripts/test_rate_limits.js"
   },
   "dependencies": {
     "@garmin/fitsdk": "^21.205.0",
