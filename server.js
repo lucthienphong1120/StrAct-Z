@@ -99,6 +99,11 @@ app.get('/geo/hanoi_urban_districts.geojson', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'geo', 'hanoi_urban_districts.geojson'));
 });
 
+// Favicon handler
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'favicon.ico'));
+});
+
 // Health check endpoint (public)
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', uptime: process.uptime() });
