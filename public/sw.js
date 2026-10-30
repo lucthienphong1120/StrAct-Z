@@ -17,6 +17,8 @@ const ASSETS_TO_CACHE = [
   '/js/ui/around-location.js',
   '/manifest.json',
   '/favicon.ico',
+  '/favicon.svg',
+  '/icons/runner.svg',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
