@@ -49,8 +49,8 @@ sudo chown -R $USER:$USER /var/www/stract-z
 git clone https://github.com/lucthienphong1120/StrAct-Z.git /var/www/stract-z
 cd /var/www/stract-z
 
-# Install production dependencies
-npm install --production
+# Install production dependencies (npm 10+)
+npm install --omit=dev
 ```
 
 ---
@@ -277,7 +277,7 @@ Whenever updates are pushed to Git:
 ```bash
 cd /var/www/stract-z
 git pull origin main
-npm install --production
+npm install --omit=dev
 
 # If using PM2:
 pm2 restart stract-z
