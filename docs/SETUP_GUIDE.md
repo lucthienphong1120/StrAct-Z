@@ -223,12 +223,16 @@ sudo nano /etc/nginx/conf.d/stract-z.conf
 Paste the following configuration (replace `run.yourdomain.com` with your domain):
 
 ```nginx
+upstream stract_app {
+    server 127.0.0.1:3001; # Match PORT in your .env (e.g. 3001 or 3000)
+}
+
 server {
     listen 80;
     server_name run.yourdomain.com;
 
     location / {
-        proxy_pass http://127.0.0.1:3000;
+        proxy_pass http://stract_app;
         proxy_http_version 1.1;
         
         # Essential Proxy Headers for Auth, Rate Limiter & Geocoding
@@ -250,7 +254,7 @@ server {
 
     # Static assets caching (optimizes PWA delivery)
     location ~* \.(css|js|png|jpg|jpeg|gif|ico|svg|geojson)$ {
-        proxy_pass http://127.0.0.1:3000;
+        proxy_pass http://stract_app;
         proxy_set_header Host $host;
         expires 7d;
         add_header Cache-Control "public, max-age=604800";
