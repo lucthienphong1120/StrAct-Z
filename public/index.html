@@ -16,8 +16,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="icon" type="image/svg+xml" href="/icons/runner.svg">
+  <link rel="icon" type="image/svg+xml" href="/icons/runner.svg?v=3.5.1">
 </head>
 
 <body>
@@ -29,7 +28,7 @@
         <div class="logo-icon">🏃</div>
         <span class="logo-text">StrAct Z</span>
         <small
-          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v3.5.0</small>
+          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v3.5.1</small>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -743,10 +742,8 @@
                   </label>
                   <select id="cfgMapType" class="form-select"
                     onchange="if(window.changeMapType) window.changeMapType(this.value)">
-                    <option value="carto_dark">CartoDB Dark Matter (Nền đen tối giản)</option>
-                    <option value="carto_positron">CartoDB Positron (Nền sáng tối giản)</option>
-                    <option value="carto_voyager">CartoDB Voyager (Nền sáng nổi bật)</option>
-                    <option value="osm_standard">OpenStreetMap Standard (Bản đồ tuyến đường)</option>
+                    <option value="osm_dark">OpenStreetMap Dark Mode (Tối giản đêm)</option>
+                    <option value="osm_standard">OpenStreetMap Standard (Đường phố chi tiết)</option>
                     <option value="esri_satellite">Esri World Imagery (Bản đồ vệ tinh)</option>
                   </select>
                 </div>
@@ -990,14 +987,14 @@
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- App Scripts -->
-  <script src="/js/core/api.js?v=3.3.0"></script>
-  <script src="/js/core/auth.js?v=3.3.0"></script>
-  <script src="/js/ui/map.js?v=3.3.0"></script>
-  <script src="/js/ui/config.js?v=3.3.0"></script>
-  <script src="/js/ui/scheduler.js?v=3.3.0"></script>
-  <script src="/js/ui/around-location.js?v=3.3.0"></script>
-  <script src="/js/ui/dashboard.js?v=3.3.0"></script>
-  <script src="/js/app.js?v=3.3.0"></script>
+  <script src="/js/core/api.js?v=3.5.1"></script>
+  <script src="/js/core/auth.js?v=3.5.1"></script>
+  <script src="/js/ui/map.js?v=3.5.1"></script>
+  <script src="/js/ui/config.js?v=3.5.1"></script>
+  <script src="/js/ui/scheduler.js?v=3.5.1"></script>
+  <script src="/js/ui/around-location.js?v=3.5.1"></script>
+  <script src="/js/ui/dashboard.js?v=3.5.1"></script>
+  <script src="/js/app.js?v=3.5.1"></script>
 
 
   <!-- Generate Around Location Modal -->

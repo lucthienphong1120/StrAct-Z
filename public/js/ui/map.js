@@ -3,45 +3,36 @@
  */
 
 const MAP_LAYERS_CONFIG = {
-  carto_dark: {
-    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  osm_dark: {
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     options: {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 20
-    }
-  },
-  carto_positron: {
-    url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-    options: {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 20
-    }
-  },
-  carto_voyager: {
-    url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-    options: {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 20
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+      className: 'leaflet-tile-dark'
     }
   },
   osm_standard: {
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     options: {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 19
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+      className: 'leaflet-tile-light'
     }
   },
   esri_satellite: {
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     options: {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-      maxZoom: 18
+      maxZoom: 18,
+      className: 'leaflet-tile-light'
     }
   }
 };
+
+// Backward compatibility aliases for existing saved user configs
+MAP_LAYERS_CONFIG.carto_dark = MAP_LAYERS_CONFIG.osm_dark;
+MAP_LAYERS_CONFIG.carto_positron = MAP_LAYERS_CONFIG.osm_standard;
+MAP_LAYERS_CONFIG.carto_voyager = MAP_LAYERS_CONFIG.osm_standard;
 
 window.MAP_LAYERS_CONFIG = MAP_LAYERS_CONFIG;
 
@@ -50,9 +41,9 @@ function initMap() {
 
   window.map = L.map('activityMap').setView([window.savedMapState.lat, window.savedMapState.lng], window.savedMapState.zoom);
 
-  const defaultMapType = (window.sysLimits?.map_type?.default) || 'carto_dark';
+  const defaultMapType = (window.sysLimits?.map_type?.default) || 'osm_dark';
   const mapType = (window.savedMapState && window.savedMapState.map_type) || defaultMapType;
-  const layerCfg = MAP_LAYERS_CONFIG[mapType] || MAP_LAYERS_CONFIG[defaultMapType] || MAP_LAYERS_CONFIG.carto_dark;
+  const layerCfg = MAP_LAYERS_CONFIG[mapType] || MAP_LAYERS_CONFIG[defaultMapType] || MAP_LAYERS_CONFIG.osm_dark;
   window.mapTileLayer = L.tileLayer(layerCfg.url, layerCfg.options).addTo(window.map);
 
   applyMapLock();
@@ -346,8 +337,8 @@ async function changeMapType(newType, skipSave = false) {
     window.map.removeLayer(window.mapTileLayer);
   }
 
-  const defaultMapType = (window.sysLimits?.map_type?.default) || 'carto_dark';
-  const layerCfg = MAP_LAYERS_CONFIG[newType] || MAP_LAYERS_CONFIG[defaultMapType] || MAP_LAYERS_CONFIG.carto_dark;
+  const defaultMapType = (window.sysLimits?.map_type?.default) || 'osm_dark';
+  const layerCfg = MAP_LAYERS_CONFIG[newType] || MAP_LAYERS_CONFIG[defaultMapType] || MAP_LAYERS_CONFIG.osm_dark;
   window.mapTileLayer = L.tileLayer(layerCfg.url, layerCfg.options).addTo(window.map);
   window.mapTileLayer.bringToBack();
 

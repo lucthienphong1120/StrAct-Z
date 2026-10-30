@@ -352,17 +352,17 @@ async function loadConfig() {
         lat: parseFloat(config.map_lat),
         lng: parseFloat(config.map_lng),
         zoom: parseInt(config.map_zoom),
-        map_type: config.map_type || (sysL?.map_type?.default) || 'carto_dark'
+        map_type: config.map_type || (sysL?.map_type?.default) || 'osm_dark'
       };
     } else {
       if (window.savedMapState) {
-        window.savedMapState.map_type = config.map_type || (sysL?.map_type?.default) || 'carto_dark';
+        window.savedMapState.map_type = config.map_type || (sysL?.map_type?.default) || 'osm_dark';
       } else {
         window.savedMapState = {
           lat: 21.0285,
           lng: 105.8542,
           zoom: 12,
-          map_type: config.map_type || (sysL?.map_type?.default) || 'carto_dark'
+          map_type: config.map_type || (sysL?.map_type?.default) || 'osm_dark'
         };
       }
     }
@@ -624,7 +624,7 @@ async function saveConfig() {
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || (window.sysLimits?.overlap_protection_minutes?.default ? String(window.sysLimits.overlap_protection_minutes.default) : '30'),
     rest_time_percent: document.getElementById('cfgRestTime')?.value || (window.sysLimits?.rest_time_percent?.default ? String(window.sysLimits.rest_time_percent.default) : '40'),
     daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || (window.sysLimits?.daily_max_activity?.default ? String(window.sysLimits.daily_max_activity.default) : '2'),
-    map_type: document.getElementById('cfgMapType')?.value || (window.sysLimits?.map_type?.default) || 'carto_dark',
+    map_type: document.getElementById('cfgMapType')?.value || (window.sysLimits?.map_type?.default) || 'osm_dark',
   };
 
   if (!validateInputs(config)) return;
@@ -688,7 +688,7 @@ function getOverrideConfig() {
     overlap_protection_minutes: document.getElementById('cfgOverlapProtection')?.value || (window.sysLimits?.overlap_protection_minutes?.default ? String(window.sysLimits.overlap_protection_minutes.default) : undefined),
     rest_time_percent: document.getElementById('cfgRestTime')?.value || (window.sysLimits?.rest_time_percent?.default ? String(window.sysLimits.rest_time_percent.default) : undefined),
     daily_max_activity: document.getElementById('cfgDailyMaxActivity')?.value || (window.sysLimits?.daily_max_activity?.default ? String(window.sysLimits.daily_max_activity.default) : undefined),
-    map_type: document.getElementById('cfgMapType')?.value || (window.sysLimits?.map_type?.default) || 'carto_dark',
+    map_type: document.getElementById('cfgMapType')?.value || (window.sysLimits?.map_type?.default) || 'osm_dark',
   };
 
   if (!validateTimeBounds(overrideConfig.min_time, overrideConfig.max_time, overrideConfig.target_date, isCustomTime)) {

@@ -22,7 +22,8 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Implementation**: The role-based class is applied in `loadStats()` (dashboard.js) or `initTheme()`.
 - **Design System**: Use variables like `--strava-orange`, `--gradient-primary`, and `--body-glow` instead of hardcoded hex/rgba values to ensure theme consistency.
 - **Form Layout Consistency**: Settings input fields (such as 'Daily Upload Limit') must occupy the full width of their card wrapper (100% width) for layout harmony. Avoid wrapping single-input groups in `.form-row` grid templates which limits their width to 50% and causes visual mismatch.
-- **Favicon Standard**: The official application favicon is the **Strava Orange circle (`#fc4c02`) with the white runner silhouette**, provided as both `public/favicon.ico` (32x32) and vector `public/icons/runner.svg` / `public/favicon.svg`. Avoid replacing it with generic unicode text/emojis.
+- **Favicon Standard**: The official application favicon is the original **SVG runner emoji (`🏃`) on a transparent background**, hosted statically at `public/icons/runner.svg` and `public/favicon.svg` with cache-busting `?v=...`. Avoid adding opaque colored circle backgrounds.
+- **Map Layers Standard (v3.5.1+)**: Map tiles use **OpenStreetMap** (Standard and CSS-inversion Dark Mode) and **Esri Satellite**, requiring **NO API KEY** and free from third-party watermarks. Legacy CartoDB keys (`carto_dark`, `carto_positron`, `carto_voyager`) are seamlessly aliased to OSM layers for 100% backward compatibility.
 
 ## 🚀 Workflow & Deployment
 - **Repository**: The `StrAct-Z` workspace is a public Git repository.

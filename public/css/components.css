@@ -636,6 +636,10 @@ body.is-vip:not(.theme-preview-basic) .schedule-label {
   filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
 }
 
+.leaflet-tile.leaflet-tile-light {
+  filter: none !important;
+}
+
 .leaflet-control-attribution {
   background: rgba(0, 0, 0, 0.5) !important;
   color: var(--text-muted) !important;

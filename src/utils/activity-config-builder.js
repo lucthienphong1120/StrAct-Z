@@ -61,7 +61,7 @@ function buildGeneratorConfig(config, overrides = {}, lastUploaded = null, role 
     nearMeLat: ov.near_me_lat ? parseFloat(ov.near_me_lat) : null,
     nearMeLng: ov.near_me_lng ? parseFloat(ov.near_me_lng) : null,
     locationName: ov.location_name || null,
-    mapType: ov.map_type || config.map_type || systemLimits.map_type?.default || 'carto_dark',
+    mapType: ov.map_type || config.map_type || systemLimits.map_type?.default || 'osm_dark',
     bypass_workhours: String(ov.bypass_workhours) === 'true',
   };
 }

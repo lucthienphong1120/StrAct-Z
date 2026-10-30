@@ -29,9 +29,10 @@ app.use(helmet({
   contentSecurityPolicy: false, // Disabled for simplicity with inline scripts/styles in this UI
 }));
 
-// Basic Security Headers for caching
+// Basic Security Headers for caching & CSP
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  res.setHeader('Content-Security-Policy', "default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data: blob:; font-src 'self' https: data:; connect-src 'self' https: wss: ws:;");
   next();
 });
 
@@ -99,9 +100,9 @@ app.get('/geo/hanoi_urban_districts.geojson', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'geo', 'hanoi_urban_districts.geojson'));
 });
 
-// Favicon handler
+// Favicon handler: fallback to runner.svg
 app.get('/favicon.ico', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'favicon.ico'));
+  res.sendFile(path.join(__dirname, 'public', 'icons', 'runner.svg'));
 });
 
 // Health check endpoint (public)

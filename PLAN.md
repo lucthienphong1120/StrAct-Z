@@ -301,4 +301,6 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 - [x] Dọn dẹp thư mục gốc, chuyển verify_pois.js vào scripts/verify_pois.js, bổ sung npm scripts (verify:pois, test:api, test:limits) vào package.json, và hoàn thiện hướng dẫn triển khai server mới tại docs/SETUP_GUIDE.md (v3.4.0)
 - [x] Nâng cấp và rà soát tương thích toàn diện cho Node.js 22 LTS (v22.23.4) & npm 10.x, khai báo engines trong package.json, nâng cấp CACHE_NAME service worker, cập nhật tài liệu cài đặt Node 22, và nâng phiên bản lên v3.5.0 (v3.5.0)
 - [x] Bổ sung mục Troubleshooting & Production Gotchas vào docs/SETUP_GUIDE.md hướng dẫn xử lý xung đột port (EADDRINUSE), CPU 100%, cập nhật biến môi trường PM2 (--update-env), xung đột lockfile git pull, và cảnh báo tránh dùng npm audit fix --force (v3.5.0)
+- [x] Khôi phục favicon SVG nguyên bản (emoji 🏃 trên nền trong suốt), loại bỏ hoàn toàn nền tròn cam, bổ sung cache-busting (?v=3.5.1) để client browser cập nhật ngay lập tức (v3.5.1)
+- [x] Khắc phục triệt để lỗi bản đồ CartoDB yêu cầu API key ("API KEY REQUIRED") bằng cách chuyển layer sang OpenStreetMap (Standard & Dark Mode với CSS inversion) và Esri Satellite hoàn toàn miễn phí, không watermark, tương thích ngược toàn bộ cấu hình cũ trong CSDL (v3.5.1)
 
