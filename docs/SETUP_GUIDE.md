@@ -57,18 +57,53 @@ npm install --omit=dev
 
 ## 🔑 4. Environment Configuration (`.env`)
 
-Copy the sample environment configuration file:
+### Step 4.1: Create Strava API Application
+
+Before configuring `.env`, you need API credentials from Strava:
+
+1. Log into your Strava account in your web browser.
+2. Navigate to: **[https://www.strava.com/settings/api](https://www.strava.com/settings/api)**
+3. If creating an application for the first time, fill in the form:
+   - **Application Name**: `StrAct Z` (or any custom name)
+   - **Category**: `Training`
+   - **Club**: (Leave blank)
+   - **Website**: Your application URL (e.g., `https://run.yourdomain.com` or `http://IP:3000`)
+   - **Application Description**: `Auto running activity generator & sync`
+   - **Authorization Callback Domain** *(CRITICAL)*:
+     - Enter strictly your **domain or subdomain hostname** (e.g., `run.yourdomain.com` or `yourdomain.com`).
+     - **DO NOT** include protocol prefix (`https://`), port numbers (`:3000`), or trailing slashes (`/`).
+     - If testing locally or via IP before domain setup, you can enter `localhost` or your server's public IP address.
+4. Click **Create** / **Save**.
+5. Once created, copy the credentials:
+   - **Client ID**: A numeric ID (e.g., `145982`) ➔ used for `STRAVA_CLIENT_ID`
+   - **Client Secret**: Click **Show** to reveal the secret string ➔ used for `STRAVA_CLIENT_SECRET`
+
+---
+
+### Step 4.2: Generate Secret Key (`APP_SECRET`)
+
+Generate a secure 64-character random key for encrypting stored OAuth tokens and signing JWT cookies:
+
+```bash
+openssl rand -hex 32
+```
+Copy the printed hex string for the `APP_SECRET` field.
+
+---
+
+### Step 4.3: Create and Edit `.env`
+
+Copy the sample environment file and open it in `nano`:
 
 ```bash
 cp .env.sample .env
 nano .env
 ```
 
-Fill in the required configuration variables:
+Configure the parameters:
 
 ```ini
-# Strava API Credentials
-# Get these from https://www.strava.com/settings/api
+# Strava API Credentials (obtained from Step 4.1)
 STRAVA_CLIENT_ID=your_strava_client_id
 STRAVA_CLIENT_SECRET=your_strava_client_secret
 
@@ -76,22 +111,30 @@ STRAVA_CLIENT_SECRET=your_strava_client_secret
 PORT=3000
 BASE_URL=https://run.yourdomain.com
 
-# Mandatory: Encryption key for your tokens (Use a secure, random string >= 32 characters)
-APP_SECRET=your_super_secret_random_key_min_32_chars_long
+# Mandatory: Encryption key for database tokens & JWT (from Step 4.2)
+APP_SECRET=your_generated_64_character_hex_key_here
 
-# Optional: Cryptographic salt for token key derivation
+# Optional: Cryptographic salt for token key derivation (keep default or change for prod)
 ENCRYPTION_SALT=stract_z_secure_static_salt_2026_prod
 
-# Optional: Initial admin account (Leave commented out to register via web UI on first launch)
+# Optional: Initial admin account (Leave commented out to register via web UI)
 # ADMIN_USERNAME=admin
 # ADMIN_PASSWORD=your_secure_password
 ```
 
+| Parameter | Description |
+| :--- | :--- |
+| `STRAVA_CLIENT_ID` | Numeric Client ID from [strava.com/settings/api](https://www.strava.com/settings/api) |
+| `STRAVA_CLIENT_SECRET` | Secret key from Strava API management page |
+| `PORT` | Local port Express listens on (default: `3000`) |
+| `BASE_URL` | Public URL users access the app (must match Nginx domain with `https://`) |
+| `APP_SECRET` | 32+ character random key used to encrypt SQLite data & sign cookies |
+| `ENCRYPTION_SALT` | Static salt for AES-256-CBC token encryption |
+
 > [!IMPORTANT]
 > - `BASE_URL` **MUST** use `https://` in production so that Strava OAuth callbacks and Service Worker PWA function properly.
 > - `APP_SECRET` must be kept safe and backed up. Changing it after accounts/tokens are created will invalidate encrypted tokens in SQLite.
-
----
+> - In `nano`, press **`Ctrl + O`** then **`Enter`** to save, followed by **`Ctrl + X`** to exit.
 
 ## 🏃 5. Process Management (Keep App Running)
 
