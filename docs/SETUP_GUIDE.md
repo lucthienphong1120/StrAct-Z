@@ -347,3 +347,60 @@ npm run test:limits
 # Test public API endpoints & security tokens
 npm run test:api
 ```
+
+---
+
+## 🛠️ 12. Troubleshooting & Production Gotchas
+
+### 1. Port Collision (`EADDRINUSE: address already in use :::3000`) & 100% CPU Spike
+- **Symptom**: Server CPU spikes to 90–100%, and PM2 restart count (`↺`) increments rapidly by hundreds or thousands.
+- **Cause**: Port 3000 is already occupied by another service/API on the server (e.g. an existing backend service). When PM2 restarts crashed processes, a crash loop occurs.
+- **Solution**:
+  1. Change `PORT` in `/var/www/stract-z/.env` to an unused port (e.g. `3001`):
+     ```ini
+     PORT=3001
+     ```
+  2. Update the upstream port in `/etc/nginx/conf.d/stract-z.conf`:
+     ```nginx
+     proxy_pass http://127.0.0.1:3001;
+     ```
+  3. Reload Nginx and restart PM2 with the `--update-env` flag:
+     ```bash
+     nginx -t && systemctl reload nginx
+     pm2 restart stract-z --update-env
+     ```
+  4. Also restart any conflicting service that was in crash loop:
+     ```bash
+     pm2 restart all
+     ```
+
+### 2. Updating Environment Variables in PM2
+- **Gotcha**: Running `pm2 restart <app>` does **NOT** reload updated `.env` values into memory by default.
+- **Rule**: Always pass `--update-env` when environment variables change:
+  ```bash
+  pm2 restart stract-z --update-env
+  ```
+
+### 3. Git Pull Conflict on `package-lock.json`
+- **Symptom**: `error: Your local changes to the following files would be overwritten by merge: package-lock.json`.
+- **Cause**: Running `npm install` on the server locally touched the lockfile.
+- **Solution**: Discard the server's local lockfile changes and pull the verified version from Git:
+  ```bash
+  git checkout package-lock.json
+  git pull origin main
+  ```
+
+### 4. Handling `npm audit` Warnings & Avoid `--force`
+- **Gotcha**: `npm audit` reports vulnerabilities originating from `node-gyp` and `tar` inside `sqlite3`'s build tooling.
+- **Rule**: **NEVER** run `npm audit fix --force`. Doing so attempts to upgrade `sqlite3` to major version 6, which breaks compatibility with the `sqlite` database wrapper. Standard `npm audit fix` (without `--force`) is safe. Build tool warnings do not expose vulnerabilities to HTTP runtime requests.
+
+### 5. High CPU Diagnosis Command
+If you suspect high CPU usage, use this command to inspect the exact script and PID consuming CPU:
+```bash
+ps -eo pid,user,%cpu,%mem,command --sort=-%cpu | head -n 10
+```
+Or open the PM2 interactive monitor:
+```bash
+pm2 monit
+```
+

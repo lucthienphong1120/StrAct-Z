@@ -300,4 +300,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 - [x] Tổng rà soát hệ thống trước khi deploy VPS: Sửa lỗi runtime ov is not defined ở POST /upload/:id, sửa lỗi timezone trong distributed lock scheduler, khắc phục logic chống trùng lặp hoạt động scheduler đa slot, chuẩn hóa HTTP status 409 cho public API, bổ sung index SQLite và exception handling, nâng phiên bản lên v3.4.0 (v3.4.0)
 - [x] Dọn dẹp thư mục gốc, chuyển verify_pois.js vào scripts/verify_pois.js, bổ sung npm scripts (verify:pois, test:api, test:limits) vào package.json, và hoàn thiện hướng dẫn triển khai server mới tại docs/SETUP_GUIDE.md (v3.4.0)
 - [x] Nâng cấp và rà soát tương thích toàn diện cho Node.js 22 LTS (v22.23.4) & npm 10.x, khai báo engines trong package.json, nâng cấp CACHE_NAME service worker, cập nhật tài liệu cài đặt Node 22, và nâng phiên bản lên v3.5.0 (v3.5.0)
+- [x] Bổ sung mục Troubleshooting & Production Gotchas vào docs/SETUP_GUIDE.md hướng dẫn xử lý xung đột port (EADDRINUSE), CPU 100%, cập nhật biến môi trường PM2 (--update-env), xung đột lockfile git pull, và cảnh báo tránh dùng npm audit fix --force (v3.5.0)
 

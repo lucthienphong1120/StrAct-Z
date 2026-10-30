@@ -150,7 +150,7 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Node.js 22 LTS Runtime Upgrade & Project Streamlining**:
   - **Node.js 22 LTS Platform Certification**: Verified complete runtime compatibility with Node.js `v22.23.4` (Active LTS) and npm `10.9.9`. Added `"engines": { "node": ">=20.0.0", "npm": ">=10.0.0" }` in `package.json`.
   - **Script Directory Reorganization**: Moved `verify_pois.js` from root into `scripts/verify_pois.js` with proper module path resolutions, and registered convenient npm scripts (`npm run verify:pois`, `npm run test:api`, `npm run test:limits`) in `package.json`.
-  - **Production Setup Guide Modernization**: Upgraded `docs/SETUP_GUIDE.md` to recommend Node.js 22 LTS via NodeSource (`setup_22.x`), complete PM2 and Systemd service configurations, Nginx reverse proxy with essential SSL/WebSocket/timeout headers, Let's Encrypt Certbot instructions, and UFW firewall rules.
+  - **Production Setup & Troubleshooting Guide**: Upgraded `docs/SETUP_GUIDE.md` to recommend Node.js 22 LTS via NodeSource (`setup_22.x`), complete PM2 and Systemd service configurations, Nginx reverse proxy (supporting `/etc/nginx/conf.d/` and `sites-available`), Let's Encrypt Certbot instructions, UFW firewall rules, and an end-to-end troubleshooting section covering port collision (`EADDRINUSE`), PM2 `--update-env`, lockfile git conflict resolution, and avoid `npm audit fix --force`.
   - **Browser Cache Invalidation**: Updated `CACHE_NAME` in `public/sw.js` to `stract-z-v3.5.0` to ensure PWA clients flush stale assets upon deployment.
   - Bumped version to `v3.5.0` across system files (`package.json`, `public/index.html`, `public/sw.js`, `AI_RULES.md`, `README.md`, and `PLAN.md`).
 
