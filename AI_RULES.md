@@ -45,6 +45,12 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 - **Formula**: `MHR = 220 - Age`.
 - **User Age**: Default is 25 (stored in DB as `user_age`).
 - **Generator Integration**: Generator uses this MHR to scale intensity (Pace vs HR correlation).
+- **Heart Rate Simulation (2026-11-03)**: `generateHeartRate()` in `route-engine.js` không còn dùng sóng sin cố định. Nhịp tim được tính từ:
+  - Nhịp nền giữa vùng `minHR..maxHR` + chênh lệch tốc độ thực tế (đã làm mượt ~25s) + độ dốc (làm mượt ~60s).
+  - Thời tiết, phong độ ngày, cardiac drift theo thời gian, dao động ngẫu nhiên mean-reverting (~150-300s) và vài cú surge ngắn không theo chu kỳ.
+  - Quán tính sinh lý: tăng nhịp tau 30-45s, giảm nhịp tau 30-45s; khởi đầu từ `restingHR` và có thể hạ dần ở cuối buổi.
+  - Đèn đỏ: HR giảm dần về ngưỡng nghỉ (không tụt sâu) rồi hồi phục từ từ sau khi chạy tiếp; các point `isPause` phải nằm sau point kích hoạt theo đúng thứ tự thời gian.
+  - Luôn kẹp trong `[restingHR, maxHR + 15]`.
 
 ### 2. Activity Type Multipliers
 - **Walking**: Distance x0.55 / Pace x1.7.

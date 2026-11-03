@@ -1040,6 +1040,8 @@ function generateTimestamps(points, options = {}) {
     cur = new Date(nextTimeRounded);
     pt.time = new Date(cur);
 
+    result.push(pt);
+
     // Simulate Red Light / Pause (approx 1.5% chance per point if not near start/end)
     if (options.simRedLights !== false && progress > 0.1 && progress < 0.9 && Math.random() < redLightsProbability) {
       const pauseSecs = randomInRange(redLightsMinDuration, redLightsMaxDuration);
@@ -1049,19 +1051,30 @@ function generateTimestamps(points, options = {}) {
         result.push({ ...pt, time: new Date(cur), isPause: true });
       }
     }
-
-    result.push(pt);
   }
   return result;
 }
 
 // ─── Heart Rate ───────────────────────────────────────────────────────────────
 
+function clampNumber(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function gaussianNoise() {
+  const u1 = Math.max(Number.EPSILON, Math.random());
+  const u2 = Math.random();
+  return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+}
+
 function generateHeartRate(points, options = {}) {
   const { minHR = 130, maxHR = 165, restingHR = 65, startTime = null } = options;
   const weatherProbability = options.weatherProbability !== undefined ? options.weatherProbability : 0.3;
   const weatherHRMin = options.weatherHRMin !== undefined ? options.weatherHRMin : 5;
   const weatherHRMax = options.weatherHRMax !== undefined ? options.weatherHRMax : 15;
+
+  const n = points.length;
+  if (n === 0) return points;
 
   // Simulate weather factor randomly (hot weather = +HR)
   const isHotWeather = options.simWeather !== false && Math.random() < weatherProbability;
@@ -1073,35 +1086,123 @@ function generateHeartRate(points, options = {}) {
     weatherFactor += randomInRange(2, 5);
   }
 
-  const n = points.length;
-  let lastActiveHR = minHR;
-  let pauseDuration = 0;
+  const zoneRange = Math.max(1, maxHR - minHR);
+  const clock = points.map(pt => new Date(pt.time).getTime());
+  const hasClock = clock.every(t => Number.isFinite(t));
+
+  const dtAt = (i) => {
+    if (!hasClock || i === 0) return 5;
+    return clampNumber((clock[i] - clock[i - 1]) / 1000, 0.5, 300);
+  };
+
+  // Average moving speed of this activity, excluding red-light pauses.
+  let movingDist = 0;
+  let movingTime = 0;
+  for (let i = 1; i < n; i++) {
+    if (points[i].isPause || points[i - 1].isPause) continue;
+    const dd = points[i].distance - points[i - 1].distance;
+    if (dd <= 0) continue;
+    movingDist += dd;
+    movingTime += dtAt(i);
+  }
+  const baseSpeed = movingTime > 0 ? movingDist / movingTime : 1000 / (7 * 60);
+
+  // Speed and gradient, smoothed over ~25s / ~60s so HR follows effort rather
+  // than the point-to-point jitter of the GPS track.
+  const paceOffset = new Array(n).fill(0);
+  const gradeOffset = new Array(n).fill(0);
+  let smoothedPace = 0;
+  let smoothedGrade = 0;
+  for (let i = 1; i < n; i++) {
+    const dt = dtAt(i);
+    const dd = points[i].distance - points[i - 1].distance;
+    let paceSample = 0;
+    let gradeSample = 0;
+    if (dd > 0 && !points[i].isPause && !points[i - 1].isPause) {
+      paceSample = clampNumber((dd / dt) / baseSpeed - 1, -0.5, 0.5);
+      if (points[i].elevation !== undefined && points[i - 1].elevation !== undefined) {
+        gradeSample = clampNumber((points[i].elevation - points[i - 1].elevation) / dd, -0.15, 0.15);
+      }
+    }
+    smoothedPace += (paceSample - smoothedPace) * (1 - Math.exp(-dt / 25));
+    smoothedGrade += (gradeSample - smoothedGrade) * (1 - Math.exp(-dt / 60));
+    paceOffset[i] = smoothedPace;
+    gradeOffset[i] = smoothedGrade;
+  }
+
+  // Day-to-day form, cardiac drift, and a slow random effort wave give each
+  // session its own baseline and shape instead of a fixed periodic curve.
+  const dayForm = randomInRange(-0.15, 0.15) * zoneRange;
+  const driftPerHour = randomInRange(4, 10);
+  const wanderTau = randomInRange(150, 300);
+  const wanderAmplitude = randomInRange(3, 6);
+  const riseTau = randomInRange(30, 45);
+  const fallTau = randomInRange(30, 45);
+  const totalSeconds = hasClock ? Math.max(1, (clock[n - 1] - clock[0]) / 1000) : n * 5;
+
+  // A few irregular surges (traffic crossings, short climbs, pace pushes).
+  const surgeCount = Math.floor(totalSeconds / 600) + (Math.random() < 0.6 ? 1 : 0);
+  const surges = [];
+  for (let i = 0; i < surgeCount; i++) {
+    surges.push({
+      start: randomInRange(0.08, 0.95) * totalSeconds,
+      duration: randomInRange(25, 80),
+      amplitude: randomInRange(4, 11),
+    });
+  }
+
+  // Optional easy finish; inertia keeps the actual drop gradual.
+  const coolDownSeconds = Math.random() < 0.4 ? randomInRange(45, 120) : 0;
+
+  let hr = restingHR + zoneRange * randomInRange(0.05, 0.15);
+  let wander = 0;
+  let elapsed = 0;
 
   for (let i = 0; i < n; i++) {
-    const p = i / n;
-    let hr;
+    const dt = i === 0 ? 0 : dtAt(i);
+    elapsed += dt;
 
-    if (points[i].isPause) {
-      // HR drops during pauses towards restingHR
-      pauseDuration += 5; // each pause point is 5s
-      const dropFactor = Math.min(0.8, pauseDuration / 120); // max 80% drop towards resting after 2 mins
-      hr = lastActiveHR - (lastActiveHR - restingHR) * dropFactor + randomInRange(-2, 2);
-    } else {
-      pauseDuration = 0; // Reset pause counter when moving
-      if (p < 0.1) {
-        hr = restingHR + (minHR - restingHR) * (p / 0.1);
-      } else if (p < 0.9) {
-        const mp = (p - 0.1) / 0.8;
-        hr = minHR + (maxHR - minHR) * (0.5 + 0.3 * Math.sin(2 * Math.PI * 3 * mp)) + randomInRange(-5, 5);
-        if (points[i].elevation !== undefined && i > 0 && points[i - 1].elevation !== undefined)
-          hr += (points[i].elevation - points[i - 1].elevation) * 2;
-      } else {
-        hr = minHR + (restingHR - minHR) * ((p - 0.9) / 0.1) * 0.5;
+    // Mean-reverting random walk: smooth, non-repeating HR undulation.
+    const wanderStep = 1 - Math.exp(-dt / wanderTau);
+    wander += -wander * wanderStep + gaussianNoise() * wanderAmplitude * Math.sqrt(2 * wanderStep);
+
+    const paceTerm = clampNumber(paceOffset[i], -0.4, 0.4) * 0.8;
+    const gradeTerm = clampNumber(gradeOffset[i], -0.15, 0.15) * 2.2;
+    const effort = clampNumber(0.5 + paceTerm + gradeTerm, 0.18, 0.85);
+
+    let target = minHR + zoneRange * effort
+      + weatherFactor + dayForm + wander
+      + driftPerHour * (elapsed / 3600);
+
+    if (!points[i].isPause) {
+      for (const surge of surges) {
+        const t = (elapsed - surge.start) / surge.duration;
+        if (t > 0 && t < 2) {
+          // Sharp onset, slower decay — how a short effort actually feels.
+          const envelope = t < 0.3 ? t / 0.3 : Math.exp(-(t - 0.3) * 2);
+          target += surge.amplitude * envelope;
+        }
       }
-      lastActiveHR = hr;
     }
 
-    points[i].heartRate = Math.round(Math.max(restingHR, Math.min(maxHR + 15, hr + weatherFactor)));
+    if (coolDownSeconds > 0 && elapsed > totalSeconds - coolDownSeconds) {
+      const k = clampNumber((elapsed - (totalSeconds - coolDownSeconds)) / coolDownSeconds, 0, 1);
+      target -= zoneRange * 0.35 * k;
+    }
+
+    if (points[i].isPause) {
+      target = restingHR + (target - restingHR) * 0.55;
+    }
+
+    target = clampNumber(target, restingHR, maxHR + 15);
+
+    if (dt > 0) {
+      const tau = target >= hr ? riseTau : fallTau;
+      hr += (target - hr) * (1 - Math.exp(-dt / tau));
+    }
+
+    const bpm = clampNumber(hr + randomInRange(-1.5, 1.5), restingHR, maxHR + 15);
+    points[i].heartRate = Math.round(bpm);
   }
   return points;
 }

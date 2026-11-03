@@ -305,4 +305,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 - [x] Khắc phục triệt để lỗi bản đồ CartoDB yêu cầu API key ("API KEY REQUIRED") bằng cách chuyển layer sang OpenStreetMap (Standard & Dark Mode với CSS inversion) và Esri Satellite hoàn toàn miễn phí, không watermark, tương thích ngược toàn bộ cấu hình cũ trong CSDL (v3.5.1)
 - [x] Bỏ hoàn toàn cơ chế cache trình duyệt ở frontend (chuyển Service Worker sang Network-Only PWA mode, dọn sạch CacheStorage, cấu hình no-cache strict headers cho Express static) và tận dụng triệt để cache dữ liệu tập trung ở backend/query/data (v3.6.0)
 - [x] Di chuyển thẻ Google Fit Account sang cột bên phải ngay dưới thẻ Strava Account để đồng nhất nhóm dịch vụ kết nối tài khoản và tối ưu không gian giao diện (v3.6.0)
+- [x] Cải thiện mô hình sinh nhịp tim: bỏ sóng sin cố định, thêm quán tính sinh lý, cardiac drift, dao động ngẫu nhiên và surge; sửa thứ tự point đèn đỏ để HR dip/hồi phục mượt
 
