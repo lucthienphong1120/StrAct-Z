@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 // Global Rate Limiting (Prevent DDoS)
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 300, // Limit each IP to 300 requests per windowMs to prevent blocking during continuous generation/syncs
+  max: 1000, // Headroom for dashboard assets, polling, and generation bursts while still bounding abuse
   message: { error: 'Too many requests from this IP, please try again later.', code: 'GLOBAL_RATE_LIMIT_EXCEEDED' },
   statusCode: 429,
   standardHeaders: true,

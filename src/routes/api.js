@@ -19,7 +19,7 @@ const rateLimit = require('express-rate-limit');
 // Rate limiter for private read operations (GET endpoints)
 const apiReadLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 read requests per 15 minutes
+  max: 300, // Limit each IP to 300 read requests per 15 minutes
   message: { error: 'Too many read requests from this IP, please try again later.', code: 'API_READ_LIMIT_EXCEEDED' },
   statusCode: 429,
   standardHeaders: true,
@@ -29,7 +29,7 @@ const apiReadLimiter = rateLimit({
 // Rate limiter for configuration updates
 const apiConfigLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: 100,
   message: { error: 'Too many configuration updates from this IP, please try again later.', code: 'API_CONFIG_LIMIT_EXCEEDED' },
   statusCode: 429,
   standardHeaders: true,
@@ -39,7 +39,7 @@ const apiConfigLimiter = rateLimit({
 // Rate limiter for activity generations & uploads
 const apiGenerateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 15,
+  max: 50,
   message: { error: 'Too many activity generation attempts from this IP, please try again later.', code: 'API_GENERATE_LIMIT_EXCEEDED' },
   statusCode: 429,
   standardHeaders: true,
@@ -49,7 +49,7 @@ const apiGenerateLimiter = rateLimit({
 // Rate limiter for scheduler operations
 const apiSchedulerLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: 50,
   message: { error: 'Too many scheduler update or trigger attempts from this IP, please try again later.', code: 'API_SCHEDULER_LIMIT_EXCEEDED' },
   statusCode: 429,
   standardHeaders: true,
@@ -59,7 +59,7 @@ const apiSchedulerLimiter = rateLimit({
 // Rate limiter for activity deletions
 const apiDeleteLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 15,
+  max: 50,
   message: { error: 'Too many activity deletion attempts from this IP, please try again later.', code: 'API_DELETE_LIMIT_EXCEEDED' },
   statusCode: 429,
   standardHeaders: true,

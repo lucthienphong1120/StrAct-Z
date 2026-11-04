@@ -99,35 +99,35 @@ async function runRateLimitTests() {
       path: '/api/stats',
       method: 'GET',
       body: null,
-      expectedLimit: 100,
+      expectedLimit: 300,
       description: 'apiReadLimiter on GET /api/stats'
     },
     {
       path: '/api/config',
       method: 'POST',
       body: {},
-      expectedLimit: 10,
+      expectedLimit: 100,
       description: 'apiConfigLimiter on POST /api/config'
     },
     {
       path: '/api/generate',
       method: 'POST',
       body: {},
-      expectedLimit: 15,
+      expectedLimit: 50,
       description: 'apiGenerateLimiter on POST /api/generate'
     },
     {
       path: '/api/scheduler',
       method: 'POST',
       body: {},
-      expectedLimit: 10,
+      expectedLimit: 50,
       description: 'apiSchedulerLimiter on POST /api/scheduler'
     },
     {
       path: '/api/activities/1',
       method: 'DELETE',
       body: null,
-      expectedLimit: 15,
+      expectedLimit: 50,
       description: 'apiDeleteLimiter on DELETE /api/activities/:id'
     },
     {

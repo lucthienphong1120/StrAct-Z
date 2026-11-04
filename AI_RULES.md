@@ -156,6 +156,14 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v3.6.1 (2026-11-04)
+- **Realistic Heart Rate & Config Editing Headroom**:
+  - Reworked `generateHeartRate()` in `route-engine.js`: bỏ sóng sin cố định, tính nhịp theo pace/độ dốc thực tế với quán tính sinh lý, cardiac drift, dao động ngẫu nhiên và surge không chu kỳ.
+  - Fixed red-light pause point ordering so FIT timestamps stay monotonic and HR dips/recoveries are gradual.
+  - Raised per-IP limits per 15 minutes in `src/routes/api.js`: read `100 → 300`, config `10 → 100`, generate `15 → 50`, scheduler `10 → 50`, delete `15 → 50`. Global limiter in `server.js`: `300 → 1000`.
+  - Auth protections unchanged: login/register `5`, OAuth general `15`, sensitive actions `5`.
+  - Updated `scripts/test_rate_limits.js` expectations and bumped version to `v3.6.1` across system files.
+
 ### v3.5.0 (2026-10-30)
 - **Node.js 22 LTS Runtime Upgrade & Project Streamlining**:
   - **Node.js 22 LTS Platform Certification**: Verified complete runtime compatibility with Node.js `v22.23.4` (Active LTS) and npm `10.9.9`. Added `"engines": { "node": ">=20.0.0", "npm": ">=10.0.0" }` in `package.json`.

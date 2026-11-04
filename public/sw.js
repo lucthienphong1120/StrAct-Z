@@ -4,7 +4,7 @@
  * All requests pass directly to the network.
  */
 
-const CACHE_NAME = 'stract-z-v3.6.0';
+const CACHE_NAME = 'stract-z-v3.6.1';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
