@@ -74,6 +74,45 @@ let selectedLat = null;
 let selectedLng = null;
 let resolvedLocationName = "";
 
+function applyAroundScheduleDefaults() {
+  const sysL = window.sysLimits || {};
+  const today = new Date();
+  const toLocalDate = (d) => d.toLocaleDateString('sv-SE');
+
+  const dateInput = document.getElementById('aroundTargetDate');
+  if (dateInput) {
+    const maxPastDays = parseInt(sysL.target_date?.max, 10) || 7;
+    const maxFutureDays = sysL._role === 'vip' ? 7 : 3;
+    const minDate = new Date(today);
+    minDate.setDate(today.getDate() - maxPastDays);
+    const maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + maxFutureDays);
+    dateInput.min = toLocalDate(minDate);
+    dateInput.max = toLocalDate(maxDate);
+    dateInput.value = toLocalDate(today);
+  }
+
+  const timeInput = document.getElementById('aroundTargetTime');
+  if (timeInput) timeInput.value = '00:00';
+
+  const minLimit = sysL.min_distance_km || {};
+  const maxLimit = sysL.max_distance_km || {};
+
+  const minDistInput = document.getElementById('aroundMinDist');
+  if (minDistInput) {
+    if (minLimit.min !== undefined) minDistInput.min = minLimit.min;
+    if (minLimit.max !== undefined) minDistInput.max = minLimit.max;
+    minDistInput.value = document.getElementById('cfgMinDist')?.value || minLimit.default || '0.5';
+  }
+
+  const maxDistInput = document.getElementById('aroundMaxDist');
+  if (maxDistInput) {
+    if (maxLimit.min !== undefined) maxDistInput.min = maxLimit.min;
+    if (maxLimit.max !== undefined) maxDistInput.max = maxLimit.max;
+    maxDistInput.value = document.getElementById('cfgMaxDist')?.value || maxLimit.default || '8.0';
+  }
+}
+
 function openAroundLocationModal() {
   const modal = document.getElementById('aroundLocationModal');
   if (!modal) return;
@@ -96,6 +135,7 @@ function openAroundLocationModal() {
   if (bypassInput) bypassInput.checked = false;
 
   document.getElementById('aroundActivityType').value = ""; // Default to System Config
+  applyAroundScheduleDefaults();
 
   document.getElementById('aroundLocationText').textContent = "Đang xác định vị trí...";
 
@@ -283,6 +323,27 @@ async function submitAroundLocationGen(upload = false) {
   const activityType = document.getElementById('aroundActivityType').value;
   const exportFormat = document.getElementById('cfgExportFormat')?.value || 'fit';
 
+  const targetDate = document.getElementById('aroundTargetDate')?.value || '';
+  const targetTime = document.getElementById('aroundTargetTime')?.value || '00:00';
+  const fixedTime = targetTime !== '00:00';
+  const minDistValue = document.getElementById('aroundMinDist')?.value;
+  const maxDistValue = document.getElementById('aroundMaxDist')?.value;
+  const minDist = minDistValue !== '' && minDistValue !== undefined ? parseFloat(minDistValue) : null;
+  const maxDist = maxDistValue !== '' && maxDistValue !== undefined ? parseFloat(maxDistValue) : null;
+
+  if (minDist !== null && (!isFinite(minDist) || minDist <= 0)) {
+    showToast("Quãng đường tối thiểu không hợp lệ.", "warning");
+    return;
+  }
+  if (maxDist !== null && (!isFinite(maxDist) || maxDist <= 0)) {
+    showToast("Quãng đường tối đa không hợp lệ.", "warning");
+    return;
+  }
+  if (minDist !== null && maxDist !== null && minDist > maxDist) {
+    showToast("Quãng đường tối thiểu không được lớn hơn quãng đường tối đa.", "warning");
+    return;
+  }
+
   const btnGen = document.getElementById('btnSubmitAroundGen');
   const btnUpload = document.getElementById('btnSubmitAroundUpload');
 
@@ -307,7 +368,14 @@ async function submitAroundLocationGen(upload = false) {
       location_name: resolvedLocationName,
       activity_type: activityType,
       export_format: exportFormat,
-      bypass_workhours: bypassWorkhours ? 'true' : 'false'
+      bypass_workhours: bypassWorkhours ? 'true' : 'false',
+      target_date: targetDate || undefined,
+      custom_time_enabled: 'true',
+      target_time_custom: fixedTime ? targetTime : '00:00',
+      min_time: fixedTime ? targetTime : undefined,
+      max_time: fixedTime ? targetTime : undefined,
+      min_distance_km: minDist !== null ? minDist : undefined,
+      max_distance_km: maxDist !== null ? maxDist : undefined
     };
 
     const endpoint = upload ? '/generate-and-upload' : '/generate';

@@ -307,4 +307,5 @@ Lưu ý: Mỗi khi thay đổi một logic cốt lõi nào đó (ví dụ: thay 
 - [x] Di chuyển thẻ Google Fit Account sang cột bên phải ngay dưới thẻ Strava Account để đồng nhất nhóm dịch vụ kết nối tài khoản và tối ưu không gian giao diện (v3.6.0)
 - [x] Cải thiện mô hình sinh nhịp tim: bỏ sóng sin cố định, thêm quán tính sinh lý, cardiac drift, dao động ngẫu nhiên và surge; sửa thứ tự point đèn đỏ để HR dip/hồi phục mượt
 - [x] Nâng rate limit cho thao tác cấu hình và vận hành (config 100, generate/scheduler/delete 50, read 300, global 1000 lượt/15 phút), giữ nguyên giới hạn auth (v3.6.1)
+- [x] Bổ sung chọn ngày, giờ và quãng đường tối thiểu/tối đa cho tính năng Generate around location (Preview Map), mặc định đồng bộ theo cấu hình dashboard và gửi override qua API generate (v3.6.2)
 

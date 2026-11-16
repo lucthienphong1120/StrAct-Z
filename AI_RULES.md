@@ -156,6 +156,13 @@ This file serves as a persistent memory and rulebook for AI coding assistants wo
 
 ## 🛠️ Developer Rules
 
+### v3.6.2 (2026-11-16)
+- **Preview Map: Custom Date/Time & Distance for Around Location**:
+  - Added `📅 Ngày chạy`, `🕒 Giờ bắt đầu`, `Quãng đường tối thiểu (km)` and `Quãng đường tối đa (km)` controls to the around-location modal in `public/index.html`.
+  - `openAroundLocationModal()` now syncs defaults from the saved dashboard config (`cfgMinDist`/`cfgMaxDist`), constrains the date input by `target_date` role limits (past up to `max`, future `3` days basic / `7` days VIP), and keeps `00:00` as the sentinel for a random time inside the configured range.
+  - `submitAroundLocationGen()` sends `target_date`, `custom_time_enabled`, `target_time_custom`/`min_time`/`max_time`, `min_distance_km` and `max_distance_km` overrides together with `near_me_lat/lng`, so `/generate` and `/generate-and-upload` reuse `buildGeneratorConfig()` exactly like the manual dashboard flow.
+  - Bumped version to `v3.6.2` and `CACHE_NAME` in `public/sw.js`.
+
 ### v3.6.1 (2026-11-04)
 - **Realistic Heart Rate & Config Editing Headroom**:
   - Reworked `generateHeartRate()` in `route-engine.js`: bỏ sóng sin cố định, tính nhịp theo pace/độ dốc thực tế với quán tính sinh lý, cardiac drift, dao động ngẫu nhiên và surge không chu kỳ.

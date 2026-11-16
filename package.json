@@ -1,6 +1,6 @@
 {
   "name": "stract-z",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "description": "Auto-generate and upload running activities to Strava daily",
   "engines": {
     "node": ">=20.0.0",

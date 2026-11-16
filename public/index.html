@@ -28,7 +28,7 @@
         <div class="logo-icon">🏃</div>
         <span class="logo-text">StrAct Z</span>
         <small
-          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v3.6.1</small>
+          style="font-size: 0.5em; font-weight: 600; padding: 2px 8px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-text-fill-color: rgba(255,255,255,0.8);">v3.6.2</small>
       </a>
       <div class="header-actions">
         <button id="btnLogout" class="btn btn-sm btn-secondary" style="display:none;"
@@ -987,14 +987,14 @@
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- App Scripts -->
-  <script src="/js/core/api.js?v=3.6.1"></script>
-  <script src="/js/core/auth.js?v=3.6.1"></script>
-  <script src="/js/ui/map.js?v=3.6.1"></script>
-  <script src="/js/ui/config.js?v=3.6.1"></script>
-  <script src="/js/ui/scheduler.js?v=3.6.1"></script>
-  <script src="/js/ui/around-location.js?v=3.6.1"></script>
-  <script src="/js/ui/dashboard.js?v=3.6.1"></script>
-  <script src="/js/app.js?v=3.6.1"></script>
+  <script src="/js/core/api.js?v=3.6.2"></script>
+  <script src="/js/core/auth.js?v=3.6.2"></script>
+  <script src="/js/ui/map.js?v=3.6.2"></script>
+  <script src="/js/ui/config.js?v=3.6.2"></script>
+  <script src="/js/ui/scheduler.js?v=3.6.2"></script>
+  <script src="/js/ui/around-location.js?v=3.6.2"></script>
+  <script src="/js/ui/dashboard.js?v=3.6.2"></script>
+  <script src="/js/app.js?v=3.6.2"></script>
 
 
   <!-- Generate Around Location Modal -->
@@ -1048,6 +1048,33 @@
               <option value="Ride">Đạp xe</option>
             </select>
           </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">📅 Ngày chạy</label>
+            <input type="date" id="aroundTargetDate" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">🕒 Giờ bắt đầu</label>
+            <input type="time" id="aroundTargetTime" class="form-input" value="00:00" lang="en-GB">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Quãng đường tối thiểu (km)</label>
+            <input type="number" step="0.1" id="aroundMinDist" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Quãng đường tối đa (km)</label>
+            <input type="number" step="0.1" id="aroundMaxDist" class="form-input">
+          </div>
+        </div>
+
+        <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.35; padding: 0 4px;">
+          💡 Để giờ <strong>00:00</strong> hệ thống sẽ tự chọn giờ ngẫu nhiên theo cấu hình. Ngày trong tương lai phụ
+          thuộc giới hạn của gói tài khoản.
         </div>
       </div>
       <div class="modal-footer">
